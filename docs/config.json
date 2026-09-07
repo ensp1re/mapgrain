@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "checks": [
+    {
+      "id": "unit",
+      "argv": ["pnpm", "test"],
+      "cwd": ".",
+      "timeoutSeconds": 120,
+      "required": true
+    },
+    {
+      "id": "lint",
+      "argv": ["pnpm", "lint"],
+      "cwd": ".",
+      "timeoutSeconds": 60,
+      "required": true
+    },
+    {
+      "id": "typecheck",
+      "argv": ["pnpm", "typecheck"],
+      "cwd": ".",
+      "timeoutSeconds": 60,
+      "required": true
+    },
+    {
+      "id": "build",
+      "argv": ["pnpm", "build"],
+      "cwd": ".",
+      "timeoutSeconds": 60,
+      "required": true
+    }
+  ],
+  "fingerprintPaths": [
+    "package.json",
+    "pnpm-workspace.yaml",
+    "tsconfig.json",
+    "tsconfig.base.json",
+    "eslint.config.js",
+    "AGENTS.md",
+    "scripts",
+    "tests",
+    "packages/document",
+    "docs/PROJECT.md",
+    "docs/PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/config.json"
+  ],
+  "delivery": {
+    "provider": "github",
+    "defaultBranch": "main",
+    "requirePR": true
+  }
+}

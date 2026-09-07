@@ -7,8 +7,8 @@ export default tseslint.config(
     ignores: [
       "node_modules/**",
       "dist/**",
-      "docs/harness/runs/**",
-      "docs/harness/archive/**",
+      "docs/runs/**",
+      "docs/archive/**",
     ],
   },
   js.configs.recommended,

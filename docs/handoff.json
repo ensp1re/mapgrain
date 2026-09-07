@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "taskId": null,
+  "plan": "docs/PLAN.md",
+  "git": {
+    "available": true,
+    "branch": "feat/document-schema",
+    "revision": "8733b91e96c0952e3905a1cefcf5388438ce82ba",
+    "dirty": true
+  },
+  "evidenceRefs": [
+    "docs/runs/run-1788786708728-a5e884.json"
+  ],
+  "decisions": [
+    "Working name is Mapgrain; final name is pending.",
+    "Node 24 LTS, pnpm workspaces, no extra monorepo orchestrator until packages exist.",
+    "React + Vite editor later; shared document/scene/layout/renderer packages; exports never embed the editor.",
+    "Quality gates: ESLint, tsc, node:test, Husky pre-commit, commitlint, GitHub Actions.",
+    "Product work is queued as F001–F012. This slice does not implement the editor."
+  ],
+  "rejectedApproaches": [
+    "Adding Turborepo or Nx before there are packages to orchestrate.",
+    "Implementing the editor in the harness bootstrap.",
+    "Copying another product's source, assets, or copy.",
+    "Empty app/package stubs that exist only to look like a monorepo."
+  ],
+  "blockers": [],
+  "nextAction": "Merge this PR, then activate F002 (canonical scene graph).",
+  "updatedAt": "2026-09-07T13:11:55.695Z"
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-cycle",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Feedback loop",
+  "theme": "dark",
+  "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
+  "groups": [],
+  "nodes": [
+    { "id": "ingest", "kind": "service", "label": "Ingest", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "score", "kind": "job", "label": "Score", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "store", "kind": "datastore", "label": "Store", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] }
+  ],
+  "edges": [
+    { "id": "e1", "source": { "nodeId": "ingest", "portId": "out" }, "target": { "nodeId": "score", "portId": "in" }, "type": "calls", "direction": "forward" },
+    { "id": "e2", "source": { "nodeId": "score", "portId": "out" }, "target": { "nodeId": "store", "portId": "in" }, "type": "writes", "direction": "forward" },
+    { "id": "e3", "source": { "nodeId": "store", "portId": "out" }, "target": { "nodeId": "ingest", "portId": "in" }, "type": "reads", "direction": "forward", "label": "replay" }
+  ],
+  "views": [{ "id": "loop", "kind": "overview", "name": "Cycle" }]
+}

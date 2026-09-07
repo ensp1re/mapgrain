@@ -4,10 +4,10 @@ Mapgrain is a local-first technical diagram workspace. This file is the router: 
 
 ## Start here
 
-1. Run `node --experimental-strip-types scripts/harness/cli.ts --root . context` from the repository root. Use its JSON output for the active task, ready IDs, blockers, evidence freshness, and next action.
+1. Run `node --experimental-strip-types scripts/cli.ts --root . context` from the repository root. Use its JSON output for the active task, ready IDs, blockers, evidence freshness, and next action.
 2. Trust the reported git branch, revision, and dirty flag. Do not invent them.
-3. Read the active task, then [the plan](docs/harness/PLAN.md) and [handoff](docs/harness/SESSION_HANDOFF.md) when those paths are present.
-4. Read [the product spec](docs/harness/PROJECT.md) and [architecture](docs/harness/ARCHITECTURE.md) before changing specced behavior or package boundaries.
+3. Read the active task, then [the plan](docs/PLAN.md) and [handoff](docs/SESSION_HANDOFF.md) when those paths are present.
+4. Read [the product spec](docs/PROJECT.md) and [architecture](docs/ARCHITECTURE.md) before changing specced behavior or package boundaries.
 5. Run `pnpm install` when dependencies or the lockfile changed.
 
 ## Working rules
@@ -25,7 +25,7 @@ Mapgrain is a local-first technical diagram workspace. This file is the router: 
 
 Use `not_started → active → verified → passing`. Use `blocked` when an external condition stops progress. A failed check returns the task to `active`. Stale `verified` work must be reactivated and verified again.
 
-Before `verified`, run `pnpm verify` through `node --experimental-strip-types scripts/harness/cli.ts --root . verify ID` so evidence is recorded. Running `pnpm verify` by itself does not update the queue.
+Before `verified`, run `pnpm verify` through `node --experimental-strip-types scripts/cli.ts --root . verify ID` so evidence is recorded. Running `pnpm verify` by itself does not update the queue.
 
 ## Delivery
 
@@ -36,21 +36,21 @@ Push and PR only with authorization already given for the current task. Default 
 3. Commit with a conventional message that names the resulting behavior.
 4. Open a **draft** GitHub pull request against `main`. Keep the description short. Include the commands that ran.
 5. Wait for [CI](.github/workflows/ci.yml). Fix on the branch.
-6. Record the PR URL and revision with `node --experimental-strip-types scripts/harness/cli.ts --root . deliver ID`.
+6. Record the PR URL and revision with `node --experimental-strip-types scripts/cli.ts --root . deliver ID`.
 
 ## Harness commands
 
 ```sh
-node --experimental-strip-types scripts/harness/cli.ts --root . context
-node --experimental-strip-types scripts/harness/cli.ts --root . tasks
-node --experimental-strip-types scripts/harness/cli.ts --root . validate
-node --experimental-strip-types scripts/harness/cli.ts --root . transition ID active
-node --experimental-strip-types scripts/harness/cli.ts --root . verify ID
-node --experimental-strip-types scripts/harness/cli.ts --root . handoff
-node --experimental-strip-types scripts/harness/cli.ts --root . deliver ID --dry-run
-node --experimental-strip-types scripts/harness/cli.ts --root . archive ID --dry-run
+node --experimental-strip-types scripts/cli.ts --root . context
+node --experimental-strip-types scripts/cli.ts --root . tasks
+node --experimental-strip-types scripts/cli.ts --root . validate
+node --experimental-strip-types scripts/cli.ts --root . transition ID active
+node --experimental-strip-types scripts/cli.ts --root . verify ID
+node --experimental-strip-types scripts/cli.ts --root . handoff
+node --experimental-strip-types scripts/cli.ts --root . deliver ID --dry-run
+node --experimental-strip-types scripts/cli.ts --root . archive ID --dry-run
 ```
 
 `pnpm --silent harness --root . context` is the same runner if you prefer the package script.
 
-Queue: [docs/harness/tasks.json](docs/harness/tasks.json). Reliability: [docs/harness/RELIABILITY.md](docs/harness/RELIABILITY.md). Security: [docs/harness/SECURITY.md](docs/harness/SECURITY.md).
+Queue: [docs/tasks.json](docs/tasks.json). Reliability: [docs/RELIABILITY.md](docs/RELIABILITY.md). Security: [docs/SECURITY.md](docs/SECURITY.md).
