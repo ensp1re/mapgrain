@@ -6,6 +6,7 @@ import type {
   EVIDENCE_STATE,
   EVIDENCE_TARGET_KIND,
   LAYOUT_DIRECTION,
+  LAYOUT_SECTION_VERSION,
   NODE_KIND,
   PORT_SIDE,
   THEME,
@@ -17,6 +18,8 @@ import type {
   EvidenceSchema,
   GroupSchema,
   LayoutHintsSchema,
+  LayoutPointSchema,
+  LayoutSectionSchema,
   NodeSchema,
   PortSchema,
   ViewSchema,
@@ -40,5 +43,8 @@ export type DiagramEdge = Static<typeof EdgeSchema>;
 export type DiagramGroup = Static<typeof GroupSchema>;
 export type DiagramView = Static<typeof ViewSchema>;
 export type LayoutHints = Static<typeof LayoutHintsSchema>;
+export type LayoutPoint = Static<typeof LayoutPointSchema>;
+export type LayoutSection = Static<typeof LayoutSectionSchema>;
+export type LayoutSectionVersion = typeof LAYOUT_SECTION_VERSION;
 export type DiagramEvidence = Static<typeof EvidenceSchema>;
 export type DiagramDocument = Static<typeof DiagramDocumentSchema>;

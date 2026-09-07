@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextId": 15,
+  "nextId": 26,
   "tasks": [
     {
       "id": "F001",
@@ -25,8 +25,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793426730-62496d",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -87,8 +87,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793439005-079954",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -150,8 +150,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793452150-7deaf4",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -213,8 +213,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793463994-b89e11",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -277,8 +277,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793476030-054c9f",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -339,8 +339,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793487911-4323db",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -402,8 +402,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788797500629-e310ff",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -464,8 +464,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788798663725-8d9cdf",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -526,8 +526,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788799557750-b00ce7",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -591,8 +591,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788800481010-e56765",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -654,8 +654,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788801310224-cc1501",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -717,8 +717,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788802146185-c8b4da",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -780,8 +780,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788802738494-8e738b",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -831,7 +831,7 @@
         "F004",
         "F012"
       ],
-      "state": "verified",
+      "state": "passing",
       "spec": "docs/PROJECT.md",
       "plan": "docs/PLAN.md",
       "verification": [
@@ -844,8 +844,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788803958032-669084",
-        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
-        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
         "checks": [
           {
             "id": "unit",
@@ -866,6 +866,307 @@
         ],
         "verifiedAt": "2026-09-07T17:59:33.696Z"
       },
+      "delivery": {
+        "implementationRevision": "0c1e84e98871a827422133dc251859560b70d848",
+        "remote": "https://github.com/ensp1re/mapgrain.git",
+        "prUrl": "https://github.com/ensp1re/mapgrain/pull/16",
+        "checkRuns": [
+          {
+            "name": "verify",
+            "revision": "168063693b6a3c05961b17a357003956b420a938",
+            "conclusion": "success",
+            "url": "https://github.com/ensp1re/mapgrain/actions/runs/34149886277/job/101829757177"
+          }
+        ],
+        "observedAt": "2026-09-07T18:05:17Z",
+        "closeoutRevision": "0c1e84e98871a827422133dc251859560b70d848"
+      }
+    },
+    {
+      "id": "F015",
+      "behavior": "R1.1 Portable layout and export parity: positions and pins travel with JSON, backup, import, CLI, and SVG/PNG/HTML.",
+      "acceptance": [
+        "Move, pin, arrange, apply, rename, then export JSON/SVG/PNG/HTML and reimport; IDs, labels, groups, positions, and routes stay consistent.",
+        "Negative coordinates and nested groups round-trip.",
+        "Backup after a storage failure restores the arrangement.",
+        "Export uses the committed layout, not an arrange preview."
+      ],
+      "dependsOn": [
+        "F004",
+        "F007",
+        "F009",
+        "F012"
+      ],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788805672118-b8d681",
+        "fingerprintBefore": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "fingerprintAfter": "774b4d83df3128f2aaa1881eb9afd34fded86a4e545973ef1c9731c1909e1fe3",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-07T18:28:07.958Z"
+      },
+      "delivery": null
+    },
+    {
+      "id": "F016",
+      "behavior": "R1.2 One geometry pipeline: editor and export share scene dimensions, routes, arrows, and font-backed text metrics.",
+      "acceptance": [
+        "Visual comparisons across fixtures at both themes: no clipped text, coincident parallel labels, or false arrows.",
+        "Canonical routes govern the editor; direction none/forward/both is visible.",
+        "Browser and Node text measurement agree for long, multiline, Cyrillic, and CJK labels."
+      ],
+      "dependsOn": [
+        "F015"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F017",
+      "behavior": "R1.3 Safe editing: one selection model, layout results bound to document and layout revisions, presentation is read-only.",
+      "acceptance": [
+        "Arrange then edit/undo/open another file cannot apply a stale layout.",
+        "Presentation mode ignores delete, duplicate, undo, and connect.",
+        "Failed operations leave the last valid snapshot intact."
+      ],
+      "dependsOn": [
+        "F015"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F018",
+      "behavior": "R1.4 Durable storage and safe CLI writes: document library, honest save states, atomic file replace, numeric JSON is invalid.",
+      "acceptance": [
+        "Two diagrams can be edited and reopened independently.",
+        "Unavailable storage never claims Saved.",
+        "Disk-write failure preserves the previous artifact; validate 0 fails."
+      ],
+      "dependsOn": [
+        "F015",
+        "F012"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F019",
+      "behavior": "R2.1 Real creation: blank diagram, open file, examples, recent, add palette; agent path instead of fake generation.",
+      "acceptance": [
+        "A new user can build Browser, API, Database, group, pin, undo, reopen, and export without writing JSON."
+      ],
+      "dependsOn": [
+        "F015",
+        "F017"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F020",
+      "behavior": "R2.2 Useful editing: context menus, search, nested outline, fit/zoom, export dialog, browser PNG.",
+      "acceptance": [
+        "Export dialog covers SVG, PNG, HTML, and JSON with theme and errors.",
+        "Search and outline can focus a node; keep-position is labeled as arrange-only."
+      ],
+      "dependsOn": [
+        "F019"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F021",
+      "behavior": "R2.3 Offline viewer with pan/zoom/search/theme, bundled assets, no editor chrome.",
+      "acceptance": [
+        "Downloaded HTML opens without a server; search and fit work; evidence is redacted."
+      ],
+      "dependsOn": [
+        "F015",
+        "F013"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F022",
+      "behavior": "R3.1 Publishable CLI: bundled binary, help/version/doctor, studio on loopback, tarball install in CI.",
+      "acceptance": [
+        "Install a packed tarball in an empty directory and run help, validate, render, PNG, HTML, and studio."
+      ],
+      "dependsOn": [
+        "F015",
+        "F018"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F023",
+      "behavior": "R3.2 Companion agent skill that emits JSON or operations and calls the CLI; no guessed pixel positions.",
+      "acceptance": [
+        "A clean agent install can generate a 10-node map, refine one node without destroying layout, and deliver offline HTML."
+      ],
+      "dependsOn": [
+        "F015",
+        "F022"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F024",
+      "behavior": "R4 Visual and performance finish: original chrome, measured budgets, lazy ELK, versioned offline cache.",
+      "acceptance": [
+        "Toolbar does not overflow at 390px. Performance results include device, fixture, warm/cold, p50/p95."
+      ],
+      "dependsOn": [
+        "F019",
+        "F021",
+        "F022"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F025",
+      "behavior": "R5 Release candidate evidence: production build in CI, browser E2E, recovery journeys, five unassisted users.",
+      "acceptance": [
+        "Clean install through agent, editor, and portable export preserves edits.",
+        "README and CLI help match shipped behavior."
+      ],
+      "dependsOn": [
+        "F024"
+      ],
+      "state": "not_started",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": null,
       "delivery": null
     }
   ]

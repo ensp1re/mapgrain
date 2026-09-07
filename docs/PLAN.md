@@ -2,13 +2,15 @@
 
 ## Objective
 
-Ship a local editor that can create, correct, and export a small architecture or workflow diagram. Tracked against [PROJECT.md](PROJECT.md).
+Ship a local architecture/workflow editor with a companion agent skill and CLI. Users create a diagram by hand or through an existing coding agent, refine it visually, save it portably, and send offline HTML. No account or Mapgrain-managed model is required.
+
+This plan supersedes broad feature expansion from the earlier brief. Visual direction from that brief still applies. Tracked against [PROJECT.md](PROJECT.md).
 
 ## State
 
 - Status: `active`
-- Current task ID: F014
-- Active slice: 100-node fixture through validate, layout, and export
+- Current task ID: F015
+- Active slice: R1.1 portable layout and export parity
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -30,9 +32,30 @@ Ship a local editor that can create, correct, and export a small architecture or
 | F011 | Example-backed first session; no fake generation | F006 | unit, lint, typecheck, build | passing |
 | F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | passing |
 | F013 | Read-only viewer from the canonical scene | F004, F012 | unit, lint, typecheck, build | passing |
-| F014 | 100-node fixture through validate, layout, and export | F003, F004, F012 | unit, lint, typecheck, build | active |
+| F014 | 100-node fixture through validate, layout, and export | F003, F004, F012 | unit, lint, typecheck, build | passing |
+| F015 | R1.1 Portable layout and export parity | F004, F007, F009, F012 | unit, lint, typecheck, build | active |
+| F016 | R1.2 One geometry pipeline | F015 | unit, lint, typecheck, build | not_started |
+| F017 | R1.3 Safe editing, selection, async layout | F015 | unit, lint, typecheck, build | not_started |
+| F018 | R1.4 Durable storage and safe CLI writes | F015, F012 | unit, lint, typecheck, build | not_started |
+| F019 | R2.1 Real creation without fake generation | F015, F017 | unit, lint, typecheck, build | not_started |
+| F020 | R2.2 Useful editing and export dialog | F019 | unit, lint, typecheck, build | not_started |
+| F021 | R2.3 Offline viewer people can use | F015, F013 | unit, lint, typecheck, build | not_started |
+| F022 | R3.1 Publishable CLI and studio | F015, F018 | unit, lint, typecheck, build | not_started |
+| F023 | R3.2 Companion agent skill | F015, F022 | unit, lint, typecheck, build | not_started |
+| F024 | R4 Visual and performance finish | F019, F021, F022 | unit, lint, typecheck, build | not_started |
+| F025 | R5 Release candidate evidence | F024 | unit, lint, typecheck, build | not_started |
 
-Later milestones (sequence mode, revisions, hosted sharing, repository evidence) stay in [PROJECT.md](PROJECT.md). Do not start them in this queue.
+Do not start R6 (imports, evidence, comparison, hosted) until R5. No backend or billing in R1–R5.
+
+## Stages
+
+| Stage | Outcome |
+| --- | --- |
+| R1 | A diagram survives editing, backup, reload, and export without changing appearance or meaning |
+| R2 | A new user can create and finish a diagram without editing JSON |
+| R3 | A clean machine can install and generate a useful diagram |
+| R4 | Diagram and controls are readable, responsive, consistent, and measured |
+| R5 | Browser, offline, package, and recovery journeys pass |
 
 ## Checkpoints
 

@@ -6,6 +6,7 @@ import {
   EVIDENCE_STATE,
   EVIDENCE_TARGET_KIND,
   LAYOUT_DIRECTION,
+  LAYOUT_SECTION_VERSION,
   NODE_KIND,
   PORT_SIDE,
   SCHEMA_VERSION,
@@ -103,6 +104,23 @@ export const LayoutHintsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const LayoutPointSchema = Type.Object(
+  {
+    x: Type.Number(),
+    y: Type.Number(),
+  },
+  { additionalProperties: false },
+);
+
+export const LayoutSectionSchema = Type.Object(
+  {
+    version: Type.Literal(LAYOUT_SECTION_VERSION),
+    revision: Type.Integer({ minimum: 1 }),
+    positions: Type.Record(Id, LayoutPointSchema),
+  },
+  { additionalProperties: false },
+);
+
 export const EvidenceSchema = Type.Object(
   {
     id: Id,
@@ -126,6 +144,7 @@ export const DiagramDocumentSchema = Type.Object(
     groups: Type.Array(GroupSchema),
     views: Type.Array(ViewSchema),
     layoutHints: LayoutHintsSchema,
+    layout: Type.Optional(LayoutSectionSchema),
     theme: stringUnion(valuesOf(THEME)),
     evidence: Type.Optional(Type.Array(EvidenceSchema)),
   },

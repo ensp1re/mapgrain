@@ -12,4 +12,5 @@ export const OPERATION_KIND = {
   DUPLICATE_NODE: "duplicate_node",
   SET_NODE_GROUP: "set_node_group",
   SET_NODE_PINNED: "set_node_pinned",
+  SET_LAYOUT: "set_layout",
 } as const;

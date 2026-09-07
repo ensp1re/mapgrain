@@ -1,4 +1,5 @@
 export const SCHEMA_VERSION = 1 as const;
+export const LAYOUT_SECTION_VERSION = 1 as const;
 
 export const DOCUMENT_KIND = {
   ARCHITECTURE: "architecture",

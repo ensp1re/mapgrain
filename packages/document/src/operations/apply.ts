@@ -3,6 +3,7 @@ import { OPERATION_KIND } from "../constants/operations.ts";
 import type { DiagramDocument, DiagramEdge, DiagramNode } from "../types/document.ts";
 import type { ApplyResult, Operation } from "../types/operation.ts";
 import type { ValidationIssue } from "../types/validation.ts";
+import { applyPortableLayout } from "../layout/portable.ts";
 import { validateDocument } from "../validate.ts";
 
 function cloneDocument(document: DiagramDocument): DiagramDocument {
@@ -41,6 +42,11 @@ function removeNodeRefs(document: DiagramDocument, nodeId: string): void {
     (edge) => edge.source.nodeId !== nodeId && edge.target.nodeId !== nodeId,
   );
   document.layoutHints.pinnedNodeIds = document.layoutHints.pinnedNodeIds.filter((id) => id !== nodeId);
+  if (document.layout?.positions) {
+    const rest = { ...document.layout.positions };
+    delete rest[nodeId];
+    document.layout = { ...document.layout, positions: rest };
+  }
   document.views = document.views.map((view) => ({
     ...view,
     nodeIds: view.nodeIds?.filter((id) => id !== nodeId),
@@ -215,6 +221,14 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
         next.layoutHints.pinnedNodeIds = next.layoutHints.pinnedNodeIds.filter((id) => id !== node.id);
       }
       return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_LAYOUT: {
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_LAYOUT,
+        positions: { ...(document.layout?.positions ?? {}) },
+      };
+      const laidOut = applyPortableLayout(next, operation.positions);
+      return commit(laidOut, inverse, document);
     }
     default: {
       const _never: never = operation;

@@ -442,6 +442,46 @@
         }
       }
     },
+    "layout": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "version",
+        "revision",
+        "positions"
+      ],
+      "properties": {
+        "version": {
+          "const": 1,
+          "type": "number"
+        },
+        "revision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "positions": {
+          "type": "object",
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]*$": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "x",
+                "y"
+              ],
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "theme": {
       "anyOf": [
         {
