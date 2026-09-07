@@ -33,7 +33,10 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /data-theme="dark"/);
   assert.match(css, /data-theme="light"/);
   assert.match(css, /max-width: 720px/);
+  assert.match(css, /max-width: 390px/);
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /--topbar-h: 48px/);
   assert.match(css, /\.react-flow__node-group/);
+  assert.match(css, /\.topbar-wide/);
+  assert.match(css, /\.topbar \{[\s\S]*overflow: hidden/);
 });

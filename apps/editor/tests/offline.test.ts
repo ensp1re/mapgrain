@@ -8,6 +8,7 @@ import { OPERATION_KIND, validateDocument } from "@mapgrain/document";
 import { buildScene } from "@mapgrain/scene";
 import { positionsFromScene } from "../src/geometry/positions.ts";
 import { editPersistReloadExport } from "../src/offline/loop.ts";
+import { OFFLINE_CACHE } from "../src/constants/offline.ts";
 import { memoryStore } from "../src/persist/memory.ts";
 
 const fixture = fileURLToPath(
@@ -66,4 +67,7 @@ test("service worker caches same-origin GET and serves it offline", async () => 
   assert.match(source, /cache\.match/);
   assert.match(source, /skipWaiting/);
   assert.match(source, /cache\.addAll/);
+  assert.match(source, new RegExp(OFFLINE_CACHE));
+  assert.match(source, /caches\.delete/);
+  assert.match(source, /startsWith\(CACHE_PREFIX\)/);
 });

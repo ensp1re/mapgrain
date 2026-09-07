@@ -98,38 +98,71 @@ export function TopBar({
         </button>
       ) : null}
       <div className="spacer" />
-      <button type="button" className="text-btn" onClick={onUndo} disabled={!canUndo}>
-        Undo
-      </button>
-      <button type="button" className="text-btn" onClick={onRedo} disabled={!canRedo}>
-        Redo
-      </button>
-      <button type="button" className="text-btn" onClick={onNew}>
-        New
-      </button>
-      <button type="button" className="text-btn" onClick={onArrange}>
-        Arrange
-      </button>
-      <button type="button" className="text-btn" onClick={onPresent}>
-        Present
-      </button>
-      <button type="button" className="text-btn primary" onClick={onExport}>
-        Export
-      </button>
-      <button type="button" className="text-btn" onClick={onToggleOutline}>
-        Outline
-      </button>
-      <button type="button" className="text-btn" onClick={onCommand}>
-        Commands
-      </button>
-      <button
-        type="button"
-        className={chatOpen ? "text-btn is-on" : "text-btn"}
-        aria-pressed={chatOpen}
-        onClick={onToggleChat}
-      >
-        Chat
-      </button>
+      <div className="topbar-actions">
+        <button type="button" className="text-btn" onClick={onArrange}>
+          Arrange
+        </button>
+        <button type="button" className="text-btn primary" onClick={onExport}>
+          Export
+        </button>
+        <button type="button" className="text-btn topbar-wide" onClick={onUndo} disabled={!canUndo}>
+          Undo
+        </button>
+        <button type="button" className="text-btn topbar-wide" onClick={onRedo} disabled={!canRedo}>
+          Redo
+        </button>
+        <button type="button" className="text-btn topbar-wide" onClick={onNew}>
+          New
+        </button>
+        <button type="button" className="text-btn topbar-wide" onClick={onPresent}>
+          Present
+        </button>
+        <button type="button" className="text-btn topbar-wide" onClick={onToggleOutline}>
+          Outline
+        </button>
+        <button type="button" className="text-btn topbar-wide" onClick={onCommand}>
+          Commands
+        </button>
+        <button
+          type="button"
+          className={chatOpen ? "text-btn is-on topbar-wide" : "text-btn topbar-wide"}
+          aria-pressed={chatOpen}
+          onClick={onToggleChat}
+        >
+          Chat
+        </button>
+        <details className="topbar-more">
+          <summary className="text-btn">More</summary>
+          <div className="topbar-more-menu">
+            <button type="button" className="text-btn" onClick={onUndo} disabled={!canUndo}>
+              Undo
+            </button>
+            <button type="button" className="text-btn" onClick={onRedo} disabled={!canRedo}>
+              Redo
+            </button>
+            <button type="button" className="text-btn" onClick={onNew}>
+              New
+            </button>
+            <button type="button" className="text-btn" onClick={onPresent}>
+              Present
+            </button>
+            <button type="button" className="text-btn" onClick={onToggleOutline}>
+              Outline
+            </button>
+            <button type="button" className="text-btn" onClick={onCommand}>
+              Commands
+            </button>
+            <button
+              type="button"
+              className={chatOpen ? "text-btn is-on" : "text-btn"}
+              aria-pressed={chatOpen}
+              onClick={onToggleChat}
+            >
+              Chat
+            </button>
+          </div>
+        </details>
+      </div>
     </header>
   );
 }
