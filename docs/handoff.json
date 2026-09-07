@@ -4,8 +4,8 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/offline-loop",
-    "revision": "d0666c7fd681fe22c01b742fb467ae104f8ce1a4",
+    "branch": "feat/example-start",
+    "revision": "7781ea220562fc63b2de1839f6ee998f5af4cd71",
     "dirty": true
   },
   "evidenceRefs": [
@@ -18,7 +18,8 @@
     "docs/runs/run-1788797500629-e310ff.json",
     "docs/runs/run-1788798663725-8d9cdf.json",
     "docs/runs/run-1788799557750-b00ce7.json",
-    "docs/runs/run-1788800481010-e56765.json"
+    "docs/runs/run-1788800481010-e56765.json",
+    "docs/runs/run-1788801310224-cc1501.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -29,7 +30,8 @@
     "New connections record explicit type and direction before they are committed.",
     "Arrange runs ELK off the UI thread, shows a preview with Apply/Discard, and never silently drops keep-position pins.",
     "Autosave writes document and positions to IndexedDB. Saved/Saving/Recovery are visible in the top bar. A failed write offers a JSON backup download.",
-    "A production service worker caches same-origin GET so edit, reload, and export work with the network disabled. Chat does not invent a reply."
+    "A production service worker caches same-origin GET so edit, reload, and export work with the network disabled. Chat does not invent a reply.",
+    "First session is an example-backed start surface. Submit without a provider fails honestly, keeps the prompt, and offers a repair. Examples are never labelled as generated output."
   ],
   "rejectedApproaches": [
     "Adding Turborepo or Nx before there are packages to orchestrate.",
@@ -39,9 +41,10 @@
     "Rebuilding default sequential placement after a label edit.",
     "Running nested ELK workers inside the editor layout worker.",
     "Adding an IndexedDB wrapper library for a single object store.",
-    "Adding vite-plugin-pwa for a single cache-first worker."
+    "Adding vite-plugin-pwa for a single cache-first worker.",
+    "Walking fake interpreting/arranging/checking stages as if a model ran."
   ],
   "blockers": [],
-  "nextAction": "Open a draft PR for F010. Wait for CI. Do not merge until asked.",
-  "updatedAt": "2026-09-07T17:02:17.084Z"
+  "nextAction": "Open a draft PR for F011. Wait for CI. Do not merge until asked.",
+  "updatedAt": "2026-09-07T17:16:01.430Z"
 }

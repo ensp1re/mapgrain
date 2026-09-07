@@ -30,6 +30,7 @@ import { buildScene } from "@mapgrain/scene";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { ChatDrawer } from "./chrome/ChatDrawer.tsx";
+import { StartSurface } from "./chrome/StartSurface.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
 import { ConnectDialog } from "./chrome/ConnectDialog.tsx";
 import { Inspector } from "./chrome/Inspector.tsx";
@@ -38,6 +39,7 @@ import { TopBar } from "./chrome/TopBar.tsx";
 import { ALIGN_KIND } from "./constants/align.ts";
 import { COMMAND_ID, type CommandId } from "./constants/commands.ts";
 import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
+import { JOB_STAGE, JOB_STATUS } from "./constants/create.ts";
 import { AUTOSAVE_MS, SAVE_STATE } from "./constants/persist.ts";
 import { ComponentNode } from "./diagram/ComponentNode.tsx";
 import { GroupNode } from "./diagram/GroupNode.tsx";
@@ -55,10 +57,15 @@ import {
 import { shouldOpenCommandMenu } from "./keyboard/commandShortcut.ts";
 import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
 import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
-import { backupBytes } from "./persist/codec.ts";
+import { EXAMPLES } from "./create/examples.ts";
+import { importDocumentText } from "./create/importDocument.ts";
+import { runCreateJob } from "./create/job.ts";
+import { isProviderConfigured } from "./create/provider.ts";
+import { backupBytes, snapshotFromStored } from "./persist/codec.ts";
 import { indexedDbStore } from "./persist/indexeddb.ts";
 import { memoryStore } from "./persist/memory.ts";
 import type { ArrangeState } from "./types/arrange.ts";
+import type { CreateJobResult, JobStage, WorkspaceSurface } from "./types/create.ts";
 import type {
   AlignKind,
   ConnectionDraft,
@@ -186,7 +193,14 @@ function Specimen() {
   const [dragging, setDragging] = useState(false);
   const [arrange, setArrange] = useState<ArrangeState>({ status: "idle" });
   const [booted, setBooted] = useState(false);
+  const [surface, setSurface] = useState<WorkspaceSurface>("start");
+  const [prompt, setPrompt] = useState("");
+  const [job, setJob] = useState<
+    CreateJobResult | { status: typeof JOB_STATUS.IDLE | typeof JOB_STATUS.RUNNING; stage?: JobStage }
+  >({ status: JOB_STATUS.IDLE, stage: JOB_STAGE.INTERPRETING });
+  const [importError, setImportError] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<SaveState>(SAVE_STATE.SAVED);
+  const jobAbort = useRef<AbortController | null>(null);
   const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
   const historyRef = useRef(history);
   historyRef.current = history;
@@ -210,7 +224,10 @@ function Specimen() {
       .load()
       .then((stored) => {
         if (cancelled) return;
-        if (stored) setHistory(createHistory(stored));
+        if (stored) {
+          setHistory(createHistory(stored));
+          setSurface("editor");
+        }
         skipNextSave.current = true;
         setBooted(true);
       })
@@ -226,7 +243,7 @@ function Specimen() {
   }, []);
 
   useEffect(() => {
-    if (!booted || !snapshot) return;
+    if (!booted || !snapshot || surface !== "editor") return;
     if (skipNextSave.current) {
       skipNextSave.current = false;
       setSaveState(bootRecovery.current ? SAVE_STATE.RECOVERY : SAVE_STATE.SAVED);
@@ -245,7 +262,35 @@ function Specimen() {
         });
     }, AUTOSAVE_MS);
     return () => window.clearTimeout(timer);
-  }, [booted, snapshot]);
+  }, [booted, snapshot, surface]);
+
+  const openSnapshot = useCallback((next: EditorSnapshot) => {
+    skipNextSave.current = false;
+    setHistory(createHistory(next));
+    setSelection({
+      nodeIds: next.document.nodes[0] ? [next.document.nodes[0].id] : [],
+      edgeIds: [],
+    });
+    setSurface("editor");
+    setImportError(null);
+  }, []);
+
+  const submitPrompt = useCallback(() => {
+    const controller = new AbortController();
+    jobAbort.current = controller;
+    setJob({ status: JOB_STATUS.RUNNING, stage: JOB_STAGE.INTERPRETING });
+    void runCreateJob(prompt, {
+      providerConfigured: isProviderConfigured(),
+      signal: controller.signal,
+    }).then((result) => {
+      setJob(result);
+    });
+  }, [prompt]);
+
+  const cancelPrompt = useCallback(() => {
+    jobAbort.current?.abort();
+  }, []);
+
   const displayPositions =
     arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {});
 
@@ -509,6 +554,11 @@ function Specimen() {
       if (id === COMMAND_ID.ALIGN_TOP) alignSelection(ALIGN_KIND.TOP);
       if (id === COMMAND_ID.ALIGN_BOTTOM) alignSelection(ALIGN_KIND.BOTTOM);
       if (id === COMMAND_ID.ARRANGE) void startArrange();
+      if (id === COMMAND_ID.NEW) {
+        jobAbort.current?.abort();
+        setJob({ status: JOB_STATUS.IDLE, stage: JOB_STAGE.INTERPRETING });
+        setSurface("start");
+      }
     },
     [alignSelection, deleteSelection, duplicateSelection, exportFormat, fitView, startArrange],
   );
@@ -569,6 +619,38 @@ function Specimen() {
     return <p>Loading workspace…</p>;
   }
 
+  if (surface === "start") {
+    return (
+      <div className="app">
+        <StartSurface
+          prompt={prompt}
+          job={job}
+          importError={importError}
+          onPromptChange={setPrompt}
+          onSubmit={submitPrompt}
+          onCancel={cancelPrompt}
+          onRepair={() => document.getElementById("examples")?.scrollIntoView({ block: "start" })}
+          onOpenExample={(id) => {
+            const example = EXAMPLES.find((item) => item.id === id);
+            if (!example) return;
+            const next = snapshotFromStored({ document: example.document });
+            if (next) openSnapshot(next);
+          }}
+          onImportFile={(file) => {
+            void file.text().then((text) => {
+              const result = importDocumentText(text);
+              if ("error" in result) {
+                setImportError(result.error);
+                return;
+              }
+              openSnapshot(result.snapshot);
+            });
+          }}
+        />
+      </div>
+    );
+  }
+
   if (!documentModel || !scene?.ok || !snapshot) {
     return <p>Could not build the specimen diagram.</p>;
   }
@@ -598,6 +680,7 @@ function Specimen() {
         onTitleCommit={(value) => applyOp({ kind: OPERATION_KIND.SET_TITLE, title: value })}
         onUndo={() => runCommand(COMMAND_ID.UNDO)}
         onRedo={() => runCommand(COMMAND_ID.REDO)}
+        onNew={() => runCommand(COMMAND_ID.NEW)}
         onArrange={() => runCommand(COMMAND_ID.ARRANGE)}
         onPresent={() => runCommand(COMMAND_ID.PRESENT)}
         onExport={() => runCommand(COMMAND_ID.EXPORT_SVG)}

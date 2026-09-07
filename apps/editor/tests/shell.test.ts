@@ -40,6 +40,8 @@ test("inspector is omitted when nothing is selected", () => {
 test("shell CSS keeps chat as an overlay, not a third column", async () => {
   const css = await readFile(fileURLToPath(new URL("../src/styles/app.css", import.meta.url)), "utf8");
   assert.match(css, /\.chat-drawer/);
+  assert.match(css, /\.start-surface/);
+  assert.match(css, /\.example-card/);
   assert.match(css, /position: absolute/);
   assert.match(css, /\.title-field input/);
 });
