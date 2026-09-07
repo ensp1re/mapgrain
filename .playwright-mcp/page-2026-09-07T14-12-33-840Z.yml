@@ -1,0 +1,98 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]: Mapgrain
+    - generic [ref=e6]: Local diagram workspace
+    - generic [ref=e7]: Saved
+    - button "Outline" [ref=e8] [cursor=pointer]
+    - button "Theme" [ref=e9] [cursor=pointer]
+    - button "Commands" [ref=e10] [cursor=pointer]
+    - button "Export" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - navigation "Components" [ref=e13]:
+      - generic [ref=e14]: Outline
+      - button "Local runtime" [ref=e15] [cursor=pointer]
+      - button "Document pipeline" [ref=e17] [cursor=pointer]
+      - button "Workspace API gateway" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: Workspace API
+        - generic [ref=e21]: gateway
+      - button "Diagram document datastore" [ref=e22] [cursor=pointer]:
+        - generic [ref=e23]: Diagram document
+        - generic [ref=e24]: datastore
+      - button "Layout worker job" [ref=e25] [cursor=pointer]:
+        - generic [ref=e26]: Layout worker
+        - generic [ref=e27]: job
+      - button "Canonical renderer service" [ref=e28] [cursor=pointer]:
+        - generic [ref=e29]: Canonical renderer
+        - generic [ref=e30]: service
+      - button "Model provider external" [ref=e31] [cursor=pointer]:
+        - generic [ref=e32]: Model provider
+        - generic [ref=e33]: external
+    - application [ref=e35]:
+      - generic [ref=e37]:
+        - generic:
+          - generic:
+            - img:
+              - group "Edge from provider to gateway"
+            - img:
+              - group "Edge from gateway to document"
+            - img:
+              - group "Edge from document to layout"
+            - img:
+              - group "Edge from layout to renderer"
+          - generic:
+            - group [ref=e61]:
+              - generic [ref=e62]: Local runtime
+            - group [ref=e64]:
+              - generic [ref=e65]: Document pipeline
+            - group [ref=e67]:
+              - generic [ref=e68]:
+                - generic [ref=e71]: gateway
+                - generic [ref=e72]: Workspace API
+            - group [ref=e74]:
+              - generic [ref=e75]:
+                - generic [ref=e78]: datastore
+                - generic [ref=e79]: Diagram document
+            - group [ref=e81]:
+              - generic [ref=e82]:
+                - generic [ref=e85]: job
+                - generic [ref=e86]: Layout worker
+            - group [ref=e88]:
+              - generic [ref=e89]:
+                - generic [ref=e92]: service
+                - generic [ref=e93]: Canonical renderer
+            - group [ref=e95]:
+              - generic [ref=e96]:
+                - generic [ref=e98]: external
+                - generic [ref=e99]: Model provider
+      - generic "Control Panel" [ref=e38]:
+        - button "Zoom In" [ref=e39] [cursor=pointer]
+        - button "Zoom Out" [disabled]
+        - button "Fit View" [ref=e45] [cursor=pointer]
+    - complementary "Inspector" [ref=e49]:
+      - generic [ref=e51]:
+        - term [ref=e52]: Component
+        - definition [ref=e53]: Workspace API
+        - term [ref=e54]: Kind
+        - definition [ref=e55]: gateway
+        - term [ref=e56]: Relations
+        - definition [ref=e57]:
+          - list [ref=e58]:
+            - listitem [ref=e59]: provider → gateway
+            - listitem [ref=e60]: gateway → document
+  - dialog "Command menu" [ref=e102]:
+    - textbox "Find component, arrange, export…" [active] [ref=e103]
+    - button "Toggle theme T" [ref=e104] [cursor=pointer]:
+      - generic [ref=e105]: Toggle theme
+      - generic [ref=e106]: T
+    - button "Toggle outline O" [ref=e107] [cursor=pointer]:
+      - generic [ref=e108]: Toggle outline
+      - generic [ref=e109]: O
+    - button "Fit diagram F" [ref=e110] [cursor=pointer]:
+      - generic [ref=e111]: Fit diagram
+      - generic [ref=e112]: F
+    - button "Export SVG E" [ref=e113] [cursor=pointer]:
+      - generic [ref=e114]: Export SVG
+      - generic [ref=e115]: E
+    - button "Export JSON J" [ref=e116] [cursor=pointer]:
+      - generic [ref=e117]: Export JSON
+      - generic [ref=e118]: J
