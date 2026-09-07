@@ -32,9 +32,23 @@ test("the view has no edit controls, chat, or inspector", async () => {
   assert.match(view.html, /Read-only view/);
   assert.doesNotMatch(view.html, /Inspector/);
   assert.doesNotMatch(view.html, /Chat/);
-  assert.doesNotMatch(view.html, /<script/i);
   assert.doesNotMatch(view.html, /https:\/\//);
   assert.doesNotMatch(view.html, /contenteditable/i);
+  assert.match(view.html, /data-act="fit"/);
+  assert.match(view.html, /aria-label="Search"/);
+  assert.match(view.html, /data-act="theme"/);
+  assert.match(view.html, /Download JSON/);
+  assert.match(view.html, /static graph, not a live system/);
+});
+
+test("viewer payload omits evidence and includes authored edges", async () => {
+  const raw = JSON.parse(await readFile(fixture, "utf8")) as { evidence?: unknown };
+  raw.evidence = [{ id: "ev1", targetKind: "node", targetId: "gateway", state: "inferred", note: "secret" }];
+  const view = renderView(raw);
+  assert.equal(view.ok, true);
+  if (!view.ok) return;
+  assert.doesNotMatch(view.html, /secret/);
+  assert.match(view.html, /"source":"gateway"/);
 });
 
 test("the viewer package does not depend on the editor", async () => {
