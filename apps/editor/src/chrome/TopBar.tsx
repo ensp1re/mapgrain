@@ -92,7 +92,7 @@ export function TopBar({
       <span className="save-state" aria-live="polite">
         {saveState}
       </span>
-      {saveState === SAVE_STATE.RECOVERY ? (
+      {saveState === SAVE_STATE.RECOVERY || saveState === SAVE_STATE.TEMPORARY ? (
         <button type="button" className="text-btn" onClick={onBackup}>
           Download backup
         </button>

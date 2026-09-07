@@ -9,6 +9,7 @@ export interface CliIo {
   stderr: { write(chunk: string | Uint8Array): void };
   readFile(path: string): Promise<string>;
   writeFile(path: string, bytes: Uint8Array): Promise<void>;
+  rename?(from: string, to: string): Promise<void>;
 }
 
 export interface DiagnosticIssue {

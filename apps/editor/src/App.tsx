@@ -262,7 +262,12 @@ function Specimen() {
     if (!booted || !snapshot || surface !== "editor") return;
     if (skipNextSave.current) {
       skipNextSave.current = false;
-      setSaveState(bootRecovery.current ? SAVE_STATE.RECOVERY : SAVE_STATE.SAVED);
+      if (!persistStore.current.durable) setSaveState(SAVE_STATE.TEMPORARY);
+      else setSaveState(bootRecovery.current ? SAVE_STATE.RECOVERY : SAVE_STATE.SAVED);
+      return;
+    }
+    if (!persistStore.current.durable) {
+      setSaveState(SAVE_STATE.TEMPORARY);
       return;
     }
     setSaveState(SAVE_STATE.SAVING);
