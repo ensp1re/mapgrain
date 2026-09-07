@@ -7,17 +7,7 @@ interface InspectorProps {
 }
 
 export function Inspector({ document, node }: InspectorProps) {
-  if (!node) {
-    return (
-      <aside className="inspector" aria-label="Inspector">
-        <div className="pane-label">Inspector</div>
-        <dl>
-          <dt>Selection</dt>
-          <dd>Select a component to see relations.</dd>
-        </dl>
-      </aside>
-    );
-  }
+  if (!node) return null;
   const relations = document.edges.filter(
     (edge) => edge.source.nodeId === node.id || edge.target.nodeId === node.id,
   );
