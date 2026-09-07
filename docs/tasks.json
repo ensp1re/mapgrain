@@ -24,9 +24,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1788788348208-8567f0",
-        "fingerprintBefore": "d0c59e5d4412cd20255ddaf1b4695800d7cc51b70b621dc7e51c0affc232c44a",
-        "fingerprintAfter": "d0c59e5d4412cd20255ddaf1b4695800d7cc51b70b621dc7e51c0affc232c44a",
+        "attemptId": "run-1788789116576-b79046",
+        "fingerprintBefore": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
+        "fingerprintAfter": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
         "checks": [
           {
             "id": "unit",
@@ -45,7 +45,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-07T13:39:16.930Z"
+        "verifiedAt": "2026-09-07T13:52:05.133Z"
       },
       "delivery": {
         "implementationRevision": "704bbde0f7bba0c7820884184b726f7d82af0fb8",
@@ -86,9 +86,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1788788372332-e08fe0",
-        "fingerprintBefore": "d0c59e5d4412cd20255ddaf1b4695800d7cc51b70b621dc7e51c0affc232c44a",
-        "fingerprintAfter": "d0c59e5d4412cd20255ddaf1b4695800d7cc51b70b621dc7e51c0affc232c44a",
+        "attemptId": "run-1788789132847-14f4ca",
+        "fingerprintBefore": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
+        "fingerprintAfter": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
         "checks": [
           {
             "id": "unit",
@@ -107,7 +107,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-07T13:39:40.376Z"
+        "verifiedAt": "2026-09-07T13:52:21.643Z"
       },
       "delivery": {
         "implementationRevision": "a03d175c254be4072c3b5600a4a53be13559a817",
@@ -137,7 +137,7 @@
       "dependsOn": [
         "F002"
       ],
-      "state": "verified",
+      "state": "passing",
       "spec": "docs/PROJECT.md",
       "plan": "docs/PLAN.md",
       "verification": [
@@ -149,9 +149,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1788788391295-052833",
-        "fingerprintBefore": "d0c59e5d4412cd20255ddaf1b4695800d7cc51b70b621dc7e51c0affc232c44a",
-        "fingerprintAfter": "d0c59e5d4412cd20255ddaf1b4695800d7cc51b70b621dc7e51c0affc232c44a",
+        "attemptId": "run-1788789147079-3f13b7",
+        "fingerprintBefore": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
+        "fingerprintAfter": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
         "checks": [
           {
             "id": "unit",
@@ -170,9 +170,23 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-07T13:39:59.429Z"
+        "verifiedAt": "2026-09-07T13:52:35.039Z"
       },
-      "delivery": null
+      "delivery": {
+        "implementationRevision": "06d0c55513974280ce57ff994db4ac1a89a1e571",
+        "remote": "https://github.com/ensp1re/mapgrain.git",
+        "prUrl": "https://github.com/ensp1re/mapgrain/pull/5",
+        "checkRuns": [
+          {
+            "name": "verify",
+            "revision": "06d0c55513974280ce57ff994db4ac1a89a1e571",
+            "conclusion": "success",
+            "url": "https://github.com/ensp1re/mapgrain/actions/runs/34129033890/job/101764437905"
+          }
+        ],
+        "observedAt": "2026-09-07T13:43:53Z",
+        "closeoutRevision": "06d0c55513974280ce57ff994db4ac1a89a1e571"
+      }
     },
     {
       "id": "F004",
@@ -186,7 +200,7 @@
       "dependsOn": [
         "F002"
       ],
-      "state": "not_started",
+      "state": "verified",
       "spec": "docs/PROJECT.md",
       "plan": "docs/PLAN.md",
       "verification": [
@@ -196,7 +210,31 @@
         "build"
       ],
       "blockedReason": null,
-      "evidence": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788789163369-3ddabe",
+        "fingerprintBefore": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
+        "fingerprintAfter": "fec315d61e687e8464a80963fabd0f665b2d413f6c2e25b26e69fdd43508a919",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-07T13:52:51.658Z"
+      },
       "delivery": null
     },
     {
