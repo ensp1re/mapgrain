@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "taskId": "F024",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/visual-perf",
-    "revision": "d2ca50f1a3038bc981bb4ba4139f7eb3792b46a8",
+    "branch": "chore/block-f025",
+    "revision": "cd30b6f6106a6342215e070d9e6fbfea7f06bdeb",
     "dirty": true
   },
   "evidenceRefs": [
@@ -31,7 +31,8 @@
     "docs/runs/run-1788808155658-391fbf.json",
     "docs/runs/run-1788808466921-89a20d.json",
     "docs/runs/run-1788810303070-9860f2.json",
-    "docs/runs/run-1788810829197-3a7bb9.json"
+    "docs/runs/run-1788810829197-3a7bb9.json",
+    "docs/runs/run-1788811389273-62a12e.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -68,7 +69,9 @@
     "Claiming a layout-time target before measuring on a documented device.",
     "Starting R6 imports, hosted sharing, or billing before R1–R5."
   ],
-  "blockers": [],
-  "nextAction": "Open a draft PR for F024. Merge when GitHub verify succeeds. Next is F025.",
-  "updatedAt": "2026-09-07T20:03:05.309Z"
+  "blockers": [
+    "F025 requires five unassisted users, desktop Chrome/Firefox/Safari, and a real touch-device smoke test. That evidence cannot be collected or invented in this environment."
+  ],
+  "nextAction": "F025 is blocked: five unassisted users and multi-browser smoke cannot be completed here. Do not invent user-study evidence.",
+  "updatedAt": "2026-09-07T20:07:27.185Z"
 }

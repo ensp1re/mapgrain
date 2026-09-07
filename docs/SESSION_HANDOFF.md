@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F024
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/visual-perf @ d2ca50f1a3038bc981bb4ba4139f7eb3792b46a8 (dirty)
-- Updated: 2026-09-07T20:03:05.309Z
+- Git: chore/block-f025 @ cd30b6f6106a6342215e070d9e6fbfea7f06bdeb (dirty)
+- Updated: 2026-09-07T20:07:27.185Z
 
 ### Next action
 
-Open a draft PR for F024. Merge when GitHub verify succeeds. Next is F025.
+F025 is blocked: five unassisted users and multi-browser smoke cannot be completed here. Do not invent user-study evidence.
 
 ### Decisions
 
@@ -52,7 +52,7 @@ Open a draft PR for F024. Merge when GitHub verify succeeds. Next is F025.
 
 ### Blockers
 
-- none
+- F025 requires five unassisted users, desktop Chrome/Firefox/Safari, and a real touch-device smoke test. That evidence cannot be collected or invented in this environment.
 
 ### Evidence
 
@@ -79,6 +79,7 @@ Open a draft PR for F024. Merge when GitHub verify succeeds. Next is F025.
 - docs/runs/run-1788808466921-89a20d.json
 - docs/runs/run-1788810303070-9860f2.json
 - docs/runs/run-1788810829197-3a7bb9.json
+- docs/runs/run-1788811389273-62a12e.json
 
 ## Resume
 
