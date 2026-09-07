@@ -7,8 +7,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 ## State
 
 - Status: `active`
-- Current task ID: F011
-- Active slice: example-backed first session; no fake generation
+- Current task ID: F012
+- Active slice: CLI validate / render / export
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -27,8 +27,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 | F008 | Arrange preview and visible pin conflicts | F007 | unit, lint, typecheck, build | passing |
 | F009 | IndexedDB persistence and backup download | F006 | unit, lint, typecheck, build | passing |
 | F010 | Offline create → edit → reload → export | F004, F007, F008, F009 | unit, lint, typecheck, build | passing |
-| F011 | Example-backed first session; no fake generation | F006 | unit, lint, typecheck, build | active |
-| F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | not_started |
+| F011 | Example-backed first session; no fake generation | F006 | unit, lint, typecheck, build | passing |
+| F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | active |
 
 Later milestones (sequence mode, revisions, hosted sharing, repository evidence) stay in [PROJECT.md](PROJECT.md) until F010 is passing. Do not start them in this queue.
 

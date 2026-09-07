@@ -82,6 +82,15 @@ importers:
         specifier: ^7.1.5
         version: 7.3.6(@types/node@24.13.3)(jiti@2.6.1)(yaml@2.9.0)
 
+  packages/cli:
+    dependencies:
+      '@mapgrain/document':
+        specifier: workspace:*
+        version: link:../document
+      '@mapgrain/renderer':
+        specifier: workspace:*
+        version: link:../renderer
+
   packages/document:
     dependencies:
       '@sinclair/typebox':
