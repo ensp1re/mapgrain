@@ -1,0 +1,2944 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-hundred-nodes",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Local telemetry mesh",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": [
+      "core00"
+    ]
+  },
+  "groups": [
+    {
+      "id": "mesh",
+      "label": "Telemetry mesh",
+      "parentId": null
+    },
+    {
+      "id": "site-north",
+      "label": "North site",
+      "parentId": "mesh"
+    },
+    {
+      "id": "site-east",
+      "label": "East site",
+      "parentId": "mesh"
+    },
+    {
+      "id": "site-south",
+      "label": "South site",
+      "parentId": "mesh"
+    },
+    {
+      "id": "site-west",
+      "label": "West site",
+      "parentId": "mesh"
+    },
+    {
+      "id": "site-core",
+      "label": "Core site",
+      "parentId": "mesh"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "north00",
+      "kind": "service",
+      "label": "North service 00",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north01",
+      "kind": "job",
+      "label": "North job 01",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north02",
+      "kind": "datastore",
+      "label": "North datastore 02",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north03",
+      "kind": "queue",
+      "label": "North queue 03",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north04",
+      "kind": "gateway",
+      "label": "North gateway 04",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north05",
+      "kind": "external",
+      "label": "North external 05",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north06",
+      "kind": "actor",
+      "label": "North actor 06",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north07",
+      "kind": "system",
+      "label": "North system 07",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north08",
+      "kind": "service",
+      "label": "North service 08",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north09",
+      "kind": "job",
+      "label": "North job 09",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north10",
+      "kind": "datastore",
+      "label": "North datastore 10",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north11",
+      "kind": "queue",
+      "label": "North queue 11",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north12",
+      "kind": "gateway",
+      "label": "North gateway 12",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north13",
+      "kind": "external",
+      "label": "North external 13",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north14",
+      "kind": "actor",
+      "label": "North actor 14",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north15",
+      "kind": "system",
+      "label": "North system 15",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north16",
+      "kind": "service",
+      "label": "North service 16",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north17",
+      "kind": "job",
+      "label": "North job 17",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north18",
+      "kind": "datastore",
+      "label": "North datastore 18",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "north19",
+      "kind": "queue",
+      "label": "North queue 19",
+      "groupId": "site-north",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east00",
+      "kind": "service",
+      "label": "East service 00",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east01",
+      "kind": "job",
+      "label": "East job 01",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east02",
+      "kind": "datastore",
+      "label": "East datastore 02",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east03",
+      "kind": "queue",
+      "label": "East queue 03",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east04",
+      "kind": "gateway",
+      "label": "East gateway 04",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east05",
+      "kind": "external",
+      "label": "East external 05",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east06",
+      "kind": "actor",
+      "label": "East actor 06",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east07",
+      "kind": "system",
+      "label": "East system 07",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east08",
+      "kind": "service",
+      "label": "East service 08",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east09",
+      "kind": "job",
+      "label": "East job 09",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east10",
+      "kind": "datastore",
+      "label": "East datastore 10",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east11",
+      "kind": "queue",
+      "label": "East queue 11",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east12",
+      "kind": "gateway",
+      "label": "East gateway 12",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east13",
+      "kind": "external",
+      "label": "East external 13",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east14",
+      "kind": "actor",
+      "label": "East actor 14",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east15",
+      "kind": "system",
+      "label": "East system 15",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east16",
+      "kind": "service",
+      "label": "East service 16",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east17",
+      "kind": "job",
+      "label": "East job 17",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east18",
+      "kind": "datastore",
+      "label": "East datastore 18",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "east19",
+      "kind": "queue",
+      "label": "East queue 19",
+      "groupId": "site-east",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south00",
+      "kind": "service",
+      "label": "South service 00",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south01",
+      "kind": "job",
+      "label": "South job 01",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south02",
+      "kind": "datastore",
+      "label": "South datastore 02",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south03",
+      "kind": "queue",
+      "label": "South queue 03",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south04",
+      "kind": "gateway",
+      "label": "South gateway 04",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south05",
+      "kind": "external",
+      "label": "South external 05",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south06",
+      "kind": "actor",
+      "label": "South actor 06",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south07",
+      "kind": "system",
+      "label": "South system 07",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south08",
+      "kind": "service",
+      "label": "South service 08",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south09",
+      "kind": "job",
+      "label": "South job 09",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south10",
+      "kind": "datastore",
+      "label": "South datastore 10",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south11",
+      "kind": "queue",
+      "label": "South queue 11",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south12",
+      "kind": "gateway",
+      "label": "South gateway 12",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south13",
+      "kind": "external",
+      "label": "South external 13",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south14",
+      "kind": "actor",
+      "label": "South actor 14",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south15",
+      "kind": "system",
+      "label": "South system 15",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south16",
+      "kind": "service",
+      "label": "South service 16",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south17",
+      "kind": "job",
+      "label": "South job 17",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south18",
+      "kind": "datastore",
+      "label": "South datastore 18",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "south19",
+      "kind": "queue",
+      "label": "South queue 19",
+      "groupId": "site-south",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west00",
+      "kind": "service",
+      "label": "West service 00",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west01",
+      "kind": "job",
+      "label": "West job 01",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west02",
+      "kind": "datastore",
+      "label": "West datastore 02",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west03",
+      "kind": "queue",
+      "label": "West queue 03",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west04",
+      "kind": "gateway",
+      "label": "West gateway 04",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west05",
+      "kind": "external",
+      "label": "West external 05",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west06",
+      "kind": "actor",
+      "label": "West actor 06",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west07",
+      "kind": "system",
+      "label": "West system 07",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west08",
+      "kind": "service",
+      "label": "West service 08",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west09",
+      "kind": "job",
+      "label": "West job 09",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west10",
+      "kind": "datastore",
+      "label": "West datastore 10",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west11",
+      "kind": "queue",
+      "label": "West queue 11",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west12",
+      "kind": "gateway",
+      "label": "West gateway 12",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west13",
+      "kind": "external",
+      "label": "West external 13",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west14",
+      "kind": "actor",
+      "label": "West actor 14",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west15",
+      "kind": "system",
+      "label": "West system 15",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west16",
+      "kind": "service",
+      "label": "West service 16",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west17",
+      "kind": "job",
+      "label": "West job 17",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west18",
+      "kind": "datastore",
+      "label": "West datastore 18",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "west19",
+      "kind": "queue",
+      "label": "West queue 19",
+      "groupId": "site-west",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core00",
+      "kind": "service",
+      "label": "Core service 00",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core01",
+      "kind": "job",
+      "label": "Core job 01",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core02",
+      "kind": "datastore",
+      "label": "Core datastore 02",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core03",
+      "kind": "queue",
+      "label": "Core queue 03",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core04",
+      "kind": "gateway",
+      "label": "Core gateway 04",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core05",
+      "kind": "external",
+      "label": "Core external 05",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core06",
+      "kind": "actor",
+      "label": "Core actor 06",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core07",
+      "kind": "system",
+      "label": "Core system 07",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core08",
+      "kind": "service",
+      "label": "Core service 08",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core09",
+      "kind": "job",
+      "label": "Core job 09",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core10",
+      "kind": "datastore",
+      "label": "Core datastore 10",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core11",
+      "kind": "queue",
+      "label": "Core queue 11",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core12",
+      "kind": "gateway",
+      "label": "Core gateway 12",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core13",
+      "kind": "external",
+      "label": "Core external 13",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core14",
+      "kind": "actor",
+      "label": "Core actor 14",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core15",
+      "kind": "system",
+      "label": "Core system 15",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core16",
+      "kind": "service",
+      "label": "Core service 16",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core17",
+      "kind": "job",
+      "label": "Core job 17",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core18",
+      "kind": "datastore",
+      "label": "Core datastore 18",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "core19",
+      "kind": "queue",
+      "label": "Core queue 19",
+      "groupId": "site-core",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-north00-north01",
+      "source": {
+        "nodeId": "north00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north01",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north01-north02",
+      "source": {
+        "nodeId": "north01",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north02",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north02-north03",
+      "source": {
+        "nodeId": "north02",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north03",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north03-north04",
+      "source": {
+        "nodeId": "north03",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north04",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north04-north05",
+      "source": {
+        "nodeId": "north04",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north05",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north05-north06",
+      "source": {
+        "nodeId": "north05",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north06",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north06-north07",
+      "source": {
+        "nodeId": "north06",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north07",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north07-north08",
+      "source": {
+        "nodeId": "north07",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north08",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north08-north09",
+      "source": {
+        "nodeId": "north08",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north09",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north09-north10",
+      "source": {
+        "nodeId": "north09",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north10",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north10-north11",
+      "source": {
+        "nodeId": "north10",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north11",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north11-north12",
+      "source": {
+        "nodeId": "north11",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north12",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north12-north13",
+      "source": {
+        "nodeId": "north12",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north13",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north13-north14",
+      "source": {
+        "nodeId": "north13",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north14",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north14-north15",
+      "source": {
+        "nodeId": "north14",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north15",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north15-north16",
+      "source": {
+        "nodeId": "north15",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north16",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north16-north17",
+      "source": {
+        "nodeId": "north16",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north17",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north17-north18",
+      "source": {
+        "nodeId": "north17",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north18",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north18-north19",
+      "source": {
+        "nodeId": "north18",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "north19",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-north-core",
+      "source": {
+        "nodeId": "north00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core00",
+        "portId": "in"
+      },
+      "type": "depends-on",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east00-east01",
+      "source": {
+        "nodeId": "east00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east01",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east01-east02",
+      "source": {
+        "nodeId": "east01",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east02",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east02-east03",
+      "source": {
+        "nodeId": "east02",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east03",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east03-east04",
+      "source": {
+        "nodeId": "east03",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east04",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east04-east05",
+      "source": {
+        "nodeId": "east04",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east05",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east05-east06",
+      "source": {
+        "nodeId": "east05",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east06",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east06-east07",
+      "source": {
+        "nodeId": "east06",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east07",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east07-east08",
+      "source": {
+        "nodeId": "east07",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east08",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east08-east09",
+      "source": {
+        "nodeId": "east08",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east09",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east09-east10",
+      "source": {
+        "nodeId": "east09",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east10",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east10-east11",
+      "source": {
+        "nodeId": "east10",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east11",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east11-east12",
+      "source": {
+        "nodeId": "east11",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east12",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east12-east13",
+      "source": {
+        "nodeId": "east12",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east13",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east13-east14",
+      "source": {
+        "nodeId": "east13",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east14",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east14-east15",
+      "source": {
+        "nodeId": "east14",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east15",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east15-east16",
+      "source": {
+        "nodeId": "east15",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east16",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east16-east17",
+      "source": {
+        "nodeId": "east16",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east17",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east17-east18",
+      "source": {
+        "nodeId": "east17",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east18",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east18-east19",
+      "source": {
+        "nodeId": "east18",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "east19",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-east-core",
+      "source": {
+        "nodeId": "east00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core00",
+        "portId": "in"
+      },
+      "type": "depends-on",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south00-south01",
+      "source": {
+        "nodeId": "south00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south01",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south01-south02",
+      "source": {
+        "nodeId": "south01",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south02",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south02-south03",
+      "source": {
+        "nodeId": "south02",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south03",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south03-south04",
+      "source": {
+        "nodeId": "south03",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south04",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south04-south05",
+      "source": {
+        "nodeId": "south04",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south05",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south05-south06",
+      "source": {
+        "nodeId": "south05",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south06",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south06-south07",
+      "source": {
+        "nodeId": "south06",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south07",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south07-south08",
+      "source": {
+        "nodeId": "south07",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south08",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south08-south09",
+      "source": {
+        "nodeId": "south08",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south09",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south09-south10",
+      "source": {
+        "nodeId": "south09",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south10",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south10-south11",
+      "source": {
+        "nodeId": "south10",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south11",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south11-south12",
+      "source": {
+        "nodeId": "south11",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south12",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south12-south13",
+      "source": {
+        "nodeId": "south12",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south13",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south13-south14",
+      "source": {
+        "nodeId": "south13",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south14",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south14-south15",
+      "source": {
+        "nodeId": "south14",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south15",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south15-south16",
+      "source": {
+        "nodeId": "south15",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south16",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south16-south17",
+      "source": {
+        "nodeId": "south16",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south17",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south17-south18",
+      "source": {
+        "nodeId": "south17",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south18",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south18-south19",
+      "source": {
+        "nodeId": "south18",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "south19",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-south-core",
+      "source": {
+        "nodeId": "south00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core00",
+        "portId": "in"
+      },
+      "type": "depends-on",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west00-west01",
+      "source": {
+        "nodeId": "west00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west01",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west01-west02",
+      "source": {
+        "nodeId": "west01",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west02",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west02-west03",
+      "source": {
+        "nodeId": "west02",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west03",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west03-west04",
+      "source": {
+        "nodeId": "west03",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west04",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west04-west05",
+      "source": {
+        "nodeId": "west04",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west05",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west05-west06",
+      "source": {
+        "nodeId": "west05",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west06",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west06-west07",
+      "source": {
+        "nodeId": "west06",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west07",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west07-west08",
+      "source": {
+        "nodeId": "west07",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west08",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west08-west09",
+      "source": {
+        "nodeId": "west08",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west09",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west09-west10",
+      "source": {
+        "nodeId": "west09",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west10",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west10-west11",
+      "source": {
+        "nodeId": "west10",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west11",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west11-west12",
+      "source": {
+        "nodeId": "west11",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west12",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west12-west13",
+      "source": {
+        "nodeId": "west12",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west13",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west13-west14",
+      "source": {
+        "nodeId": "west13",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west14",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west14-west15",
+      "source": {
+        "nodeId": "west14",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west15",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west15-west16",
+      "source": {
+        "nodeId": "west15",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west16",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west16-west17",
+      "source": {
+        "nodeId": "west16",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west17",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west17-west18",
+      "source": {
+        "nodeId": "west17",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west18",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west18-west19",
+      "source": {
+        "nodeId": "west18",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "west19",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-west-core",
+      "source": {
+        "nodeId": "west00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core00",
+        "portId": "in"
+      },
+      "type": "depends-on",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core00-core01",
+      "source": {
+        "nodeId": "core00",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core01",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core01-core02",
+      "source": {
+        "nodeId": "core01",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core02",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core02-core03",
+      "source": {
+        "nodeId": "core02",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core03",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core03-core04",
+      "source": {
+        "nodeId": "core03",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core04",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core04-core05",
+      "source": {
+        "nodeId": "core04",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core05",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core05-core06",
+      "source": {
+        "nodeId": "core05",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core06",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core06-core07",
+      "source": {
+        "nodeId": "core06",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core07",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core07-core08",
+      "source": {
+        "nodeId": "core07",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core08",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core08-core09",
+      "source": {
+        "nodeId": "core08",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core09",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core09-core10",
+      "source": {
+        "nodeId": "core09",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core10",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core10-core11",
+      "source": {
+        "nodeId": "core10",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core11",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core11-core12",
+      "source": {
+        "nodeId": "core11",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core12",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core12-core13",
+      "source": {
+        "nodeId": "core12",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core13",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core13-core14",
+      "source": {
+        "nodeId": "core13",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core14",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core14-core15",
+      "source": {
+        "nodeId": "core14",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core15",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core15-core16",
+      "source": {
+        "nodeId": "core15",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core16",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core16-core17",
+      "source": {
+        "nodeId": "core16",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core17",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core17-core18",
+      "source": {
+        "nodeId": "core17",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core18",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-core18-core19",
+      "source": {
+        "nodeId": "core18",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "core19",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "Mesh"
+    }
+  ]
+}

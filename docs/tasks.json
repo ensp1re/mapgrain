@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextId": 14,
+  "nextId": 15,
   "tasks": [
     {
       "id": "F001",
@@ -25,8 +25,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793426730-62496d",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -87,8 +87,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793439005-079954",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -150,8 +150,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793452150-7deaf4",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -213,8 +213,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793463994-b89e11",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -277,8 +277,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793476030-054c9f",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -339,8 +339,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793487911-4323db",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -402,8 +402,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788797500629-e310ff",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -464,8 +464,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788798663725-8d9cdf",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -526,8 +526,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788799557750-b00ce7",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -591,8 +591,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788800481010-e56765",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -654,8 +654,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788801310224-cc1501",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -717,8 +717,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788802146185-c8b4da",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -767,7 +767,7 @@
         "F004",
         "F012"
       ],
-      "state": "verified",
+      "state": "passing",
       "spec": "docs/PROJECT.md",
       "plan": "docs/PLAN.md",
       "verification": [
@@ -780,8 +780,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788802738494-8e738b",
-        "fingerprintBefore": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
-        "fingerprintAfter": "86f83d2b2d3619365df83d70030b1b6bacf41575b29a045713a9b132a9dce857",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
         "checks": [
           {
             "id": "unit",
@@ -801,6 +801,70 @@
           }
         ],
         "verifiedAt": "2026-09-07T17:39:15.851Z"
+      },
+      "delivery": {
+        "implementationRevision": "c41e9e73ec0a51de95de4c21c78577337367abc9",
+        "remote": "https://github.com/ensp1re/mapgrain.git",
+        "prUrl": "https://github.com/ensp1re/mapgrain/pull/15",
+        "checkRuns": [
+          {
+            "name": "verify",
+            "revision": "25b4ac05d2bf6ab377933f61065caaf83826ac2f",
+            "conclusion": "success",
+            "url": "https://github.com/ensp1re/mapgrain/actions/runs/34148649095/job/101826019463"
+          }
+        ],
+        "observedAt": "2026-09-07T17:57:38Z",
+        "closeoutRevision": "c41e9e73ec0a51de95de4c21c78577337367abc9"
+      }
+    },
+    {
+      "id": "F014",
+      "behavior": "Add an original 100-node architecture fixture and prove validate, scene, layout, export, and CLI still work on it.",
+      "acceptance": [
+        "The fixture has 100 nodes, validates, and is original.",
+        "Scene, layout, and SVG export succeed for the fixture.",
+        "The CLI validates the fixture without the editor."
+      ],
+      "dependsOn": [
+        "F003",
+        "F004",
+        "F012"
+      ],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788803958032-669084",
+        "fingerprintBefore": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "fingerprintAfter": "2e625d49e6fe35544c5872c86817756ac23a815c2b8e10c55499693252548c6c",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-07T17:59:33.696Z"
       },
       "delivery": null
     }
