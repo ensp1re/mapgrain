@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/scene-graph @ 704bbde0f7bba0c7820884184b726f7d82af0fb8 (dirty)
-- Updated: 2026-09-07T13:22:01.159Z
+- Git: feat/layout-worker @ a03d175c254be4072c3b5600a4a53be13559a817 (dirty)
+- Updated: 2026-09-07T13:40:07.451Z
 
 ### Next action
 
-Merge this PR, then activate F003 (ELK layout worker).
+Merge this PR, then activate F004 (canonical exports).
 
 ### Decisions
 
@@ -34,8 +34,9 @@ Merge this PR, then activate F003 (ELK layout worker).
 
 ### Evidence
 
-- docs/runs/run-1788787273748-64b28c.json
-- docs/runs/run-1788787302679-e39350.json
+- docs/runs/run-1788788348208-8567f0.json
+- docs/runs/run-1788788372332-e08fe0.json
+- docs/runs/run-1788788391295-052833.json
 
 ## Resume
 

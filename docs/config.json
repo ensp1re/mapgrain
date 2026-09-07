@@ -41,6 +41,7 @@
     "tests",
     "packages/document",
     "packages/scene",
+    "packages/layout",
     "docs/PROJECT.md",
     "docs/PLAN.md",
     "docs/ARCHITECTURE.md",
