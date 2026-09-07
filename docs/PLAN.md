@@ -7,8 +7,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 ## State
 
 - Status: `active`
-- Current task ID: F012
-- Active slice: CLI validate / render / export
+- Current task ID: F013
+- Active slice: read-only viewer
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -28,9 +28,10 @@ Ship a local editor that can create, correct, and export a small architecture or
 | F009 | IndexedDB persistence and backup download | F006 | unit, lint, typecheck, build | passing |
 | F010 | Offline create → edit → reload → export | F004, F007, F008, F009 | unit, lint, typecheck, build | passing |
 | F011 | Example-backed first session; no fake generation | F006 | unit, lint, typecheck, build | passing |
-| F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | active |
+| F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | passing |
+| F013 | Read-only viewer from the canonical scene | F004, F012 | unit, lint, typecheck, build | active |
 
-Later milestones (sequence mode, revisions, hosted sharing, repository evidence) stay in [PROJECT.md](PROJECT.md) until F010 is passing. Do not start them in this queue.
+Later milestones (sequence mode, revisions, hosted sharing, repository evidence) stay in [PROJECT.md](PROJECT.md). Do not start them in this queue.
 
 ## Checkpoints
 

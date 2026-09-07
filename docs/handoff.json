@@ -4,8 +4,8 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/cli",
-    "revision": "100eae6de35440539fffd4905adc3ab53e97486e",
+    "branch": "feat/readonly-viewer",
+    "revision": "4fe444230910c56c53a2bcb645d9799083b5346b",
     "dirty": true
   },
   "evidenceRefs": [
@@ -20,7 +20,8 @@
     "docs/runs/run-1788799557750-b00ce7.json",
     "docs/runs/run-1788800481010-e56765.json",
     "docs/runs/run-1788801310224-cc1501.json",
-    "docs/runs/run-1788802146185-c8b4da.json"
+    "docs/runs/run-1788802146185-c8b4da.json",
+    "docs/runs/run-1788802738494-8e738b.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -33,7 +34,8 @@
     "Autosave writes document and positions to IndexedDB. Saved/Saving/Recovery are visible in the top bar. A failed write offers a JSON backup download.",
     "A production service worker caches same-origin GET so edit, reload, and export work with the network disabled. Chat does not invent a reply.",
     "First session is an example-backed start surface. Submit without a provider fails honestly, keeps the prompt, and offers a repair. Examples are never labelled as generated output.",
-    "The product CLI lives in packages/cli, uses the same document and renderer as the editor, and does not depend on the GUI."
+    "The product CLI lives in packages/cli, uses the same document and renderer as the editor, and does not depend on the GUI.",
+    "The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency."
   ],
   "rejectedApproaches": [
     "Adding Turborepo or Nx before there are packages to orchestrate.",
@@ -45,9 +47,10 @@
     "Adding an IndexedDB wrapper library for a single object store.",
     "Adding vite-plugin-pwa for a single cache-first worker.",
     "Walking fake interpreting/arranging/checking stages as if a model ran.",
-    "Adding Commander or another parser for three CLI commands."
+    "Adding Commander or another parser for three CLI commands.",
+    "Building the viewer on React Flow."
   ],
   "blockers": [],
-  "nextAction": "Open a draft PR for F012. Wait for CI. Do not merge until asked.",
-  "updatedAt": "2026-09-07T17:30:03.307Z"
+  "nextAction": "Open a draft PR for F013. Wait for CI. Do not merge until asked.",
+  "updatedAt": "2026-09-07T17:40:55.618Z"
 }

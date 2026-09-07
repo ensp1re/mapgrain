@@ -2,6 +2,7 @@ export const CLI_COMMAND = {
   VALIDATE: "validate",
   RENDER: "render",
   EXPORT: "export",
+  VIEW: "view",
 } as const;
 
 export const EXIT_CODE = {
@@ -17,4 +18,4 @@ export const DIAGNOSTIC_CODE = {
 } as const;
 
 export const USAGE =
-  "Usage: mapgrain <validate|render|export> <file> [--format json|svg|png|html] [-o file]";
+  "Usage: mapgrain <validate|render|export|view> <file> [--format json|svg|png|html] [-o file]";

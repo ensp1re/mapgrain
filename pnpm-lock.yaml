@@ -90,6 +90,9 @@ importers:
       '@mapgrain/renderer':
         specifier: workspace:*
         version: link:../renderer
+      '@mapgrain/viewer':
+        specifier: workspace:*
+        version: link:../viewer
 
   packages/document:
     dependencies:
@@ -126,6 +129,15 @@ importers:
       '@mapgrain/document':
         specifier: workspace:*
         version: link:../document
+
+  packages/viewer:
+    dependencies:
+      '@mapgrain/document':
+        specifier: workspace:*
+        version: link:../document
+      '@mapgrain/renderer':
+        specifier: workspace:*
+        version: link:../renderer
 
 packages:
 

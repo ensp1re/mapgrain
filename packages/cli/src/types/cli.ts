@@ -22,4 +22,5 @@ export type ParsedArgs =
   | { ok: true; command: "validate"; file: string }
   | { ok: true; command: "render"; file: string; out: string | null }
   | { ok: true; command: "export"; file: string; format: ExportFormat; out: string | null }
+  | { ok: true; command: "view"; file: string; out: string | null }
   | { ok: false; errors: DiagnosticIssue[] };

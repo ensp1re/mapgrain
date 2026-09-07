@@ -43,6 +43,8 @@
     "packages/scene",
     "packages/layout",
     "packages/renderer",
+    "packages/cli",
+    "packages/viewer",
     "apps/editor",
     "docs/PROJECT.md",
     "docs/PLAN.md",

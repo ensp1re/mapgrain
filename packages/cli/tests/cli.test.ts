@@ -100,6 +100,17 @@ test("render and export match the canonical scene for a fixture", async () => {
   assert.equal(exportIo.files["out.svg"], Buffer.from(expected.bytes).toString("binary"));
 });
 
+test("view writes read-only HTML from the canonical scene", async () => {
+  const source = await readFile(fixture, "utf8");
+  const io = memoryIo({ "nested-groups.json": source });
+  const code = await runCli(["view", "nested-groups.json", "-o", "view.html"], io);
+  assert.equal(code, EXIT_CODE.OK);
+  const html = io.files["view.html"] ?? "";
+  assert.match(html, /Read-only view/);
+  assert.match(html, /Workspace API/);
+  assert.doesNotMatch(html, /Inspector/);
+});
+
 test("the CLI package does not depend on the editor", async () => {
   const manifest = JSON.parse(await readFile(pkg, "utf8")) as { dependencies: Record<string, string> };
   assert.equal(Object.hasOwn(manifest.dependencies, "@mapgrain/editor"), false);
