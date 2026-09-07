@@ -1,4 +1,7 @@
-import type { FlowNodeDraft } from "../diagram/sceneToFlow.ts";
+import { useMemo, useState } from "react";
+import { matchesQuery } from "../outline/search.ts";
+import { outlineTree } from "../outline/tree.ts";
+import type { FlowNodeDraft } from "../types/flow.ts";
 
 interface OutlineProps {
   nodes: FlowNodeDraft[];
@@ -7,25 +10,60 @@ interface OutlineProps {
 }
 
 export function Outline({ nodes, selectedId, onSelect }: OutlineProps) {
+  const [query, setQuery] = useState("");
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const rows = useMemo(() => {
+    const tree = outlineTree(nodes);
+    const visibleParents = new Set<string>();
+    return tree.filter((entry) => {
+      if (entry.node.parentId && collapsed.has(entry.node.parentId)) return false;
+      if (!matchesQuery(entry.node, query)) return false;
+      if (entry.node.parentId) visibleParents.add(entry.node.parentId);
+      return true;
+    });
+  }, [collapsed, nodes, query]);
+
   return (
     <nav className="outline" aria-label="Components">
       <div className="pane-label">Outline</div>
-      {nodes.map((node) => (
-        <button
-          key={node.id}
-          type="button"
-          className={[
-            "outline-row",
-            node.type === "group" ? "is-group" : "",
-            selectedId === node.id ? "is-selected" : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={() => onSelect(node.id)}
-        >
-          <span>{node.data.label}</span>
-          {node.data.kind ? <span className="kind">{node.data.kind}</span> : null}
-        </button>
+      <input
+        aria-label="Search components"
+        placeholder="Search label or kind"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+      />
+      {rows.map((entry) => (
+        <div key={entry.node.id} className="outline-item" style={{ paddingLeft: 8 + entry.depth * 12 }}>
+          {entry.node.type === "group" ? (
+            <button
+              type="button"
+              className="text-btn"
+              aria-label={collapsed.has(entry.node.id) ? "Expand group" : "Collapse group"}
+              onClick={() => {
+                const next = new Set(collapsed);
+                if (next.has(entry.node.id)) next.delete(entry.node.id);
+                else next.add(entry.node.id);
+                setCollapsed(next);
+              }}
+            >
+              {collapsed.has(entry.node.id) ? "+" : "−"}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className={[
+              "outline-row",
+              entry.node.type === "group" ? "is-group" : "",
+              selectedId === entry.node.id ? "is-selected" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            onClick={() => onSelect(entry.node.id)}
+          >
+            <span>{entry.node.data.label}</span>
+            {entry.node.data.kind ? <span className="kind">{entry.node.data.kind}</span> : null}
+          </button>
+        </div>
       ))}
     </nav>
   );

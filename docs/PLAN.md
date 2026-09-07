@@ -38,7 +38,7 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F017 | R1.3 Safe editing, selection, async layout | F015 | unit, lint, typecheck, build | active |
 | F018 | R1.4 Durable storage and safe CLI writes | F015, F012 | unit, lint, typecheck, build | active |
 | F019 | R2.1 Real creation without fake generation | F015, F017 | unit, lint, typecheck, build | active |
-| F020 | R2.2 Useful editing and export dialog | F019 | unit, lint, typecheck, build | not_started |
+| F020 | R2.2 Useful editing and export dialog | F019 | unit, lint, typecheck, build | active |
 | F021 | R2.3 Offline viewer people can use | F015, F013 | unit, lint, typecheck, build | not_started |
 | F022 | R3.1 Publishable CLI and studio | F015, F018 | unit, lint, typecheck, build | not_started |
 | F023 | R3.2 Companion agent skill | F015, F022 | unit, lint, typecheck, build | not_started |
