@@ -65,8 +65,15 @@ export default tseslint.config(
   },
   {
     files: ["**/*.js"],
+    ignores: ["apps/editor/public/**"],
     languageOptions: {
       globals: globals.node,
+    },
+  },
+  {
+    files: ["apps/editor/public/**/*.js"],
+    languageOptions: {
+      globals: globals.serviceworker,
     },
   },
 );

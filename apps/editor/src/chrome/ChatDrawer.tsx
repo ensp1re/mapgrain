@@ -8,8 +8,8 @@ export function ChatDrawer({ open }: ChatDrawerProps) {
     <aside className="chat-drawer" aria-label="Chat">
       <div className="pane-label">Chat</div>
       <p>
-        Chat stays closed until you open it. It is a tool, not a permanent panel, and it does not
-        sit beside the inspector.
+        Chat stays closed until you open it. Generation is not configured. This panel does not
+        invent a diagram or a reply.
       </p>
     </aside>
   );

@@ -7,8 +7,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 ## State
 
 - Status: `active`
-- Current task ID: F009
-- Active slice: IndexedDB persistence and backup download
+- Current task ID: F010
+- Active slice: offline create → edit → reload → export
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -25,8 +25,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 | F006 | Editor shell: top bar, canvas, outline, command menu | F005 | unit, lint, typecheck, build | passing |
 | F007 | Direct editing, undo/redo, keep-position | F006 | unit, lint, typecheck, build | passing |
 | F008 | Arrange preview and visible pin conflicts | F007 | unit, lint, typecheck, build | passing |
-| F009 | IndexedDB persistence and backup download | F006 | unit, lint, typecheck, build | active |
-| F010 | Offline create → edit → reload → export | F004, F007, F008, F009 | unit, lint, typecheck, build | not_started |
+| F009 | IndexedDB persistence and backup download | F006 | unit, lint, typecheck, build | passing |
+| F010 | Offline create → edit → reload → export | F004, F007, F008, F009 | unit, lint, typecheck, build | active |
 | F011 | Example-backed first session; no fake generation | F006 | unit, lint, typecheck, build | not_started |
 | F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | not_started |
 
