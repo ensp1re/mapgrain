@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "nextId": 13,
+  "tasks": [
+    {
+      "id": "F001",
+      "behavior": "Add a versioned diagram document schema with generated TypeScript types, runtime validation, and original architecture/workflow fixtures.",
+      "acceptance": [
+        "A document schema version is stored and rejected when unsupported.",
+        "Generated types cover nodes, edges, groups, views, and layout hints.",
+        "Invalid documents fail validation with a structured error.",
+        "Original fixtures exist for nested groups, cycles, parallel edges, long labels, and disconnected components."
+      ],
+      "dependsOn": [],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F002",
+      "behavior": "Implement a canonical scene graph for bounds, measured text, ports, edges, and groups that editor and export both consume.",
+      "acceptance": [
+        "Scene output is determined by document, fonts, and layout options.",
+        "Text measurement supports multiline labels.",
+        "Ports are explicit and stable across a layout pass."
+      ],
+      "dependsOn": ["F001"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F003",
+      "behavior": "Run ELK layout in a worker with pins, nesting, cycles, and parallel edges, and surface constraint conflicts instead of dropping pins.",
+      "acceptance": [
+        "Layout runs off the UI thread.",
+        "Pinned nodes keep position when space allows.",
+        "Insufficient space yields a visible conflict, not a silent pin drop.",
+        "Superseded worker results are discarded."
+      ],
+      "dependsOn": ["F002"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F004",
+      "behavior": "Export JSON, SVG, PNG, and offline HTML from the canonical scene with bounded raster size and no editor-only data.",
+      "acceptance": [
+        "Exports are generated from the scene, not a DOM screenshot.",
+        "HTML opens offline without remote assets or credentials.",
+        "Oversized PNG fails with a smaller-size option.",
+        "Secrets, comments, and selection do not appear in the artifact."
+      ],
+      "dependsOn": ["F002"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F005",
+      "behavior": "Ship an original visual specimen in a running app: toolbar, outline row, node, relation, tooltip, command menu, inspector, and one interactive architecture diagram.",
+      "acceptance": [
+        "Dark and light themes render the specimen.",
+        "The diagram uses original nodes and edges, not library defaults as the finished look.",
+        "390px and 1440px layouts remain usable.",
+        "Reduced-motion preferences disable non-essential motion."
+      ],
+      "dependsOn": ["F003", "F004"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F006",
+      "behavior": "Build the editor shell with a compact top bar, dominant canvas, collapsible outline, and command menu. Chat is collapsed by default.",
+      "acceptance": [
+        "Title, save state, undo/redo, Present, and Export are reachable without chat.",
+        "Cmd/Ctrl+K opens the command menu and is ignored while typing in an input.",
+        "Inspector appears only for a selected element."
+      ],
+      "dependsOn": ["F005"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F007",
+      "behavior": "Support direct label edits, connections, rename, delete, duplicate, regroup, align, move, and undo/redo without rearranging unrelated nodes on a label change.",
+      "acceptance": [
+        "Double-click edits a label.",
+        "A connection has explicit direction and meaning.",
+        "Undo restores the previous document.",
+        "A rejected edit leaves the last valid document in place."
+      ],
+      "dependsOn": ["F006"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F008",
+      "behavior": "Preview automatic arrangement before applying it, and keep pinned nodes unless a conflict is shown.",
+      "acceptance": [
+        "Arrange diagram shows a preview and Apply/Discard.",
+        "Keep position pins survive a successful arrange.",
+        "Conflicts are visible when pins cannot be honored."
+      ],
+      "dependsOn": ["F007"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F009",
+      "behavior": "Autosave locally in IndexedDB with Saved/Saving/Recovery states and a downloadable backup when persistence fails.",
+      "acceptance": [
+        "Reload restores the last saved document without an account.",
+        "Save state is visible in the top bar.",
+        "A storage failure offers a JSON download."
+      ],
+      "dependsOn": ["F006"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F010",
+      "behavior": "Prove the offline loop: create, edit, reload, and export without network or fake actions.",
+      "acceptance": [
+        "An example can be edited and exported with the network disabled.",
+        "Reload after edit restores the same document ids and meaning.",
+        "No control claims a capability it does not have."
+      ],
+      "dependsOn": ["F004", "F007", "F008", "F009"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F011",
+      "behavior": "Land on an example-backed creation surface with three original examples and Import. Generation is disabled until a provider is configured.",
+      "acceptance": [
+        "Examples load and edit without model credentials.",
+        "Submit shows interpreting / arranging / checking and can be cancelled.",
+        "A first-run failure returns the entered text and a repair action.",
+        "Sample content is never labelled as generated output."
+      ],
+      "dependsOn": ["F006"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F012",
+      "behavior": "Ship a CLI that validates, renders, and exports a document using the same schema and scene as the editor.",
+      "acceptance": [
+        "Invalid input exits non-zero with a structured diagnostic.",
+        "Render and export match the canonical scene for a fixture.",
+        "The CLI works without the editor installed as a GUI."
+      ],
+      "dependsOn": ["F001", "F004"],
+      "state": "not_started",
+      "spec": "docs/harness/PROJECT.md",
+      "plan": "docs/harness/PLAN.md",
+      "verification": ["unit", "lint", "typecheck", "build"],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    }
+  ]
+}

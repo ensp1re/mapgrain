@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "taskId": null,
+  "plan": "docs/harness/PLAN.md",
+  "git": {
+    "available": true,
+    "branch": "chore/bootstrap-harness",
+    "revision": "783ac192987f98d2c2c7e0b259e13f24b8aed500",
+    "dirty": true
+  },
+  "evidenceRefs": [],
+  "decisions": [
+    "Working name is Mapgrain; final name is pending.",
+    "Node 24 LTS, pnpm workspaces, no extra monorepo orchestrator until packages exist.",
+    "React + Vite editor later; shared document/scene/layout/renderer packages; exports never embed the editor.",
+    "Quality gates: ESLint, tsc, node:test, Husky pre-commit, commitlint, GitHub Actions.",
+    "Product work is queued as F001–F012. This slice does not implement the editor."
+  ],
+  "rejectedApproaches": [
+    "Adding Turborepo or Nx before there are packages to orchestrate.",
+    "Implementing the editor in the harness bootstrap.",
+    "Copying another product's source, assets, or copy.",
+    "Empty app/package stubs that exist only to look like a monorepo."
+  ],
+  "blockers": [],
+  "nextAction": "After the harness PR lands, activate F001 and implement the versioned document schema with original fixtures.",
+  "updatedAt": "2026-09-07T12:43:15.933Z"
+}
