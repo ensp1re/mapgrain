@@ -1,0 +1,19 @@
+{
+  "name": "@mapgrain/layout",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test --experimental-strip-types --test-reporter=spec tests/*.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@mapgrain/document": "workspace:*",
+    "@mapgrain/scene": "workspace:*",
+    "elkjs": "^0.10.0"
+  }
+}

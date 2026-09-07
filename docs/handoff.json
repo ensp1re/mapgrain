@@ -4,13 +4,14 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/scene-graph",
-    "revision": "704bbde0f7bba0c7820884184b726f7d82af0fb8",
+    "branch": "feat/layout-worker",
+    "revision": "a03d175c254be4072c3b5600a4a53be13559a817",
     "dirty": true
   },
   "evidenceRefs": [
-    "docs/runs/run-1788787273748-64b28c.json",
-    "docs/runs/run-1788787302679-e39350.json"
+    "docs/runs/run-1788788348208-8567f0.json",
+    "docs/runs/run-1788788372332-e08fe0.json",
+    "docs/runs/run-1788788391295-052833.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -26,6 +27,6 @@
     "Empty app/package stubs that exist only to look like a monorepo."
   ],
   "blockers": [],
-  "nextAction": "Merge this PR, then activate F003 (ELK layout worker).",
-  "updatedAt": "2026-09-07T13:22:01.159Z"
+  "nextAction": "Merge this PR, then activate F004 (canonical exports).",
+  "updatedAt": "2026-09-07T13:40:07.451Z"
 }
