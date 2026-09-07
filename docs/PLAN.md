@@ -8,9 +8,9 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 
 ## State
 
-- Status: `active`
-- Current task ID: F024
-- Active slice: R4 visual and performance finish
+- Status: `blocked`
+- Current task ID: F025
+- Active slice: R5 release candidate evidence (unassisted users unverifiable)
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -42,8 +42,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F021 | R2.3 Offline viewer people can use | F015, F013 | unit, lint, typecheck, build | passing |
 | F022 | R3.1 Publishable CLI and studio | F015, F018 | unit, lint, typecheck, build | passing |
 | F023 | R3.2 Companion agent skill | F015, F022 | unit, lint, typecheck, build | passing |
-| F024 | R4 Visual and performance finish | F019, F021, F022 | unit, lint, typecheck, build | active |
-| F025 | R5 Release candidate evidence | F024 | unit, lint, typecheck, build | not_started |
+| F024 | R4 Visual and performance finish | F019, F021, F022 | unit, lint, typecheck, build | passing |
+| F025 | R5 Release candidate evidence | F024 | unit, lint, typecheck, build | blocked |
 
 Do not start R6 (imports, evidence, comparison, hosted) until R5. No backend or billing in R1–R5.
 
