@@ -7,6 +7,7 @@ import {
   EDGE_TYPE,
   OPERATION_KIND,
   applyOperation,
+  applyOperationAt,
   nextPrefixedId,
   validateDocument,
 } from "../src/index.ts";
@@ -42,6 +43,27 @@ test("set_node_label succeeds and inverse restores the previous document", async
   assert.equal(undone.ok, true);
   if (!undone.ok) return;
   assert.equal(undone.document.nodes.find((node) => node.id === "gateway")?.label, "Workspace API");
+});
+
+test("applyOperationAt rejects a changed base revision and leaves the document", async () => {
+  const document = await load();
+  const missed = applyOperationAt(
+    document,
+    { kind: OPERATION_KIND.SET_TITLE, title: "Stale patch" },
+    document.revision + 1,
+  );
+  assert.equal(missed.ok, false);
+  assert.equal(missed.document.title, document.title);
+  assert.equal(missed.document.revision, document.revision);
+  const applied = applyOperationAt(
+    document,
+    { kind: OPERATION_KIND.SET_TITLE, title: "Fresh title" },
+    document.revision,
+  );
+  assert.equal(applied.ok, true);
+  if (!applied.ok) return;
+  assert.equal(applied.document.title, "Fresh title");
+  assert.equal(applied.document.revision, document.revision + 1);
 });
 
 test("rejected edits leave the last valid document in place", async () => {

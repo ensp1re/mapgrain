@@ -59,6 +59,21 @@ function endpoint(nodeId: string, portId?: string): { nodeId: string; portId?: s
   return portId ? { nodeId, portId } : { nodeId };
 }
 
+export function applyOperationAt(
+  document: DiagramDocument,
+  operation: Operation,
+  baseRevision: number,
+): ApplyResult {
+  if (document.revision !== baseRevision) {
+    return fail(
+      document,
+      `document revision is ${document.revision}, not ${baseRevision}`,
+      "/revision",
+    );
+  }
+  return applyOperation(document, operation);
+}
+
 export function applyOperation(document: DiagramDocument, operation: Operation): ApplyResult {
   const next = cloneDocument(document);
 

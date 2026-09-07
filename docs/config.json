@@ -46,6 +46,7 @@
     "packages/cli",
     "packages/viewer",
     "apps/editor",
+    "skills",
     "docs/PROJECT.md",
     "docs/PLAN.md",
     "docs/ARCHITECTURE.md",

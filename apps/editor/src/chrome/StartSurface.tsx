@@ -50,10 +50,12 @@ export function StartSurface({
       <section className="agent-path" aria-label="Use with your agent">
         <h2>Use with your agent</h2>
         <p>
-          Install the Mapgrain skill in your coding agent, then ask it to emit a Mapgrain JSON
-          document and run <code>pnpm mapgrain validate</code>. Open the file here to refine it.
+          Install the Mapgrain skill, ask your agent for a diagram JSON, then validate and open it
+          here.
         </p>
-        <pre className="agent-example">{`Create a Mapgrain architecture JSON with Browser, API, and Database nodes.`}</pre>
+        <pre className="agent-example">{`npx skills add ensp1re/mapgrain --skill mapgrain --yes
+Create a Mapgrain architecture JSON with Browser, API, and Database nodes.
+npx mapgrain@0.1.0 validate diagram.json`}</pre>
       </section>
       {recents.length > 0 ? (
         <section className="recent-list" aria-label="Recent diagrams">

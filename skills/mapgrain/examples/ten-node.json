@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-invoice-lane",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Invoice capture lane",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": ["capture"]
+  },
+  "groups": [
+    { "id": "intake", "label": "Intake", "parentId": null },
+    { "id": "core", "label": "Core", "parentId": null }
+  ],
+  "nodes": [
+    {
+      "id": "clerk",
+      "kind": "actor",
+      "label": "Clerk",
+      "groupId": null,
+      "ports": [{ "id": "out", "side": "east" }]
+    },
+    {
+      "id": "inbox",
+      "kind": "queue",
+      "label": "Mail inbox",
+      "groupId": "intake",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "capture",
+      "kind": "gateway",
+      "label": "Capture API",
+      "groupId": "intake",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "ocr",
+      "kind": "job",
+      "label": "OCR job",
+      "groupId": "core",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "docs",
+      "kind": "datastore",
+      "label": "Document store",
+      "groupId": "core",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "rules",
+      "kind": "service",
+      "label": "Coding rules",
+      "groupId": "core",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "ledger",
+      "kind": "datastore",
+      "label": "Ledger",
+      "groupId": "core",
+      "ports": [{ "id": "in", "side": "west" }]
+    },
+    {
+      "id": "notify",
+      "kind": "queue",
+      "label": "Notify",
+      "groupId": null,
+      "ports": [{ "id": "in", "side": "west" }]
+    },
+    {
+      "id": "bank",
+      "kind": "external",
+      "label": "Bank file",
+      "groupId": null,
+      "ports": [{ "id": "out", "side": "east" }]
+    },
+    {
+      "id": "audit",
+      "kind": "service",
+      "label": "Audit log",
+      "groupId": "core",
+      "ports": [{ "id": "in", "side": "west" }]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-clerk-inbox",
+      "source": { "nodeId": "clerk", "portId": "out" },
+      "target": { "nodeId": "inbox", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-inbox-capture",
+      "source": { "nodeId": "inbox", "portId": "out" },
+      "target": { "nodeId": "capture", "portId": "in" },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-bank-capture",
+      "source": { "nodeId": "bank", "portId": "out" },
+      "target": { "nodeId": "capture", "portId": "in" },
+      "type": "writes",
+      "direction": "forward",
+      "evidenceState": "inferred"
+    },
+    {
+      "id": "e-capture-ocr",
+      "source": { "nodeId": "capture", "portId": "out" },
+      "target": { "nodeId": "ocr", "portId": "in" },
+      "type": "calls",
+      "direction": "forward",
+      "evidenceState": "observed"
+    },
+    {
+      "id": "e-ocr-docs",
+      "source": { "nodeId": "ocr", "portId": "out" },
+      "target": { "nodeId": "docs", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-capture-rules",
+      "source": { "nodeId": "capture", "portId": "out" },
+      "target": { "nodeId": "rules", "portId": "in" },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-rules-ledger",
+      "source": { "nodeId": "rules", "portId": "out" },
+      "target": { "nodeId": "ledger", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-ocr-audit",
+      "source": { "nodeId": "ocr", "portId": "out" },
+      "target": { "nodeId": "audit", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-rules-notify",
+      "source": { "nodeId": "rules", "portId": "out" },
+      "target": { "nodeId": "notify", "portId": "in" },
+      "type": "publishes",
+      "direction": "forward"
+    }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "All" }],
+  "layout": {
+    "version": 1,
+    "revision": 1,
+    "positions": {
+      "clerk": { "x": 0, "y": 48 },
+      "inbox": { "x": 180, "y": 48 },
+      "capture": { "x": 360, "y": 48 },
+      "ocr": { "x": 540, "y": 0 },
+      "docs": { "x": 720, "y": 0 },
+      "rules": { "x": 540, "y": 120 },
+      "ledger": { "x": 720, "y": 120 },
+      "notify": { "x": 720, "y": 240 },
+      "bank": { "x": 360, "y": 200 },
+      "audit": { "x": 720, "y": -96 }
+    }
+  },
+  "evidence": [
+    {
+      "id": "ev-capture",
+      "targetKind": "node",
+      "targetId": "capture",
+      "state": "observed",
+      "note": "path: src/capture/router.ts:18"
+    }
+  ]
+}
