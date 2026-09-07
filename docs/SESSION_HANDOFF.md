@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/useful-editing @ 70a79c8044fc05033e3566beb808141b6635c1b6 (dirty)
-- Updated: 2026-09-07T19:09:42.229Z
+- Git: feat/offline-viewer @ 978bcfa66a3c4d775f68417fa4fbee743a846e56 (dirty)
+- Updated: 2026-09-07T19:15:01.697Z
 
 ### Next action
 
-Open a draft PR for F019. Merge when GitHub verify succeeds. Next is F020.
+Open a draft PR for F020. Merge when GitHub verify succeeds. Next is F021.
 
 ### Decisions
 
@@ -74,6 +74,7 @@ Open a draft PR for F019. Merge when GitHub verify succeeds. Next is F020.
 - docs/runs/run-1788807243525-161da0.json
 - docs/runs/run-1788807797035-89e364.json
 - docs/runs/run-1788808155658-391fbf.json
+- docs/runs/run-1788808466921-89a20d.json
 
 ## Resume
 
