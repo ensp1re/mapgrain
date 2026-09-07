@@ -6,6 +6,7 @@ import type {
   EdgeDirection,
   EdgeType,
   LayoutPoint,
+  Theme,
 } from "./document.ts";
 import type { ValidationIssue } from "./validation.ts";
 
@@ -39,7 +40,8 @@ export type Operation =
   | { kind: typeof OPERATION_KIND.DUPLICATE_NODE; nodeId: string; newId: string }
   | { kind: typeof OPERATION_KIND.SET_NODE_GROUP; nodeId: string; groupId: string | null }
   | { kind: typeof OPERATION_KIND.SET_NODE_PINNED; nodeId: string; pinned: boolean }
-  | { kind: typeof OPERATION_KIND.SET_LAYOUT; positions: Record<string, LayoutPoint> };
+  | { kind: typeof OPERATION_KIND.SET_LAYOUT; positions: Record<string, LayoutPoint> }
+  | { kind: typeof OPERATION_KIND.SET_THEME; theme: Theme };
 
 export type ApplyResult =
   | { ok: true; document: DiagramDocument; inverse: Operation }

@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/geometry-pipeline @ d949236bd925ab84375eb922c5a79c8b1daa06b3 (dirty)
-- Updated: 2026-09-07T18:39:25.867Z
+- Git: feat/safe-editing @ a1821e1e73c9f9532501480aed1037c87da59fd3 (dirty)
+- Updated: 2026-09-07T18:47:39.444Z
 
 ### Next action
 
-Open a draft PR for F015 (R1.1 portable layout). Wait for CI. Do not merge until asked. Next after merge is F016 (R1.2 geometry pipeline).
+Open a draft PR for F016 (R1.2 geometry pipeline). Merge when GitHub verify succeeds. Next is F017.
 
 ### Decisions
 
@@ -29,6 +29,7 @@ Open a draft PR for F015 (R1.1 portable layout). Wait for CI. Do not merge until
 - The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
 - The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
 - The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
+- Editor edges follow canonical scene polylines. Direction none/forward/both is visible. Text measurement uses Inter-like glyph classes including CJK and Cyrillic. Node size reserves a kind line.
 
 ### Rejected approaches
 
@@ -68,6 +69,7 @@ Open a draft PR for F015 (R1.1 portable layout). Wait for CI. Do not merge until
 - docs/runs/run-1788803958032-669084.json
 - docs/runs/run-1788805672118-b8d681.json
 - docs/runs/run-1788806341421-3200fb.json
+- docs/runs/run-1788806830014-5101bb.json
 
 ## Resume
 
