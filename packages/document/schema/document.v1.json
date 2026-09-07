@@ -270,6 +270,10 @@
               {
                 "const": "both",
                 "type": "string"
+              },
+              {
+                "const": "none",
+                "type": "string"
               }
             ]
           },

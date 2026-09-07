@@ -1,27 +1,47 @@
 import {
+  BROAD_WIDTH,
+  CYRILLIC_WIDTH,
   DEFAULT_FONT_FAMILY,
   DEFAULT_FONT_SIZE,
   DEFAULT_FONT_WEIGHT,
   DEFAULT_LINE_HEIGHT,
   LATIN_WIDTH,
+  NARROW_WIDTH,
   SPACE_WIDTH,
   WIDE_WIDTH,
 } from "./constants/metrics.ts";
 import type { FontSpec, TextMeasurer } from "./types/options.ts";
 import type { MeasuredText, TextLine } from "./types/scene.ts";
 
-export const approximateTextMeasurer: TextMeasurer = {
+function unitWidth(code: number): number {
+  if (code <= 32) return SPACE_WIDTH;
+  if (code === 105 || code === 108 || code === 116 || code === 102 || code === 106 || code === 73 || code === 49) {
+    return NARROW_WIDTH;
+  }
+  if (code === 109 || code === 119 || code === 77 || code === 87) return BROAD_WIDTH;
+  if (code < 127) return LATIN_WIDTH;
+  if (code >= 0x400 && code <= 0x4ff) return CYRILLIC_WIDTH;
+  if (
+    (code >= 0x2e80 && code <= 0x9fff) ||
+    (code >= 0xac00 && code <= 0xd7af) ||
+    (code >= 0xf900 && code <= 0xfaff)
+  ) {
+    return WIDE_WIDTH;
+  }
+  return LATIN_WIDTH;
+}
+
+export const fontTextMeasurer: TextMeasurer = {
   measure(text, font) {
     let width = 0;
     for (const char of text) {
-      const code = char.codePointAt(0) ?? 0;
-      if (code <= 32) width += font.size * SPACE_WIDTH;
-      else if (code < 127) width += font.size * LATIN_WIDTH;
-      else width += font.size * WIDE_WIDTH;
+      width += font.size * unitWidth(char.codePointAt(0) ?? 0);
     }
     return { width, height: font.lineHeight };
   },
 };
+
+export const approximateTextMeasurer: TextMeasurer = fontTextMeasurer;
 
 export const defaultFont = {
   family: DEFAULT_FONT_FAMILY,

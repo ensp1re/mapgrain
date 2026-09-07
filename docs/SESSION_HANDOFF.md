@@ -6,8 +6,8 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/portable-layout @ 0c1e84e98871a827422133dc251859560b70d848 (dirty)
-- Updated: 2026-09-07T18:29:44.025Z
+- Git: feat/geometry-pipeline @ d949236bd925ab84375eb922c5a79c8b1daa06b3 (dirty)
+- Updated: 2026-09-07T18:39:25.867Z
 
 ### Next action
 
@@ -67,6 +67,7 @@ Open a draft PR for F015 (R1.1 portable layout). Wait for CI. Do not merge until
 - docs/runs/run-1788802738494-8e738b.json
 - docs/runs/run-1788803958032-669084.json
 - docs/runs/run-1788805672118-b8d681.json
+- docs/runs/run-1788806341421-3200fb.json
 
 ## Resume
 

@@ -1,9 +1,11 @@
 import {
+  EDGE_DIRECTION,
   LAYOUT_DIRECTION,
   validateDocument,
   type DiagramDocument,
   type PortSide,
 } from "@mapgrain/document";
+import { KIND_FONT_SIZE, KIND_LINE_HEIGHT } from "./constants/metrics.ts";
 import { PARALLEL_EDGE_OFFSET } from "./constants/metrics.ts";
 import { expandTop, inflate, midpoint, normalize, unionRects } from "./geometry.ts";
 import { defaultSceneOptions } from "./options.ts";
@@ -19,11 +21,12 @@ import type { Scene, SceneEdge, SceneGroup, SceneNode, ScenePort, SceneResult } 
 
 function nodeSize(
   label: { width: number; height: number },
+  kind: { width: number; height: number },
   options: SceneOptions,
 ): { width: number; height: number } {
   return {
-    width: Math.max(options.minNodeWidth, label.width + options.padding.x * 2),
-    height: Math.max(options.minNodeHeight, label.height + options.padding.y * 2),
+    width: Math.max(options.minNodeWidth, Math.max(label.width, kind.width) + options.padding.x * 2),
+    height: Math.max(options.minNodeHeight, label.height + kind.height + options.padding.y * 2),
   };
 }
 
@@ -170,10 +173,12 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
 
   const sizes = new Map<string, { width: number; height: number }>();
   const labels = new Map<string, ReturnType<typeof measureText>>();
+  const kindFont = { ...options.font, size: KIND_FONT_SIZE, lineHeight: KIND_LINE_HEIGHT };
   for (const node of document.nodes) {
     const label = measureText(node.label, options.font, options.maxLabelWidth, options.measurer);
+    const kind = measureText(node.kind, kindFont, options.maxLabelWidth, options.measurer);
     labels.set(node.id, label);
-    sizes.set(node.id, nodeSize(label, options));
+    sizes.set(node.id, nodeSize(label, kind, options));
   }
 
   const positions = placeNodes(document, sizes, options);
@@ -209,6 +214,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
         source: { nodeId: edge.source.nodeId, portId: edge.source.portId ?? "" },
         target: { nodeId: edge.target.nodeId, portId: edge.target.portId ?? "" },
         points: [],
+        direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
       };
     }
     const sourcePort = resolvePort(sourceNode, edge.source.portId, targetNode.rect);
@@ -227,6 +233,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
         index,
         count,
       ),
+      direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
     };
   });
 

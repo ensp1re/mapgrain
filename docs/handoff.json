@@ -4,8 +4,8 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/portable-layout",
-    "revision": "0c1e84e98871a827422133dc251859560b70d848",
+    "branch": "feat/geometry-pipeline",
+    "revision": "d949236bd925ab84375eb922c5a79c8b1daa06b3",
     "dirty": true
   },
   "evidenceRefs": [
@@ -23,7 +23,8 @@
     "docs/runs/run-1788802146185-c8b4da.json",
     "docs/runs/run-1788802738494-8e738b.json",
     "docs/runs/run-1788803958032-669084.json",
-    "docs/runs/run-1788805672118-b8d681.json"
+    "docs/runs/run-1788805672118-b8d681.json",
+    "docs/runs/run-1788806341421-3200fb.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -39,7 +40,8 @@
     "The product CLI lives in packages/cli, uses the same document and renderer as the editor, and does not depend on the GUI.",
     "The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.",
     "The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.",
-    "The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out."
+    "The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.",
+    "Editor edges follow canonical scene polylines. Direction none/forward/both is visible. Text measurement uses Inter-like glyph classes including CJK and Cyrillic. Node size reserves a kind line."
   ],
   "rejectedApproaches": [
     "Adding Turborepo or Nx before there are packages to orchestrate.",
@@ -57,6 +59,6 @@
     "Starting R6 imports, hosted sharing, or billing before R1–R5."
   ],
   "blockers": [],
-  "nextAction": "Open a draft PR for F015 (R1.1 portable layout). Wait for CI. Do not merge until asked. Next after merge is F016 (R1.2 geometry pipeline).",
-  "updatedAt": "2026-09-07T18:29:44.025Z"
+  "nextAction": "Open a draft PR for F016 (R1.2 geometry pipeline). Merge when GitHub verify succeeds. Next is F017.",
+  "updatedAt": "2026-09-07T18:39:25.867Z"
 }

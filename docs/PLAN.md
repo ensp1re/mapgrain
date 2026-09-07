@@ -34,7 +34,7 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F013 | Read-only viewer from the canonical scene | F004, F012 | unit, lint, typecheck, build | passing |
 | F014 | 100-node fixture through validate, layout, and export | F003, F004, F012 | unit, lint, typecheck, build | passing |
 | F015 | R1.1 Portable layout and export parity | F004, F007, F009, F012 | unit, lint, typecheck, build | active |
-| F016 | R1.2 One geometry pipeline | F015 | unit, lint, typecheck, build | not_started |
+| F016 | R1.2 One geometry pipeline | F015 | unit, lint, typecheck, build | active |
 | F017 | R1.3 Safe editing, selection, async layout | F015 | unit, lint, typecheck, build | not_started |
 | F018 | R1.4 Durable storage and safe CLI writes | F015, F012 | unit, lint, typecheck, build | not_started |
 | F019 | R2.1 Real creation without fake generation | F015, F017 | unit, lint, typecheck, build | not_started |

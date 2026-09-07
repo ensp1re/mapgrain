@@ -22,6 +22,9 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   const edge = flow.edges.find((item) => item.id === "e-gateway-document");
   assert.equal(edge?.sourceHandle, "out");
   assert.equal(edge?.targetHandle, "in");
+  assert.ok((edge?.points.length ?? 0) >= 2);
+  const sceneEdge = scene.scene.edges.find((item) => item.id === "e-gateway-document");
+  assert.deepEqual(edge?.points, sceneEdge?.points);
 });
 
 test("specimen CSS covers both themes, a 390px layout, and reduced motion", async () => {
@@ -32,4 +35,5 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /max-width: 720px/);
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /--topbar-h: 48px/);
+  assert.match(css, /\.react-flow__node-group/);
 });
