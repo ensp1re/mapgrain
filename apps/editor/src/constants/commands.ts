@@ -17,6 +17,7 @@ export const COMMAND_ID = {
   ARRANGE: "arrange",
   NEW: "new",
   IMPORT: "import",
+  CONNECT: "connect",
 } as const;
 
 export type CommandId = (typeof COMMAND_ID)[keyof typeof COMMAND_ID];
@@ -39,6 +40,7 @@ export const COMMANDS: CommandSpec[] = [
   { id: COMMAND_ID.ARRANGE, label: "Arrange diagram", shortcut: "A" },
   { id: COMMAND_ID.NEW, label: "New diagram", shortcut: "N" },
   { id: COMMAND_ID.IMPORT, label: "Import JSON", shortcut: "" },
+  { id: COMMAND_ID.CONNECT, label: "Connect selected", shortcut: "" },
   { id: COMMAND_ID.PRESENT, label: "Present", shortcut: "P" },
   { id: COMMAND_ID.EXPORT_SVG, label: "Export SVG", shortcut: "E" },
   { id: COMMAND_ID.EXPORT_JSON, label: "Export JSON", shortcut: "J" },

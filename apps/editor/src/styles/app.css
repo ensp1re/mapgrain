@@ -584,9 +584,32 @@ input {
   color: var(--text);
 }
 
-.start-actions {
+.start-actions,
+.add-bar {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+}
+
+.add-bar {
+  position: absolute;
+  z-index: 6;
+  left: 12px;
+  top: 12px;
+  max-width: calc(100% - 24px);
+}
+
+.agent-path {
+  margin: 20px 0;
+}
+
+.agent-example {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: auto;
+  white-space: pre-wrap;
 }
 
 .job-stages {
