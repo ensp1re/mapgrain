@@ -7,8 +7,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 ## State
 
 - Status: `active`
-- Current task ID: F013
-- Active slice: read-only viewer
+- Current task ID: F014
+- Active slice: 100-node fixture through validate, layout, and export
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -29,7 +29,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 | F010 | Offline create → edit → reload → export | F004, F007, F008, F009 | unit, lint, typecheck, build | passing |
 | F011 | Example-backed first session; no fake generation | F006 | unit, lint, typecheck, build | passing |
 | F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | passing |
-| F013 | Read-only viewer from the canonical scene | F004, F012 | unit, lint, typecheck, build | active |
+| F013 | Read-only viewer from the canonical scene | F004, F012 | unit, lint, typecheck, build | passing |
+| F014 | 100-node fixture through validate, layout, and export | F003, F004, F012 | unit, lint, typecheck, build | active |
 
 Later milestones (sequence mode, revisions, hosted sharing, repository evidence) stay in [PROJECT.md](PROJECT.md). Do not start them in this queue.
 

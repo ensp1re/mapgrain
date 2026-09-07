@@ -12,6 +12,9 @@ import { runCli } from "../src/run.ts";
 const fixture = fileURLToPath(
   new URL("../../../tests/fixtures/documents/nested-groups.json", import.meta.url),
 );
+const hundred = fileURLToPath(
+  new URL("../../../tests/fixtures/documents/hundred-nodes.json", import.meta.url),
+);
 const cliEntry = fileURLToPath(new URL("../src/cli.ts", import.meta.url));
 const pkg = fileURLToPath(new URL("../package.json", import.meta.url));
 
@@ -115,6 +118,16 @@ test("the CLI package does not depend on the editor", async () => {
   const manifest = JSON.parse(await readFile(pkg, "utf8")) as { dependencies: Record<string, string> };
   assert.equal(Object.hasOwn(manifest.dependencies, "@mapgrain/editor"), false);
   assert.equal(Object.hasOwn(manifest.dependencies, "react"), false);
+});
+
+test("CLI validates the hundred-node fixture", async () => {
+  const source = await readFile(hundred, "utf8");
+  const io = memoryIo({ "hundred-nodes.json": source });
+  const code = await runCli(["validate", "hundred-nodes.json"], io);
+  assert.equal(code, EXIT_CODE.OK);
+  const result = JSON.parse(text(io.stdoutChunks)) as { ok: boolean; nodes: number };
+  assert.equal(result.ok, true);
+  assert.equal(result.nodes, 100);
 });
 
 test("spawned CLI validates a fixture without loading the editor", async () => {

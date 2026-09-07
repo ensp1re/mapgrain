@@ -15,6 +15,7 @@ const requiredFixtures = [
   "long-labels.json",
   "disconnected.json",
   "workflow-review.json",
+  "hundred-nodes.json",
 ];
 
 test("every original fixture validates", async () => {
@@ -27,6 +28,16 @@ test("every original fixture validates", async () => {
     const result = validateDocument(raw);
     assert.equal(result.ok, true, `${name} failed: ${JSON.stringify(result)}`);
   }
+});
+
+test("hundred-node fixture is original and has 100 nodes", async () => {
+  const raw = JSON.parse(await readFile(path.join(fixturesDir, "hundred-nodes.json"), "utf8"));
+  const result = validateDocument(raw);
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.document.nodes.length, 100);
+  assert.equal(result.document.id, "doc-hundred-nodes");
+  assert.equal(result.document.title, "Local telemetry mesh");
 });
 
 test("nested groups keep parent links", async () => {

@@ -15,6 +15,18 @@ function text(bytes: Uint8Array): string {
   return new TextDecoder().decode(bytes);
 }
 
+test("hundred-node fixture exports SVG from the canonical scene", async () => {
+  const raw = await load("hundred-nodes.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = text(result.bytes);
+  assert.match(svg, /<svg /);
+  assert.match(svg, /data-id="core00"/);
+  assert.match(svg, /Core service 00/);
+  assert.match(svg, /data-kind="node"/);
+});
+
 test("JSON export is built from the document and omits evidence by default", async () => {
   const raw = await load("nested-groups.json");
   const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.JSON });

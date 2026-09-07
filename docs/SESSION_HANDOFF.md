@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/readonly-viewer @ 4fe444230910c56c53a2bcb645d9799083b5346b (dirty)
-- Updated: 2026-09-07T17:40:55.618Z
+- Git: feat/hundred-node-fixture @ c41e9e73ec0a51de95de4c21c78577337367abc9 (dirty)
+- Updated: 2026-09-07T17:59:49.470Z
 
 ### Next action
 
-Open a draft PR for F013. Wait for CI. Do not merge until asked.
+Open a draft PR for F014. Wait for CI. Do not merge until asked.
 
 ### Decisions
 
@@ -27,6 +27,7 @@ Open a draft PR for F013. Wait for CI. Do not merge until asked.
 - First session is an example-backed start surface. Submit without a provider fails honestly, keeps the prompt, and offers a repair. Examples are never labelled as generated output.
 - The product CLI lives in packages/cli, uses the same document and renderer as the editor, and does not depend on the GUI.
 - The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
+- The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
 
 ### Rejected approaches
 
@@ -41,6 +42,7 @@ Open a draft PR for F013. Wait for CI. Do not merge until asked.
 - Walking fake interpreting/arranging/checking stages as if a model ran.
 - Adding Commander or another parser for three CLI commands.
 - Building the viewer on React Flow.
+- Claiming a layout-time target before measuring on a documented device.
 
 ### Blockers
 
@@ -61,6 +63,7 @@ Open a draft PR for F013. Wait for CI. Do not merge until asked.
 - docs/runs/run-1788801310224-cc1501.json
 - docs/runs/run-1788802146185-c8b4da.json
 - docs/runs/run-1788802738494-8e738b.json
+- docs/runs/run-1788803958032-669084.json
 
 ## Resume
 
