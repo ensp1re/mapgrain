@@ -45,6 +45,12 @@ importers:
         specifier: ^0.34.41
         version: 0.34.52
 
+  packages/scene:
+    dependencies:
+      '@mapgrain/document':
+        specifier: workspace:*
+        version: link:../document
+
 packages:
 
   '@babel/code-frame@7.29.7':

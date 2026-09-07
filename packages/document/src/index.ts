@@ -25,8 +25,10 @@ export type {
   EdgeDirection,
   EdgeType,
   EvidenceState,
+  LayoutDirection,
   LayoutHints,
   NodeKind,
+  PortSide,
   Theme,
 } from "./types/document.ts";
 export type { ValidationErrorCode, ValidationIssue, ValidationResult } from "./types/validation.ts";

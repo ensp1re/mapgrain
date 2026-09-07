@@ -12,7 +12,7 @@
         "Original fixtures exist for nested groups, cycles, parallel edges, long labels, and disconnected components."
       ],
       "dependsOn": [],
-      "state": "verified",
+      "state": "passing",
       "spec": "docs/PROJECT.md",
       "plan": "docs/PLAN.md",
       "verification": [
@@ -24,9 +24,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1788786708728-a5e884",
-        "fingerprintBefore": "43a803967c890dfbafc0c92ef47598bdee68aa7818814b52fa8610820a6b2cf6",
-        "fingerprintAfter": "43a803967c890dfbafc0c92ef47598bdee68aa7818814b52fa8610820a6b2cf6",
+        "attemptId": "run-1788787273748-64b28c",
+        "fingerprintBefore": "7f0c30a94dd34450ef282e778add9fe7bfd80b64ac4ea4bb96ad1dba9c266915",
+        "fingerprintAfter": "7f0c30a94dd34450ef282e778add9fe7bfd80b64ac4ea4bb96ad1dba9c266915",
         "checks": [
           {
             "id": "unit",
@@ -45,9 +45,23 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-07T13:11:55.527Z"
+        "verifiedAt": "2026-09-07T13:21:20.984Z"
       },
-      "delivery": null
+      "delivery": {
+        "implementationRevision": "704bbde0f7bba0c7820884184b726f7d82af0fb8",
+        "remote": "https://github.com/ensp1re/mapgrain.git",
+        "prUrl": "https://github.com/ensp1re/mapgrain/pull/3",
+        "checkRuns": [
+          {
+            "name": "verify",
+            "revision": "704bbde0f7bba0c7820884184b726f7d82af0fb8",
+            "conclusion": "success",
+            "url": "https://github.com/ensp1re/mapgrain/actions/runs/34126154828/job/101755188986"
+          }
+        ],
+        "observedAt": "2026-09-07T13:13:06Z",
+        "closeoutRevision": "704bbde0f7bba0c7820884184b726f7d82af0fb8"
+      }
     },
     {
       "id": "F002",
@@ -60,7 +74,7 @@
       "dependsOn": [
         "F001"
       ],
-      "state": "not_started",
+      "state": "verified",
       "spec": "docs/PROJECT.md",
       "plan": "docs/PLAN.md",
       "verification": [
@@ -70,7 +84,31 @@
         "build"
       ],
       "blockedReason": null,
-      "evidence": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788787302679-e39350",
+        "fingerprintBefore": "7f0c30a94dd34450ef282e778add9fe7bfd80b64ac4ea4bb96ad1dba9c266915",
+        "fingerprintAfter": "7f0c30a94dd34450ef282e778add9fe7bfd80b64ac4ea4bb96ad1dba9c266915",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-07T13:21:50.063Z"
+      },
       "delivery": null
     },
     {

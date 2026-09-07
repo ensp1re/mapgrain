@@ -40,6 +40,7 @@
     "scripts",
     "tests",
     "packages/document",
+    "packages/scene",
     "docs/PROJECT.md",
     "docs/PLAN.md",
     "docs/ARCHITECTURE.md",
