@@ -1,4 +1,3 @@
-import { createRequire } from "node:module";
 import {
   VALIDATION_ERROR_CODE,
   validateDocument,
@@ -11,12 +10,12 @@ import { applyPins } from "../pins.ts";
 import type { LayoutConflict, WorkerLayoutResponse } from "../types/layout.ts";
 import { collectPositions, toElkGraph, type ElkNode } from "./graph.ts";
 
-const require = createRequire(import.meta.url);
-const ELK = require("elkjs/lib/elk.bundled.js") as new () => {
+export interface ElkEngine {
   layout: (graph: ElkNode) => Promise<ElkNode>;
-};
+}
 
-const elk = new ELK();
+export { LAYOUT_STATUS } from "../constants/codes.ts";
+export type { LayoutConflict, LayoutResult, WorkerLayoutResponse } from "../types/layout.ts";
 
 function sizesFromDocument(
   document: DiagramDocument,
@@ -36,6 +35,7 @@ export async function runLayout(
   threadId: number,
   input: unknown,
   pins: Record<string, Point>,
+  elk: ElkEngine,
 ): Promise<WorkerLayoutResponse> {
   const validated = validateDocument(input);
   if (!validated.ok) {

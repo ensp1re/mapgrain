@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/direct-editing @ 06b4b6c0bd8b938fdfeafab8669a9f7b81f07d5a (dirty)
-- Updated: 2026-09-07T16:13:25.781Z
+- Git: feat/arrange-preview @ 9d608b6d6dedc3daca3c3a8cdc244a7aac6360a5 (dirty)
+- Updated: 2026-09-07T16:31:47.258Z
 
 ### Next action
 
-Open a draft PR for F007. Wait for CI. Do not merge until asked.
+Open a draft PR for F008. Wait for CI. Do not merge until asked.
 
 ### Decisions
 
@@ -21,6 +21,7 @@ Open a draft PR for F007. Wait for CI. Do not merge until asked.
 - Quality gates: ESLint, tsc, node:test, Husky pre-commit, commitlint, GitHub Actions.
 - Document operations live in packages/document with inverses. Editor history stores document plus node positions so a label change does not rearrange other nodes.
 - New connections record explicit type and direction before they are committed.
+- Arrange runs ELK off the UI thread, shows a preview with Apply/Discard, and never silently drops keep-position pins.
 
 ### Rejected approaches
 
@@ -29,6 +30,7 @@ Open a draft PR for F007. Wait for CI. Do not merge until asked.
 - Copying another product's source, assets, or copy.
 - Empty app/package stubs that exist only to look like a monorepo.
 - Rebuilding default sequential placement after a label edit.
+- Running nested ELK workers inside the editor layout worker.
 
 ### Blockers
 
@@ -43,6 +45,7 @@ Open a draft PR for F007. Wait for CI. Do not merge until asked.
 - docs/runs/run-1788793476030-054c9f.json
 - docs/runs/run-1788793487911-4323db.json
 - docs/runs/run-1788797500629-e310ff.json
+- docs/runs/run-1788798663725-8d9cdf.json
 
 ## Resume
 

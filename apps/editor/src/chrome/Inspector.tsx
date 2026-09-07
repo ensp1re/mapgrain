@@ -134,6 +134,24 @@ export function Inspector({
         <dd>{node.data.kind ?? "group"}</dd>
         {source ? (
           <>
+            <dt>Keep position</dt>
+            <dd>
+              <label className="pin-field">
+                <input
+                  type="checkbox"
+                  aria-label="Keep position"
+                  checked={document.layoutHints.pinnedNodeIds.includes(source.id)}
+                  onChange={(event) =>
+                    onOperate({
+                      kind: OPERATION_KIND.SET_NODE_PINNED,
+                      nodeId: source.id,
+                      pinned: event.target.checked,
+                    })
+                  }
+                />
+                Pin this node during arrange
+              </label>
+            </dd>
             <dt>Group</dt>
             <dd>
               <select

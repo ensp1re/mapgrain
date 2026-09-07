@@ -10,6 +10,7 @@ interface TopBarProps {
   onTitleCommit: (value: string) => void;
   onUndo: () => void;
   onRedo: () => void;
+  onArrange: () => void;
   onPresent: () => void;
   onExport: () => void;
   onCommand: () => void;
@@ -27,6 +28,7 @@ export function TopBar({
   onTitleCommit,
   onUndo,
   onRedo,
+  onArrange,
   onPresent,
   onExport,
   onCommand,
@@ -88,6 +90,9 @@ export function TopBar({
       </button>
       <button type="button" className="text-btn" onClick={onRedo} disabled={!canRedo}>
         Redo
+      </button>
+      <button type="button" className="text-btn" onClick={onArrange}>
+        Arrange
       </button>
       <button type="button" className="text-btn" onClick={onPresent}>
         Present
