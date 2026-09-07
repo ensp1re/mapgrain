@@ -28,7 +28,9 @@ import {
   type Theme,
 } from "@mapgrain/document";
 import { LAYOUT_STATUS } from "@mapgrain/layout/run";
-import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
+import { exportVector } from "@mapgrain/renderer/vector";
+import { ExportDialog } from "./chrome/ExportDialog.tsx";
+import { EXPORT_CHOICE } from "./constants/export.ts";
 import { buildScene } from "@mapgrain/scene";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
@@ -214,6 +216,8 @@ function Specimen() {
   const [importError, setImportError] = useState<string | null>(null);
   const [recents, setRecents] = useState<Array<{ id: string; title: string }>>([]);
   const [saveState, setSaveState] = useState<SaveState>(SAVE_STATE.SAVED);
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
   const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
   const historyRef = useRef(history);
   historyRef.current = history;
@@ -587,15 +591,25 @@ function Specimen() {
   }, [applyOp, pending]);
 
   const exportFormat = useCallback(
-    (format: typeof EXPORT_FORMAT.SVG | typeof EXPORT_FORMAT.JSON) => {
+    (format: (typeof EXPORT_CHOICE)[keyof typeof EXPORT_CHOICE]) => {
       if (!documentModel) return;
+      if (format === EXPORT_CHOICE.PNG) {
+        setExportError("PNG in the browser needs a canvas raster. Use pnpm mapgrain export --format png.");
+        return;
+      }
       const result = exportVector({ document: documentModel, format, theme });
-      if (!result.ok) return;
-      download(
-        format === EXPORT_FORMAT.JSON ? "diagram.json" : "diagram.svg",
-        result.bytes,
-        result.mediaType,
-      );
+      if (!result.ok) {
+        setExportError(result.errors[0]?.message ?? "Export failed");
+        return;
+      }
+      setExportError(null);
+      const name =
+        format === EXPORT_CHOICE.JSON
+          ? "diagram.json"
+          : format === EXPORT_CHOICE.HTML
+            ? "diagram.html"
+            : "diagram.svg";
+      download(name, result.bytes, result.mediaType);
     },
     [documentModel, theme],
   );
@@ -614,8 +628,7 @@ function Specimen() {
       if (id === COMMAND_ID.REDO) setHistory((stack) => redoHistory(stack));
       if (id === COMMAND_ID.PRESENT) setPresenting((value) => !value);
       if (id === COMMAND_ID.FIT) void fitView({ padding: 0.2 });
-      if (id === COMMAND_ID.EXPORT_SVG) exportFormat(EXPORT_FORMAT.SVG);
-      if (id === COMMAND_ID.EXPORT_JSON) exportFormat(EXPORT_FORMAT.JSON);
+      if (id === COMMAND_ID.EXPORT_SVG || id === COMMAND_ID.EXPORT_JSON) setExportOpen(true);
       if (id === COMMAND_ID.DELETE) deleteSelection();
       if (id === COMMAND_ID.DUPLICATE) duplicateSelection();
       if (id === COMMAND_ID.ALIGN_LEFT) alignSelection(ALIGN_KIND.LEFT);
@@ -673,7 +686,11 @@ function Specimen() {
 
   const onConnect = useCallback((connection: Connection) => {
     if (presenting) return;
-    if (!connection.source || !connection.target || connection.source === connection.target) return;
+    if (!connection.source || !connection.target) return;
+    if (connection.source === connection.target) {
+      setEditError("Self-loops are not supported. Connect two different nodes.");
+      return;
+    }
     setPending({
       source: connection.source,
       target: connection.target,
@@ -754,7 +771,7 @@ function Specimen() {
         onNew={() => runCommand(COMMAND_ID.NEW)}
         onArrange={() => runCommand(COMMAND_ID.ARRANGE)}
         onPresent={() => runCommand(COMMAND_ID.PRESENT)}
-        onExport={() => runCommand(COMMAND_ID.EXPORT_SVG)}
+        onExport={() => setExportOpen(true)}
         onCommand={() => setCommandsOpen(true)}
         onToggleOutline={() => runCommand(COMMAND_ID.TOGGLE_OUTLINE)}
         onToggleChat={() => runCommand(COMMAND_ID.TOGGLE_CHAT)}
@@ -821,6 +838,14 @@ function Specimen() {
               {editError}
             </div>
           ) : null}
+          <ExportDialog
+            open={exportOpen}
+            theme={theme}
+            error={exportError}
+            onTheme={setTheme}
+            onExport={exportFormat}
+            onClose={() => setExportOpen(false)}
+          />
           {presenting ? null : (
             <AddBar onAddNode={addNode} onAddGroup={addGroup} onConnect={connectSelected} />
           )}

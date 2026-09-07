@@ -6,6 +6,7 @@ import {
   type DiagramEdge,
   type Operation,
 } from "@mapgrain/document";
+import { directionLabel, relationCaption } from "../export/labels.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
 
 interface InspectorProps {
@@ -36,7 +37,7 @@ export function Inspector({
         <dl>
           <dt>Relation</dt>
           <dd>
-            {edge.source.nodeId} → {edge.target.nodeId}
+            {relationCaption(document, edge)}
           </dd>
           <dt>Meaning</dt>
           <dd>
@@ -73,7 +74,7 @@ export function Inspector({
             >
               {Object.values(EDGE_DIRECTION).map((value) => (
                 <option key={value} value={value}>
-                  {value}
+                  {directionLabel(value)}
                 </option>
               ))}
             </select>
@@ -189,8 +190,8 @@ export function Inspector({
             <ul>
               {relations.map((item) => (
                 <li key={item.id}>
-                  {item.source.nodeId} → {item.target.nodeId}
-                  {item.label ? ` (${item.label})` : ""} · {item.type} · {item.direction}
+                  {relationCaption(document, item)}
+                  {item.label ? ` (${item.label})` : ""} · {item.type}
                 </li>
               ))}
             </ul>
