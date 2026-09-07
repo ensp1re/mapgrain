@@ -6,8 +6,8 @@ This is a readable view of `docs/harness/handoff.json`. Update decisions, reject
 
 - Task: none
 - Plan: docs/harness/PLAN.md
-- Git: chore/bootstrap-harness @ 783ac192987f98d2c2c7e0b259e13f24b8aed500 (dirty)
-- Updated: 2026-09-07T12:43:15.933Z
+- Git: feat/document-schema @ 6fdde2cef44474f62146c348491c6ef9edf24d33 (dirty)
+- Updated: 2026-09-07T13:03:55.681Z
 
 ### Next action
 
@@ -34,7 +34,7 @@ After the harness PR lands, activate F001 and implement the versioned document s
 
 ### Evidence
 
-- none
+- docs/harness/runs/run-1788786216210-fddf29.json
 
 ## Resume
 

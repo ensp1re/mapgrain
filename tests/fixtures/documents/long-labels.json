@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-long-labels",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Readable long names",
+  "theme": "dark",
+  "layoutHints": { "direction": "down", "pinnedNodeIds": [] },
+  "groups": [
+    { "id": "boundary", "label": "Регіональний контур обробки запитів", "parentId": null }
+  ],
+  "nodes": [
+    {
+      "id": "front",
+      "kind": "gateway",
+      "label": "Edge gateway that terminates TLS, authenticates the session, and forwards the diagram description without storing provider credentials",
+      "description": "長い説明は省略せず、文書の意味として残す。",
+      "groupId": "boundary",
+      "ports": [{ "id": "out", "side": "south" }]
+    },
+    {
+      "id": "worker",
+      "kind": "job",
+      "label": "Працівник розкладки, який зберігає закріплені вузли і повідомляє про конфлікт простору",
+      "groupId": "boundary",
+      "ports": [{ "id": "in", "side": "north" }]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-front-worker",
+      "source": { "nodeId": "front", "portId": "out" },
+      "target": { "nodeId": "worker", "portId": "in" },
+      "type": "calls",
+      "direction": "forward",
+      "label": "arrange after interpret"
+    }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "Long labels" }]
+}

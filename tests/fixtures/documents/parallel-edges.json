@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-parallel-edges",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "API and cache",
+  "theme": "light",
+  "layoutHints": { "direction": "right", "pinnedNodeIds": ["api"] },
+  "groups": [],
+  "nodes": [
+    { "id": "api", "kind": "service", "label": "Query API", "groupId": null, "ports": [{ "id": "out", "side": "east" }] },
+    { "id": "cache", "kind": "datastore", "label": "Cache", "groupId": null, "ports": [{ "id": "in", "side": "west" }] }
+  ],
+  "edges": [
+    { "id": "e-read", "source": { "nodeId": "api", "portId": "out" }, "target": { "nodeId": "cache", "portId": "in" }, "type": "reads", "direction": "forward", "label": "get" },
+    { "id": "e-write", "source": { "nodeId": "api", "portId": "out" }, "target": { "nodeId": "cache", "portId": "in" }, "type": "writes", "direction": "forward", "label": "set" }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "Parallel relations" }]
+}

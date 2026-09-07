@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-disconnected",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Two islands",
+  "theme": "light",
+  "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
+  "groups": [],
+  "nodes": [
+    { "id": "billing", "kind": "service", "label": "Billing", "groupId": null, "ports": [] },
+    { "id": "notify", "kind": "queue", "label": "Notifier", "groupId": null, "ports": [] },
+    { "id": "search", "kind": "service", "label": "Search", "groupId": null, "ports": [] },
+    { "id": "index", "kind": "datastore", "label": "Index", "groupId": null, "ports": [] }
+  ],
+  "edges": [
+    { "id": "e-search-index", "source": { "nodeId": "search" }, "target": { "nodeId": "index" }, "type": "reads", "direction": "forward" }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "Disconnected components" }]
+}

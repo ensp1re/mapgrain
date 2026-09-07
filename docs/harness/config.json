@@ -39,6 +39,8 @@
     "AGENTS.md",
     "scripts/harness",
     "tests/harness",
+    "tests/fixtures",
+    "packages/document",
     "docs/harness/PROJECT.md",
     "docs/harness/PLAN.md",
     "docs/harness/ARCHITECTURE.md",

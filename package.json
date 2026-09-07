@@ -13,8 +13,8 @@
     "harness": "node --experimental-strip-types scripts/harness/cli.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "node --test --experimental-strip-types --test-reporter=spec tests/harness/*.test.ts",
-    "build": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test --experimental-strip-types --test-reporter=spec tests/harness/*.test.ts packages/document/tests/*.test.ts",
+    "build": "pnpm -r --if-present build",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && node --experimental-strip-types scripts/harness/cli.ts --root . validate",
     "prepare": "husky"
   },

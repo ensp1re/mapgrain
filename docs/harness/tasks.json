@@ -12,12 +12,41 @@
         "Original fixtures exist for nested groups, cycles, parallel edges, long labels, and disconnected components."
       ],
       "dependsOn": [],
-      "state": "not_started",
+      "state": "verified",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
-      "evidence": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788786216210-fddf29",
+        "fingerprintBefore": "e1a5579279034549ba51be33d5877e45373b3986d57fe2b2bbcaf01070b42021",
+        "fingerprintAfter": "e1a5579279034549ba51be33d5877e45373b3986d57fe2b2bbcaf01070b42021",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-07T13:03:43.112Z"
+      },
       "delivery": null
     },
     {
@@ -28,11 +57,18 @@
         "Text measurement supports multiline labels.",
         "Ports are explicit and stable across a layout pass."
       ],
-      "dependsOn": ["F001"],
+      "dependsOn": [
+        "F001"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -46,11 +82,18 @@
         "Insufficient space yields a visible conflict, not a silent pin drop.",
         "Superseded worker results are discarded."
       ],
-      "dependsOn": ["F002"],
+      "dependsOn": [
+        "F002"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -64,11 +107,18 @@
         "Oversized PNG fails with a smaller-size option.",
         "Secrets, comments, and selection do not appear in the artifact."
       ],
-      "dependsOn": ["F002"],
+      "dependsOn": [
+        "F002"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -82,11 +132,19 @@
         "390px and 1440px layouts remain usable.",
         "Reduced-motion preferences disable non-essential motion."
       ],
-      "dependsOn": ["F003", "F004"],
+      "dependsOn": [
+        "F003",
+        "F004"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -99,11 +157,18 @@
         "Cmd/Ctrl+K opens the command menu and is ignored while typing in an input.",
         "Inspector appears only for a selected element."
       ],
-      "dependsOn": ["F005"],
+      "dependsOn": [
+        "F005"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -117,11 +182,18 @@
         "Undo restores the previous document.",
         "A rejected edit leaves the last valid document in place."
       ],
-      "dependsOn": ["F006"],
+      "dependsOn": [
+        "F006"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -134,11 +206,18 @@
         "Keep position pins survive a successful arrange.",
         "Conflicts are visible when pins cannot be honored."
       ],
-      "dependsOn": ["F007"],
+      "dependsOn": [
+        "F007"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -151,11 +230,18 @@
         "Save state is visible in the top bar.",
         "A storage failure offers a JSON download."
       ],
-      "dependsOn": ["F006"],
+      "dependsOn": [
+        "F006"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -168,11 +254,21 @@
         "Reload after edit restores the same document ids and meaning.",
         "No control claims a capability it does not have."
       ],
-      "dependsOn": ["F004", "F007", "F008", "F009"],
+      "dependsOn": [
+        "F004",
+        "F007",
+        "F008",
+        "F009"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -186,11 +282,18 @@
         "A first-run failure returns the entered text and a repair action.",
         "Sample content is never labelled as generated output."
       ],
-      "dependsOn": ["F006"],
+      "dependsOn": [
+        "F006"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null
@@ -203,11 +306,19 @@
         "Render and export match the canonical scene for a fixture.",
         "The CLI works without the editor installed as a GUI."
       ],
-      "dependsOn": ["F001", "F004"],
+      "dependsOn": [
+        "F001",
+        "F004"
+      ],
       "state": "not_started",
       "spec": "docs/harness/PROJECT.md",
       "plan": "docs/harness/PLAN.md",
-      "verification": ["unit", "lint", "typecheck", "build"],
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
       "blockedReason": null,
       "evidence": null,
       "delivery": null

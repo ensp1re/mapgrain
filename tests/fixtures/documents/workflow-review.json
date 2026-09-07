@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-workflow-review",
+  "revision": 1,
+  "kind": "workflow",
+  "title": "First generation",
+  "theme": "dark",
+  "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
+  "groups": [],
+  "nodes": [
+    { "id": "interpret", "kind": "job", "label": "Interpreting", "groupId": null, "ports": [{ "id": "out", "side": "east" }] },
+    { "id": "arrange", "kind": "job", "label": "Arranging", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "check", "kind": "job", "label": "Checking", "groupId": null, "ports": [{ "id": "in", "side": "west" }] }
+  ],
+  "edges": [
+    { "id": "e1", "source": { "nodeId": "interpret", "portId": "out" }, "target": { "nodeId": "arrange", "portId": "in" }, "type": "calls", "direction": "forward" },
+    { "id": "e2", "source": { "nodeId": "arrange", "portId": "out" }, "target": { "nodeId": "check", "portId": "in" }, "type": "calls", "direction": "forward" }
+  ],
+  "views": [
+    {
+      "id": "happy-path",
+      "kind": "path",
+      "name": "Generation stages",
+      "path": { "from": "interpret", "to": "check" }
+    }
+  ]
+}

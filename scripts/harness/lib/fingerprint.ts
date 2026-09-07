@@ -5,6 +5,8 @@ import type { FingerprintResult, HarnessConfig, TaskStateFile } from "../types/r
 import { HarnessError } from "./error.ts";
 import { exists, safePath, sha256File } from "./fs.ts";
 
+const SKIP_NAMES = new Set(["node_modules", "dist", "coverage", ".git"]);
+
 function isGeneratedPath(stored: string): boolean {
   return GENERATED_OUTPUT_PREFIXES.some(
     (prefix) => stored === prefix || stored.startsWith(`${prefix}/`),
@@ -30,6 +32,10 @@ async function walkFiles(root: string, stored: string): Promise<Array<{ path: st
   }
   const stat = await fs.lstat(file);
   if (stat.isSymbolicLink()) {
+    const target = await fs.stat(file);
+    if (target.isDirectory()) {
+      return walkDirectory(root, stored, file);
+    }
     await safePath(root, stored, { allowMissing: false });
     return [{ path: stored, sha256: await sha256File(file) }];
   }
@@ -37,9 +43,18 @@ async function walkFiles(root: string, stored: string): Promise<Array<{ path: st
   if (!stat.isDirectory()) {
     throw new HarnessError(`unsupported fingerprint input: ${stored}`, 1);
   }
+  return walkDirectory(root, stored, file);
+}
+
+async function walkDirectory(
+  root: string,
+  stored: string,
+  file: string,
+): Promise<Array<{ path: string; sha256: string }>> {
   const names = (await fs.readdir(file)).sort();
   const records: Array<{ path: string; sha256: string }> = [];
   for (const name of names) {
+    if (SKIP_NAMES.has(name)) continue;
     const child = `${stored}/${name}`;
     if (isGeneratedPath(child)) continue;
     records.push(...(await walkFiles(root, child)));

@@ -33,7 +33,7 @@ The working product name is Mapgrain. Final naming, domain, and trademark work a
 
 | ID | Requirement | Acceptance evidence | Status |
 | --- | --- | --- | --- |
-| R-001 | Versioned document contract shared by UI, CLI, and adapters | Schema + generated types + runtime validation tests | not_started |
+| R-001 | Versioned document contract shared by UI, CLI, and adapters | Schema + generated types + runtime validation tests | active |
 | R-002 | Canonical scene used by editor and export | Same bounds/text/ports/edges for a fixture in editor and SVG | not_started |
 | R-003 | Layout does not silently drop pins | Conflict is visible when space is insufficient | not_started |
 | R-004 | Create → edit → reload → export works offline | IndexedDB round-trip plus export files; no fake actions | not_started |
