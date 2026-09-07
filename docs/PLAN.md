@@ -6,9 +6,9 @@ Ship a local editor that can create, correct, and export a small architecture or
 
 ## State
 
-- Status: `active` (harness bootstrap; product queue is `not_started`)
-- Current task ID: none
-- Active slice: repository harness and quality gates
+- Status: `active`
+- Current task ID: F007
+- Active slice: direct editing, undo/redo, keep-position
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -17,13 +17,13 @@ Ship a local editor that can create, correct, and export a small architecture or
 
 | ID | Slice and expected behavior | Dependencies | Verification | Status |
 | --- | --- | --- | --- | --- |
-| F001 | Versioned document schema, generated types, runtime validation, original fixtures | — | unit, lint, typecheck, build | not_started |
-| F002 | Canonical scene graph: bounds, text, ports, edges, groups | F001 | unit, lint, typecheck, build | not_started |
-| F003 | ELK worker layout spike: nesting, cycles, pins, parallel edges | F002 | unit, lint, typecheck, build | not_started |
-| F004 | Deterministic SVG/PNG/HTML/JSON export from the scene | F002 | unit, lint, typecheck, build | not_started |
-| F005 | Visual specimen in a working app: chrome, node, edge, inspector, one interactive diagram | F003, F004 | unit, lint, typecheck, build | not_started |
-| F006 | Editor shell: top bar, canvas, outline, command menu | F005 | unit, lint, typecheck, build | not_started |
-| F007 | Direct editing, undo/redo, keep-position | F006 | unit, lint, typecheck, build | not_started |
+| F001 | Versioned document schema, generated types, runtime validation, original fixtures | — | unit, lint, typecheck, build | passing |
+| F002 | Canonical scene graph: bounds, text, ports, edges, groups | F001 | unit, lint, typecheck, build | passing |
+| F003 | ELK worker layout spike: nesting, cycles, pins, parallel edges | F002 | unit, lint, typecheck, build | passing |
+| F004 | Deterministic SVG/PNG/HTML/JSON export from the scene | F002 | unit, lint, typecheck, build | passing |
+| F005 | Visual specimen in a working app: chrome, node, edge, inspector, one interactive diagram | F003, F004 | unit, lint, typecheck, build | passing |
+| F006 | Editor shell: top bar, canvas, outline, command menu | F005 | unit, lint, typecheck, build | passing |
+| F007 | Direct editing, undo/redo, keep-position | F006 | unit, lint, typecheck, build | active |
 | F008 | Arrange preview and visible pin conflicts | F007 | unit, lint, typecheck, build | not_started |
 | F009 | IndexedDB persistence and backup download | F006 | unit, lint, typecheck, build | not_started |
 | F010 | Offline create → edit → reload → export | F004, F007, F008, F009 | unit, lint, typecheck, build | not_started |

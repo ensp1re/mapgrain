@@ -1,4 +1,5 @@
-import { BaseEdge, getSmoothStepPath, type EdgeProps } from "@xyflow/react";
+import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath, type EdgeProps } from "@xyflow/react";
+import type { RelationEdgeData } from "../types/flow.ts";
 
 export function RelationEdge({
   id,
@@ -9,8 +10,10 @@ export function RelationEdge({
   sourcePosition,
   targetPosition,
   markerEnd,
+  markerStart,
+  data,
 }: EdgeProps) {
-  const [path] = getSmoothStepPath({
+  const [path, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
     targetX,
@@ -19,5 +22,23 @@ export function RelationEdge({
     targetPosition,
     borderRadius: 8,
   });
-  return <BaseEdge id={id} path={path} markerEnd={markerEnd} />;
+  const edge = data as RelationEdgeData | undefined;
+  const caption = [edge?.type, edge?.label].filter(Boolean).join(" · ");
+  return (
+    <>
+      <BaseEdge id={id} path={path} markerEnd={markerEnd} markerStart={markerStart} />
+      {caption ? (
+        <EdgeLabelRenderer>
+          <div
+            className="edge-caption"
+            style={{
+              transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
+            }}
+          >
+            {caption}
+          </div>
+        </EdgeLabelRenderer>
+      ) : null}
+    </>
+  );
 }

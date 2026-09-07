@@ -1,29 +1,8 @@
 import { PORT_SIDE, type PortSide } from "@mapgrain/document";
 import type { Scene, SceneGroup, SceneNode } from "@mapgrain/scene";
+import type { FlowEdgeDraft, FlowNodeDraft } from "../types/flow.ts";
 
-export interface FlowNodeDraft {
-  id: string;
-  type: "component" | "group";
-  position: { x: number; y: number };
-  parentId?: string;
-  width: number;
-  height: number;
-  data: {
-    kind?: string;
-    label: string;
-    lines: string[];
-    description?: string;
-    ports: Array<{ id: string; side: PortSide }>;
-  };
-}
-
-export interface FlowEdgeDraft {
-  id: string;
-  source: string;
-  target: string;
-  sourceHandle: string;
-  targetHandle: string;
-}
+export type { FlowEdgeDraft, FlowNodeDraft } from "../types/flow.ts";
 
 function originFor(node: SceneNode, groups: Map<string, SceneGroup>): { x: number; y: number } {
   if (!node.groupId) return { x: node.rect.x, y: node.rect.y };

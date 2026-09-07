@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 interface TopBarProps {
   title: string;
   saveState: string;
@@ -5,7 +7,7 @@ interface TopBarProps {
   canRedo: boolean;
   presenting: boolean;
   chatOpen: boolean;
-  onTitleChange: (value: string) => void;
+  onTitleCommit: (value: string) => void;
   onUndo: () => void;
   onRedo: () => void;
   onPresent: () => void;
@@ -22,7 +24,7 @@ export function TopBar({
   canRedo,
   presenting,
   chatOpen,
-  onTitleChange,
+  onTitleCommit,
   onUndo,
   onRedo,
   onPresent,
@@ -31,6 +33,20 @@ export function TopBar({
   onToggleOutline,
   onToggleChat,
 }: TopBarProps) {
+  const [draft, setDraft] = useState(title);
+  useEffect(() => {
+    setDraft(title);
+  }, [title]);
+
+  const commitTitle = () => {
+    const next = draft.trim();
+    if (next === title) {
+      setDraft(title);
+      return;
+    }
+    onTitleCommit(next);
+  };
+
   if (presenting) {
     return (
       <header className="topbar">
@@ -50,8 +66,19 @@ export function TopBar({
         <span className="visually-hidden">Document title</span>
         <input
           aria-label="Document title"
-          value={title}
-          onChange={(event) => onTitleChange(event.target.value)}
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          onBlur={commitTitle}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              (event.currentTarget as HTMLInputElement).blur();
+            }
+            if (event.key === "Escape") {
+              setDraft(title);
+              event.currentTarget.blur();
+            }
+          }}
         />
       </label>
       <span className="save-state">{saveState}</span>

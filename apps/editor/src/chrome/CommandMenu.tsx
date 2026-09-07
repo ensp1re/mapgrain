@@ -68,7 +68,7 @@ export function CommandMenu({ open, onClose, onRun }: CommandMenuProps) {
             }}
           >
             <span>{item.label}</span>
-            <kbd>{item.shortcut}</kbd>
+            {item.shortcut ? <kbd>{item.shortcut}</kbd> : null}
           </button>
         ))}
       </div>
