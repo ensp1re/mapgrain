@@ -38,6 +38,7 @@ import { TopBar } from "./chrome/TopBar.tsx";
 import { ALIGN_KIND } from "./constants/align.ts";
 import { COMMAND_ID, type CommandId } from "./constants/commands.ts";
 import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
+import { AUTOSAVE_MS, SAVE_STATE } from "./constants/persist.ts";
 import { ComponentNode } from "./diagram/ComponentNode.tsx";
 import { GroupNode } from "./diagram/GroupNode.tsx";
 import { RelationEdge } from "./diagram/RelationEdge.tsx";
@@ -54,6 +55,9 @@ import {
 import { shouldOpenCommandMenu } from "./keyboard/commandShortcut.ts";
 import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
 import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
+import { backupBytes } from "./persist/codec.ts";
+import { indexedDbStore } from "./persist/indexeddb.ts";
+import { memoryStore } from "./persist/memory.ts";
 import type { ArrangeState } from "./types/arrange.ts";
 import type {
   AlignKind,
@@ -63,11 +67,16 @@ import type {
   PendingConnection,
   PositionMap,
 } from "./types/editor.ts";
+import type { PersistStore, SaveState } from "./types/persist.ts";
 import type { ComponentNodeData, FlowNodeDraft, GroupNodeData } from "./types/flow.ts";
 
 const nodeTypes = { component: ComponentNode, group: GroupNode };
 const edgeTypes = { relation: RelationEdge };
 const emptySelection: EditorSelection = { nodeIds: [], edgeIds: [] };
+
+function defaultStore(): PersistStore {
+  return globalThis.indexedDB ? indexedDbStore() : memoryStore();
+}
 
 function loadSnapshot(): EditorSnapshot | null {
   const result = validateDocument(nestedGroups);
@@ -176,10 +185,18 @@ function Specimen() {
   const [editError, setEditError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [arrange, setArrange] = useState<ArrangeState>({ status: "idle" });
+  const [booted, setBooted] = useState(false);
+  const [saveState, setSaveState] = useState<SaveState>(SAVE_STATE.SAVED);
   const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
   const historyRef = useRef(history);
   historyRef.current = history;
   const layoutEngine = useRef<BrowserLayoutEngine | null>(null);
+  const persistStore = useRef<PersistStore>(defaultStore());
+  const persistGen = useRef(0);
+  const skipNextSave = useRef(true);
+  const bootRecovery = useRef(false);
+  const snapshot = history.present;
+  const documentModel = snapshot?.document ?? null;
 
   useEffect(() => {
     const engine = new BrowserLayoutEngine();
@@ -187,8 +204,48 @@ function Specimen() {
     return () => engine.dispose();
   }, []);
 
-  const snapshot = history.present;
-  const documentModel = snapshot?.document ?? null;
+  useEffect(() => {
+    let cancelled = false;
+    void persistStore.current
+      .load()
+      .then((stored) => {
+        if (cancelled) return;
+        if (stored) setHistory(createHistory(stored));
+        skipNextSave.current = true;
+        setBooted(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        bootRecovery.current = true;
+        skipNextSave.current = true;
+        setBooted(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!booted || !snapshot) return;
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      setSaveState(bootRecovery.current ? SAVE_STATE.RECOVERY : SAVE_STATE.SAVED);
+      return;
+    }
+    setSaveState(SAVE_STATE.SAVING);
+    const generation = (persistGen.current += 1);
+    const timer = window.setTimeout(() => {
+      void persistStore.current
+        .save(snapshot)
+        .then(() => {
+          if (generation === persistGen.current) setSaveState(SAVE_STATE.SAVED);
+        })
+        .catch(() => {
+          if (generation === persistGen.current) setSaveState(SAVE_STATE.RECOVERY);
+        });
+    }, AUTOSAVE_MS);
+    return () => window.clearTimeout(timer);
+  }, [booted, snapshot]);
   const displayPositions =
     arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {});
 
@@ -508,6 +565,10 @@ function Specimen() {
     });
   }, []);
 
+  if (!booted) {
+    return <p>Loading workspace…</p>;
+  }
+
   if (!documentModel || !scene?.ok || !snapshot) {
     return <p>Could not build the specimen diagram.</p>;
   }
@@ -525,7 +586,11 @@ function Specimen() {
     <div className={presenting ? "app is-presenting" : "app"}>
       <TopBar
         title={documentModel.title}
-        saveState={history.past.length === 0 ? "Saved" : "Edited"}
+        saveState={saveState}
+        onBackup={() => {
+          if (!snapshot) return;
+          download("diagram.json", backupBytes(snapshot), "application/json");
+        }}
         canUndo={history.past.length > 0}
         canRedo={history.future.length > 0}
         presenting={presenting}

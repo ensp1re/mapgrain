@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { SAVE_STATE } from "../constants/persist.ts";
+import type { SaveState } from "../types/persist.ts";
 
 interface TopBarProps {
   title: string;
-  saveState: string;
+  saveState: SaveState;
+  onBackup: () => void;
   canUndo: boolean;
   canRedo: boolean;
   presenting: boolean;
@@ -25,6 +28,7 @@ export function TopBar({
   canRedo,
   presenting,
   chatOpen,
+  onBackup,
   onTitleCommit,
   onUndo,
   onRedo,
@@ -83,7 +87,14 @@ export function TopBar({
           }}
         />
       </label>
-      <span className="save-state">{saveState}</span>
+      <span className="save-state" aria-live="polite">
+        {saveState}
+      </span>
+      {saveState === SAVE_STATE.RECOVERY ? (
+        <button type="button" className="text-btn" onClick={onBackup}>
+          Download backup
+        </button>
+      ) : null}
       <div className="spacer" />
       <button type="button" className="text-btn" onClick={onUndo} disabled={!canUndo}>
         Undo

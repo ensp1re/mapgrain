@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/arrange-preview @ 9d608b6d6dedc3daca3c3a8cdc244a7aac6360a5 (dirty)
-- Updated: 2026-09-07T16:31:47.258Z
+- Git: feat/local-autosave @ a34beb79976f01f45cb592152fb5d76d50cbffd8 (dirty)
+- Updated: 2026-09-07T16:46:38.698Z
 
 ### Next action
 
-Open a draft PR for F008. Wait for CI. Do not merge until asked.
+Open a draft PR for F009. Wait for CI. Do not merge until asked.
 
 ### Decisions
 
@@ -22,6 +22,7 @@ Open a draft PR for F008. Wait for CI. Do not merge until asked.
 - Document operations live in packages/document with inverses. Editor history stores document plus node positions so a label change does not rearrange other nodes.
 - New connections record explicit type and direction before they are committed.
 - Arrange runs ELK off the UI thread, shows a preview with Apply/Discard, and never silently drops keep-position pins.
+- Autosave writes document and positions to IndexedDB. Saved/Saving/Recovery are visible in the top bar. A failed write offers a JSON backup download.
 
 ### Rejected approaches
 
@@ -31,6 +32,7 @@ Open a draft PR for F008. Wait for CI. Do not merge until asked.
 - Empty app/package stubs that exist only to look like a monorepo.
 - Rebuilding default sequential placement after a label edit.
 - Running nested ELK workers inside the editor layout worker.
+- Adding an IndexedDB wrapper library for a single object store.
 
 ### Blockers
 
@@ -46,6 +48,7 @@ Open a draft PR for F008. Wait for CI. Do not merge until asked.
 - docs/runs/run-1788793487911-4323db.json
 - docs/runs/run-1788797500629-e310ff.json
 - docs/runs/run-1788798663725-8d9cdf.json
+- docs/runs/run-1788799557750-b00ce7.json
 
 ## Resume
 
