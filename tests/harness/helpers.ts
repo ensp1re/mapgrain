@@ -88,13 +88,22 @@ export async function makeFixture(options: FixtureOptions = {}): Promise<string>
   if (options.withGit) {
     const env = isolatedGitEnv();
     await execFile("git", ["init", "-b", "main"], { cwd: root, env });
-    await execFile("git", ["config", "user.email", "harness@example.test"], { cwd: root, env });
-    await execFile("git", ["config", "user.name", "Harness"], { cwd: root, env });
     await execFile("git", ["add", "."], { cwd: root, env });
-    await execFile("git", ["-c", "commit.gpgsign=false", "commit", "-m", "chore: fixture"], {
-      cwd: root,
-      env,
-    });
+    await execFile(
+      "git",
+      [
+        "-c",
+        "user.name=fixture",
+        "-c",
+        "user.email=fixture@example.test",
+        "-c",
+        "commit.gpgsign=false",
+        "commit",
+        "-m",
+        "chore: fixture",
+      ],
+      { cwd: root, env },
+    );
   }
   return root;
 }
@@ -114,6 +123,15 @@ export function sampleTask(overrides: Partial<TaskRecord> = {}): TaskRecord {
     delivery: null,
     ...overrides,
   };
+}
+
+export async function repoGitConfig(key: string): Promise<string | null> {
+  try {
+    const { stdout } = await execFile("git", ["config", "--get", key], { encoding: "utf8" });
+    return stdout.trim();
+  } catch {
+    return null;
+  }
 }
 
 export async function runHarness(

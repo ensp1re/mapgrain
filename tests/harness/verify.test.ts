@@ -2,7 +2,14 @@ import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
-import { FAILING_ARGV, MISSING_ARGV, makeFixture, runHarness, sampleTask } from "./helpers.ts";
+import {
+  FAILING_ARGV,
+  MISSING_ARGV,
+  makeFixture,
+  repoGitConfig,
+  runHarness,
+  sampleTask,
+} from "./helpers.ts";
 
 test("empty verification cannot pass", async () => {
   const root = await makeFixture({
@@ -162,6 +169,15 @@ test("deliver dry-run reports missing remote without publishing", async () => {
   assert.equal(dry.exitCode, 0);
   assert.equal(dry.payload.dryRun, true);
   assert.ok(Array.isArray(dry.payload.proposedActions));
+});
+
+test("fixture git identity does not write the real repository config", async () => {
+  const beforeName = await repoGitConfig("user.name");
+  const beforeEmail = await repoGitConfig("user.email");
+  await makeFixture({ withGit: true });
+  assert.equal(await repoGitConfig("user.name"), beforeName);
+  assert.equal(await repoGitConfig("user.email"), beforeEmail);
+  assert.notEqual((beforeName ?? "").toLowerCase(), "harness");
 });
 
 test("concurrent writers fail clearly", async () => {
