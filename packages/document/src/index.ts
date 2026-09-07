@@ -15,7 +15,7 @@ export {
 export { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
 export { OPERATION_KIND } from "./constants/operations.ts";
 export { applyPortableLayout, portablePositions } from "./layout/portable.ts";
-export { applyOperation, nextPrefixedId } from "./operations/apply.ts";
+export { applyOperation, applyOperationAt, nextPrefixedId } from "./operations/apply.ts";
 export { DiagramDocumentSchema, documentJsonSchema } from "./schema/document.ts";
 export type {
   DiagramDocument,

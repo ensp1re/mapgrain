@@ -77,6 +77,7 @@ test("start surface offers blank, file, examples, and agent path", async () => {
   assert.match(source, /Open file/);
   assert.match(source, /Use with your agent/);
   assert.match(source, /Recent diagrams/);
+  assert.match(source, /npx skills add ensp1re\/mapgrain --skill mapgrain/);
   assert.doesNotMatch(source, /Describe a diagram/);
 });
 

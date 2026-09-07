@@ -45,6 +45,12 @@ pnpm mapgrain doctor
 
 The public CLI package is `mapgrain`. From this checkout, `pnpm --filter mapgrain pack` writes a tarball that installs without the monorepo. `studio` serves the editor on `127.0.0.1` for one opened file. There is no hosted service.
 
+Companion skill (Cursor / Codex first):
+
+```sh
+npx skills add ensp1re/mapgrain --skill mapgrain --yes
+```
+
 Current work is tracked with:
 
 ```sh
