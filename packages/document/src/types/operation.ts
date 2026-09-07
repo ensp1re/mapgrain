@@ -41,7 +41,9 @@ export type Operation =
   | { kind: typeof OPERATION_KIND.SET_NODE_GROUP; nodeId: string; groupId: string | null }
   | { kind: typeof OPERATION_KIND.SET_NODE_PINNED; nodeId: string; pinned: boolean }
   | { kind: typeof OPERATION_KIND.SET_LAYOUT; positions: Record<string, LayoutPoint> }
-  | { kind: typeof OPERATION_KIND.SET_THEME; theme: Theme };
+  | { kind: typeof OPERATION_KIND.SET_THEME; theme: Theme }
+  | { kind: typeof OPERATION_KIND.ADD_GROUP; id: string; label: string; parentId?: string | null }
+  | { kind: typeof OPERATION_KIND.DELETE_GROUP; groupId: string };
 
 export type ApplyResult =
   | { ok: true; document: DiagramDocument; inverse: Operation }

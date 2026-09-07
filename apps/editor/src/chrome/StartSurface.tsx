@@ -1,87 +1,73 @@
-import { JOB_STAGE, JOB_STATUS, REPAIR_ACTION } from "../constants/create.ts";
 import { EXAMPLES } from "../create/examples.ts";
-import type { CreateJobResult, JobStage } from "../types/create.ts";
+
+interface RecentItem {
+  id: string;
+  title: string;
+}
 
 interface StartSurfaceProps {
-  prompt: string;
-  job: CreateJobResult | { status: typeof JOB_STATUS.IDLE | typeof JOB_STATUS.RUNNING; stage?: JobStage };
   importError: string | null;
-  onPromptChange: (value: string) => void;
-  onSubmit: () => void;
-  onCancel: () => void;
-  onRepair: () => void;
+  recents: RecentItem[];
+  onNewBlank: () => void;
   onOpenExample: (id: string) => void;
+  onOpenRecent: (id: string) => void;
   onImportFile: (file: File) => void;
 }
 
-const STAGES = [JOB_STAGE.INTERPRETING, JOB_STAGE.ARRANGING, JOB_STAGE.CHECKING];
-
 export function StartSurface({
-  prompt,
-  job,
   importError,
-  onPromptChange,
-  onSubmit,
-  onCancel,
-  onRepair,
+  recents,
+  onNewBlank,
   onOpenExample,
+  onOpenRecent,
   onImportFile,
 }: StartSurfaceProps) {
-  const running = job.status === JOB_STATUS.RUNNING;
   return (
     <main className="start-surface" aria-label="New diagram">
       <header className="start-header">
         <div className="brand">Mapgrain</div>
-        <p>Start from an example or import a document. Generation stays off until a provider is configured.</p>
+        <p>Create a diagram by hand, open a file, or start from an example.</p>
       </header>
-      <form
-        className="start-prompt"
-        onSubmit={(event) => {
-          event.preventDefault();
-          onSubmit();
-        }}
-      >
-        <label>
-          Describe a diagram
-          <textarea
-            aria-label="Describe a diagram"
-            value={prompt}
-            onChange={(event) => onPromptChange(event.target.value)}
-            rows={4}
+      <div className="start-actions">
+        <button type="button" className="text-btn primary" onClick={onNewBlank}>
+          New blank diagram
+        </button>
+        <label className="text-btn">
+          Open file
+          <input
+            type="file"
+            accept="application/json,.json"
+            aria-label="Open file"
+            hidden
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) onImportFile(file);
+              event.target.value = "";
+            }}
           />
         </label>
-        <div className="start-actions">
-          <button type="submit" className="text-btn primary" disabled={running || prompt.trim() === ""}>
-            Submit
-          </button>
-          {running ? (
-            <button type="button" className="text-btn" onClick={onCancel}>
-              Cancel
-            </button>
-          ) : null}
-        </div>
-      </form>
-      <ol className="job-stages" aria-label="Generation stages">
-        {STAGES.map((stage) => (
-          <li key={stage} className={job.stage === stage ? "is-current" : ""}>
-            {stage}
-          </li>
-        ))}
-      </ol>
-      {job.status === JOB_STATUS.FAILED ? (
-        <div className="start-failure" role="alert">
-          <p>{job.message}</p>
-          {job.repair === REPAIR_ACTION.OPEN_EXAMPLE ? (
-            <button type="button" className="text-btn" onClick={onRepair}>
-              Open an example
-            </button>
-          ) : null}
-        </div>
-      ) : null}
-      {job.status === JOB_STATUS.CANCELLED ? (
-        <p className="start-note" role="status">
-          Cancelled. Your text is still here.
+      </div>
+      <section className="agent-path" aria-label="Use with your agent">
+        <h2>Use with your agent</h2>
+        <p>
+          Install the Mapgrain skill in your coding agent, then ask it to emit a Mapgrain JSON
+          document and run <code>pnpm mapgrain validate</code>. Open the file here to refine it.
         </p>
+        <pre className="agent-example">{`Create a Mapgrain architecture JSON with Browser, API, and Database nodes.`}</pre>
+      </section>
+      {recents.length > 0 ? (
+        <section className="recent-list" aria-label="Recent diagrams">
+          <h2>Recent diagrams</h2>
+          <ul>
+            {recents.map((item) => (
+              <li key={item.id}>
+                <button type="button" className="text-btn" onClick={() => onOpenRecent(item.id)}>
+                  {item.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
       ) : null}
       <section id="examples" className="example-grid" aria-label="Examples">
         <h2>Examples</h2>
@@ -100,19 +86,6 @@ export function StartSurface({
           ))}
         </div>
       </section>
-      <label className="import-field">
-        Import JSON
-        <input
-          type="file"
-          accept="application/json,.json"
-          aria-label="Import JSON"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) onImportFile(file);
-            event.target.value = "";
-          }}
-        />
-      </label>
       {importError ? (
         <p className="start-failure" role="alert">
           {importError}

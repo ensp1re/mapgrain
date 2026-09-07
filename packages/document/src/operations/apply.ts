@@ -222,6 +222,33 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
       }
       return commit(next, inverse, document);
     }
+    case OPERATION_KIND.ADD_GROUP: {
+      if (next.groups.some((group) => group.id === operation.id)) {
+        return fail(document, `id ${operation.id} already exists`, "/groups", operation.id);
+      }
+      next.groups.push({
+        id: operation.id,
+        label: operation.label,
+        parentId: operation.parentId ?? null,
+      });
+      return commit(next, { kind: OPERATION_KIND.DELETE_GROUP, groupId: operation.id }, document);
+    }
+    case OPERATION_KIND.DELETE_GROUP: {
+      const group = next.groups.find((item) => item.id === operation.groupId);
+      if (!group) return fail(document, `unknown group ${operation.groupId}`, "/groups", operation.groupId);
+      next.groups = next.groups.filter((item) => item.id !== operation.groupId);
+      next.groups = next.groups.map((item) =>
+        item.parentId === operation.groupId ? { ...item, parentId: group.parentId } : item,
+      );
+      next.nodes = next.nodes.map((node) =>
+        node.groupId === operation.groupId ? { ...node, groupId: group.parentId } : node,
+      );
+      return commit(
+        next,
+        { kind: OPERATION_KIND.ADD_GROUP, id: group.id, label: group.label, parentId: group.parentId },
+        document,
+      );
+    }
     case OPERATION_KIND.SET_THEME: {
       const inverse: Operation = { kind: OPERATION_KIND.SET_THEME, theme: document.theme };
       next.theme = operation.theme;

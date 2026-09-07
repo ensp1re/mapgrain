@@ -4,8 +4,8 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/durable-storage",
-    "revision": "f3a7c2ed2cb3fe01390ec5a29ae0cba4a1c925dc",
+    "branch": "feat/real-creation",
+    "revision": "780631167a17b1772ec5492cd1edc0e065eaecea",
     "dirty": true
   },
   "evidenceRefs": [
@@ -26,7 +26,8 @@
     "docs/runs/run-1788805672118-b8d681.json",
     "docs/runs/run-1788806341421-3200fb.json",
     "docs/runs/run-1788806830014-5101bb.json",
-    "docs/runs/run-1788807243525-161da0.json"
+    "docs/runs/run-1788807243525-161da0.json",
+    "docs/runs/run-1788807797035-89e364.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -62,6 +63,6 @@
     "Starting R6 imports, hosted sharing, or billing before R1–R5."
   ],
   "blockers": [],
-  "nextAction": "Open a draft PR for F018. Merge when GitHub verify succeeds. Next is F019.",
-  "updatedAt": "2026-09-07T18:54:38.376Z"
+  "nextAction": "Open a draft PR for F019. Merge when GitHub verify succeeds. Next is F020.",
+  "updatedAt": "2026-09-07T19:03:46.944Z"
 }

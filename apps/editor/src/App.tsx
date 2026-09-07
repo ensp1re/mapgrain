@@ -23,6 +23,7 @@ import {
   portablePositions,
   validateDocument,
   type DiagramDocument,
+  type NodeKind,
   type Operation,
   type Theme,
 } from "@mapgrain/document";
@@ -41,7 +42,9 @@ import { TopBar } from "./chrome/TopBar.tsx";
 import { ALIGN_KIND } from "./constants/align.ts";
 import { COMMAND_ID, type CommandId } from "./constants/commands.ts";
 import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
-import { JOB_STAGE, JOB_STATUS } from "./constants/create.ts";
+import { AddBar } from "./chrome/AddBar.tsx";
+import { blankDocument } from "./create/blank.ts";
+import { makeNode } from "./create/nodes.ts";
 import { AUTOSAVE_MS, SAVE_STATE } from "./constants/persist.ts";
 import { ComponentNode } from "./diagram/ComponentNode.tsx";
 import { GroupNode } from "./diagram/GroupNode.tsx";
@@ -67,13 +70,11 @@ import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
 import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
 import { EXAMPLES } from "./create/examples.ts";
 import { importDocumentText } from "./create/importDocument.ts";
-import { runCreateJob } from "./create/job.ts";
-import { isProviderConfigured } from "./create/provider.ts";
 import { backupBytes, snapshotFromStored } from "./persist/codec.ts";
 import { indexedDbStore } from "./persist/indexeddb.ts";
 import { memoryStore } from "./persist/memory.ts";
 import type { ArrangeState } from "./types/arrange.ts";
-import type { CreateJobResult, JobStage, WorkspaceSurface } from "./types/create.ts";
+import type { WorkspaceSurface } from "./types/create.ts";
 import type {
   AlignKind,
   ConnectionDraft,
@@ -210,13 +211,9 @@ function Specimen() {
   const [arrange, setArrange] = useState<ArrangeState>({ status: "idle" });
   const [booted, setBooted] = useState(false);
   const [surface, setSurface] = useState<WorkspaceSurface>("start");
-  const [prompt, setPrompt] = useState("");
-  const [job, setJob] = useState<
-    CreateJobResult | { status: typeof JOB_STATUS.IDLE | typeof JOB_STATUS.RUNNING; stage?: JobStage }
-  >({ status: JOB_STATUS.IDLE, stage: JOB_STAGE.INTERPRETING });
   const [importError, setImportError] = useState<string | null>(null);
+  const [recents, setRecents] = useState<Array<{ id: string; title: string }>>([]);
   const [saveState, setSaveState] = useState<SaveState>(SAVE_STATE.SAVED);
-  const jobAbort = useRef<AbortController | null>(null);
   const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
   const historyRef = useRef(history);
   historyRef.current = history;
@@ -298,21 +295,9 @@ function Specimen() {
     setImportError(null);
   }, []);
 
-  const submitPrompt = useCallback(() => {
-    const controller = new AbortController();
-    jobAbort.current = controller;
-    setJob({ status: JOB_STATUS.RUNNING, stage: JOB_STAGE.INTERPRETING });
-    void runCreateJob(prompt, {
-      providerConfigured: isProviderConfigured(),
-      signal: controller.signal,
-    }).then((result) => {
-      setJob(result);
-    });
-  }, [prompt]);
-
-  const cancelPrompt = useCallback(() => {
-    jobAbort.current?.abort();
-  }, []);
+  useEffect(() => {
+    void persistStore.current.list().then(setRecents);
+  }, [booted, snapshot]);
 
   const displayPositions =
     arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {});
@@ -388,6 +373,43 @@ function Specimen() {
     setHistory((stack) => pushHistory(stack, { document, positions }));
     return true;
   }, [presenting]);
+
+  const addNode = useCallback(
+    (kind: NodeKind) => {
+      const current = historyRef.current.present;
+      const id = nextPrefixedId("n", usedIds(current.document));
+      const node = makeNode(id, kind, kind);
+      const positions = {
+        ...current.positions,
+        [id]: { x: 40 + current.document.nodes.length * 24, y: 40 },
+      };
+      applyOp({ kind: OPERATION_KIND.ADD_NODE, node }, positions);
+    },
+    [applyOp],
+  );
+
+  const addGroup = useCallback(() => {
+    const current = historyRef.current.present;
+    const id = nextPrefixedId("g", usedIds(current.document));
+    applyOp({ kind: OPERATION_KIND.ADD_GROUP, id, label: "Group" });
+  }, [applyOp]);
+
+  const connectSelected = useCallback(() => {
+    const ids = selection.nodeIds.filter((id) =>
+      historyRef.current.present.document.nodes.some((node) => node.id === id),
+    );
+    if (ids.length < 2 || !ids[0] || !ids[1]) return;
+    const current = historyRef.current.present;
+    const edgeId = nextPrefixedId("e", usedIds(current.document));
+    applyOp({
+      kind: OPERATION_KIND.ADD_EDGE,
+      id: edgeId,
+      source: { nodeId: ids[0], portId: "out" },
+      target: { nodeId: ids[1], portId: "in" },
+      type: EDGE_TYPE.CALLS,
+      direction: EDGE_DIRECTION.FORWARD,
+    });
+  }, [applyOp, selection.nodeIds]);
 
   const commitLabel = useCallback(
     (id: string, type: FlowNodeDraft["type"], label: string) => {
@@ -601,13 +623,10 @@ function Specimen() {
       if (id === COMMAND_ID.ALIGN_TOP) alignSelection(ALIGN_KIND.TOP);
       if (id === COMMAND_ID.ALIGN_BOTTOM) alignSelection(ALIGN_KIND.BOTTOM);
       if (id === COMMAND_ID.ARRANGE) void startArrange();
-      if (id === COMMAND_ID.NEW) {
-        jobAbort.current?.abort();
-        setJob({ status: JOB_STATUS.IDLE, stage: JOB_STAGE.INTERPRETING });
-        setSurface("start");
-      }
+      if (id === COMMAND_ID.CONNECT) connectSelected();
+      if (id === COMMAND_ID.NEW) setSurface("start");
     },
-    [alignSelection, applyOp, deleteSelection, duplicateSelection, exportFormat, fitView, presenting, startArrange, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, presenting, startArrange, theme],
   );
 
   useEffect(() => {
@@ -671,18 +690,22 @@ function Specimen() {
     return (
       <div className="app">
         <StartSurface
-          prompt={prompt}
-          job={job}
           importError={importError}
-          onPromptChange={setPrompt}
-          onSubmit={submitPrompt}
-          onCancel={cancelPrompt}
-          onRepair={() => document.getElementById("examples")?.scrollIntoView({ block: "start" })}
+          recents={recents}
+          onNewBlank={() => {
+            const document = blankDocument();
+            openSnapshot({ document, positions: {} });
+          }}
           onOpenExample={(id) => {
             const example = EXAMPLES.find((item) => item.id === id);
             if (!example) return;
             const next = snapshotFromStored({ document: example.document });
             if (next) openSnapshot(next);
+          }}
+          onOpenRecent={(id) => {
+            void persistStore.current.load(id).then((stored) => {
+              if (stored) openSnapshot(stored);
+            });
           }}
           onImportFile={(file) => {
             void file.text().then((text) => {
@@ -798,6 +821,9 @@ function Specimen() {
               {editError}
             </div>
           ) : null}
+          {presenting ? null : (
+            <AddBar onAddNode={addNode} onAddGroup={addGroup} onConnect={connectSelected} />
+          )}
           <ArrangeBar state={arrange} onApply={applyArrange} onDiscard={discardArrange} />
           {pending ? (
             <ConnectDialog

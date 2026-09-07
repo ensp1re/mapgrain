@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/durable-storage @ f3a7c2ed2cb3fe01390ec5a29ae0cba4a1c925dc (dirty)
-- Updated: 2026-09-07T18:54:38.376Z
+- Git: feat/real-creation @ 780631167a17b1772ec5492cd1edc0e065eaecea (dirty)
+- Updated: 2026-09-07T19:03:46.944Z
 
 ### Next action
 
-Open a draft PR for F017. Merge when GitHub verify succeeds. Next is F018.
+Open a draft PR for F018. Merge when GitHub verify succeeds. Next is F019.
 
 ### Decisions
 
@@ -72,6 +72,7 @@ Open a draft PR for F017. Merge when GitHub verify succeeds. Next is F018.
 - docs/runs/run-1788806341421-3200fb.json
 - docs/runs/run-1788806830014-5101bb.json
 - docs/runs/run-1788807243525-161da0.json
+- docs/runs/run-1788807797035-89e364.json
 
 ## Resume
 
