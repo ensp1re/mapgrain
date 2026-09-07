@@ -42,6 +42,7 @@
     "packages/document",
     "packages/scene",
     "packages/layout",
+    "packages/renderer",
     "docs/PROJECT.md",
     "docs/PLAN.md",
     "docs/ARCHITECTURE.md",
