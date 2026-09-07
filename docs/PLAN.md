@@ -9,8 +9,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 ## State
 
 - Status: `active`
-- Current task ID: F015
-- Active slice: R1.1 portable layout and export parity
+- Current task ID: F022
+- Active slice: R3.1 publishable CLI and studio
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -33,14 +33,14 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F012 | CLI validate / render / export | F001, F004 | unit, lint, typecheck, build | passing |
 | F013 | Read-only viewer from the canonical scene | F004, F012 | unit, lint, typecheck, build | passing |
 | F014 | 100-node fixture through validate, layout, and export | F003, F004, F012 | unit, lint, typecheck, build | passing |
-| F015 | R1.1 Portable layout and export parity | F004, F007, F009, F012 | unit, lint, typecheck, build | active |
-| F016 | R1.2 One geometry pipeline | F015 | unit, lint, typecheck, build | active |
-| F017 | R1.3 Safe editing, selection, async layout | F015 | unit, lint, typecheck, build | active |
-| F018 | R1.4 Durable storage and safe CLI writes | F015, F012 | unit, lint, typecheck, build | active |
-| F019 | R2.1 Real creation without fake generation | F015, F017 | unit, lint, typecheck, build | active |
-| F020 | R2.2 Useful editing and export dialog | F019 | unit, lint, typecheck, build | active |
-| F021 | R2.3 Offline viewer people can use | F015, F013 | unit, lint, typecheck, build | active |
-| F022 | R3.1 Publishable CLI and studio | F015, F018 | unit, lint, typecheck, build | not_started |
+| F015 | R1.1 Portable layout and export parity | F004, F007, F009, F012 | unit, lint, typecheck, build | passing |
+| F016 | R1.2 One geometry pipeline | F015 | unit, lint, typecheck, build | passing |
+| F017 | R1.3 Safe editing, selection, async layout | F015 | unit, lint, typecheck, build | passing |
+| F018 | R1.4 Durable storage and safe CLI writes | F015, F012 | unit, lint, typecheck, build | passing |
+| F019 | R2.1 Real creation without fake generation | F015, F017 | unit, lint, typecheck, build | passing |
+| F020 | R2.2 Useful editing and export dialog | F019 | unit, lint, typecheck, build | passing |
+| F021 | R2.3 Offline viewer people can use | F015, F013 | unit, lint, typecheck, build | passing |
+| F022 | R3.1 Publishable CLI and studio | F015, F018 | unit, lint, typecheck, build | active |
 | F023 | R3.2 Companion agent skill | F015, F022 | unit, lint, typecheck, build | not_started |
 | F024 | R4 Visual and performance finish | F019, F021, F022 | unit, lint, typecheck, build | not_started |
 | F025 | R5 Release candidate evidence | F024 | unit, lint, typecheck, build | not_started |

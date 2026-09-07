@@ -14,18 +14,38 @@ function isFormat(value: string): value is ExportFormat {
 }
 
 export function parseArgs(argv: string[]): ParsedArgs {
+  if (
+    argv.length === 0 ||
+    argv.includes("--help") ||
+    argv.includes("-h") ||
+    argv[0] === CLI_COMMAND.HELP
+  ) {
+    return { ok: true, command: CLI_COMMAND.HELP };
+  }
+  if (argv.includes("--version") || argv.includes("-v") || argv[0] === CLI_COMMAND.VERSION) {
+    return { ok: true, command: CLI_COMMAND.VERSION };
+  }
+
   const command = argv[0];
   if (
     command !== CLI_COMMAND.VALIDATE &&
     command !== CLI_COMMAND.RENDER &&
     command !== CLI_COMMAND.EXPORT &&
-    command !== CLI_COMMAND.VIEW
+    command !== CLI_COMMAND.VIEW &&
+    command !== CLI_COMMAND.DOCTOR &&
+    command !== CLI_COMMAND.STUDIO
   ) {
     return usage("Unknown command.");
   }
+  if (command === CLI_COMMAND.DOCTOR) {
+    if (argv.slice(1).some((token) => token.startsWith("-"))) return usage(`Unknown flag ${argv[1]}.`);
+    return { ok: true, command };
+  }
+
   let file: string | undefined;
   let out: string | null = null;
   let format: ExportFormat | undefined;
+  let noClobber = false;
   for (let i = 1; i < argv.length; i += 1) {
     const token = argv[i];
     if (!token) continue;
@@ -43,14 +63,19 @@ export function parseArgs(argv: string[]): ParsedArgs {
       i += 1;
       continue;
     }
-    if (token.startsWith("-")) return usage(`Unknown flag ${token}.`);
+    if (token === "--no-clobber") {
+      noClobber = true;
+      continue;
+    }
+    if (token.startsWith("-") && token !== "-") return usage(`Unknown flag ${token}.`);
     if (file) return usage("Unexpected extra argument.");
     file = token;
   }
   if (!file) return usage("Missing input file.");
   if (command === CLI_COMMAND.VALIDATE) return { ok: true, command, file };
-  if (command === CLI_COMMAND.RENDER) return { ok: true, command, file, out };
-  if (command === CLI_COMMAND.VIEW) return { ok: true, command, file, out };
+  if (command === CLI_COMMAND.STUDIO) return { ok: true, command, file };
+  if (command === CLI_COMMAND.RENDER) return { ok: true, command, file, out, noClobber };
+  if (command === CLI_COMMAND.VIEW) return { ok: true, command, file, out, noClobber };
   if (!format) return usage("export requires --format.");
-  return { ok: true, command, file, format, out };
+  return { ok: true, command, file, format, out, noClobber };
 }

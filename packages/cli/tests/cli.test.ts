@@ -6,7 +6,7 @@ import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { EXPORT_FORMAT, exportDiagram } from "@mapgrain/renderer";
-import { EXIT_CODE } from "../src/constants/cli.ts";
+import { EXIT_CODE, MAX_INPUT_BYTES } from "../src/constants/cli.ts";
 import { runCli } from "../src/run.ts";
 
 const fixture = fileURLToPath(
@@ -45,6 +45,14 @@ function memoryIo(files: Record<string, string> = {}) {
       if (value === undefined) throw new Error(`ENOENT: ${from}`);
       files[to] = value;
       delete files[from];
+    },
+    async exists(path: string) {
+      return Object.hasOwn(files, path);
+    },
+    async stdin() {
+      const value = files["-"];
+      if (value === undefined) throw new Error("stdin is empty");
+      return value;
     },
     stdoutChunks,
     stderrChunks,
@@ -91,9 +99,19 @@ test("invalid input exits non-zero with a structured diagnostic", async () => {
   assert.ok(diagnostic.errors[0]?.message);
 });
 
-test("usage errors exit 2 with a structured diagnostic", async () => {
+test("help exits 0 and lists commands", async () => {
   const io = memoryIo();
   const code = await runCli([], io);
+  assert.equal(code, EXIT_CODE.OK);
+  const body = text(io.stdoutChunks);
+  assert.match(body, /validate/);
+  assert.match(body, /studio/);
+  assert.match(body, /doctor/);
+});
+
+test("unknown command exits 2 with a structured diagnostic", async () => {
+  const io = memoryIo();
+  const code = await runCli(["nope"], io);
   assert.equal(code, EXIT_CODE.USAGE);
   const diagnostic = JSON.parse(text(io.stderrChunks)) as { ok: boolean };
   assert.equal(diagnostic.ok, false);
@@ -160,9 +178,20 @@ test("view writes read-only HTML from the canonical scene", async () => {
   assert.doesNotMatch(html, /Inspector/);
 });
 
-test("the CLI package does not depend on the editor", async () => {
-  const manifest = JSON.parse(await readFile(pkg, "utf8")) as { dependencies: Record<string, string> };
+test("the CLI package is public, bundled, and does not depend on the editor", async () => {
+  const manifest = JSON.parse(await readFile(pkg, "utf8")) as {
+    name: string;
+    bin: Record<string, string>;
+    files: string[];
+    dependencies: Record<string, string>;
+    devDependencies?: Record<string, string>;
+  };
+  assert.equal(manifest.name, "mapgrain");
+  assert.equal(manifest.bin.mapgrain, "./dist/mapgrain.js");
+  assert.ok(manifest.files.includes("dist"));
+  assert.ok(manifest.files.includes("schema"));
   assert.equal(Object.hasOwn(manifest.dependencies, "@mapgrain/editor"), false);
+  assert.equal(Object.hasOwn(manifest.devDependencies ?? {}, "@mapgrain/editor"), false);
   assert.equal(Object.hasOwn(manifest.dependencies, "react"), false);
 });
 
@@ -187,4 +216,54 @@ test("spawned CLI validates a fixture without loading the editor", async () => {
     child.on("close", (exit) => resolve(exit ?? 1));
   });
   assert.equal(code, EXIT_CODE.OK);
+});
+
+test("version prints the package version", async () => {
+  const io = memoryIo();
+  const code = await runCli(["--version"], io);
+  assert.equal(code, EXIT_CODE.OK);
+  assert.match(text(io.stdoutChunks), /^0\.1\.0\n$/);
+});
+
+test("validate reads stdin", async () => {
+  const source = await readFile(fixture, "utf8");
+  const io = memoryIo({ "-": source });
+  const code = await runCli(["validate", "-"], io);
+  assert.equal(code, EXIT_CODE.OK);
+  const result = JSON.parse(text(io.stdoutChunks)) as { ok: boolean; id: string };
+  assert.equal(result.id, "doc-nested-groups");
+});
+
+test("no-clobber leaves an existing output file", async () => {
+  const source = await readFile(fixture, "utf8");
+  const io = memoryIo({ "nested-groups.json": source, "out.svg": "old" });
+  const code = await runCli(["render", "nested-groups.json", "-o", "out.svg", "--no-clobber"], io);
+  assert.equal(code, EXIT_CODE.ERROR);
+  assert.equal(io.files["out.svg"], "old");
+});
+
+test("oversized input is rejected", async () => {
+  const io = memoryIo({ "big.json": `{"x":"${"a".repeat(MAX_INPUT_BYTES)}}` });
+  const code = await runCli(["validate", "big.json"], io);
+  assert.equal(code, EXIT_CODE.ERROR);
+  const diagnostic = JSON.parse(text(io.stderrChunks)) as { errors: Array<{ code: string }> };
+  assert.equal(diagnostic.errors[0]?.code, "too_large");
+});
+
+test("paths with spaces and non-ASCII characters validate", async () => {
+  const source = await readFile(fixture, "utf8");
+  const name = "nested groups/диаграмма.json";
+  const io = memoryIo({ [name]: source });
+  const code = await runCli(["validate", name], io);
+  assert.equal(code, EXIT_CODE.OK);
+});
+
+test("doctor reports runtime, assets, worker, renderer, and output", async () => {
+  const io = memoryIo();
+  const code = await runCli(["doctor"], io);
+  assert.equal(code, EXIT_CODE.OK);
+  const report = JSON.parse(text(io.stdoutChunks)) as { ok: boolean; checks: Array<{ id: string; ok: boolean }> };
+  assert.equal(report.ok, true);
+  const ids = report.checks.map((check) => check.id).sort();
+  assert.deepEqual(ids, ["assets", "output", "renderer", "runtime", "worker"]);
 });

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-nested-groups",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Local diagram workspace",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": ["gateway"]
+  },
+  "groups": [
+    { "id": "runtime", "label": "Local runtime", "parentId": null },
+    { "id": "pipeline", "label": "Document pipeline", "parentId": "runtime" }
+  ],
+  "nodes": [
+    {
+      "id": "gateway",
+      "kind": "gateway",
+      "label": "Workspace API",
+      "groupId": "runtime",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "document",
+      "kind": "datastore",
+      "label": "Diagram document",
+      "groupId": "pipeline",
+      "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }]
+    },
+    {
+      "id": "layout",
+      "kind": "job",
+      "label": "Layout worker",
+      "groupId": "pipeline",
+      "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }]
+    },
+    {
+      "id": "renderer",
+      "kind": "service",
+      "label": "Canonical renderer",
+      "groupId": "pipeline",
+      "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }]
+    },
+    {
+      "id": "provider",
+      "kind": "external",
+      "label": "Model provider",
+      "groupId": null,
+      "ports": [{ "id": "out", "side": "east" }]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-provider-gateway",
+      "source": { "nodeId": "provider", "portId": "out" },
+      "target": { "nodeId": "gateway", "portId": "in" },
+      "type": "calls",
+      "direction": "forward",
+      "evidenceState": "inferred"
+    },
+    {
+      "id": "e-gateway-document",
+      "source": { "nodeId": "gateway", "portId": "out" },
+      "target": { "nodeId": "document", "portId": "in" },
+      "type": "writes",
+      "direction": "forward",
+      "evidenceState": "asserted"
+    },
+    {
+      "id": "e-document-layout",
+      "source": { "nodeId": "document", "portId": "out" },
+      "target": { "nodeId": "layout", "portId": "in" },
+      "type": "reads",
+      "direction": "forward"
+    },
+    {
+      "id": "e-layout-renderer",
+      "source": { "nodeId": "layout", "portId": "out" },
+      "target": { "nodeId": "renderer", "portId": "in" },
+      "type": "calls",
+      "direction": "forward"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "Whole workspace"
+    },
+    {
+      "id": "request-path",
+      "kind": "path",
+      "name": "Describe to render",
+      "path": { "from": "gateway", "to": "renderer" }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-local",
+      "targetKind": "group",
+      "targetId": "runtime",
+      "state": "asserted",
+      "note": "Runs on the user's machine. No account required."
+    }
+  ]
+}

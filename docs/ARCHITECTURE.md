@@ -50,7 +50,7 @@ Those app and package directories are created when the owning task starts. Do no
 | Layout | `packages/layout` | document + pins | positions or a visible conflict | pins never dropped silently |
 | Renderer | `packages/renderer` | scene | SVG/PNG/HTML/JSON | no editor DOM screenshots |
 | Editor | `apps/editor` | document operations | user edits, previews | AI apply cannot clobber newer manual edits |
-| CLI | `packages/cli` | files | validate/render/export | same schema as the UI |
+| CLI | `packages/cli` (public `mapgrain`) | files | validate/render/export/view/doctor/studio | bundled internals; same schema as the UI |
 | Work queue | `scripts` | queue + checks | JSON status | no product success without recorded evidence |
 
 ## Data and control flow

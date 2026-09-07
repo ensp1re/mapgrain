@@ -1,22 +1,45 @@
 {
-  "name": "@mapgrain/cli",
-  "version": "0.0.0",
-  "private": true,
+  "name": "mapgrain",
+  "version": "0.1.0",
+  "description": "Local-first CLI for architecture and workflow diagrams.",
+  "license": "MIT",
   "type": "module",
   "bin": {
-    "mapgrain": "./src/cli.ts"
+    "mapgrain": "./dist/mapgrain.js"
   },
   "exports": {
     ".": "./src/index.ts"
   },
+  "files": [
+    "dist",
+    "schema",
+    "examples",
+    "studio",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=24.0.0 <27"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ensp1re/mapgrain.git"
+  },
   "scripts": {
+    "build": "node --experimental-strip-types scripts/build.ts",
+    "prepack": "pnpm build",
     "test": "node --test --experimental-strip-types --test-reporter=spec tests/*.test.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "elkjs": "^0.10.0"
+  },
+  "devDependencies": {
     "@mapgrain/document": "workspace:*",
+    "@mapgrain/layout": "workspace:*",
     "@mapgrain/renderer": "workspace:*",
-    "@mapgrain/viewer": "workspace:*"
+    "@mapgrain/viewer": "workspace:*",
+    "esbuild": "^0.25.9"
   }
 }

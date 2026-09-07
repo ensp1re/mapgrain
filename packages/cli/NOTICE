@@ -1,0 +1,9 @@
+Mapgrain
+Copyright (c) 2026 Mapgrain contributors
+MIT License. See LICENSE.
+
+This distribution depends on or may bundle:
+- @sinclair/typebox (MIT)
+- elkjs (Eclipse Public License-1.0) for layout checks
+- @resvg/resvg-js (MPL-2.0) for PNG export
+- React, React Flow, Inter, and ELK when studio editor assets are included
