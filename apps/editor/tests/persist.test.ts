@@ -62,11 +62,13 @@ test("imported backup JSON restores the arrangement", async () => {
   assert.equal(restored?.positions.gateway?.y, 24);
 });
 
-test("save states cover saved, saving, recovery, and temporary session", () => {
+test("save states cover saved, saving, recovery, temporary session, and file save", () => {
   assert.equal(SAVE_STATE.SAVED, "Saved");
   assert.equal(SAVE_STATE.SAVING, "Saving");
   assert.equal(SAVE_STATE.RECOVERY, "Recovery");
   assert.equal(SAVE_STATE.TEMPORARY, "Temporary session");
+  assert.equal(SAVE_STATE.FILE_SAVED, "Saved to file");
+  assert.equal(SAVE_STATE.FILE_SAVING, "Saving to file");
 });
 
 test("two diagrams save and load independently", async () => {

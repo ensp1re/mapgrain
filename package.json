@@ -1,5 +1,5 @@
 {
-  "name": "mapgrain",
+  "name": "@mapgrain/source",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     "mapgrain": "node --experimental-strip-types packages/cli/src/cli.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json && pnpm -r --if-present typecheck",
     "test": "node --test --experimental-strip-types --test-reporter=spec tests/*.test.ts packages/*/tests/*.test.ts apps/*/tests/*.test.ts",
-    "build": "pnpm -r --if-present build",
+    "build": "pnpm -r --if-present --filter=!mapgrain build && pnpm --filter mapgrain build",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && node --experimental-strip-types scripts/cli.ts --root . validate",
     "prepare": "husky"
   },

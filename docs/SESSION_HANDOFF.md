@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/offline-viewer @ 978bcfa66a3c4d775f68417fa4fbee743a846e56 (dirty)
-- Updated: 2026-09-07T19:15:01.697Z
+- Git: feat/publishable-cli @ 02215846adcb9cc75d0818e9aeaaf0df21c19251 (dirty)
+- Updated: 2026-09-07T19:39:59.688Z
 
 ### Next action
 
-Open a draft PR for F020. Merge when GitHub verify succeeds. Next is F021.
+Open a draft PR for F022. Merge when GitHub verify succeeds. Next is F023.
 
 ### Decisions
 
@@ -25,7 +25,7 @@ Open a draft PR for F020. Merge when GitHub verify succeeds. Next is F021.
 - Autosave writes document and positions to IndexedDB. Saved/Saving/Recovery are visible in the top bar. A failed write offers a JSON backup download.
 - A production service worker caches same-origin GET so edit, reload, and export work with the network disabled. Chat does not invent a reply.
 - First session is an example-backed start surface. Submit without a provider fails honestly, keeps the prompt, and offers a repair. Examples are never labelled as generated output.
-- The product CLI lives in packages/cli, uses the same document and renderer as the editor, and does not depend on the GUI.
+- The public CLI package is mapgrain. Internals are bundled; @resvg/resvg-js and elkjs stay real dependencies. Studio binds 127.0.0.1, checks origin/session, and writes only the opened file.
 - The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
 - The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
 - The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
@@ -75,6 +75,7 @@ Open a draft PR for F020. Merge when GitHub verify succeeds. Next is F021.
 - docs/runs/run-1788807797035-89e364.json
 - docs/runs/run-1788808155658-391fbf.json
 - docs/runs/run-1788808466921-89a20d.json
+- docs/runs/run-1788809925586-2c1530.json
 
 ## Resume
 

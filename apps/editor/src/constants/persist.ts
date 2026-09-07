@@ -3,6 +3,8 @@ export const SAVE_STATE = {
   SAVING: "Saving",
   RECOVERY: "Recovery",
   TEMPORARY: "Temporary session",
+  FILE_SAVED: "Saved to file",
+  FILE_SAVING: "Saving to file",
 } as const;
 
 export const DB_NAME = "mapgrain";

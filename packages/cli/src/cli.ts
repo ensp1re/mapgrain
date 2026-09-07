@@ -1,6 +1,13 @@
-#!/usr/bin/env node
-import { readFile, rename, writeFile } from "node:fs/promises";
+import { access, readFile, rename, writeFile } from "node:fs/promises";
 import { runCli } from "./run.ts";
+
+async function readStdin(): Promise<string> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of process.stdin) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
 
 void runCli(process.argv.slice(2), {
   stdout: process.stdout,
@@ -8,6 +15,15 @@ void runCli(process.argv.slice(2), {
   readFile: (file) => readFile(file, "utf8"),
   writeFile: (file, bytes) => writeFile(file, bytes),
   rename: (from, to) => rename(from, to),
+  stdin: readStdin,
+  exists: async (file) => {
+    try {
+      await access(file);
+      return true;
+    } catch {
+      return false;
+    }
+  },
 }).then((code) => {
   process.exitCode = code;
 });

@@ -1,8 +1,9 @@
 import type { ExportFormat } from "@mapgrain/renderer";
-import type { CLI_COMMAND, DIAGNOSTIC_CODE } from "../constants/cli.ts";
+import type { CLI_COMMAND, DIAGNOSTIC_CODE, DOCTOR_CHECK } from "../constants/cli.ts";
 
 export type CliCommand = (typeof CLI_COMMAND)[keyof typeof CLI_COMMAND];
 export type DiagnosticCode = (typeof DIAGNOSTIC_CODE)[keyof typeof DIAGNOSTIC_CODE];
+export type DoctorCheckId = (typeof DOCTOR_CHECK)[keyof typeof DOCTOR_CHECK];
 
 export interface CliIo {
   stdout: { write(chunk: string | Uint8Array): void };
@@ -10,6 +11,8 @@ export interface CliIo {
   readFile(path: string): Promise<string>;
   writeFile(path: string, bytes: Uint8Array): Promise<void>;
   rename?(from: string, to: string): Promise<void>;
+  stdin?: () => Promise<string>;
+  exists?: (path: string) => Promise<boolean>;
 }
 
 export interface DiagnosticIssue {
@@ -19,9 +22,19 @@ export interface DiagnosticIssue {
   elementId: string | null;
 }
 
+export interface DoctorCheck {
+  id: DoctorCheckId;
+  ok: boolean;
+  message: string;
+}
+
 export type ParsedArgs =
+  | { ok: true; command: "help" }
+  | { ok: true; command: "version" }
+  | { ok: true; command: "doctor" }
   | { ok: true; command: "validate"; file: string }
-  | { ok: true; command: "render"; file: string; out: string | null }
-  | { ok: true; command: "export"; file: string; format: ExportFormat; out: string | null }
-  | { ok: true; command: "view"; file: string; out: string | null }
+  | { ok: true; command: "render"; file: string; out: string | null; noClobber: boolean }
+  | { ok: true; command: "export"; file: string; format: ExportFormat; out: string | null; noClobber: boolean }
+  | { ok: true; command: "view"; file: string; out: string | null; noClobber: boolean }
+  | { ok: true; command: "studio"; file: string }
   | { ok: false; errors: DiagnosticIssue[] };

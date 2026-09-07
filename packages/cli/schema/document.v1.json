@@ -1,0 +1,565 @@
+{
+  "additionalProperties": false,
+  "$id": "urn:mapgrain:schema:document:v1",
+  "title": "DiagramDocument",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "revision",
+    "kind",
+    "title",
+    "nodes",
+    "edges",
+    "groups",
+    "views",
+    "layoutHints",
+    "theme"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "type": "number"
+    },
+    "id": {
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "kind": {
+      "anyOf": [
+        {
+          "const": "architecture",
+          "type": "string"
+        },
+        {
+          "const": "workflow",
+          "type": "string"
+        }
+      ]
+    },
+    "title": {
+      "minLength": 1,
+      "maxLength": 200,
+      "type": "string"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "label",
+          "groupId",
+          "ports"
+        ],
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "const": "service",
+                "type": "string"
+              },
+              {
+                "const": "datastore",
+                "type": "string"
+              },
+              {
+                "const": "queue",
+                "type": "string"
+              },
+              {
+                "const": "gateway",
+                "type": "string"
+              },
+              {
+                "const": "actor",
+                "type": "string"
+              },
+              {
+                "const": "system",
+                "type": "string"
+              },
+              {
+                "const": "job",
+                "type": "string"
+              },
+              {
+                "const": "external",
+                "type": "string"
+              }
+            ]
+          },
+          "label": {
+            "minLength": 1,
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "groupId": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ports": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "side"
+              ],
+              "properties": {
+                "id": {
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                  "type": "string"
+                },
+                "side": {
+                  "anyOf": [
+                    {
+                      "const": "north",
+                      "type": "string"
+                    },
+                    {
+                      "const": "south",
+                      "type": "string"
+                    },
+                    {
+                      "const": "east",
+                      "type": "string"
+                    },
+                    {
+                      "const": "west",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "label": {
+                  "maxLength": 80,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "target",
+          "type",
+          "direction"
+        ],
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "nodeId"
+            ],
+            "properties": {
+              "nodeId": {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "portId": {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              }
+            }
+          },
+          "target": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "nodeId"
+            ],
+            "properties": {
+              "nodeId": {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "portId": {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              }
+            }
+          },
+          "type": {
+            "anyOf": [
+              {
+                "const": "calls",
+                "type": "string"
+              },
+              {
+                "const": "reads",
+                "type": "string"
+              },
+              {
+                "const": "writes",
+                "type": "string"
+              },
+              {
+                "const": "publishes",
+                "type": "string"
+              },
+              {
+                "const": "subscribes",
+                "type": "string"
+              },
+              {
+                "const": "depends-on",
+                "type": "string"
+              }
+            ]
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "const": "forward",
+                "type": "string"
+              },
+              {
+                "const": "both",
+                "type": "string"
+              },
+              {
+                "const": "none",
+                "type": "string"
+              }
+            ]
+          },
+          "label": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "evidenceState": {
+            "anyOf": [
+              {
+                "const": "observed",
+                "type": "string"
+              },
+              {
+                "const": "asserted",
+                "type": "string"
+              },
+              {
+                "const": "inferred",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "parentId"
+        ],
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "label": {
+            "minLength": 1,
+            "maxLength": 200,
+            "type": "string"
+          },
+          "parentId": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "views": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "const": "overview",
+                "type": "string"
+              },
+              {
+                "const": "path",
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "minLength": 1,
+            "maxLength": 200,
+            "type": "string"
+          },
+          "nodeIds": {
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+              "type": "string"
+            }
+          },
+          "edgeIds": {
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+              "type": "string"
+            }
+          },
+          "path": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "from",
+              "to"
+            ],
+            "properties": {
+              "from": {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "to": {
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "layoutHints": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "direction",
+        "pinnedNodeIds"
+      ],
+      "properties": {
+        "direction": {
+          "anyOf": [
+            {
+              "const": "right",
+              "type": "string"
+            },
+            {
+              "const": "down",
+              "type": "string"
+            }
+          ]
+        },
+        "pinnedNodeIds": {
+          "type": "array",
+          "items": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "layout": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "version",
+        "revision",
+        "positions"
+      ],
+      "properties": {
+        "version": {
+          "const": 1,
+          "type": "number"
+        },
+        "revision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "positions": {
+          "type": "object",
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]*$": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "x",
+                "y"
+              ],
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "theme": {
+      "anyOf": [
+        {
+          "const": "dark",
+          "type": "string"
+        },
+        {
+          "const": "light",
+          "type": "string"
+        }
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "targetKind",
+          "targetId",
+          "state"
+        ],
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "targetKind": {
+            "anyOf": [
+              {
+                "const": "node",
+                "type": "string"
+              },
+              {
+                "const": "edge",
+                "type": "string"
+              },
+              {
+                "const": "group",
+                "type": "string"
+              }
+            ]
+          },
+          "targetId": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "const": "observed",
+                "type": "string"
+              },
+              {
+                "const": "asserted",
+                "type": "string"
+              },
+              {
+                "const": "inferred",
+                "type": "string"
+              }
+            ]
+          },
+          "note": {
+            "maxLength": 2000,
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

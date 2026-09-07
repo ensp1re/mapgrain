@@ -10,6 +10,8 @@ export default tseslint.config(
       "apps/*/dist/**",
       "docs/runs/**",
       "docs/archive/**",
+      "packages/cli/studio/**",
+      "packages/cli/dist/**",
     ],
   },
   js.configs.recommended,

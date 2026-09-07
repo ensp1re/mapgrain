@@ -40,7 +40,10 @@ pnpm mapgrain validate tests/fixtures/documents/nested-groups.json
 pnpm mapgrain render tests/fixtures/documents/nested-groups.json -o diagram.svg
 pnpm mapgrain export tests/fixtures/documents/nested-groups.json --format json -o diagram.json
 pnpm mapgrain view tests/fixtures/documents/nested-groups.json -o view.html
+pnpm mapgrain doctor
 ```
+
+The public CLI package is `mapgrain`. From this checkout, `pnpm --filter mapgrain pack` writes a tarball that installs without the monorepo. `studio` serves the editor on `127.0.0.1` for one opened file. There is no hosted service.
 
 Current work is tracked with:
 

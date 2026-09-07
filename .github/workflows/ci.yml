@@ -8,7 +8,7 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
@@ -18,3 +18,6 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm verify
+      - run: pnpm build
+      - run: MAPGRAIN_PACK_TEST=1 node --test --experimental-strip-types --test-reporter=spec packages/cli/tests/pack.test.ts
+        timeout-minutes: 5

@@ -75,6 +75,7 @@ import { importDocumentText } from "./create/importDocument.ts";
 import { backupBytes, snapshotFromStored } from "./persist/codec.ts";
 import { indexedDbStore } from "./persist/indexeddb.ts";
 import { memoryStore } from "./persist/memory.ts";
+import { readStudioConfig, studioStore } from "./persist/studio.ts";
 import type { ArrangeState } from "./types/arrange.ts";
 import type { WorkspaceSurface } from "./types/create.ts";
 import type {
@@ -93,6 +94,8 @@ const edgeTypes = { relation: RelationEdge };
 const emptySelection: EditorSelection = { nodeIds: [], edgeIds: [] };
 
 function defaultStore(): PersistStore {
+  const studio = readStudioConfig();
+  if (studio) return studioStore(studio);
   return globalThis.indexedDB ? indexedDbStore() : memoryStore();
 }
 
@@ -264,6 +267,7 @@ function Specimen() {
     if (skipNextSave.current) {
       skipNextSave.current = false;
       if (!persistStore.current.durable) setSaveState(SAVE_STATE.TEMPORARY);
+      else if (readStudioConfig()) setSaveState(SAVE_STATE.FILE_SAVED);
       else setSaveState(bootRecovery.current ? SAVE_STATE.RECOVERY : SAVE_STATE.SAVED);
       return;
     }
@@ -271,13 +275,16 @@ function Specimen() {
       setSaveState(SAVE_STATE.TEMPORARY);
       return;
     }
-    setSaveState(SAVE_STATE.SAVING);
+    const fileBacked = Boolean(readStudioConfig());
+    setSaveState(fileBacked ? SAVE_STATE.FILE_SAVING : SAVE_STATE.SAVING);
     const generation = (persistGen.current += 1);
     const timer = window.setTimeout(() => {
       void persistStore.current
         .save(snapshot)
         .then(() => {
-          if (generation === persistGen.current) setSaveState(SAVE_STATE.SAVED);
+          if (generation === persistGen.current) {
+            setSaveState(fileBacked ? SAVE_STATE.FILE_SAVED : SAVE_STATE.SAVED);
+          }
         })
         .catch(() => {
           if (generation === persistGen.current) setSaveState(SAVE_STATE.RECOVERY);
