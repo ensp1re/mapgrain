@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/visual-specimen @ 6599006bd1782ce7481ecee778bc78ddb18d9c24 (dirty)
-- Updated: 2026-09-07T14:15:29.913Z
+- Git: feat/editor-shell @ 6114aa61a72db6aa510f59670eae209e662b07f1 (dirty)
+- Updated: 2026-09-07T15:05:28.136Z
 
 ### Next action
 
-Merge this PR, then activate F006 (editor shell).
+Merge this PR, then activate F007 (direct editing and undo).
 
 ### Decisions
 
@@ -34,11 +34,12 @@ Merge this PR, then activate F006 (editor shell).
 
 ### Evidence
 
-- docs/runs/run-1788790442642-ab8049.json
-- docs/runs/run-1788790472713-16ae0a.json
-- docs/runs/run-1788790484399-767329.json
-- docs/runs/run-1788790496622-547996.json
-- docs/runs/run-1788790508341-fa803c.json
+- docs/runs/run-1788793426730-62496d.json
+- docs/runs/run-1788793439005-079954.json
+- docs/runs/run-1788793452150-7deaf4.json
+- docs/runs/run-1788793463994-b89e11.json
+- docs/runs/run-1788793476030-054c9f.json
+- docs/runs/run-1788793487911-4323db.json
 
 ## Resume
 
