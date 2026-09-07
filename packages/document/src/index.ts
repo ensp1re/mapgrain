@@ -12,6 +12,8 @@ export {
   VIEW_KIND,
 } from "./constants/document.ts";
 export { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
+export { OPERATION_KIND } from "./constants/operations.ts";
+export { applyOperation, nextPrefixedId } from "./operations/apply.ts";
 export { DiagramDocumentSchema, documentJsonSchema } from "./schema/document.ts";
 export type {
   DiagramDocument,
@@ -31,5 +33,6 @@ export type {
   PortSide,
   Theme,
 } from "./types/document.ts";
+export type { ApplyResult, Operation, OperationKind } from "./types/operation.ts";
 export type { ValidationErrorCode, ValidationIssue, ValidationResult } from "./types/validation.ts";
 export { validateDocument } from "./validate.ts";

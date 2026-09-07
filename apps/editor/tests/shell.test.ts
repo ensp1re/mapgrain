@@ -20,7 +20,7 @@ test("Cmd/Ctrl+K opens the command menu except while typing in an input", () => 
   );
 });
 
-test("title history supports undo and redo", () => {
+test("history stack supports undo and redo", () => {
   let stack = createHistory("Local diagram workspace");
   stack = pushHistory(stack, "Review map");
   stack = pushHistory(stack, "Service map");

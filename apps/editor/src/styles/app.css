@@ -375,6 +375,95 @@ input {
   font-size: 12px;
 }
 
+.label-input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  padding: 0;
+  outline: none;
+}
+
+.group-label.label-input {
+  width: calc(100% - 24px);
+}
+
+.inspector input,
+.inspector select,
+.connect-dialog input,
+.connect-dialog select {
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.inspector-actions,
+.connect-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 16px;
+}
+
+.connect-dialog {
+  position: absolute;
+  z-index: 6;
+  left: 12px;
+  bottom: 12px;
+  width: min(280px, calc(100% - 24px));
+  padding: 0 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.connect-dialog p,
+.connect-dialog label {
+  display: block;
+  margin: 0;
+  padding: 8px 12px 0;
+  color: var(--muted);
+}
+
+.connect-dialog p {
+  color: var(--text);
+}
+
+.edge-caption {
+  position: absolute;
+  pointer-events: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+.edit-error {
+  margin: 0 12px 12px;
+  color: #f0a8a8;
+  font-size: 12px;
+}
+
+.canvas-error {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 6;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
 .react-flow__edge-path {
   stroke: var(--edge) !important;
   stroke-width: 1.5 !important;
@@ -389,6 +478,16 @@ input {
   height: 8px;
   border: 1px solid var(--border);
   background: var(--port);
+  z-index: 5;
+  pointer-events: all;
+}
+
+.react-flow__nodes {
+  z-index: 1;
+}
+
+.react-flow__edges {
+  z-index: 0;
 }
 
 .react-flow__controls {

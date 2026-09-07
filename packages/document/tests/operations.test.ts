@@ -1,0 +1,143 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+import {
+  EDGE_DIRECTION,
+  EDGE_TYPE,
+  OPERATION_KIND,
+  applyOperation,
+  nextPrefixedId,
+  validateDocument,
+} from "../src/index.ts";
+
+const fixture = fileURLToPath(
+  new URL("../../../tests/fixtures/documents/nested-groups.json", import.meta.url),
+);
+
+async function load() {
+  const raw = JSON.parse(await readFile(fixture, "utf8")) as unknown;
+  const result = validateDocument(raw);
+  assert.equal(result.ok, true);
+  if (!result.ok) throw new Error("fixture invalid");
+  return result.document;
+}
+
+test("set_node_label succeeds and inverse restores the previous document", async () => {
+  const document = await load();
+  const others = document.nodes.filter((node) => node.id !== "gateway").map((node) => node.label);
+  const result = applyOperation(document, {
+    kind: OPERATION_KIND.SET_NODE_LABEL,
+    nodeId: "gateway",
+    label: "Workspace API v2",
+  });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.document.nodes.find((node) => node.id === "gateway")?.label, "Workspace API v2");
+  assert.deepEqual(
+    result.document.nodes.filter((node) => node.id !== "gateway").map((node) => node.label),
+    others,
+  );
+  const undone = applyOperation(result.document, result.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(undone.document.nodes.find((node) => node.id === "gateway")?.label, "Workspace API");
+});
+
+test("rejected edits leave the last valid document in place", async () => {
+  const document = await load();
+  const result = applyOperation(document, {
+    kind: OPERATION_KIND.SET_NODE_LABEL,
+    nodeId: "gateway",
+    label: "",
+  });
+  assert.equal(result.ok, false);
+  if (result.ok) return;
+  assert.equal(result.document, document);
+  assert.equal(result.document.nodes.find((node) => node.id === "gateway")?.label, "Workspace API");
+  assert.equal(result.document.revision, document.revision);
+});
+
+test("add_edge records direction and meaning; inverse deletes it", async () => {
+  const document = await load();
+  const id = nextPrefixedId("e", document.edges.map((edge) => edge.id));
+  const result = applyOperation(document, {
+    kind: OPERATION_KIND.ADD_EDGE,
+    id,
+    source: { nodeId: "provider", portId: "out" },
+    target: { nodeId: "renderer", portId: "in" },
+    type: EDGE_TYPE.CALLS,
+    direction: EDGE_DIRECTION.FORWARD,
+    label: "render",
+  });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const edge = result.document.edges.find((item) => item.id === id);
+  assert.equal(edge?.type, "calls");
+  assert.equal(edge?.direction, "forward");
+  assert.equal(edge?.label, "render");
+  const undone = applyOperation(result.document, result.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(undone.document.edges.some((item) => item.id === id), false);
+});
+
+test("delete_node removes incident edges and inverse restores them", async () => {
+  const document = await load();
+  const result = applyOperation(document, { kind: OPERATION_KIND.DELETE_NODE, nodeId: "layout" });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.document.nodes.some((node) => node.id === "layout"), false);
+  assert.equal(
+    result.document.edges.some(
+      (edge) => edge.source.nodeId === "layout" || edge.target.nodeId === "layout",
+    ),
+    false,
+  );
+  const undone = applyOperation(result.document, result.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.ok(undone.document.nodes.some((node) => node.id === "layout"));
+  assert.ok(
+    undone.document.edges.some(
+      (edge) => edge.source.nodeId === "layout" || edge.target.nodeId === "layout",
+    ),
+  );
+});
+
+test("duplicate_node copies the node and inverse removes the copy", async () => {
+  const document = await load();
+  const result = applyOperation(document, {
+    kind: OPERATION_KIND.DUPLICATE_NODE,
+    nodeId: "gateway",
+    newId: "gateway2",
+  });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.document.nodes.find((node) => node.id === "gateway2")?.label, "Workspace API");
+  const undone = applyOperation(result.document, result.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(undone.document.nodes.some((node) => node.id === "gateway2"), false);
+});
+
+test("set_node_group regroups a node; empty title is rejected", async () => {
+  const document = await load();
+  const grouped = applyOperation(document, {
+    kind: OPERATION_KIND.SET_NODE_GROUP,
+    nodeId: "provider",
+    groupId: "runtime",
+  });
+  assert.equal(grouped.ok, true);
+  if (!grouped.ok) return;
+  assert.equal(grouped.document.nodes.find((node) => node.id === "provider")?.groupId, "runtime");
+  const undone = applyOperation(grouped.document, grouped.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(undone.document.nodes.find((node) => node.id === "provider")?.groupId, null);
+
+  const rejected = applyOperation(document, { kind: OPERATION_KIND.SET_TITLE, title: "" });
+  assert.equal(rejected.ok, false);
+  if (rejected.ok) return;
+  assert.equal(rejected.document, document);
+});

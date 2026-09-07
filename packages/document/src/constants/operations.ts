@@ -1,0 +1,14 @@
+export const OPERATION_KIND = {
+  SET_TITLE: "set_title",
+  SET_NODE_LABEL: "set_node_label",
+  SET_GROUP_LABEL: "set_group_label",
+  SET_EDGE_LABEL: "set_edge_label",
+  SET_EDGE_TYPE: "set_edge_type",
+  SET_EDGE_DIRECTION: "set_edge_direction",
+  ADD_NODE: "add_node",
+  ADD_EDGE: "add_edge",
+  DELETE_NODE: "delete_node",
+  DELETE_EDGE: "delete_edge",
+  DUPLICATE_NODE: "duplicate_node",
+  SET_NODE_GROUP: "set_node_group",
+} as const;
