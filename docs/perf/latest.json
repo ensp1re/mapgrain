@@ -1,0 +1,54 @@
+{
+  "measuredAt": "2026-09-07T20:02:48.091Z",
+  "runtime": {
+    "node": "26.5.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "device": "Apple M4 Pro"
+  },
+  "browser": null,
+  "fixtures": [
+    {
+      "name": "nested-groups.json",
+      "cold": {
+        "sceneMs": 1.66,
+        "layoutMs": 162.672,
+        "svgMs": 0.898
+      },
+      "warm": {
+        "reps": 5,
+        "p50": {
+          "sceneMs": 0.163,
+          "layoutMs": 145.919,
+          "svgMs": 0.304
+        },
+        "p95": {
+          "sceneMs": 0.193,
+          "layoutMs": 159.575,
+          "svgMs": 0.403
+        }
+      }
+    },
+    {
+      "name": "hundred-nodes.json",
+      "cold": {
+        "sceneMs": 0.872,
+        "layoutMs": 188.355,
+        "svgMs": 2.124
+      },
+      "warm": {
+        "reps": 5,
+        "p50": {
+          "sceneMs": 0.692,
+          "layoutMs": 186.16,
+          "svgMs": 1.543
+        },
+        "p95": {
+          "sceneMs": 1.037,
+          "layoutMs": 192.276,
+          "svgMs": 1.781
+        }
+      }
+    }
+  ]
+}

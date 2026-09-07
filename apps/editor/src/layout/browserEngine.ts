@@ -1,17 +1,32 @@
 import { LAYOUT_STATUS, runLayout, type ElkEngine, type LayoutResult } from "@mapgrain/layout/run";
 import type { Point } from "@mapgrain/scene";
-import ELK from "elkjs/lib/elk-api.js";
-import ElkWorker from "elkjs/lib/elk-worker.js?worker";
+
+async function loadElk(): Promise<ElkEngine> {
+  const [{ default: ELK }, { default: ElkWorker }] = await Promise.all([
+    import("elkjs/lib/elk-api.js"),
+    import("elkjs/lib/elk-worker.js?worker"),
+  ]);
+  return new ELK({
+    workerFactory: () => new ElkWorker(),
+  }) as unknown as ElkEngine;
+}
 
 export class BrowserLayoutEngine {
   private generation = 0;
-  private readonly elk: ElkEngine = new ELK({
-    workerFactory: () => new ElkWorker(),
-  }) as unknown as ElkEngine;
+  private elk: Promise<ElkEngine> | null = null;
+
+  private engine(): Promise<ElkEngine> {
+    this.elk ??= loadElk();
+    return this.elk;
+  }
 
   async layout(document: unknown, pins: Record<string, Point>): Promise<LayoutResult> {
     const generation = (this.generation += 1);
-    const response = await runLayout(generation, 0, document, pins, this.elk);
+    const elk = await this.engine();
+    if (generation !== this.generation) {
+      return { status: LAYOUT_STATUS.SUPERSEDED, generation };
+    }
+    const response = await runLayout(generation, 0, document, pins, elk);
     if (generation !== this.generation) {
       return { status: LAYOUT_STATUS.SUPERSEDED, generation };
     }

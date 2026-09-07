@@ -1,4 +1,5 @@
-const CACHE = "mapgrain-offline-v1";
+const CACHE_PREFIX = "mapgrain-offline-";
+const CACHE = "mapgrain-offline-v2";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -11,7 +12,17 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    (async () => {
+      const names = await caches.keys();
+      await Promise.all(
+        names
+          .filter((name) => name.startsWith(CACHE_PREFIX) && name !== CACHE)
+          .map((name) => caches.delete(name)),
+      );
+      await self.clients.claim();
+    })(),
+  );
 });
 
 self.addEventListener("fetch", (event) => {

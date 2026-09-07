@@ -67,9 +67,48 @@ input {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  overflow: hidden;
   padding: 0 12px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-raised);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.topbar-more {
+  display: none;
+  position: relative;
+}
+
+.topbar-more summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.topbar-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.topbar-more-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 
 .brand {
@@ -723,6 +762,31 @@ input {
 
   .example-cards {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .topbar {
+    overflow: hidden;
+  }
+
+  .title-field input {
+    width: 88px;
+  }
+
+  .save-state {
+    max-width: 72px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .topbar-wide {
+    display: none;
+  }
+
+  .topbar-more {
+    display: inline-block;
   }
 }
 

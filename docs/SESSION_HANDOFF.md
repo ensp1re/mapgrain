@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F023
+- Task: F024
 - Plan: docs/PLAN.md
-- Git: feat/agent-skill @ 8bb33811b00dea040bfab7a039e0f544eb1338ef (dirty)
-- Updated: 2026-09-07T19:53:49.122Z
+- Git: feat/visual-perf @ d2ca50f1a3038bc981bb4ba4139f7eb3792b46a8 (dirty)
+- Updated: 2026-09-07T20:03:05.309Z
 
 ### Next action
 
-Open a draft PR for F023. Merge when GitHub verify succeeds. Next is F024.
+Open a draft PR for F024. Merge when GitHub verify succeeds. Next is F025.
 
 ### Decisions
 
@@ -27,6 +27,7 @@ Open a draft PR for F023. Merge when GitHub verify succeeds. Next is F024.
 - First session is an example-backed start surface. Submit without a provider fails honestly, keeps the prompt, and offers a repair. Examples are never labelled as generated output.
 - The public CLI package is mapgrain. Internals are bundled; @resvg/resvg-js and elkjs stay real dependencies. Studio binds 127.0.0.1, checks origin/session, and writes only the opened file.
 - The companion skill lives at skills/mapgrain. Agents emit semantic JSON, call the CLI, preserve ids and layout, and must not execute a repository to discover architecture.
+- At 390px the top bar keeps Arrange and Export visible and moves the rest behind More. Browser ELK loads on first arrange. The offline cache is versioned and drops previous names. Perf numbers are Node scene/layout/svg, not browser.
 - The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
 - The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
 - The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
@@ -77,6 +78,7 @@ Open a draft PR for F023. Merge when GitHub verify succeeds. Next is F024.
 - docs/runs/run-1788808155658-391fbf.json
 - docs/runs/run-1788808466921-89a20d.json
 - docs/runs/run-1788810303070-9860f2.json
+- docs/runs/run-1788810829197-3a7bb9.json
 
 ## Resume
 

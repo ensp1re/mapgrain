@@ -38,6 +38,7 @@
   "devDependencies": {
     "@mapgrain/document": "workspace:*",
     "@mapgrain/layout": "workspace:*",
+    "@mapgrain/scene": "workspace:*",
     "@mapgrain/renderer": "workspace:*",
     "@mapgrain/viewer": "workspace:*",
     "esbuild": "^0.25.9"
