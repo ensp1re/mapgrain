@@ -36,7 +36,7 @@ The working product name is Mapgrain. Final naming, domain, and trademark work a
 | R-001 | Versioned document contract shared by UI, CLI, and adapters | Schema + generated types + runtime validation tests | active |
 | R-002 | Canonical scene used by editor and export | Same bounds/text/ports/edges for a fixture in editor and SVG | active |
 | R-003 | Layout does not silently drop pins | Conflict is visible when space is insufficient | active |
-| R-004 | Create → edit → reload → export works offline | IndexedDB round-trip plus export files; no fake actions | not_started |
+| R-004 | Create → edit → reload → export works offline | IndexedDB round-trip plus export files; no fake actions | active |
 | R-005 | Failed edits preserve the last valid diagram | Integration test for a rejected operation | active |
 | R-006 | Exports omit secrets, comments, and transient selection | Export fixture assertions | active |
 | R-007 | First session examples work without a model provider | Example loads and edits with credentials unset | not_started |

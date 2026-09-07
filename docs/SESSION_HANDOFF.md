@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/local-autosave @ a34beb79976f01f45cb592152fb5d76d50cbffd8 (dirty)
-- Updated: 2026-09-07T16:46:38.698Z
+- Git: feat/offline-loop @ d0666c7fd681fe22c01b742fb467ae104f8ce1a4 (dirty)
+- Updated: 2026-09-07T17:02:17.084Z
 
 ### Next action
 
-Open a draft PR for F009. Wait for CI. Do not merge until asked.
+Open a draft PR for F010. Wait for CI. Do not merge until asked.
 
 ### Decisions
 
@@ -23,6 +23,7 @@ Open a draft PR for F009. Wait for CI. Do not merge until asked.
 - New connections record explicit type and direction before they are committed.
 - Arrange runs ELK off the UI thread, shows a preview with Apply/Discard, and never silently drops keep-position pins.
 - Autosave writes document and positions to IndexedDB. Saved/Saving/Recovery are visible in the top bar. A failed write offers a JSON backup download.
+- A production service worker caches same-origin GET so edit, reload, and export work with the network disabled. Chat does not invent a reply.
 
 ### Rejected approaches
 
@@ -33,6 +34,7 @@ Open a draft PR for F009. Wait for CI. Do not merge until asked.
 - Rebuilding default sequential placement after a label edit.
 - Running nested ELK workers inside the editor layout worker.
 - Adding an IndexedDB wrapper library for a single object store.
+- Adding vite-plugin-pwa for a single cache-first worker.
 
 ### Blockers
 
@@ -49,6 +51,7 @@ Open a draft PR for F009. Wait for CI. Do not merge until asked.
 - docs/runs/run-1788797500629-e310ff.json
 - docs/runs/run-1788798663725-8d9cdf.json
 - docs/runs/run-1788799557750-b00ce7.json
+- docs/runs/run-1788800481010-e56765.json
 
 ## Resume
 
