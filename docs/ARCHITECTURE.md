@@ -35,7 +35,7 @@ packages/ai                 # typed adapters, later
 packages/importers          # bounded syntax import, later
 packages/cli                # validate, render, export
 scripts                     # native work-queue runner
-tests/harness               # runner contract tests
+tests                       # runner contract tests and original fixtures
 tests/fixtures              # original product fixtures, later
 ```
 

@@ -4,11 +4,11 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
-import { SCHEMA_VERSION } from "../../scripts/constants/states.ts";
-import type { HarnessConfig, TaskRecord, TaskStateFile } from "../../scripts/types/records.ts";
+import { SCHEMA_VERSION } from "../scripts/constants/states.ts";
+import type { HarnessConfig, TaskRecord, TaskStateFile } from "../scripts/types/records.ts";
 
 const execFile = promisify(execFileCallback);
-const CLI = fileURLToPath(new URL("../../scripts/cli.ts", import.meta.url));
+const CLI = fileURLToPath(new URL("../scripts/cli.ts", import.meta.url));
 
 function isolatedGitEnv(): NodeJS.ProcessEnv {
   const env = { ...process.env };

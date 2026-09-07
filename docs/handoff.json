@@ -5,11 +5,11 @@
   "git": {
     "available": true,
     "branch": "feat/document-schema",
-    "revision": "cdd14de210f95ba5c97d6156cddf653ebfaf6e4f",
+    "revision": "8733b91e96c0952e3905a1cefcf5388438ce82ba",
     "dirty": true
   },
   "evidenceRefs": [
-    "docs/runs/run-1788786501280-05ea42.json"
+    "docs/runs/run-1788786708728-a5e884.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -26,5 +26,5 @@
   ],
   "blockers": [],
   "nextAction": "Merge this PR, then activate F002 (canonical scene graph).",
-  "updatedAt": "2026-09-07T13:08:36.677Z"
+  "updatedAt": "2026-09-07T13:11:55.695Z"
 }

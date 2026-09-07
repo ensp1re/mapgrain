@@ -6,8 +6,8 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/document-schema @ cdd14de210f95ba5c97d6156cddf653ebfaf6e4f (dirty)
-- Updated: 2026-09-07T13:08:36.677Z
+- Git: feat/document-schema @ 8733b91e96c0952e3905a1cefcf5388438ce82ba (dirty)
+- Updated: 2026-09-07T13:11:55.695Z
 
 ### Next action
 
@@ -34,7 +34,7 @@ Merge this PR, then activate F002 (canonical scene graph).
 
 ### Evidence
 
-- docs/runs/run-1788786501280-05ea42.json
+- docs/runs/run-1788786708728-a5e884.json
 
 ## Resume
 
