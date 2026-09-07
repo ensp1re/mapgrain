@@ -3,11 +3,14 @@ export {
   DEFAULT_FONT_SIZE,
   DEFAULT_LINE_HEIGHT,
   DEFAULT_MAX_LABEL_WIDTH,
+  KIND_FONT_SIZE,
+  KIND_LINE_HEIGHT,
 } from "./constants/metrics.ts";
 export { buildScene } from "./build.ts";
 export { defaultSceneOptions } from "./options.ts";
 export { facingSide, placePortsOnRect, portOffset } from "./ports.ts";
-export { approximateTextMeasurer, defaultFont, measureText } from "./text.ts";
+export { mapScenePolyline, polylinePath } from "./routes.ts";
+export { approximateTextMeasurer, defaultFont, fontTextMeasurer, measureText } from "./text.ts";
 export type { Point, Rect, Size } from "./types/geometry.ts";
 export type { FontSpec, SceneOptions, TextMeasurer } from "./types/options.ts";
 export type {

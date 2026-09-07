@@ -29,6 +29,7 @@ export const EDGE_TYPE = {
 export const EDGE_DIRECTION = {
   FORWARD: "forward",
   BOTH: "both",
+  NONE: "none",
 } as const;
 
 export const PORT_SIDE = {

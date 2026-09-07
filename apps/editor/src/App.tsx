@@ -327,15 +327,19 @@ function Specimen() {
         targetHandle: edge.targetHandle,
         type: "relation",
         selected: selected.has(edge.id),
-        markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16 },
+        markerEnd:
+          edge.direction === EDGE_DIRECTION.NONE
+            ? undefined
+            : { type: MarkerType.ArrowClosed, width: 16, height: 16 },
         markerStart:
-          meaning?.direction === EDGE_DIRECTION.BOTH
+          edge.direction === EDGE_DIRECTION.BOTH
             ? { type: MarkerType.ArrowClosed, width: 16, height: 16 }
             : undefined,
         data: {
           label: meaning?.label,
           type: meaning?.type ?? EDGE_TYPE.CALLS,
-          direction: meaning?.direction ?? EDGE_DIRECTION.FORWARD,
+          direction: edge.direction,
+          points: edge.points,
         },
       };
     });

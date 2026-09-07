@@ -1,4 +1,5 @@
-import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath, type EdgeProps } from "@xyflow/react";
+import { BaseEdge, EdgeLabelRenderer, type EdgeProps } from "@xyflow/react";
+import { mapScenePolyline, polylinePath } from "@mapgrain/scene";
 import type { RelationEdgeData } from "../types/flow.ts";
 
 export function RelationEdge({
@@ -7,22 +8,16 @@ export function RelationEdge({
   sourceY,
   targetX,
   targetY,
-  sourcePosition,
-  targetPosition,
   markerEnd,
   markerStart,
   data,
 }: EdgeProps) {
-  const [path, labelX, labelY] = getSmoothStepPath({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition,
-    targetPosition,
-    borderRadius: 8,
-  });
   const edge = data as RelationEdgeData | undefined;
+  const mapped = mapScenePolyline(edge?.points ?? [], sourceX, sourceY, targetX, targetY);
+  const path = polylinePath(mapped);
+  const mid = mapped[Math.floor(mapped.length / 2)] ?? { x: (sourceX + targetX) / 2, y: (sourceY + targetY) / 2 };
+  const labelX = mid.x;
+  const labelY = mid.y;
   const caption = [edge?.type, edge?.label].filter(Boolean).join(" · ");
   return (
     <>

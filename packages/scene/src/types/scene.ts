@@ -1,4 +1,4 @@
-import type { NodeKind, PortSide, ValidationIssue } from "@mapgrain/document";
+import type { EdgeDirection, NodeKind, PortSide, ValidationIssue } from "@mapgrain/document";
 import type { Point, Rect } from "./geometry.ts";
 
 export interface TextLine {
@@ -35,6 +35,7 @@ export interface SceneEdge {
   source: { nodeId: string; portId: string };
   target: { nodeId: string; portId: string };
   points: Point[];
+  direction: EdgeDirection;
 }
 
 export interface SceneGroup {
