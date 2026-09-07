@@ -24,7 +24,7 @@ test("context and validate succeed on a clean queue", async () => {
 
 test("malformed tasks JSON is a failed check, not a stack trace", async () => {
   const root = await makeFixture();
-  await writeFile(path.join(root, "docs/harness/tasks.json"), "{invalid");
+  await writeFile(path.join(root, "docs/tasks.json"), "{invalid");
   const result = await runHarness(root, ["validate"]);
   assert.ok(result.exitCode === 1 || result.exitCode === 2);
   assert.equal(result.payload.ok, false);
@@ -111,7 +111,7 @@ test("handoff preserves authored prose", async () => {
   const result = await runHarness(root, ["handoff"]);
   assert.equal(result.exitCode, 0);
   const handoff = JSON.parse(
-    await readFile(path.join(root, "docs/harness/handoff.json"), "utf8"),
+    await readFile(path.join(root, "docs/handoff.json"), "utf8"),
   ) as { decisions: string[]; rejectedApproaches: string[] };
   assert.deepEqual(handoff.decisions, ["keep this decision"]);
   assert.deepEqual(handoff.rejectedApproaches, ["abandoned approach"]);

@@ -64,4 +64,4 @@ See [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Verification contract
 
-Local command: `pnpm verify` (lint, typecheck, test, harness validate). CI: [.github/workflows/ci.yml](../../.github/workflows/ci.yml). Product slices must add tests that cover their acceptance rows before `verify ID`.
+Local command: `pnpm verify` (lint, typecheck, test, harness validate). CI: [.github/workflows/ci.yml](../.github/workflows/ci.yml). Product slices must add tests that cover their acceptance rows before `verify ID`.

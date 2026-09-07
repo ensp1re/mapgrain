@@ -17,7 +17,7 @@ test("empty verification cannot pass", async () => {
   });
   const result = await runHarness(root, ["verify", "F001"]);
   assert.equal(result.exitCode, 1);
-  const tasks = JSON.parse(await readFile(path.join(root, "docs/harness/tasks.json"), "utf8")) as {
+  const tasks = JSON.parse(await readFile(path.join(root, "docs/tasks.json"), "utf8")) as {
     tasks: Array<{ state: string }>;
   };
   assert.equal(tasks.tasks[0]?.state, "active");
@@ -75,7 +75,7 @@ test("acceptance changes invalidate verified evidence", async () => {
     tasks: [sampleTask({ state: "active" })],
   });
   assert.equal((await runHarness(root, ["verify", "F001"])).exitCode, 0);
-  const tasksPath = path.join(root, "docs/harness/tasks.json");
+  const tasksPath = path.join(root, "docs/tasks.json");
   const tasks = JSON.parse(await readFile(tasksPath, "utf8")) as {
     tasks: Array<{ acceptance: string[] }>;
   };
@@ -90,7 +90,7 @@ test("config changes invalidate verified evidence", async () => {
     tasks: [sampleTask({ state: "active" })],
   });
   assert.equal((await runHarness(root, ["verify", "F001"])).exitCode, 0);
-  const configPath = path.join(root, "docs/harness/config.json");
+  const configPath = path.join(root, "docs/config.json");
   const config = JSON.parse(await readFile(configPath, "utf8")) as {
     checks: Array<{ timeoutSeconds: number }>;
   };
@@ -131,7 +131,7 @@ test("archive requires passing and preserves archived dependencies", async () =>
   });
   assert.equal((await runHarness(root, ["transition", "F001", "active"])).exitCode, 0);
   assert.equal((await runHarness(root, ["verify", "F001"])).exitCode, 0);
-  const tasksPath = path.join(root, "docs/harness/tasks.json");
+  const tasksPath = path.join(root, "docs/tasks.json");
   const tasks = JSON.parse(await readFile(tasksPath, "utf8")) as {
     tasks: Array<{ state: string }>;
   };
@@ -182,9 +182,9 @@ test("fixture git identity does not write the real repository config", async () 
 
 test("concurrent writers fail clearly", async () => {
   const root = await makeFixture();
-  await mkdir(path.join(root, "docs/harness"), { recursive: true });
+  await mkdir(path.join(root, "docs"), { recursive: true });
   await writeFile(
-    path.join(root, "docs/harness/state.lock"),
+    path.join(root, "docs/state.lock"),
     `${JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() })}\n`,
   );
   const result = await runHarness(root, ["transition", "F001", "active"]);

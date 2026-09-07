@@ -4,11 +4,11 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
-import { SCHEMA_VERSION } from "../../scripts/harness/constants/states.ts";
-import type { HarnessConfig, TaskRecord, TaskStateFile } from "../../scripts/harness/types/records.ts";
+import { SCHEMA_VERSION } from "../../scripts/constants/states.ts";
+import type { HarnessConfig, TaskRecord, TaskStateFile } from "../../scripts/types/records.ts";
 
 const execFile = promisify(execFileCallback);
-const CLI = fileURLToPath(new URL("../../scripts/harness/cli.ts", import.meta.url));
+const CLI = fileURLToPath(new URL("../../scripts/cli.ts", import.meta.url));
 
 function isolatedGitEnv(): NodeJS.ProcessEnv {
   const env = { ...process.env };
@@ -35,13 +35,13 @@ export interface FixtureOptions {
 
 export async function makeFixture(options: FixtureOptions = {}): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "mapgrain-harness-"));
-  await mkdir(path.join(root, "docs/harness/runs"), { recursive: true });
-  await mkdir(path.join(root, "docs/harness/archive"), { recursive: true });
+  await mkdir(path.join(root, "docs/runs"), { recursive: true });
+  await mkdir(path.join(root, "docs/archive"), { recursive: true });
   await mkdir(path.join(root, "src"), { recursive: true });
   await writeFile(path.join(root, "package.json"), `${JSON.stringify({ name: "fixture" }, null, 2)}\n`);
   await writeFile(path.join(root, "src/index.ts"), "export const ok = true;\n");
-  await writeFile(path.join(root, "docs/harness/PLAN.md"), "# plan\n");
-  await writeFile(path.join(root, "docs/harness/PROJECT.md"), "# project\n");
+  await writeFile(path.join(root, "docs/PLAN.md"), "# plan\n");
+  await writeFile(path.join(root, "docs/PROJECT.md"), "# project\n");
 
   const config: HarnessConfig = {
     schemaVersion: SCHEMA_VERSION,
@@ -57,21 +57,21 @@ export async function makeFixture(options: FixtureOptions = {}): Promise<string>
     fingerprintPaths: options.fingerprintPaths ?? ["package.json", "src"],
     delivery: { provider: "github", defaultBranch: "main", requirePR: true },
   };
-  await writeFile(path.join(root, "docs/harness/config.json"), `${JSON.stringify(config, null, 2)}\n`);
+  await writeFile(path.join(root, "docs/config.json"), `${JSON.stringify(config, null, 2)}\n`);
 
   const tasks: TaskStateFile = {
     schemaVersion: SCHEMA_VERSION,
     nextId: options.nextId ?? 2,
     tasks: options.tasks ?? [sampleTask()],
   };
-  await writeFile(path.join(root, "docs/harness/tasks.json"), `${JSON.stringify(tasks, null, 2)}\n`);
+  await writeFile(path.join(root, "docs/tasks.json"), `${JSON.stringify(tasks, null, 2)}\n`);
   await writeFile(
-    path.join(root, "docs/harness/handoff.json"),
+    path.join(root, "docs/handoff.json"),
     `${JSON.stringify(
       {
         schemaVersion: SCHEMA_VERSION,
         taskId: null,
-        plan: "docs/harness/PLAN.md",
+        plan: "docs/PLAN.md",
         git: null,
         evidenceRefs: [],
         decisions: ["keep this decision"],
@@ -115,8 +115,8 @@ export function sampleTask(overrides: Partial<TaskRecord> = {}): TaskRecord {
     acceptance: ["The configured unit check passes."],
     dependsOn: [],
     state: "not_started",
-    spec: "docs/harness/PROJECT.md",
-    plan: "docs/harness/PLAN.md",
+    spec: "docs/PROJECT.md",
+    plan: "docs/PLAN.md",
     verification: ["unit"],
     blockedReason: null,
     evidence: null,

@@ -1,4 +1,4 @@
-export const HARNESS_DIR = "docs/harness";
+export const HARNESS_DIR = "docs";
 
 export const HARNESS_PATHS = {
   config: `${HARNESS_DIR}/config.json`,

@@ -38,8 +38,8 @@ pnpm verify
 Current work is tracked with:
 
 ```sh
-node --experimental-strip-types scripts/harness/cli.ts --root . context
-node --experimental-strip-types scripts/harness/cli.ts --root . tasks
+node --experimental-strip-types scripts/cli.ts --root . context
+node --experimental-strip-types scripts/cli.ts --root . tasks
 ```
 
 ## License

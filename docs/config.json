@@ -37,14 +37,14 @@
     "tsconfig.base.json",
     "eslint.config.js",
     "AGENTS.md",
-    "scripts/harness",
+    "scripts",
     "tests/harness",
     "tests/fixtures",
     "packages/document",
-    "docs/harness/PROJECT.md",
-    "docs/harness/PLAN.md",
-    "docs/harness/ARCHITECTURE.md",
-    "docs/harness/config.json"
+    "docs/PROJECT.md",
+    "docs/PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/config.json"
   ],
   "delivery": {
     "provider": "github",

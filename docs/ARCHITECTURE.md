@@ -34,7 +34,7 @@ packages/viewer             # small read-only bundle
 packages/ai                 # typed adapters, later
 packages/importers          # bounded syntax import, later
 packages/cli                # validate, render, export
-scripts/harness             # native work-queue runner
+scripts                     # native work-queue runner
 tests/harness               # runner contract tests
 tests/fixtures              # original product fixtures, later
 ```
@@ -51,7 +51,7 @@ Those app and package directories are created when the owning task starts. Do no
 | Renderer | `packages/renderer` | scene | SVG/PNG/HTML/JSON | no editor DOM screenshots |
 | Editor | `apps/editor` | document operations | user edits, previews | AI apply cannot clobber newer manual edits |
 | CLI | `packages/cli` | files | validate/render/export | same schema as the UI |
-| Harness | `scripts/harness` | queue + checks | JSON status | no product success without recorded evidence |
+| Work queue | `scripts` | queue + checks | JSON status | no product success without recorded evidence |
 
 ## Data and control flow
 

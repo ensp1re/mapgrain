@@ -19,7 +19,7 @@ export function renderHandoffMarkdown(handoff: HandoffRecord): string {
 
   return `# Session handoff
 
-This is a readable view of \`docs/harness/handoff.json\`. Update decisions, rejected approaches, blockers, and nextAction in that JSON source. The handoff command preserves them while refreshing git and task facts.
+This is a readable view of \`docs/handoff.json\`. Update decisions, rejected approaches, blockers, and nextAction in that JSON source. The handoff command preserves them while refreshing git and task facts.
 
 ## Current checkpoint
 
@@ -50,6 +50,6 @@ ${evidence}
 
 ## Resume
 
-Run \`node --experimental-strip-types scripts/harness/cli.ts --root . context\`, inspect discrepancies, and follow the recorded next action.
+Run \`node --experimental-strip-types scripts/cli.ts --root . context\`, inspect discrepancies, and follow the recorded next action.
 `;
 }

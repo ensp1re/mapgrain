@@ -24,7 +24,7 @@ export async function commandHandoff(root: string): Promise<CommandResult> {
     const next: HandoffRecord = {
       schemaVersion: SCHEMA_VERSION,
       taskId: active?.id ?? null,
-      plan: previous?.plan ?? "docs/harness/PLAN.md",
+      plan: previous?.plan ?? "docs/PLAN.md",
       git: await gitInfo(root),
       evidenceRefs,
       decisions: previous?.decisions ?? [],

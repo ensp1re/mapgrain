@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "include": [
-    "scripts/harness/**/*.ts",
+    "scripts/**/*.ts",
     "tests/harness/**/*.ts",
     "packages/*/src/**/*.ts",
     "packages/*/tests/**/*.ts",

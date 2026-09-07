@@ -1,17 +1,17 @@
 # Session handoff
 
-This is a readable view of `docs/harness/handoff.json`. Update decisions, rejected approaches, blockers, and nextAction in that JSON source. The handoff command preserves them while refreshing git and task facts.
+This is a readable view of `docs/handoff.json`. Update decisions, rejected approaches, blockers, and nextAction in that JSON source. The handoff command preserves them while refreshing git and task facts.
 
 ## Current checkpoint
 
 - Task: none
-- Plan: docs/harness/PLAN.md
-- Git: feat/document-schema @ 6fdde2cef44474f62146c348491c6ef9edf24d33 (dirty)
-- Updated: 2026-09-07T13:03:55.681Z
+- Plan: docs/PLAN.md
+- Git: feat/document-schema @ cdd14de210f95ba5c97d6156cddf653ebfaf6e4f (dirty)
+- Updated: 2026-09-07T13:08:36.677Z
 
 ### Next action
 
-After the harness PR lands, activate F001 and implement the versioned document schema with original fixtures.
+Merge this PR, then activate F002 (canonical scene graph).
 
 ### Decisions
 
@@ -34,8 +34,8 @@ After the harness PR lands, activate F001 and implement the versioned document s
 
 ### Evidence
 
-- docs/harness/runs/run-1788786216210-fddf29.json
+- docs/runs/run-1788786501280-05ea42.json
 
 ## Resume
 
-Run `node --experimental-strip-types scripts/harness/cli.ts --root . context`, inspect discrepancies, and follow the recorded next action.
+Run `node --experimental-strip-types scripts/cli.ts --root . context`, inspect discrepancies, and follow the recorded next action.

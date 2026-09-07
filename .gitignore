@@ -3,9 +3,9 @@ dist
 coverage
 .DS_Store
 *.log
-docs/harness/runs/*
-!docs/harness/runs/.gitkeep
-docs/harness/state.lock
-docs/harness/*.tmp-*
+docs/runs/*
+!docs/runs/.gitkeep
+docs/state.lock
+docs/*.tmp-*
 .env
 .env.*

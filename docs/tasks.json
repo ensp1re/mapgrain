@@ -13,8 +13,8 @@
       ],
       "dependsOn": [],
       "state": "verified",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -24,9 +24,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1788786216210-fddf29",
-        "fingerprintBefore": "e1a5579279034549ba51be33d5877e45373b3986d57fe2b2bbcaf01070b42021",
-        "fingerprintAfter": "e1a5579279034549ba51be33d5877e45373b3986d57fe2b2bbcaf01070b42021",
+        "attemptId": "run-1788786501280-05ea42",
+        "fingerprintBefore": "e5adfeabb8c5251d30901265b4ca5110e9392cda29faccfdfbfcdb82fdea47f6",
+        "fingerprintAfter": "e5adfeabb8c5251d30901265b4ca5110e9392cda29faccfdfbfcdb82fdea47f6",
         "checks": [
           {
             "id": "unit",
@@ -45,7 +45,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-07T13:03:43.112Z"
+        "verifiedAt": "2026-09-07T13:08:28.217Z"
       },
       "delivery": null
     },
@@ -61,8 +61,8 @@
         "F001"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -86,8 +86,8 @@
         "F002"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -111,8 +111,8 @@
         "F002"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -137,8 +137,8 @@
         "F004"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -161,8 +161,8 @@
         "F005"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -186,8 +186,8 @@
         "F006"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -210,8 +210,8 @@
         "F007"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -234,8 +234,8 @@
         "F006"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -261,8 +261,8 @@
         "F009"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -286,8 +286,8 @@
         "F006"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
@@ -311,8 +311,8 @@
         "F004"
       ],
       "state": "not_started",
-      "spec": "docs/harness/PROJECT.md",
-      "plan": "docs/harness/PLAN.md",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
       "verification": [
         "unit",
         "lint",
