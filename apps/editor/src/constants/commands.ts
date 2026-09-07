@@ -14,6 +14,7 @@ export const COMMAND_ID = {
   ALIGN_RIGHT: "align-right",
   ALIGN_TOP: "align-top",
   ALIGN_BOTTOM: "align-bottom",
+  ARRANGE: "arrange",
 } as const;
 
 export type CommandId = (typeof COMMAND_ID)[keyof typeof COMMAND_ID];
@@ -33,6 +34,7 @@ export const COMMANDS: CommandSpec[] = [
   { id: COMMAND_ID.ALIGN_RIGHT, label: "Align right", shortcut: "" },
   { id: COMMAND_ID.ALIGN_TOP, label: "Align top", shortcut: "" },
   { id: COMMAND_ID.ALIGN_BOTTOM, label: "Align bottom", shortcut: "" },
+  { id: COMMAND_ID.ARRANGE, label: "Arrange diagram", shortcut: "A" },
   { id: COMMAND_ID.PRESENT, label: "Present", shortcut: "P" },
   { id: COMMAND_ID.EXPORT_SVG, label: "Export SVG", shortcut: "E" },
   { id: COMMAND_ID.EXPORT_JSON, label: "Export JSON", shortcut: "J" },

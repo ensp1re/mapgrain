@@ -24,9 +24,11 @@ import {
   type Operation,
   type Theme,
 } from "@mapgrain/document";
+import { LAYOUT_STATUS } from "@mapgrain/layout/run";
 import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
 import { buildScene } from "@mapgrain/scene";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json";
+import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { ChatDrawer } from "./chrome/ChatDrawer.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
 import { ConnectDialog } from "./chrome/ConnectDialog.tsx";
@@ -50,6 +52,9 @@ import {
   isUndoEvent,
 } from "./keyboard/editShortcut.ts";
 import { shouldOpenCommandMenu } from "./keyboard/commandShortcut.ts";
+import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
+import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
+import type { ArrangeState } from "./types/arrange.ts";
 import type {
   AlignKind,
   ConnectionDraft,
@@ -110,6 +115,8 @@ function isNoOp(document: DiagramDocument, operation: Operation): boolean {
       return document.edges.find((edge) => edge.id === operation.edgeId)?.direction === operation.direction;
     case OPERATION_KIND.SET_NODE_GROUP:
       return document.nodes.find((node) => node.id === operation.nodeId)?.groupId === operation.groupId;
+    case OPERATION_KIND.SET_NODE_PINNED:
+      return document.layoutHints.pinnedNodeIds.includes(operation.nodeId) === operation.pinned;
     default:
       return false;
   }
@@ -168,16 +175,26 @@ function Specimen() {
   const [pending, setPending] = useState<PendingConnection | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [arrange, setArrange] = useState<ArrangeState>({ status: "idle" });
   const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
   const historyRef = useRef(history);
   historyRef.current = history;
+  const layoutEngine = useRef<BrowserLayoutEngine | null>(null);
+
+  useEffect(() => {
+    const engine = new BrowserLayoutEngine();
+    layoutEngine.current = engine;
+    return () => engine.dispose();
+  }, []);
 
   const snapshot = history.present;
   const documentModel = snapshot?.document ?? null;
+  const displayPositions =
+    arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {});
 
   const scene = useMemo(
-    () => (documentModel ? buildScene(documentModel, { positions: snapshot.positions }) : null),
-    [documentModel, snapshot],
+    () => (documentModel ? buildScene(documentModel, { positions: displayPositions }) : null),
+    [documentModel, displayPositions],
   );
   const flow = useMemo(() => {
     if (!scene?.ok) return { nodes: [] as FlowNodeDraft[], edges: [] };
@@ -273,6 +290,42 @@ function Specimen() {
     if (samePositions(current.positions, positions)) return;
     setHistory((stack) => pushHistory(stack, { document: stack.present.document, positions }));
   }, []);
+
+  const startArrange = useCallback(async () => {
+    const current = historyRef.current.present;
+    const engine = layoutEngine.current;
+    if (!engine) return;
+    setArrange({ status: "working" });
+    const result = await engine.layout(
+      current.document,
+      pinsFromDocument(current.document, current.positions),
+    );
+    if (result.status === LAYOUT_STATUS.SUPERSEDED) return;
+    if (result.status === LAYOUT_STATUS.LAID_OUT) {
+      setArrange({ status: "preview", positions: mergePositions(current.positions, result.positions) });
+      return;
+    }
+    if (result.status === LAYOUT_STATUS.CONFLICT) {
+      setArrange({
+        status: "conflict",
+        message: result.conflict.message,
+        overlappingNodeIds: result.conflict.overlappingNodeIds,
+        pins: result.conflict.pins,
+      });
+      return;
+    }
+    setArrange({ status: "idle" });
+    setEditError(result.errors[0]?.message ?? "Arrange failed");
+  }, []);
+
+  const applyArrange = useCallback(() => {
+    if (arrange.status !== "preview") return;
+    pushPositions(arrange.positions);
+    setArrange({ status: "idle" });
+    void fitView({ padding: 0.2 });
+  }, [arrange, fitView, pushPositions]);
+
+  const discardArrange = useCallback(() => setArrange({ status: "idle" }), []);
 
   const deleteSelection = useCallback(() => {
     const current = historyRef.current.present;
@@ -398,8 +451,9 @@ function Specimen() {
       if (id === COMMAND_ID.ALIGN_RIGHT) alignSelection(ALIGN_KIND.RIGHT);
       if (id === COMMAND_ID.ALIGN_TOP) alignSelection(ALIGN_KIND.TOP);
       if (id === COMMAND_ID.ALIGN_BOTTOM) alignSelection(ALIGN_KIND.BOTTOM);
+      if (id === COMMAND_ID.ARRANGE) void startArrange();
     },
-    [alignSelection, deleteSelection, duplicateSelection, exportFormat, fitView],
+    [alignSelection, deleteSelection, duplicateSelection, exportFormat, fitView, startArrange],
   );
 
   useEffect(() => {
@@ -479,6 +533,7 @@ function Specimen() {
         onTitleCommit={(value) => applyOp({ kind: OPERATION_KIND.SET_TITLE, title: value })}
         onUndo={() => runCommand(COMMAND_ID.UNDO)}
         onRedo={() => runCommand(COMMAND_ID.REDO)}
+        onArrange={() => runCommand(COMMAND_ID.ARRANGE)}
         onPresent={() => runCommand(COMMAND_ID.PRESENT)}
         onExport={() => runCommand(COMMAND_ID.EXPORT_SVG)}
         onCommand={() => setCommandsOpen(true)}
@@ -493,7 +548,7 @@ function Specimen() {
             onSelect={(id) => setSelection({ nodeIds: [id], edgeIds: [] })}
           />
         )}
-        <div className="canvas">
+        <div className={arrange.status === "preview" ? "canvas is-previewing" : "canvas"}>
           <ReactFlow
             nodes={nodes}
             edges={rfEdges}
@@ -501,6 +556,8 @@ function Specimen() {
             edgeTypes={edgeTypes}
             onNodesChange={onNodesChange}
             onConnect={onConnect}
+            nodesDraggable={arrange.status === "idle"}
+            nodesConnectable={arrange.status === "idle"}
             onNodeDragStart={onNodeDragStart}
             onNodeDragStop={onNodeDragStop}
             onNodeClick={(_event, node) => setSelection({ nodeIds: [node.id], edgeIds: [] })}
@@ -542,6 +599,7 @@ function Specimen() {
               {editError}
             </div>
           ) : null}
+          <ArrangeBar state={arrange} onApply={applyArrange} onDiscard={discardArrange} />
           {pending ? (
             <ConnectDialog
               pending={pending}

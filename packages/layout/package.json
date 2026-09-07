@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./run": "./src/elk/run.ts",
+    "./codes": "./src/constants/codes.ts"
   },
   "scripts": {
     "test": "node --test --experimental-strip-types --test-reporter=spec tests/*.test.ts",

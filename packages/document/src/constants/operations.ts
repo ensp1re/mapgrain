@@ -11,4 +11,5 @@ export const OPERATION_KIND = {
   DELETE_EDGE: "delete_edge",
   DUPLICATE_NODE: "duplicate_node",
   SET_NODE_GROUP: "set_node_group",
+  SET_NODE_PINNED: "set_node_pinned",
 } as const;

@@ -141,3 +141,20 @@ test("set_node_group regroups a node; empty title is rejected", async () => {
   if (rejected.ok) return;
   assert.equal(rejected.document, document);
 });
+
+test("set_node_pinned toggles keep-position and inverse restores it", async () => {
+  const document = await load();
+  assert.equal(document.layoutHints.pinnedNodeIds.includes("gateway"), true);
+  const unpinned = applyOperation(document, {
+    kind: OPERATION_KIND.SET_NODE_PINNED,
+    nodeId: "gateway",
+    pinned: false,
+  });
+  assert.equal(unpinned.ok, true);
+  if (!unpinned.ok) return;
+  assert.equal(unpinned.document.layoutHints.pinnedNodeIds.includes("gateway"), false);
+  const restored = applyOperation(unpinned.document, unpinned.inverse);
+  assert.equal(restored.ok, true);
+  if (!restored.ok) return;
+  assert.equal(restored.document.layoutHints.pinnedNodeIds.includes("gateway"), true);
+});

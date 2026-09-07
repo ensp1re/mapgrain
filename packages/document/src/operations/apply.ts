@@ -201,6 +201,21 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
       node.groupId = operation.groupId;
       return commit(next, inverse, document);
     }
+    case OPERATION_KIND.SET_NODE_PINNED: {
+      const node = findNode(next, operation.nodeId);
+      if (!node) return fail(document, `unknown node ${operation.nodeId}`, "/nodes", operation.nodeId);
+      const pinned = next.layoutHints.pinnedNodeIds.includes(node.id);
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_NODE_PINNED,
+        nodeId: node.id,
+        pinned,
+      };
+      if (operation.pinned && !pinned) next.layoutHints.pinnedNodeIds.push(node.id);
+      if (!operation.pinned) {
+        next.layoutHints.pinnedNodeIds = next.layoutHints.pinnedNodeIds.filter((id) => id !== node.id);
+      }
+      return commit(next, inverse, document);
+    }
     default: {
       const _never: never = operation;
       return fail(document, `unsupported operation ${String(_never)}`, "/");

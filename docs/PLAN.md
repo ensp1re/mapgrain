@@ -7,8 +7,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 ## State
 
 - Status: `active`
-- Current task ID: F007
-- Active slice: direct editing, undo/redo, keep-position
+- Current task ID: F008
+- Active slice: arrange preview and visible pin conflicts
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -23,8 +23,8 @@ Ship a local editor that can create, correct, and export a small architecture or
 | F004 | Deterministic SVG/PNG/HTML/JSON export from the scene | F002 | unit, lint, typecheck, build | passing |
 | F005 | Visual specimen in a working app: chrome, node, edge, inspector, one interactive diagram | F003, F004 | unit, lint, typecheck, build | passing |
 | F006 | Editor shell: top bar, canvas, outline, command menu | F005 | unit, lint, typecheck, build | passing |
-| F007 | Direct editing, undo/redo, keep-position | F006 | unit, lint, typecheck, build | active |
-| F008 | Arrange preview and visible pin conflicts | F007 | unit, lint, typecheck, build | not_started |
+| F007 | Direct editing, undo/redo, keep-position | F006 | unit, lint, typecheck, build | passing |
+| F008 | Arrange preview and visible pin conflicts | F007 | unit, lint, typecheck, build | active |
 | F009 | IndexedDB persistence and backup download | F006 | unit, lint, typecheck, build | not_started |
 | F010 | Offline create → edit → reload → export | F004, F007, F008, F009 | unit, lint, typecheck, build | not_started |
 | F011 | Example-backed first session; no fake generation | F006 | unit, lint, typecheck, build | not_started |
