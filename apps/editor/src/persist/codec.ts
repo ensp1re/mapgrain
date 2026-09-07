@@ -1,4 +1,4 @@
-import { validateDocument } from "@mapgrain/document";
+import { applyPortableLayout, portablePositions, validateDocument } from "@mapgrain/document";
 import { buildScene } from "@mapgrain/scene";
 import { positionsFromScene } from "../geometry/positions.ts";
 import type { EditorSnapshot, PositionMap } from "../types/editor.ts";
@@ -15,23 +15,39 @@ function isPositionMap(value: unknown): value is PositionMap {
   );
 }
 
+function placedSnapshot(document: EditorSnapshot["document"], extra?: PositionMap): EditorSnapshot {
+  const fromLayout = portablePositions(document);
+  const positions =
+    extra && Object.keys(extra).length > 0
+      ? extra
+      : Object.keys(fromLayout).length > 0
+        ? fromLayout
+        : null;
+  if (positions) {
+    return { document: applyPortableLayout(document, positions), positions };
+  }
+  const scene = buildScene(document);
+  if (!scene.ok) return { document, positions: {} };
+  const placed = positionsFromScene(scene.scene.nodes);
+  return { document: applyPortableLayout(document, placed), positions: placed };
+}
+
 export function snapshotFromStored(value: unknown): EditorSnapshot | null {
   if (!value || typeof value !== "object") return null;
+  const direct = validateDocument(value);
+  if (direct.ok) return placedSnapshot(direct.document);
   const record = value as StoredWorkspace;
   const validated = validateDocument(record.document);
   if (!validated.ok) return null;
-  if (isPositionMap(record.positions)) {
-    return { document: validated.document, positions: record.positions };
-  }
-  const scene = buildScene(validated.document);
-  if (!scene.ok) return { document: validated.document, positions: {} };
-  return { document: validated.document, positions: positionsFromScene(scene.scene.nodes) };
+  return placedSnapshot(validated.document, isPositionMap(record.positions) ? record.positions : undefined);
 }
 
 export function storedFromSnapshot(snapshot: EditorSnapshot): StoredWorkspace {
-  return { document: snapshot.document, positions: snapshot.positions };
+  const document = applyPortableLayout(snapshot.document, snapshot.positions);
+  return { document, positions: snapshot.positions };
 }
 
 export function backupBytes(snapshot: EditorSnapshot): Uint8Array {
-  return new TextEncoder().encode(`${JSON.stringify(snapshot.document, null, 2)}\n`);
+  const document = applyPortableLayout(snapshot.document, snapshot.positions);
+  return new TextEncoder().encode(`${JSON.stringify(document, null, 2)}\n`);
 }

@@ -62,7 +62,7 @@ export function renderDocumentSvg(
   document: DiagramDocument,
   theme: Theme,
 ): { svg: string; width: number; height: number } | { ok: false; errors: ExportIssue[] } {
-  const scene = buildScene(document);
+  const scene = buildScene(document, { positions: document.layout?.positions ?? {} });
   if (!scene.ok) {
     return {
       ok: false,

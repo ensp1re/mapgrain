@@ -164,6 +164,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   const document = validated.document;
   const options = defaultSceneOptions({
     direction: document.layoutHints.direction,
+    positions: document.layout?.positions ?? {},
     ...optionOverrides,
   });
 

@@ -45,7 +45,7 @@ Those app and package directories are created when the owning task starts. Do no
 
 | Area | Owner | Inputs | Outputs | Invariants |
 | --- | --- | --- | --- | --- |
-| Document | `packages/document` | operations on a revision | validated document | IDs stable; meaning unchanged by layout |
+| Document | `packages/document` | operations on a revision | validated document | IDs stable; portable `layout` holds positions, not viewport/selection |
 | Scene | `packages/scene` | document + fonts + layout options | bounds, ports, routes | identical for editor and export |
 | Layout | `packages/layout` | document + pins | positions or a visible conflict | pins never dropped silently |
 | Renderer | `packages/renderer` | scene | SVG/PNG/HTML/JSON | no editor DOM screenshots |

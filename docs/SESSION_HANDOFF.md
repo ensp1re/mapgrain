@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/hundred-node-fixture @ c41e9e73ec0a51de95de4c21c78577337367abc9 (dirty)
-- Updated: 2026-09-07T17:59:49.470Z
+- Git: feat/portable-layout @ 0c1e84e98871a827422133dc251859560b70d848 (dirty)
+- Updated: 2026-09-07T18:29:44.025Z
 
 ### Next action
 
-Open a draft PR for F014. Wait for CI. Do not merge until asked.
+Open a draft PR for F015 (R1.1 portable layout). Wait for CI. Do not merge until asked. Next after merge is F016 (R1.2 geometry pipeline).
 
 ### Decisions
 
@@ -28,6 +28,7 @@ Open a draft PR for F014. Wait for CI. Do not merge until asked.
 - The product CLI lives in packages/cli, uses the same document and renderer as the editor, and does not depend on the GUI.
 - The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
 - The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
+- The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
 
 ### Rejected approaches
 
@@ -43,6 +44,7 @@ Open a draft PR for F014. Wait for CI. Do not merge until asked.
 - Adding Commander or another parser for three CLI commands.
 - Building the viewer on React Flow.
 - Claiming a layout-time target before measuring on a documented device.
+- Starting R6 imports, hosted sharing, or billing before R1–R5.
 
 ### Blockers
 
@@ -64,6 +66,7 @@ Open a draft PR for F014. Wait for CI. Do not merge until asked.
 - docs/runs/run-1788802146185-c8b4da.json
 - docs/runs/run-1788802738494-8e738b.json
 - docs/runs/run-1788803958032-669084.json
+- docs/runs/run-1788805672118-b8d681.json
 
 ## Resume
 

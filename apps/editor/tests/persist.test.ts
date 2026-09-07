@@ -50,6 +50,16 @@ test("storage failure still yields a valid JSON backup", async () => {
   assert.equal(validated.ok, true);
   if (!validated.ok) return;
   assert.equal(validated.document.title, original.document.title);
+  assert.deepEqual(validated.document.layout?.positions.gateway, original.positions.gateway);
+});
+
+test("imported backup JSON restores the arrangement", async () => {
+  const original = await snapshot();
+  original.positions.gateway = { x: -80, y: 24 };
+  const parsed = JSON.parse(new TextDecoder().decode(backupBytes(original))) as unknown;
+  const restored = snapshotFromStored(parsed);
+  assert.equal(restored?.positions.gateway?.x, -80);
+  assert.equal(restored?.positions.gateway?.y, 24);
 });
 
 test("save states cover saved, saving, and recovery", () => {

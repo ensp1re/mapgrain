@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { applyPortableLayout, validateDocument } from "@mapgrain/document";
 import { EXPORT_ERROR_CODE, EXPORT_FORMAT, exportDiagram } from "../src/index.ts";
 
 const fixturesDir = fileURLToPath(new URL("../../../tests/fixtures/documents", import.meta.url));
@@ -14,6 +15,37 @@ async function load(name: string): Promise<unknown> {
 function text(bytes: Uint8Array): string {
   return new TextDecoder().decode(bytes);
 }
+
+test("export JSON and SVG keep committed portable layout", async () => {
+  const raw = await load("nested-groups.json");
+  const validated = validateDocument(raw);
+  assert.equal(validated.ok, true);
+  if (!validated.ok) return;
+  const moved = applyPortableLayout(validated.document, {
+    gateway: { x: -120, y: 40 },
+    document: { x: 40, y: 40 },
+    layout: { x: 200, y: 40 },
+    renderer: { x: 360, y: 40 },
+    provider: { x: -120, y: 180 },
+  });
+  const json = exportDiagram({ document: moved, format: EXPORT_FORMAT.JSON });
+  assert.equal(json.ok, true);
+  if (!json.ok) return;
+  const parsed = JSON.parse(text(json.bytes)) as { layout?: { positions?: Record<string, { x: number }> } };
+  assert.equal(parsed.layout?.positions?.gateway?.x, -120);
+  const svgMoved = exportDiagram({ document: moved, format: EXPORT_FORMAT.SVG });
+  const svgDefault = exportDiagram({ document: validated.document, format: EXPORT_FORMAT.SVG });
+  assert.equal(svgMoved.ok && svgDefault.ok, true);
+  if (!svgMoved.ok || !svgDefault.ok) return;
+  assert.notEqual(text(svgMoved.bytes), text(svgDefault.bytes));
+  const reimported = validateDocument(JSON.parse(text(json.bytes)));
+  assert.equal(reimported.ok, true);
+  if (!reimported.ok) return;
+  const svgAgain = exportDiagram({ document: reimported.document, format: EXPORT_FORMAT.SVG });
+  assert.equal(svgAgain.ok, true);
+  if (!svgAgain.ok) return;
+  assert.equal(text(svgAgain.bytes), text(svgMoved.bytes));
+});
 
 test("hundred-node fixture exports SVG from the canonical scene", async () => {
   const raw = await load("hundred-nodes.json");

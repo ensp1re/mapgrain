@@ -5,6 +5,7 @@ export {
   EVIDENCE_STATE,
   EVIDENCE_TARGET_KIND,
   LAYOUT_DIRECTION,
+  LAYOUT_SECTION_VERSION,
   NODE_KIND,
   PORT_SIDE,
   SCHEMA_VERSION,
@@ -13,6 +14,7 @@ export {
 } from "./constants/document.ts";
 export { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
 export { OPERATION_KIND } from "./constants/operations.ts";
+export { applyPortableLayout, portablePositions } from "./layout/portable.ts";
 export { applyOperation, nextPrefixedId } from "./operations/apply.ts";
 export { DiagramDocumentSchema, documentJsonSchema } from "./schema/document.ts";
 export type {
@@ -29,6 +31,8 @@ export type {
   EvidenceState,
   LayoutDirection,
   LayoutHints,
+  LayoutPoint,
+  LayoutSection,
   NodeKind,
   PortSide,
   Theme,

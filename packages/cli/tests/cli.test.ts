@@ -103,6 +103,21 @@ test("render and export match the canonical scene for a fixture", async () => {
   assert.equal(exportIo.files["out.svg"], Buffer.from(expected.bytes).toString("binary"));
 });
 
+test("CLI export JSON preserves portable layout positions", async () => {
+  const source = await readFile(fixture, "utf8");
+  const document = JSON.parse(source) as Record<string, unknown>;
+  document.layout = {
+    version: 1,
+    revision: 1,
+    positions: { gateway: { x: -90, y: 30 } },
+  };
+  const io = memoryIo({ "laid-out.json": JSON.stringify(document) });
+  const code = await runCli(["export", "laid-out.json", "--format", "json"], io);
+  assert.equal(code, EXIT_CODE.OK);
+  const exported = JSON.parse(text(io.stdoutChunks)) as { layout?: { positions?: { gateway?: { x: number } } } };
+  assert.equal(exported.layout?.positions?.gateway?.x, -90);
+});
+
 test("view writes read-only HTML from the canonical scene", async () => {
   const source = await readFile(fixture, "utf8");
   const io = memoryIo({ "nested-groups.json": source });

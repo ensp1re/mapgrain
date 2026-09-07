@@ -49,5 +49,13 @@ export function subsetDocument(document: DiagramDocument, nodeIds: string[]): Di
       ...document.layoutHints,
       pinnedNodeIds: document.layoutHints.pinnedNodeIds.filter((id) => nodeSet.has(id)),
     },
+    layout: document.layout
+      ? {
+          ...document.layout,
+          positions: Object.fromEntries(
+            Object.entries(document.layout.positions).filter(([id]) => nodeSet.has(id)),
+          ),
+        }
+      : undefined,
   };
 }

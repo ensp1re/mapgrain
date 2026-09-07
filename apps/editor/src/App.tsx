@@ -18,7 +18,9 @@ import {
   OPERATION_KIND,
   THEME,
   applyOperation,
+  applyPortableLayout,
   nextPrefixedId,
+  portablePositions,
   validateDocument,
   type DiagramDocument,
   type Operation,
@@ -90,9 +92,13 @@ function loadSnapshot(): EditorSnapshot | null {
   if (!result.ok) return null;
   const scene = buildScene(result.document);
   if (!scene.ok) return null;
+  const positions =
+    Object.keys(portablePositions(result.document)).length > 0
+      ? portablePositions(result.document)
+      : positionsFromScene(scene.scene.nodes);
   return {
-    document: result.document,
-    positions: positionsFromScene(scene.scene.nodes),
+    document: applyPortableLayout(result.document, positions),
+    positions,
   };
 }
 
@@ -133,6 +139,8 @@ function isNoOp(document: DiagramDocument, operation: Operation): boolean {
       return document.nodes.find((node) => node.id === operation.nodeId)?.groupId === operation.groupId;
     case OPERATION_KIND.SET_NODE_PINNED:
       return document.layoutHints.pinnedNodeIds.includes(operation.nodeId) === operation.pinned;
+    case OPERATION_KIND.SET_LAYOUT:
+      return JSON.stringify(portablePositions(document)) === JSON.stringify(operation.positions);
     default:
       return false;
   }
@@ -352,7 +360,11 @@ function Specimen() {
     }
     setEditError(null);
     const positions = nextPositions ?? current.positions;
-    setHistory((stack) => pushHistory(stack, { document: result.document, positions }));
+    const document =
+      operation.kind === OPERATION_KIND.SET_LAYOUT
+        ? result.document
+        : applyPortableLayout(result.document, positions);
+    setHistory((stack) => pushHistory(stack, { document, positions }));
     return true;
   }, []);
 
@@ -390,7 +402,7 @@ function Specimen() {
   const pushPositions = useCallback((positions: PositionMap) => {
     const current = historyRef.current.present;
     if (samePositions(current.positions, positions)) return;
-    setHistory((stack) => pushHistory(stack, { document: stack.present.document, positions }));
+    applyOp({ kind: OPERATION_KIND.SET_LAYOUT, positions }, positions);
   }, []);
 
   const startArrange = useCallback(async () => {
@@ -455,7 +467,9 @@ function Specimen() {
     if (nextDoc === current.document) return;
     setEditError(null);
     setSelection(emptySelection);
-    setHistory((stack) => pushHistory(stack, { document: nextDoc, positions }));
+    setHistory((stack) =>
+      pushHistory(stack, { document: applyPortableLayout(nextDoc, positions), positions }),
+    );
   }, [selection]);
 
   const duplicateSelection = useCallback(() => {
@@ -484,7 +498,9 @@ function Specimen() {
     if (created.length === 0) return;
     setEditError(null);
     setSelection({ nodeIds: created, edgeIds: [] });
-    setHistory((stack) => pushHistory(stack, { document: nextDoc, positions }));
+    setHistory((stack) =>
+      pushHistory(stack, { document: applyPortableLayout(nextDoc, positions), positions }),
+    );
   }, [selection.nodeIds]);
 
   const alignSelection = useCallback((kind: AlignKind) => {

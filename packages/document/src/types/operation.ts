@@ -1,5 +1,12 @@
 import type { OPERATION_KIND } from "../constants/operations.ts";
-import type { DiagramDocument, DiagramEdge, DiagramNode, EdgeDirection, EdgeType } from "./document.ts";
+import type {
+  DiagramDocument,
+  DiagramEdge,
+  DiagramNode,
+  EdgeDirection,
+  EdgeType,
+  LayoutPoint,
+} from "./document.ts";
 import type { ValidationIssue } from "./validation.ts";
 
 export type OperationKind = (typeof OPERATION_KIND)[keyof typeof OPERATION_KIND];
@@ -31,7 +38,8 @@ export type Operation =
   | { kind: typeof OPERATION_KIND.DELETE_EDGE; edgeId: string }
   | { kind: typeof OPERATION_KIND.DUPLICATE_NODE; nodeId: string; newId: string }
   | { kind: typeof OPERATION_KIND.SET_NODE_GROUP; nodeId: string; groupId: string | null }
-  | { kind: typeof OPERATION_KIND.SET_NODE_PINNED; nodeId: string; pinned: boolean };
+  | { kind: typeof OPERATION_KIND.SET_NODE_PINNED; nodeId: string; pinned: boolean }
+  | { kind: typeof OPERATION_KIND.SET_LAYOUT; positions: Record<string, LayoutPoint> };
 
 export type ApplyResult =
   | { ok: true; document: DiagramDocument; inverse: Operation }
