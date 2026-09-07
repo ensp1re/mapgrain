@@ -222,6 +222,11 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
       }
       return commit(next, inverse, document);
     }
+    case OPERATION_KIND.SET_THEME: {
+      const inverse: Operation = { kind: OPERATION_KIND.SET_THEME, theme: document.theme };
+      next.theme = operation.theme;
+      return commit(next, inverse, document);
+    }
     case OPERATION_KIND.SET_LAYOUT: {
       const inverse: Operation = {
         kind: OPERATION_KIND.SET_LAYOUT,

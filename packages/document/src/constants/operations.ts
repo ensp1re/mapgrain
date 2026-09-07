@@ -13,4 +13,5 @@ export const OPERATION_KIND = {
   SET_NODE_GROUP: "set_node_group",
   SET_NODE_PINNED: "set_node_pinned",
   SET_LAYOUT: "set_layout",
+  SET_THEME: "set_theme",
 } as const;

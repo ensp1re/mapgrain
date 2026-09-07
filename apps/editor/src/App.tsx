@@ -51,6 +51,12 @@ import { alignPositions } from "./geometry/align.ts";
 import { positionsFromFlow, positionsFromScene, samePositions } from "./geometry/positions.ts";
 import { createHistory, pushHistory, redoHistory, undoHistory } from "./history/stack.ts";
 import {
+  commandAllowed,
+  layoutToken,
+  layoutTokenMatches,
+  selectionFromFlow,
+} from "./edit/safety.ts";
+import {
   isDeleteEvent,
   isDuplicateEvent,
   isRedoEvent,
@@ -141,6 +147,8 @@ function isNoOp(document: DiagramDocument, operation: Operation): boolean {
       return document.layoutHints.pinnedNodeIds.includes(operation.nodeId) === operation.pinned;
     case OPERATION_KIND.SET_LAYOUT:
       return JSON.stringify(portablePositions(document)) === JSON.stringify(operation.positions);
+    case OPERATION_KIND.SET_THEME:
+      return document.theme === operation.theme;
     default:
       return false;
   }
@@ -274,6 +282,8 @@ function Specimen() {
 
   const openSnapshot = useCallback((next: EditorSnapshot) => {
     skipNextSave.current = false;
+    setArrange({ status: "idle" });
+    setTheme(next.document.theme);
     setHistory(createHistory(next));
     setSelection({
       nodeIds: next.document.nodes[0] ? [next.document.nodes[0].id] : [],
@@ -355,6 +365,7 @@ function Specimen() {
   }, [theme]);
 
   const applyOp = useCallback((operation: Operation, nextPositions?: PositionMap) => {
+    if (presenting) return false;
     const current = historyRef.current.present;
     if (isNoOp(current.document, operation)) return true;
     const result = applyOperation(current.document, operation);
@@ -368,9 +379,10 @@ function Specimen() {
       operation.kind === OPERATION_KIND.SET_LAYOUT
         ? result.document
         : applyPortableLayout(result.document, positions);
+    setArrange({ status: "idle" });
     setHistory((stack) => pushHistory(stack, { document, positions }));
     return true;
-  }, []);
+  }, [presenting]);
 
   const commitLabel = useCallback(
     (id: string, type: FlowNodeDraft["type"], label: string) => {
@@ -410,14 +422,21 @@ function Specimen() {
   }, []);
 
   const startArrange = useCallback(async () => {
+    if (presenting) return;
     const current = historyRef.current.present;
     const engine = layoutEngine.current;
     if (!engine) return;
+    const token = layoutToken(current.document);
     setArrange({ status: "working" });
     const result = await engine.layout(
       current.document,
       pinsFromDocument(current.document, current.positions),
     );
+    const latest = historyRef.current.present.document;
+    if (!layoutTokenMatches(latest, token)) {
+      setArrange({ status: "idle" });
+      return;
+    }
     if (result.status === LAYOUT_STATUS.SUPERSEDED) return;
     if (result.status === LAYOUT_STATUS.LAID_OUT) {
       setArrange({ status: "preview", positions: mergePositions(current.positions, result.positions) });
@@ -434,7 +453,7 @@ function Specimen() {
     }
     setArrange({ status: "idle" });
     setEditError(result.errors[0]?.message ?? "Arrange failed");
-  }, []);
+  }, [presenting]);
 
   const applyArrange = useCallback(() => {
     if (arrange.status !== "preview") return;
@@ -556,8 +575,11 @@ function Specimen() {
 
   const runCommand = useCallback(
     (id: CommandId) => {
+      if (!commandAllowed(presenting, id)) return;
       if (id === COMMAND_ID.TOGGLE_THEME) {
-        setTheme((current) => (current === THEME.DARK ? THEME.LIGHT : THEME.DARK));
+        const next = theme === THEME.DARK ? THEME.LIGHT : THEME.DARK;
+        setTheme(next);
+        applyOp({ kind: OPERATION_KIND.SET_THEME, theme: next });
       }
       if (id === COMMAND_ID.TOGGLE_OUTLINE) setOutlineOpen((value) => !value);
       if (id === COMMAND_ID.TOGGLE_CHAT) setChatOpen((value) => !value);
@@ -580,7 +602,7 @@ function Specimen() {
         setSurface("start");
       }
     },
-    [alignSelection, deleteSelection, duplicateSelection, exportFormat, fitView, startArrange],
+    [alignSelection, applyOp, deleteSelection, duplicateSelection, exportFormat, fitView, presenting, startArrange, theme],
   );
 
   useEffect(() => {
@@ -626,6 +648,7 @@ function Specimen() {
   }, [getNodes, pushPositions]);
 
   const onConnect = useCallback((connection: Connection) => {
+    if (presenting) return;
     if (!connection.source || !connection.target || connection.source === connection.target) return;
     setPending({
       source: connection.source,
@@ -633,7 +656,7 @@ function Specimen() {
       sourceHandle: connection.sourceHandle ?? null,
       targetHandle: connection.targetHandle ?? null,
     });
-  }, []);
+  }, [presenting]);
 
   if (!booted) {
     return <p>Loading workspace…</p>;
@@ -724,21 +747,24 @@ function Specimen() {
             edgeTypes={edgeTypes}
             onNodesChange={onNodesChange}
             onConnect={onConnect}
-            nodesDraggable={arrange.status === "idle"}
-            nodesConnectable={arrange.status === "idle"}
+            nodesDraggable={arrange.status === "idle" && !presenting}
+            nodesConnectable={arrange.status === "idle" && !presenting}
             onNodeDragStart={onNodeDragStart}
             onNodeDragStop={onNodeDragStop}
-            onNodeClick={(_event, node) => setSelection({ nodeIds: [node.id], edgeIds: [] })}
-            onEdgeClick={(_event, edge) => setSelection({ nodeIds: [], edgeIds: [edge.id] })}
+            onSelectionChange={({ nodes: selectedNodes, edges: selectedEdges }) => {
+              setSelection(selectionFromFlow(selectedNodes, selectedEdges));
+            }}
             onPaneClick={(event) => {
               const target = event.target;
               if (target instanceof Element && target.closest(".node-card, .group-frame, .label-input")) {
                 return;
               }
-              setSelection(emptySelection);
+              if (!presenting) setSelection(emptySelection);
               setEditingId(null);
             }}
-            onNodeDoubleClick={(_event, node) => setEditingId(node.id)}
+            onNodeDoubleClick={(_event, node) => {
+              if (!presenting) setEditingId(node.id);
+            }}
             onNodeMouseEnter={(event, node) => {
               const box = (event.currentTarget as HTMLElement).closest(".canvas")?.getBoundingClientRect();
               setTooltip({
