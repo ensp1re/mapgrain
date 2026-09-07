@@ -15,4 +15,5 @@ export const GENERATED_OUTPUT_PREFIXES = [
   HARNESS_PATHS.runs,
   HARNESS_PATHS.archive,
   HARNESS_PATHS.lock,
+  "packages/cli/studio",
 ] as const;
