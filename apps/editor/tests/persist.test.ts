@@ -62,8 +62,27 @@ test("imported backup JSON restores the arrangement", async () => {
   assert.equal(restored?.positions.gateway?.y, 24);
 });
 
-test("save states cover saved, saving, and recovery", () => {
+test("save states cover saved, saving, recovery, and temporary session", () => {
   assert.equal(SAVE_STATE.SAVED, "Saved");
   assert.equal(SAVE_STATE.SAVING, "Saving");
   assert.equal(SAVE_STATE.RECOVERY, "Recovery");
+  assert.equal(SAVE_STATE.TEMPORARY, "Temporary session");
+});
+
+test("two diagrams save and load independently", async () => {
+  const first = await snapshot();
+  const second = {
+    ...first,
+    document: { ...first.document, id: "doc-other", title: "Other map", revision: 1 },
+  };
+  const store = memoryStore();
+  assert.equal(store.durable, false);
+  await store.save(first);
+  await store.save(second);
+  const listed = await store.list();
+  assert.equal(listed.length, 2);
+  const loadedFirst = await store.load(first.document.id);
+  const loadedSecond = await store.load("doc-other");
+  assert.equal(loadedFirst?.document.id, first.document.id);
+  assert.equal(loadedSecond?.document.title, "Other map");
 });

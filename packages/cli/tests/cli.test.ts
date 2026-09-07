@@ -40,6 +40,12 @@ function memoryIo(files: Record<string, string> = {}) {
     async writeFile(path: string, bytes: Uint8Array) {
       files[path] = Buffer.from(bytes).toString("binary");
     },
+    async rename(from: string, to: string) {
+      const value = files[from];
+      if (value === undefined) throw new Error(`ENOENT: ${from}`);
+      files[to] = value;
+      delete files[from];
+    },
     stdoutChunks,
     stderrChunks,
     files,
@@ -49,6 +55,31 @@ function memoryIo(files: Record<string, string> = {}) {
 function text(chunks: Array<string | Uint8Array>): string {
   return chunks.map((chunk) => (typeof chunk === "string" ? chunk : new TextDecoder().decode(chunk))).join("");
 }
+
+test("numeric JSON is not treated as a successful exit code", async () => {
+  const io = memoryIo({ "zero.json": "0" });
+  const code = await runCli(["validate", "zero.json"], io);
+  assert.equal(code, EXIT_CODE.ERROR);
+  const diagnostic = JSON.parse(text(io.stderrChunks)) as { ok: boolean };
+  assert.equal(diagnostic.ok, false);
+});
+
+test("failed temp write leaves the previous output file", async () => {
+  const files: Record<string, string> = { "out.svg": "old" };
+  const io = {
+    ...memoryIo(files),
+    files,
+    async writeFile(path: string, bytes: Uint8Array) {
+      if (path.endsWith(".tmp")) throw new Error("disk full");
+      files[path] = Buffer.from(bytes).toString("binary");
+    },
+  };
+  const source = await readFile(fixture, "utf8");
+  files["nested-groups.json"] = source;
+  const code = await runCli(["render", "nested-groups.json", "-o", "out.svg"], io);
+  assert.equal(code, EXIT_CODE.ERROR);
+  assert.equal(files["out.svg"], "old");
+});
 
 test("invalid input exits non-zero with a structured diagnostic", async () => {
   const io = memoryIo({ "bad.json": "{" });

@@ -14,48 +14,81 @@ function fail(io: CliIo, errors: DiagnosticIssue[], code: number): number {
   return code;
 }
 
-async function readDocument(file: string, io: CliIo): Promise<unknown | number> {
+async function readDocument(
+  file: string,
+  io: CliIo,
+): Promise<{ ok: true; value: unknown } | { ok: false; exit: number }> {
   let text: string;
   try {
     text = await io.readFile(file);
   } catch (error) {
-    return fail(
-      io,
-      [
-        {
-          code: DIAGNOSTIC_CODE.IO,
-          message: error instanceof Error ? error.message : String(error),
-          path: file,
-          elementId: null,
-        },
-      ],
-      EXIT_CODE.ERROR,
-    );
+    return {
+      ok: false,
+      exit: fail(
+        io,
+        [
+          {
+            code: DIAGNOSTIC_CODE.IO,
+            message: error instanceof Error ? error.message : String(error),
+            path: file,
+            elementId: null,
+          },
+        ],
+        EXIT_CODE.ERROR,
+      ),
+    };
   }
   try {
-    return JSON.parse(text) as unknown;
+    const value = JSON.parse(text) as unknown;
+    if (value === null || typeof value !== "object") {
+      return {
+        ok: false,
+        exit: fail(
+          io,
+          [
+            {
+              code: DIAGNOSTIC_CODE.INVALID_DOCUMENT,
+              message: "Input must be a JSON object.",
+              path: file,
+              elementId: null,
+            },
+          ],
+          EXIT_CODE.ERROR,
+        ),
+      };
+    }
+    return { ok: true, value };
   } catch (error) {
-    return fail(
-      io,
-      [
-        {
-          code: DIAGNOSTIC_CODE.INVALID_DOCUMENT,
-          message: error instanceof Error ? error.message : "Invalid JSON.",
-          path: file,
-          elementId: null,
-        },
-      ],
-      EXIT_CODE.ERROR,
-    );
+    return {
+      ok: false,
+      exit: fail(
+        io,
+        [
+          {
+            code: DIAGNOSTIC_CODE.INVALID_DOCUMENT,
+            message: error instanceof Error ? error.message : "Invalid JSON.",
+            path: file,
+            elementId: null,
+          },
+        ],
+        EXIT_CODE.ERROR,
+      ),
+    };
   }
 }
 
 async function writeBytes(io: CliIo, out: string | null, bytes: Uint8Array): Promise<void> {
-  if (out) {
-    await io.writeFile(out, bytes);
+  if (!out) {
+    io.stdout.write(bytes);
     return;
   }
-  io.stdout.write(bytes);
+  const tmp = `${out}.tmp`;
+  await io.writeFile(tmp, bytes);
+  if (io.rename) {
+    await io.rename(tmp, out);
+    return;
+  }
+  await io.writeFile(out, bytes);
 }
 
 export async function runCli(argv: string[], io: CliIo): Promise<number> {
@@ -63,10 +96,10 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
   if (!parsed.ok) return fail(io, parsed.errors, EXIT_CODE.USAGE);
 
   const raw = await readDocument(parsed.file, io);
-  if (typeof raw === "number") return raw;
+  if (!raw.ok) return raw.exit;
 
   if (parsed.command === CLI_COMMAND.VALIDATE) {
-    const result = validateDocument(raw);
+    const result = validateDocument(raw.value);
     if (!result.ok) {
       return fail(io, result.errors, EXIT_CODE.ERROR);
     }
@@ -80,7 +113,7 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
   }
 
   if (parsed.command === CLI_COMMAND.VIEW) {
-    const view = renderView(raw);
+    const view = renderView(raw.value);
     if (!view.ok) {
       return fail(
         io,
@@ -113,7 +146,7 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
   }
 
   const format = parsed.command === CLI_COMMAND.RENDER ? EXPORT_FORMAT.SVG : parsed.format;
-  const exported = exportDiagram({ document: raw, format });
+  const exported = exportDiagram({ document: raw.value, format });
   if (!exported.ok) {
     return fail(
       io,

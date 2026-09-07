@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/safe-editing @ a1821e1e73c9f9532501480aed1037c87da59fd3 (dirty)
-- Updated: 2026-09-07T18:47:39.444Z
+- Git: feat/durable-storage @ f3a7c2ed2cb3fe01390ec5a29ae0cba4a1c925dc (dirty)
+- Updated: 2026-09-07T18:54:38.376Z
 
 ### Next action
 
-Open a draft PR for F016 (R1.2 geometry pipeline). Merge when GitHub verify succeeds. Next is F017.
+Open a draft PR for F017. Merge when GitHub verify succeeds. Next is F018.
 
 ### Decisions
 
@@ -30,6 +30,7 @@ Open a draft PR for F016 (R1.2 geometry pipeline). Merge when GitHub verify succ
 - The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
 - The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
 - Editor edges follow canonical scene polylines. Direction none/forward/both is visible. Text measurement uses Inter-like glyph classes including CJK and Cyrillic. Node size reserves a kind line.
+- Arrange results are bound to document id plus document and layout revisions. Presentation mode blocks mutating commands. Theme is a document property.
 
 ### Rejected approaches
 
@@ -70,6 +71,7 @@ Open a draft PR for F016 (R1.2 geometry pipeline). Merge when GitHub verify succ
 - docs/runs/run-1788805672118-b8d681.json
 - docs/runs/run-1788806341421-3200fb.json
 - docs/runs/run-1788806830014-5101bb.json
+- docs/runs/run-1788807243525-161da0.json
 
 ## Resume
 
