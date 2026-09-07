@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/cli @ 100eae6de35440539fffd4905adc3ab53e97486e (dirty)
-- Updated: 2026-09-07T17:30:03.307Z
+- Git: feat/readonly-viewer @ 4fe444230910c56c53a2bcb645d9799083b5346b (dirty)
+- Updated: 2026-09-07T17:40:55.618Z
 
 ### Next action
 
-Open a draft PR for F012. Wait for CI. Do not merge until asked.
+Open a draft PR for F013. Wait for CI. Do not merge until asked.
 
 ### Decisions
 
@@ -26,6 +26,7 @@ Open a draft PR for F012. Wait for CI. Do not merge until asked.
 - A production service worker caches same-origin GET so edit, reload, and export work with the network disabled. Chat does not invent a reply.
 - First session is an example-backed start surface. Submit without a provider fails honestly, keeps the prompt, and offers a repair. Examples are never labelled as generated output.
 - The product CLI lives in packages/cli, uses the same document and renderer as the editor, and does not depend on the GUI.
+- The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
 
 ### Rejected approaches
 
@@ -39,6 +40,7 @@ Open a draft PR for F012. Wait for CI. Do not merge until asked.
 - Adding vite-plugin-pwa for a single cache-first worker.
 - Walking fake interpreting/arranging/checking stages as if a model ran.
 - Adding Commander or another parser for three CLI commands.
+- Building the viewer on React Flow.
 
 ### Blockers
 
@@ -58,6 +60,7 @@ Open a draft PR for F012. Wait for CI. Do not merge until asked.
 - docs/runs/run-1788800481010-e56765.json
 - docs/runs/run-1788801310224-cc1501.json
 - docs/runs/run-1788802146185-c8b4da.json
+- docs/runs/run-1788802738494-8e738b.json
 
 ## Resume
 

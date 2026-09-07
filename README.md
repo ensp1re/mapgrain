@@ -39,6 +39,7 @@ pnpm verify
 pnpm mapgrain validate tests/fixtures/documents/nested-groups.json
 pnpm mapgrain render tests/fixtures/documents/nested-groups.json -o diagram.svg
 pnpm mapgrain export tests/fixtures/documents/nested-groups.json --format json -o diagram.json
+pnpm mapgrain view tests/fixtures/documents/nested-groups.json -o view.html
 ```
 
 Current work is tracked with:

@@ -18,7 +18,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
   if (
     command !== CLI_COMMAND.VALIDATE &&
     command !== CLI_COMMAND.RENDER &&
-    command !== CLI_COMMAND.EXPORT
+    command !== CLI_COMMAND.EXPORT &&
+    command !== CLI_COMMAND.VIEW
   ) {
     return usage("Unknown command.");
   }
@@ -49,6 +50,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   if (!file) return usage("Missing input file.");
   if (command === CLI_COMMAND.VALIDATE) return { ok: true, command, file };
   if (command === CLI_COMMAND.RENDER) return { ok: true, command, file, out };
+  if (command === CLI_COMMAND.VIEW) return { ok: true, command, file, out };
   if (!format) return usage("export requires --format.");
   return { ok: true, command, file, format, out };
 }

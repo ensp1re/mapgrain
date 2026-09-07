@@ -1,5 +1,6 @@
 import { validateDocument } from "@mapgrain/document";
 import { EXPORT_FORMAT, exportDiagram } from "@mapgrain/renderer";
+import { renderView } from "@mapgrain/viewer";
 import { CLI_COMMAND, DIAGNOSTIC_CODE, EXIT_CODE } from "./constants/cli.ts";
 import { parseArgs } from "./parse.ts";
 import type { CliIo, DiagnosticIssue } from "./types/cli.ts";
@@ -75,6 +76,39 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
       revision: result.document.revision,
       nodes: result.document.nodes.length,
     });
+    return EXIT_CODE.OK;
+  }
+
+  if (parsed.command === CLI_COMMAND.VIEW) {
+    const view = renderView(raw);
+    if (!view.ok) {
+      return fail(
+        io,
+        view.errors.map((error) => ({
+          code: error.code,
+          message: error.message,
+          path: error.path,
+          elementId: null,
+        })),
+        EXIT_CODE.ERROR,
+      );
+    }
+    try {
+      await writeBytes(io, parsed.out, new TextEncoder().encode(view.html));
+    } catch (error) {
+      return fail(
+        io,
+        [
+          {
+            code: DIAGNOSTIC_CODE.IO,
+            message: error instanceof Error ? error.message : String(error),
+            path: parsed.out ?? "-",
+            elementId: null,
+          },
+        ],
+        EXIT_CODE.ERROR,
+      );
+    }
     return EXIT_CODE.OK;
   }
 
