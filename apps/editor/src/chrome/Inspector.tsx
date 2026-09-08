@@ -8,6 +8,7 @@ import {
 } from "@mapgrain/document";
 import { directionLabel, relationCaption } from "../export/labels.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
+import { Pane } from "../ui/Pane.tsx";
 import { Select } from "../ui/Select.tsx";
 
 interface InspectorProps {
@@ -33,8 +34,7 @@ export function Inspector({
 
   if (edge) {
     return (
-      <aside className="inspector" aria-label="Inspector">
-        <div className="pane-label">Inspector</div>
+      <Pane className="inspector" title="Inspector">
         <dl>
           <dt>Relation</dt>
           <dd>
@@ -95,7 +95,7 @@ export function Inspector({
             Delete
           </button>
         </div>
-      </aside>
+      </Pane>
     );
   }
 
@@ -106,8 +106,7 @@ export function Inspector({
   );
 
   return (
-    <aside className="inspector" aria-label="Inspector">
-      <div className="pane-label">Inspector</div>
+    <Pane className="inspector" title="Inspector">
       <dl>
         <dt>Component</dt>
         <dd>
@@ -202,6 +201,6 @@ export function Inspector({
           </button>
         ) : null}
       </div>
-    </aside>
+    </Pane>
   );
 }

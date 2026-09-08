@@ -12,9 +12,6 @@
   --port: #52525b;
   --focus: #9aa0ff;
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
-  --topbar-h: 48px;
-  --outline-w: 240px;
-  --inspector-w: 304px;
 }
 
 :root[data-theme="light"] {
@@ -31,6 +28,15 @@
   --port: #a1a1aa;
   --focus: #4f46e5;
   --shadow: 0 10px 28px rgba(28, 25, 23, 0.12);
+}
+
+:root {
+  --topbar-h: 48px;
+  --outline-w: 240px;
+  --inspector-w: 304px;
+  --node-radius: 7px;
+  --node-pad-x: 12px;
+  --node-pad-y: 8px;
 }
 
 * { box-sizing: border-box; }
@@ -371,12 +377,12 @@ input {
   width: 100%;
   height: 100%;
   border: 1px solid var(--border);
-  border-radius: 7px;
+  border-radius: var(--node-radius);
   background: var(--surface);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 8px 12px;
+  padding: var(--node-pad-y) var(--node-pad-x);
 }
 
 .node-card.is-selected {
@@ -809,7 +815,50 @@ input {
   background: var(--accent-soft);
 }
 
-@media (max-width: 720px) {
+@media (min-width: 1440px) {
+  :root {
+    --outline-w: 280px;
+    --inspector-w: 336px;
+  }
+}
+
+@media (max-width: 1279px) {
+  :root {
+    --outline-w: 220px;
+    --inspector-w: 280px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .workspace {
+    grid-template-columns: var(--outline-w) 1fr;
+  }
+
+  .workspace.is-outline-collapsed {
+    grid-template-columns: 0 1fr;
+  }
+
+  .workspace.is-inspector-hidden {
+    grid-template-columns: var(--outline-w) 1fr;
+  }
+
+  .inspector {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 7;
+    width: min(304px, 42vw);
+    box-shadow: var(--shadow);
+  }
+
+  .add-bar,
+  .export-dialog {
+    max-width: min(360px, calc(100% - 24px));
+  }
+}
+
+@media (max-width: 767px) {
   .workspace {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(120px, 28%) 1fr minmax(140px, 32%);
@@ -822,8 +871,11 @@ input {
 
   .outline,
   .inspector {
+    position: static;
     display: block;
+    width: auto;
     border: 0;
+    box-shadow: none;
   }
 
   .outline { border-bottom: 1px solid var(--border); }
@@ -832,6 +884,11 @@ input {
 
   .example-cards {
     grid-template-columns: 1fr;
+  }
+
+  .add-bar,
+  .export-dialog {
+    max-width: calc(100% - 24px);
   }
 }
 
@@ -857,6 +914,12 @@ input {
 
   .topbar-more {
     display: inline-block;
+  }
+
+  .export-dialog {
+    left: 12px;
+    right: 12px;
+    width: auto;
   }
 }
 

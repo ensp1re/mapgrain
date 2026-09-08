@@ -1,0 +1,16 @@
+export const BREAKPOINT = {
+  PHONE: 390,
+  TABLET: 768,
+  LAPTOP: 1024,
+  DESKTOP: 1280,
+  WIDE: 1440,
+} as const;
+
+export const PANE_WIDTH = {
+  OUTLINE: 240,
+  INSPECTOR: 304,
+  OUTLINE_WIDE: 280,
+  INSPECTOR_WIDE: 336,
+  OUTLINE_LAPTOP: 220,
+  INSPECTOR_LAPTOP: 280,
+} as const;

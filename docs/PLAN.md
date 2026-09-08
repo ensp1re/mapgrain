@@ -9,8 +9,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 ## State
 
 - Status: `active`
-- Current task ID: F029
-- Active slice: P0.4 Exports and interactive viewer
+- Current task ID: F030
+- Active slice: P1 Coherent interface and custom Select
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -47,8 +47,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F026 | P0.1 Stop the editor selection-loop crash | — | unit, lint, typecheck, build, browser | passing |
 | F027 | P0.2 Protect Studio writes and document ownership | F026 | unit, lint, typecheck, build | passing |
 | F028 | P0.3 Skill and distribution contract | F026 | unit, lint, typecheck, build | passing |
-| F029 | P0.4 Exports and interactive viewer | F026 | unit, lint, typecheck, build | active |
-| F030 | P1 Coherent interface and custom Select | F026, F029 | unit, lint, typecheck, build | not_started |
+| F029 | P0.4 Exports and interactive viewer | F026 | unit, lint, typecheck, build | passing |
+| F030 | P1 Coherent interface and custom Select | F026, F029 | unit, lint, typecheck, build | active |
 | F031 | P2 Interaction-path performance | F026 | unit, lint, typecheck, build | not_started |
 
 Do not start R6 (imports, evidence, comparison, hosted) until R5. No backend or billing in R1–R5.

@@ -1,5 +1,6 @@
 import type { NodeKind } from "@mapgrain/document";
 import { ADDABLE_KINDS } from "../create/nodes.ts";
+import { Button } from "../ui/Button.tsx";
 
 interface AddBarProps {
   onAddNode: (kind: NodeKind) => void;
@@ -9,18 +10,14 @@ interface AddBarProps {
 
 export function AddBar({ onAddNode, onAddGroup, onConnect }: AddBarProps) {
   return (
-    <div className="add-bar" role="toolbar" aria-label="Add">
+    <div className="add-bar" role="toolbar" aria-label="Library">
       {ADDABLE_KINDS.map((kind) => (
-        <button key={kind} type="button" className="text-btn" onClick={() => onAddNode(kind)}>
+        <Button key={kind} onClick={() => onAddNode(kind)}>
           Add {kind}
-        </button>
+        </Button>
       ))}
-      <button type="button" className="text-btn" onClick={onAddGroup}>
-        Add group
-      </button>
-      <button type="button" className="text-btn" onClick={onConnect}>
-        Connect selected
-      </button>
+      <Button onClick={onAddGroup}>Add group</Button>
+      <Button onClick={onConnect}>Connect selected</Button>
     </div>
   );
 }

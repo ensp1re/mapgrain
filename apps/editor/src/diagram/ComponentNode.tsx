@@ -2,6 +2,8 @@ import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { PORT_SIDE } from "@mapgrain/document";
 import { useEffect, useState } from "react";
 import type { ComponentNodeData } from "../types/flow.ts";
+import { KindLabel } from "./KindLabel.tsx";
+import { NodeCard } from "./NodeCard.tsx";
 import { handlePosition } from "./sceneToFlow.ts";
 
 const POSITION: Record<"top" | "bottom" | "left" | "right", Position> = {
@@ -20,8 +22,8 @@ export function ComponentNode({ data, selected }: NodeProps) {
   }, [node.editing, node.label]);
 
   return (
-    <div
-      className={selected ? "node-card is-selected" : "node-card"}
+    <NodeCard
+      selected={selected}
       onDoubleClick={() => {
         if (!node.editing) node.onStartEdit();
       }}
@@ -34,7 +36,7 @@ export function ComponentNode({ data, selected }: NodeProps) {
           position={POSITION[handlePosition(port.side)]}
         />
       ))}
-      <div className="node-kind">{node.kind}</div>
+      <KindLabel kind={node.kind} />
       {node.editing ? (
         <input
           className="label-input"
@@ -57,6 +59,6 @@ export function ComponentNode({ data, selected }: NodeProps) {
           ))}
         </div>
       )}
-    </div>
+    </NodeCard>
   );
 }

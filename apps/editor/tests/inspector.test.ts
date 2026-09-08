@@ -14,6 +14,16 @@ test("inspector, connect, and export use the custom Select, not a native select"
   }
 });
 
+test("outline, inspector, toolbar, and export have no native unstyled select", async () => {
+  const files = ["Outline.tsx", "Inspector.tsx", "TopBar.tsx", "ExportDialog.tsx", "AddBar.tsx"].map((name) =>
+    fileURLToPath(new URL(`../src/chrome/${name}`, import.meta.url)),
+  );
+  for (const file of files) {
+    const source = await readFile(file, "utf8");
+    assert.doesNotMatch(source, /<select[\s>]/);
+  }
+});
+
 test("export dialog offers PNG scale without a native select", async () => {
   const source = await readFile(
     fileURLToPath(new URL("../src/chrome/ExportDialog.tsx", import.meta.url)),
