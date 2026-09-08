@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { EDGE_DIRECTION, EDGE_TYPE, NODE_KIND } from "@mapgrain/document";
 import { EXPORT_CHOICE } from "../src/constants/export.ts";
 import { directionLabel, relationCaption } from "../src/export/labels.ts";
@@ -63,4 +65,19 @@ test("inspector relation captions use human labels", () => {
 
 test("export dialog offers SVG, PNG, HTML, and JSON", () => {
   assert.deepEqual(Object.values(EXPORT_CHOICE).sort(), ["html", "json", "png", "svg"]);
+});
+
+test("browser PNG uses a canvas raster and HTML uses the interactive viewer", async () => {
+  const app = await readFile(fileURLToPath(new URL("../src/App.tsx", import.meta.url)), "utf8");
+  const png = await readFile(fileURLToPath(new URL("../src/export/png.ts", import.meta.url)), "utf8");
+  const edge = await readFile(
+    fileURLToPath(new URL("../src/diagram/RelationEdge.tsx", import.meta.url)),
+    "utf8",
+  );
+  assert.doesNotMatch(app, /PNG in the browser needs/);
+  assert.match(app, /rasterSvgToPng/);
+  assert.match(app, /renderView/);
+  assert.match(png, /document\.createElement\("canvas"\)/);
+  assert.match(edge, /roundedPolylinePath/);
+  assert.match(edge, /placeEdgeLabel/);
 });

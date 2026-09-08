@@ -13,3 +13,12 @@ test("inspector, connect, and export use the custom Select, not a native select"
     assert.doesNotMatch(source, /<select[\s>]/);
   }
 });
+
+test("export dialog offers PNG scale without a native select", async () => {
+  const source = await readFile(
+    fileURLToPath(new URL("../src/chrome/ExportDialog.tsx", import.meta.url)),
+    "utf8",
+  );
+  assert.match(source, /PNG scale/);
+  assert.match(source, /PNG_SCALE_OPTIONS/);
+});

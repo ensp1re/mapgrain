@@ -1,13 +1,20 @@
 import { THEME, validateDocument, type DiagramDocument, type Theme } from "@mapgrain/document";
 import { buildScene } from "@mapgrain/scene";
 import { EXPORT_ERROR_CODE, EXPORT_FORMAT } from "./constants/export.ts";
-
-export { EXPORT_FORMAT, EXPORT_ERROR_CODE };
 import { tokensFor } from "./constants/tokens.ts";
 import { wrapHtml } from "./html.ts";
 import { sanitizeDocument, subsetDocument } from "./sanitize.ts";
 import { renderSvg } from "./svg/scene.ts";
 import type { ExportIssue, ExportRequest, ExportResult } from "./types/export.ts";
+
+export {
+  DEFAULT_SCALE,
+  EXPORT_ERROR_CODE,
+  EXPORT_FORMAT,
+  MAX_PIXELS,
+  MAX_SCALE,
+} from "./constants/export.ts";
+export { rasterLimits } from "./limits.ts";
 
 function encodeUtf8(value: string): Uint8Array {
   return new TextEncoder().encode(value);

@@ -1,6 +1,7 @@
 import { THEME } from "@mapgrain/document";
 import { DEFAULT_SCALE, EXPORT_FORMAT, MAX_PIXELS } from "./constants/export.ts";
-import { rasterLimits, svgToPng } from "./png.ts";
+import { rasterLimits } from "./limits.ts";
+import { svgToPng } from "./png.ts";
 import type { ExportRequest, ExportResult } from "./types/export.ts";
 import { exportVector, prepareDocument, renderDocumentSvg } from "./vector.ts";
 

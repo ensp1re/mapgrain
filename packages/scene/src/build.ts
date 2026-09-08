@@ -7,7 +7,9 @@ import {
 } from "@mapgrain/document";
 import { KIND_FONT_SIZE, KIND_LINE_HEIGHT } from "./constants/metrics.ts";
 import { PARALLEL_EDGE_OFFSET } from "./constants/metrics.ts";
+import { edgeCaption } from "./caption.ts";
 import { expandTop, inflate, midpoint, normalize, unionRects } from "./geometry.ts";
+import { placeEdgeLabel } from "./routes.ts";
 import { defaultSceneOptions } from "./options.ts";
 import {
   facingSide,
@@ -209,12 +211,17 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     const sourceNode = nodeById.get(edge.source.nodeId);
     const targetNode = nodeById.get(edge.target.nodeId);
     if (!sourceNode || !targetNode) {
+      const empty = { lines: [], width: 0, height: 0 };
       return {
         id: edge.id,
         source: { nodeId: edge.source.nodeId, portId: edge.source.portId ?? "" },
         target: { nodeId: edge.target.nodeId, portId: edge.target.portId ?? "" },
         points: [],
         direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
+        caption: "",
+        label: empty,
+        labelAnchor: { x: 0, y: 0 },
+        labelBox: { x: 0, y: 0, width: 0, height: 0 },
       };
     }
     const sourcePort = resolvePort(sourceNode, edge.source.portId, targetNode.rect);
@@ -223,17 +230,25 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     const count = pairCounts.get(key) ?? 1;
     const index = pairSeen.get(key) ?? 0;
     pairSeen.set(key, index + 1);
+    const points = offsetEdge(
+      { x: sourcePort.x, y: sourcePort.y },
+      { x: targetPort.x, y: targetPort.y },
+      index,
+      count,
+    );
+    const caption = edgeCaption(edge.type, edge.label);
+    const label = measureText(caption || " ", options.font, options.maxLabelWidth, options.measurer);
+    const placed = placeEdgeLabel(points, caption ? label : { width: 0, height: 0 });
     return {
       id: edge.id,
       source: { nodeId: sourceNode.id, portId: sourcePort.id },
       target: { nodeId: targetNode.id, portId: targetPort.id },
-      points: offsetEdge(
-        { x: sourcePort.x, y: sourcePort.y },
-        { x: targetPort.x, y: targetPort.y },
-        index,
-        count,
-      ),
+      points,
       direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
+      caption,
+      label,
+      labelAnchor: placed.anchor,
+      labelBox: placed.box,
     };
   });
 
@@ -241,9 +256,10 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   const bounds = unionRects([
     ...nodes.map((node) => node.rect),
     ...groups.map((group) => group.rect),
-    ...edges.flatMap((edge) =>
-      edge.points.map((point) => ({ x: point.x, y: point.y, width: 0, height: 0 })),
-    ),
+    ...edges.flatMap((edge) => [
+      ...edge.points.map((point) => ({ x: point.x, y: point.y, width: 0, height: 0 })),
+      edge.labelBox,
+    ]),
   ]);
 
   const scene: Scene = {

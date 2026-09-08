@@ -31,7 +31,8 @@ export function sameEdgeContent(left: Edge, right: Edge): boolean {
     left.targetHandle === right.targetHandle &&
     dataField(left.data, "label") === dataField(right.data, "label") &&
     dataField(left.data, "type") === dataField(right.data, "type") &&
-    dataField(left.data, "direction") === dataField(right.data, "direction")
+    dataField(left.data, "direction") === dataField(right.data, "direction") &&
+    dataField(left.data, "caption") === dataField(right.data, "caption")
   );
 }
 

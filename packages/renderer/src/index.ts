@@ -6,6 +6,7 @@ export {
   MAX_SCALE,
 } from "./constants/export.ts";
 export { exportDiagram } from "./export.ts";
+export { rasterLimits } from "./limits.ts";
 export { exportVector, prepareDocument, renderDocumentSvg } from "./vector.ts";
 export type {
   ExportErrorCode,

@@ -55,6 +55,8 @@ export function sceneToFlow(scene: Scene): { nodes: FlowNodeDraft[]; edges: Flow
     targetHandle: edge.target.portId,
     points: edge.points,
     direction: edge.direction,
+    caption: edge.caption,
+    labelAnchor: edge.labelAnchor,
   }));
   return { nodes: [...groupNodes, ...componentNodes], edges };
 }

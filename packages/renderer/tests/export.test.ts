@@ -84,6 +84,19 @@ test("JSON export can keep evidence when asked", async () => {
   assert.ok((parsed.evidence?.length ?? 0) > 0);
 });
 
+test("SVG captions and CSS variables match the canonical scene", async () => {
+  const raw = await load("parallel-edges.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = text(result.bytes);
+  assert.match(svg, /reads · get/);
+  assert.match(svg, /writes · set/);
+  assert.match(svg, /var\(--mg-bg,/);
+  assert.match(svg, /var\(--mg-text,/);
+  assert.match(svg, / Q/);
+});
+
 test("SVG is drawn from the scene, not a screenshot, and keeps labels", async () => {
   const raw = await load("parallel-edges.json");
   const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
