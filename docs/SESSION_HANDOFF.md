@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F035
+- Task: F037
 - Plan: docs/PLAN.md
-- Git: feat/editor-shell @ 73d2a531b101411b9908d5dffe706082bfd6c02a (dirty)
-- Updated: 2026-09-08T19:21:28.337Z
+- Git: feat/portable-viewer @ 00bc62e2b3541395c6f0366b7ed67f39ceac04a6 (dirty)
+- Updated: 2026-09-08T19:44:39.912Z
 
 ### Next action
 
-Implement F035 editor shell on feat/editor-shell. Verify locally, draft PR, merge when GitHub verify succeeds.
+Draft PR for F037 on feat/portable-viewer. Merge when GitHub verify succeeds, then stamp passing from main push.
 
 ### Decisions
 
@@ -37,6 +37,7 @@ Implement F035 editor shell on feat/editor-shell. Verify locally, draft PR, merg
 - F033: Saved is shown only after the durable write finishes. Last-active document id is explicit; last-opened and last-edited times stay separate. Studio returns structured errors for missing files, conflicts, and rename failures. Unique sibling temp files are not a merge.
 - F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers.
 - F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled.
+- F037: Portable viewer uses adjacency indexes for directed reach and routes. Named views and focus restore from the local hash. Filters never mutate the document payload. Stories and role lenses remain Task 9.
 
 ### Rejected approaches
 
@@ -53,6 +54,8 @@ Implement F035 editor shell on feat/editor-shell. Verify locally, draft PR, merg
 - Building the viewer on React Flow.
 - Claiming a layout-time target before measuring on a documented device.
 - Starting R6 imports, hosted sharing, or billing before R1–R5.
+- Scanning payload.edges on every node click to find neighbors.
+- Centering search hits with scrollIntoView instead of the node's bounding box.
 
 ### Blockers
 
@@ -93,6 +96,8 @@ Implement F035 editor shell on feat/editor-shell. Verify locally, draft PR, merg
 - docs/runs/run-1788890099442-23244e.json
 - docs/runs/run-1788893556151-df7074.json
 - docs/runs/run-1788894419719-d17bef.json
+- docs/runs/run-1788895288417-2e96e5.json
+- docs/runs/run-1788896583251-3a089f.json
 
 ## Resume
 

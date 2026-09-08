@@ -8,9 +8,9 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 
 ## State
 
-- Status: `active`
-- Current task ID: F035
-- Active slice: Usable-release Task 4 — editor shell and spacing
+- Status: `verified`
+- Current task ID: F037
+- Active slice: Usable-release Task 6 — portable viewing
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -53,9 +53,9 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F032 | Usable-release T1: export fidelity (resolved paints, captions, Inter, doctor pixels) | F029 | unit, lint, typecheck, build | passing |
 | F033 | Usable-release T2: saving and Studio recovery | F032 | unit, lint, typecheck, build | passing |
 | F034 | Usable-release T3: actual offline support | F032 | unit, lint, typecheck, build | passing |
-| F035 | Usable-release T4: editor shell and spacing | F030 | unit, lint, typecheck, build | active |
+| F035 | Usable-release T4: editor shell and spacing | F030 | unit, lint, typecheck, build | passing |
 | F036 | Usable-release T5: readable diagrams and interaction | F035 | unit, lint, typecheck, build | not_started |
-| F037 | Usable-release T6: portable viewing | F032 | unit, lint, typecheck, build | not_started |
+| F037 | Usable-release T6: portable viewing | F032 | unit, lint, typecheck, build | verified |
 | F038 | Usable-release T7: skill install and agent workflows | F028 | unit, lint, typecheck, build | not_started |
 | F039 | Usable-release T8: outcome and performance gates | F032, F036 | unit, lint, typecheck, build, browser | not_started |
 | F040 | Full product T9: remaining feature gaps (modes, diagnostics, stories) | F039 | unit, lint, typecheck, build | not_started |

@@ -1,4 +1,5 @@
 import { VIEW_MODE } from "./constants/view.ts";
+import { viewerClientScript } from "./runtime.ts";
 
 function escapeHtml(value: string): string {
   return value
@@ -31,6 +32,7 @@ export function wrapViewer(
     html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: ui-sans-serif, system-ui, sans-serif; height: 100%; }
     .mapgrain-viewer { display: flex; flex-direction: column; height: 100%; }
     .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid #3333; }
+    .toolbar input, .toolbar select { font: inherit; background: var(--mg-surface); color: var(--fg); border: 1px solid var(--mg-border); border-radius: 6px; padding: 4px 8px; }
     .toolbar input { flex: 1; min-width: 120px; }
     .search-hits { list-style: none; margin: 0; padding: 0 12px; display: none; }
     .search-hits.is-open { display: block; }
@@ -43,6 +45,7 @@ export function wrapViewer(
     .is-dim { opacity: 0.28; }
     .help { display: none; padding: 12px; }
     .help.is-open { display: block; }
+    .status { margin: 0; padding: 0 12px; color: var(--muted); min-height: 1.4em; }
     button { font: inherit; }
   </style>
 </head>
@@ -54,141 +57,27 @@ export function wrapViewer(
       <button type="button" data-act="fit">Fit</button>
       <button type="button" data-act="zoom-in">+</button>
       <button type="button" data-act="zoom-out">−</button>
+      <span data-zoom aria-live="polite">100%</span>
       <button type="button" data-act="theme">Theme</button>
       <button type="button" data-act="full">Fullscreen</button>
+      <button type="button" data-act="reach-up">Upstream</button>
+      <button type="button" data-act="reach-down">Downstream</button>
+      <label>From <select data-act="route-from" aria-label="Route from"></select></label>
+      <label>To <select data-act="route-to" aria-label="Route to"></select></label>
+      <button type="button" data-act="route">Route</button>
+      <label>View <select data-act="view" aria-label="Named view"></select></label>
       <button type="button" data-act="json">Download JSON</button>
       <button type="button" data-act="reset">Reset highlight</button>
       <button type="button" data-act="help">Help</button>
     </div>
+    <p class="status" data-status role="status"></p>
     <ul class="search-hits" aria-label="Search results"></ul>
-    <p class="help" role="note">Drag to pan. Wheel to zoom toward the cursor. Click a node to highlight neighbors. / focuses search. Escape clears highlight. This is a static graph, not a live system.</p>
+    <p class="help" role="note">Drag to pan. Wheel or +/- to zoom. Click or Enter a node to focus. Upstream/Downstream follow directed edges and stop at cycles. Route shows one path or No route. / focuses search. Escape clears highlight. Named views and focus restore from the local hash. This is a static graph, not a live system.</p>
     <div class="stage"><div class="board">${svg}</div></div>
   </main>
   <script>
   const payload = ${safePayload};
-  const stage = document.querySelector(".stage");
-  const board = document.querySelector(".board");
-  const search = document.querySelector("input[aria-label='Search']");
-  const hits = document.querySelector(".search-hits");
-  const svg = board.querySelector("svg");
-  const PAD = 24;
-  const MIN = 0.1, MAX = 8;
-  let scale = 1, x = 0, y = 0, dragging = false, last = {x:0,y:0};
-  function diagramSize() {
-    return { w: Number(svg.getAttribute("width")) || svg.viewBox.baseVal.width || 1, h: Number(svg.getAttribute("height")) || svg.viewBox.baseVal.height || 1 };
-  }
-  function apply() { board.style.transform = "translate(" + x + "px," + y + "px) scale(" + scale + ")"; }
-  function clamp(value) { return Math.max(MIN, Math.min(MAX, value)); }
-  function fit() {
-    const size = diagramSize();
-    const availW = Math.max(1, stage.clientWidth - 2 * PAD);
-    const availH = Math.max(1, stage.clientHeight - 2 * PAD);
-    scale = clamp(Math.min(availW / size.w, availH / size.h));
-    x = (stage.clientWidth - size.w * scale) / 2;
-    y = (stage.clientHeight - size.h * scale) / 2;
-    apply();
-  }
-  function visible() {
-    const size = diagramSize();
-    return x + size.w * scale > 0 && y + size.h * scale > 0 && x < stage.clientWidth && y < stage.clientHeight;
-  }
-  function clearDim() {
-    for (const item of document.querySelectorAll(".is-dim, .is-match")) item.classList.remove("is-dim", "is-match");
-  }
-  document.querySelector("[data-act=fit]").onclick = fit;
-  document.querySelector("[data-act=zoom-in]").onclick = () => { scale = clamp(scale * 1.15); apply(); };
-  document.querySelector("[data-act=zoom-out]").onclick = () => { scale = clamp(scale / 1.15); apply(); };
-  document.querySelector("[data-act=theme]").onclick = () => {
-    document.documentElement.dataset.theme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
-  };
-  document.querySelector("[data-act=full]").onclick = () => {
-    const next = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-    Promise.resolve(next).catch(() => {});
-  };
-  document.querySelector("[data-act=json]").onclick = () => {
-    const blob = new Blob([JSON.stringify(payload.document, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    a.href = url;
-    a.download = "diagram.json";
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 0);
-  };
-  document.querySelector("[data-act=reset]").onclick = clearDim;
-  document.querySelector("[data-act=help]").onclick = () => document.querySelector(".help").classList.toggle("is-open");
-  stage.addEventListener("pointerdown", (e) => {
-    if (e.target.closest("g[data-kind=node]")) return;
-    dragging = true;
-    last = { x: e.clientX, y: e.clientY };
-    stage.classList.add("is-panning");
-    stage.setPointerCapture(e.pointerId);
-  });
-  stage.addEventListener("pointerup", () => { dragging = false; stage.classList.remove("is-panning"); });
-  stage.addEventListener("pointermove", (e) => {
-    if (!dragging) return;
-    x += e.clientX - last.x; y += e.clientY - last.y; last = { x: e.clientX, y: e.clientY }; apply();
-  });
-  stage.addEventListener("wheel", (e) => {
-    e.preventDefault();
-    const rect = stage.getBoundingClientRect();
-    const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
-    const next = clamp(scale * (e.deltaY > 0 ? 0.92 : 1.08));
-    x = cx - (cx - x) * (next / scale);
-    y = cy - (cy - y) * (next / scale);
-    scale = next;
-    apply();
-  }, { passive: false });
-  search.addEventListener("input", () => {
-    const q = search.value.toLowerCase();
-    hits.innerHTML = "";
-    hits.classList.toggle("is-open", Boolean(q));
-    for (const node of document.querySelectorAll("g[data-kind=node]")) {
-      const id = node.getAttribute("data-id") || "";
-      const meta = payload.nodes.find((n) => n.id === id);
-      const hit = !q || Boolean(meta && (meta.label + " " + meta.kind).toLowerCase().includes(q));
-      node.classList.toggle("is-match", Boolean(q && hit));
-      node.classList.toggle("is-dim", Boolean(q && !hit));
-      if (q && hit && meta) {
-        const item = document.createElement("li");
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = meta.label + " (" + meta.kind + ")";
-        button.onclick = () => { node.focus(); node.scrollIntoView({ block: "nearest" }); };
-        item.appendChild(button);
-        hits.appendChild(item);
-      }
-    }
-  });
-  document.querySelectorAll("g[data-kind=node]").forEach((node) => {
-    node.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const id = node.getAttribute("data-id");
-      const related = new Set([id]);
-      for (const edge of payload.edges) {
-        if (edge.source === id) related.add(edge.target);
-        if (edge.target === id) related.add(edge.source);
-      }
-      for (const item of document.querySelectorAll("g[data-kind=node], g[data-kind=edge]")) {
-        const itemId = item.getAttribute("data-id");
-        const edge = payload.edges.find((row) => row.id === itemId);
-        const keep = related.has(itemId) || (edge && related.has(edge.source) && related.has(edge.target));
-        item.classList.toggle("is-dim", !keep);
-      }
-    });
-  });
-  stage.addEventListener("click", (e) => { if (e.target === stage || e.target === board || e.target === svg) clearDim(); });
-  window.addEventListener("keydown", (e) => {
-    if (e.target === search) {
-      if (e.key === "Escape") { search.blur(); hits.classList.remove("is-open"); }
-      return;
-    }
-    if (e.key === "/") { e.preventDefault(); search.focus(); }
-    if (e.key === "f") fit();
-    if (e.key === "Escape") clearDim();
-    if (e.key === "?") document.querySelector(".help").classList.toggle("is-open");
-  });
-  window.addEventListener("resize", () => { if (!visible()) fit(); });
-  fit();
+  ${viewerClientScript()}
   </script>
 </body>
 </html>

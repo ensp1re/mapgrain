@@ -41,9 +41,16 @@ test("the view has no edit controls, chat, or inspector", async () => {
   assert.match(view.html, /data-act="fit"/);
   assert.match(view.html, /aria-label="Search"/);
   assert.match(view.html, /data-act="theme"/);
+  assert.match(view.html, /data-act="reach-up"/);
+  assert.match(view.html, /data-act="reach-down"/);
+  assert.match(view.html, /data-act="route"/);
+  assert.match(view.html, /data-act="view"/);
+  assert.match(view.html, /data-act="reset"/);
   assert.match(view.html, /Download JSON/);
   assert.match(view.html, /static graph, not a live system/);
   assert.match(view.html, /Math\.min\(availW \/ size\.w, availH \/ size\.h\)/);
+  assert.match(view.html, /hashchange/);
+  assert.match(view.html, /history\.replaceState/);
   assert.match(view.html, /--mg-bg:/);
   assert.match(view.html, /html\[data-theme="light"\]/);
   assert.match(view.html, /dataset\.theme === "light" \? "dark" : "light"/);
@@ -57,6 +64,40 @@ test("viewer payload omits evidence and includes authored edges", async () => {
   if (!view.ok) return;
   assert.doesNotMatch(view.html, /secret/);
   assert.match(view.html, /"source":"gateway"/);
+  assert.match(view.html, /"direction":"forward"/);
+  assert.match(view.html, /"id":"request-path"/);
+  assert.match(view.html, /"from":"gateway"/);
+  assert.match(view.html, /"to":"renderer"/);
+});
+
+test("viewer navigation uses indexes and bounding boxes and does not mutate source", async () => {
+  const raw = JSON.parse(await readFile(fixture, "utf8")) as unknown;
+  const view = renderView(raw);
+  assert.equal(view.ok, true);
+  if (!view.ok) return;
+  assert.match(view.html, /function buildIndex\(edges\)/);
+  assert.match(view.html, /index\.down/);
+  assert.match(view.html, /index\.up/);
+  assert.match(view.html, /node\.getBBox\(\)/);
+  assert.match(view.html, /Object\.freeze\(payload\)/);
+  assert.match(view.html, /e\.key === "Enter" \|\| e\.key === " "/);
+  assert.match(view.html, /e\.key === "\/"/);
+  assert.doesNotMatch(view.html, /scrollIntoView/);
+  assert.doesNotMatch(view.html, /payload\.edges\.find/);
+  assert.doesNotMatch(view.html, /payload\.document\s*=/);
+  assert.doesNotMatch(view.html, /https:\/\//);
+  assert.doesNotMatch(view.html, /googleapis|cdnjs|unpkg|jsdelivr/i);
+});
+
+test("the 100-node fixture exports a read-only viewer with direction in the payload", async () => {
+  const hundred = fileURLToPath(new URL("../../../tests/fixtures/documents/hundred-nodes.json", import.meta.url));
+  const raw = JSON.parse(await readFile(hundred, "utf8")) as unknown;
+  const view = renderView(raw);
+  assert.equal(view.ok, true);
+  if (!view.ok) return;
+  assert.match(view.html, /data-mode="readonly"/);
+  assert.match(view.html, /"direction":"forward"/);
+  assert.match(view.html, /data-act="reach-up"/);
 });
 
 test("the viewer builds HTML from the vector renderer, not Node PNG", async () => {

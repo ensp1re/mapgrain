@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "taskId": "F035",
+  "taskId": "F037",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/editor-shell",
-    "revision": "73d2a531b101411b9908d5dffe706082bfd6c02a",
+    "branch": "feat/portable-viewer",
+    "revision": "00bc62e2b3541395c6f0366b7ed67f39ceac04a6",
     "dirty": true
   },
   "evidenceRefs": [
@@ -41,7 +41,9 @@
     "docs/runs/run-1788873694499-14c3cf.json",
     "docs/runs/run-1788890099442-23244e.json",
     "docs/runs/run-1788893556151-df7074.json",
-    "docs/runs/run-1788894419719-d17bef.json"
+    "docs/runs/run-1788894419719-d17bef.json",
+    "docs/runs/run-1788895288417-2e96e5.json",
+    "docs/runs/run-1788896583251-3a089f.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -65,7 +67,8 @@
     "Arrange results are bound to document id plus document and layout revisions. Presentation mode blocks mutating commands. Theme is a document property.",
     "F033: Saved is shown only after the durable write finishes. Last-active document id is explicit; last-opened and last-edited times stay separate. Studio returns structured errors for missing files, conflicts, and rename failures. Unique sibling temp files are not a merge.",
     "F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers.",
-    "F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled."
+    "F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled.",
+    "F037: Portable viewer uses adjacency indexes for directed reach and routes. Named views and focus restore from the local hash. Filters never mutate the document payload. Stories and role lenses remain Task 9."
   ],
   "rejectedApproaches": [
     "Adding Turborepo or Nx before there are packages to orchestrate.",
@@ -80,11 +83,13 @@
     "Adding Commander or another parser for three CLI commands.",
     "Building the viewer on React Flow.",
     "Claiming a layout-time target before measuring on a documented device.",
-    "Starting R6 imports, hosted sharing, or billing before R1–R5."
+    "Starting R6 imports, hosted sharing, or billing before R1–R5.",
+    "Scanning payload.edges on every node click to find neighbors.",
+    "Centering search hits with scrollIntoView instead of the node's bounding box."
   ],
   "blockers": [
     "F025 requires five unassisted users, desktop Chrome/Firefox/Safari, and a real touch-device smoke test. That evidence cannot be collected or invented in this environment."
   ],
-  "nextAction": "Implement F035 editor shell on feat/editor-shell. Verify locally, draft PR, merge when GitHub verify succeeds.",
-  "updatedAt": "2026-09-08T19:21:28.337Z"
+  "nextAction": "Draft PR for F037 on feat/portable-viewer. Merge when GitHub verify succeeds, then stamp passing from main push.",
+  "updatedAt": "2026-09-08T19:44:39.912Z"
 }
