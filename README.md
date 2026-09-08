@@ -1,64 +1,70 @@
 # Mapgrain
 
-Local-first workspace for technical diagrams.
+A local workspace for architecture and workflow diagrams you can edit by hand, generate through an agent, and send as offline HTML.
 
-Describe a system, correct the map by hand, and export something you can actually send. The working name is Mapgrain; a final name is still open.
+![Invoice capture lane in the Mapgrain editor, dark theme](docs/media/hero-dark.png)
 
-**This repository is under active development and is not ready for use.** There is no hosted service and no supported release yet.
+Light theme: [hero-light.png](docs/media/hero-light.png). Capture notes: [docs/media/capture.json](docs/media/capture.json).
 
-## What it is for
+## Try it
 
-Engineers preparing a design review, explaining a service, or onboarding a teammate. The first useful product is a small architecture or workflow diagram that is easy to create, correct, and export without learning a DSL.
+Edit a label, connect two nodes, pin one, preview Arrange, then undo:
 
-## Status
+![Editing: rename, connect, pin, arrange, undo](docs/media/editing.gif)
 
-The local editor and CLI are in progress. They are not a supported product yet.
+Open exported HTML without a server. Search, change theme, pan:
 
-| Area | State |
+![Portable viewer: search, theme, pan](docs/media/viewer.gif)
+
+At 390px the canvas stays the main surface:
+
+![Editor at 390px](docs/media/narrow-390.png)
+
+## CLI and skill
+
+```sh
+npx mapgrain@0.1.0 validate diagram.json
+npx mapgrain@0.1.0 layout diagram.json
+npx mapgrain@0.1.0 view diagram.json -o view.html
+npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
+```
+
+![CLI validate and layout receipts](docs/media/cli-workflow.gif)
+
+Those frames are CLI receipts, not a live agent prompt. Install paths are tested; live prompt runs are not. Matrix: [docs/agents.md](docs/agents.md). Walkthrough: [docs/getting-started.md](docs/getting-started.md).
+
+## What is shipped
+
+See [docs/FEATURES.md](docs/FEATURES.md) for shipped, partial, planned, and deferred rows. Short version:
+
+- Architecture, workflow, sequence, data-flow, and lifecycle documents with mode-specific validation
+- Editor: direct edit, arrange preview, save, export, offline production bundle
+- Portable HTML: search, fit, reach, route, named views
+- CLI: validate, layout, view, export, diagnose, compare, doctor, studio
+
+Not shipped: watch/reload of a dirty agent file, stories, visual presets, video export, localization, hosted sharing, Mermaid/draw.io import. Five-user and device smoke evidence is still outstanding.
+
+## Examples
+
+| File | Kind |
 | --- | --- |
-| Document schema and fixtures | in tree |
-| Editor, layout, exports | in tree |
-| CLI validate / render / export | in tree |
-| Hosted sharing and accounts | out of scope for the first release |
+| [tests/fixtures/documents/nested-groups.json](tests/fixtures/documents/nested-groups.json) | Architecture with nested groups |
+| [tests/fixtures/documents/workflow-decision.json](tests/fixtures/documents/workflow-decision.json) | Workflow decision with labelled outcomes |
+| [skills/mapgrain/examples/ten-node.json](skills/mapgrain/examples/ten-node.json) | 10-node invoice lane used in the hero still |
+
+Each file validates, lays out, and exports JSON/SVG/PNG/HTML.
 
 ## Requirements
 
-- Node.js 24 LTS (CI target). Node 26 current is accepted locally.
-- pnpm 10
-
-## Setup
+- Node.js 24 LTS (CI). Node 26 is accepted locally.
+- pnpm 10 for this repository. End users only need `npx`.
 
 ```sh
 pnpm install
 pnpm verify
 ```
 
-`pnpm verify` runs ESLint, `tsc`, tests, and harness validation.
-
-```sh
-pnpm mapgrain validate tests/fixtures/documents/nested-groups.json
-pnpm mapgrain render tests/fixtures/documents/nested-groups.json -o diagram.svg
-pnpm mapgrain export tests/fixtures/documents/nested-groups.json --format json -o diagram.json
-pnpm mapgrain layout tests/fixtures/documents/nested-groups.json -o laid.json
-pnpm mapgrain view tests/fixtures/documents/nested-groups.json -o view.html
-pnpm mapgrain doctor
-```
-
-The CLI package name is `mapgrain`. End users run `npx mapgrain@0.1.0`. From this checkout, `pnpm mapgrain` is the development command. `studio` serves the editor on `127.0.0.1` for one opened file. There is no hosted service.
-
-Companion skill (Cursor / Codex first):
-
-```sh
-npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
-npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent codex
-```
-
-Current work is tracked with:
-
-```sh
-node --experimental-strip-types scripts/cli.ts --root . context
-node --experimental-strip-types scripts/cli.ts --root . tasks
-```
+Development CLI: `pnpm mapgrain`. Public package: `mapgrain@0.1.0`. Internals are bundled.
 
 ## License
 

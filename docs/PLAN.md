@@ -9,8 +9,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 ## State
 
 - Status: `verified`
-- Current task ID: F040
-- Active slice: Full-product Task 9 — remaining modes and diagnostics
+- Current task ID: F041
+- Active slice: Production README, getting-started, and media capture
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -58,7 +58,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F037 | Usable-release T6: portable viewing | F032 | unit, lint, typecheck, build | passing |
 | F038 | Usable-release T7: skill install and agent workflows | F028 | unit, lint, typecheck, build | passing |
 | F039 | Usable-release T8: outcome and performance gates | F032, F036 | unit, lint, typecheck, build, browser | passing |
-| F040 | Full product T9: remaining feature gaps (modes, diagnostics, stories) | F039 | unit, lint, typecheck, build | verified |
+| F040 | Full product T9: remaining feature gaps (modes, diagnostics, stories) | F039 | unit, lint, typecheck, build | passing |
+| F041 | Production README, getting-started, screenshots, and GIFs | F040 | unit, lint, typecheck, build | verified |
 
 The master product brief (usable release then full product) supersedes the shorter V3 plan for remaining scope. F025 stays blocked on external user-study evidence. Do not start hosted sharing or billing. README media rewrite is last, after F040.
 

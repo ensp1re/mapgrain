@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/diagram-modes @ b8b25639d0ba6da2676cbb040474fbdcf53714d8 (dirty)
-- Updated: 2026-09-08T21:05:32.050Z
+- Git: feat/readme-media @ cea0d2f040718683699889d36d9599236a5998bf (dirty)
+- Updated: 2026-09-08T21:20:28.993Z
 
 ### Next action
 
-Draft PR for F040 on feat/diagram-modes. Merge when GitHub verify succeeds, then stamp passing from main push.
+Verify F041, draft PR on feat/readme-media. Merge when GitHub verify succeeds, then stamp passing from main push.
 
 ### Decisions
 
@@ -42,6 +42,7 @@ Draft PR for F040 on feat/diagram-modes. Merge when GitHub verify succeeds, then
 - F038: End users pin npx mapgrain@0.1.0. Installer IDs come from skills@1.5.25. Cursor/Codex/OpenCode/Copilot/Gemini share .agents/skills. Live agent tasks stay untested until a clean-directory agent run is recorded.
 - F039: Selection p95 is measured through next paint on alternating outline rows. The 100-node budget is 100ms. The production journey covers blank, connect, pin, arrange, undo, export, and reimport.
 - F040: Sequence, data-flow, and lifecycle are dedicated kinds with allowlists and constraints, not relabelled architecture graphs. Diagnose warnings stay separate from invalid documents. Compare is snapshot delta only. Watch/reload, stories, presets, video, and localization stay planned.
+- F041: README media is captured from the production editor bundle and CLI view HTML. CLI receipt GIFs are labelled as receipts, not live agent prompts.
 
 ### Rejected approaches
 
@@ -107,6 +108,7 @@ Draft PR for F040 on feat/diagram-modes. Merge when GitHub verify succeeds, then
 - docs/runs/run-1788898310839-6d486d.json
 - docs/runs/run-1788899490994-7d2591.json
 - docs/runs/run-1788901487093-a1dd52.json
+- docs/runs/run-1788902383419-1b12dc.json
 
 ## Resume
 
