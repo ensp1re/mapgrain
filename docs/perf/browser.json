@@ -1,0 +1,36 @@
+{
+  "measuredAt": "2026-09-08T13:15:02.892Z",
+  "runtime": {
+    "node": "26.5.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "device": "darwin arm64"
+  },
+  "browser": {
+    "name": "chromium",
+    "headless": true,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+  },
+  "fixtures": [
+    {
+      "name": "branching.json",
+      "nodes": 10,
+      "cold": { "selectMs": 43.488, "typeMs": 2.418 },
+      "warm": {
+        "reps": 8,
+        "p50": { "selectMs": 32.913, "typeMs": 0.974 },
+        "p95": { "selectMs": 36.572, "typeMs": 1.505 }
+      }
+    },
+    {
+      "name": "hundred-nodes.json",
+      "nodes": 100,
+      "cold": { "selectMs": 47.061, "typeMs": 4.149 },
+      "warm": {
+        "reps": 8,
+        "p50": { "selectMs": 43.752, "typeMs": 2.974 },
+        "p95": { "selectMs": 67.568, "typeMs": 3.651 }
+      }
+    }
+  ]
+}

@@ -18,7 +18,13 @@ export {
   polylinePath,
   roundedPolylinePath,
 } from "./routes.ts";
-export { approximateTextMeasurer, defaultFont, fontTextMeasurer, measureText } from "./text.ts";
+export {
+  approximateTextMeasurer,
+  cachedTextMeasurer,
+  defaultFont,
+  fontTextMeasurer,
+  measureText,
+} from "./text.ts";
 export type { Point, Rect, Size } from "./types/geometry.ts";
 export type { FontSpec, SceneOptions, TextMeasurer } from "./types/options.ts";
 export type {
