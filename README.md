@@ -44,7 +44,7 @@ pnpm mapgrain view tests/fixtures/documents/nested-groups.json -o view.html
 pnpm mapgrain doctor
 ```
 
-The CLI package name is `mapgrain`. It is not on the npm registry yet. From this checkout, `pnpm build` then `pnpm --filter mapgrain pack` writes a tarball; install that tarball with npm. `studio` serves the editor on `127.0.0.1` for one opened file. There is no hosted service.
+The CLI package name is `mapgrain`. End users run `npx mapgrain@0.1.0`. From this checkout, `pnpm mapgrain` is the development command. `studio` serves the editor on `127.0.0.1` for one opened file. There is no hosted service.
 
 Companion skill (Cursor / Codex first):
 

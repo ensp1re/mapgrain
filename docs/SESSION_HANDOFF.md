@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F036
+- Task: F038
 - Plan: docs/PLAN.md
-- Git: feat/readable-diagrams @ bc86b9d3988a04b5de21b0c0403f2f4afef924c8 (dirty)
-- Updated: 2026-09-08T19:59:30.768Z
+- Git: feat/skill-install @ 8bb3c5a0b43526e4733f99e9b97bb34c506c363a (dirty)
+- Updated: 2026-09-08T20:12:23.824Z
 
 ### Next action
 
-Draft PR for F036 on feat/readable-diagrams. Merge when GitHub verify succeeds, then stamp passing from main push.
+Draft PR for F038 on feat/skill-install. Merge when GitHub verify succeeds, then stamp passing from main push.
 
 ### Decisions
 
@@ -39,6 +39,7 @@ Draft PR for F036 on feat/readable-diagrams. Merge when GitHub verify succeeds, 
 - F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled.
 - F037: Portable viewer uses adjacency indexes for directed reach and routes. Named views and focus restore from the local hash. Filters never mutate the document payload. Stories and role lenses remain Task 9.
 - F036: Default fit uses a minimum zoom so 14px labels stay at least 12px. Zoom percentage is visible. Dialogs trap focus and Escape closes the topmost surface.
+- F038: End users pin npx mapgrain@0.1.0. Installer IDs come from skills@1.5.25. Cursor/Codex/OpenCode/Copilot/Gemini share .agents/skills. Live agent tasks stay untested until a clean-directory agent run is recorded.
 
 ### Rejected approaches
 
@@ -100,6 +101,7 @@ Draft PR for F036 on feat/readable-diagrams. Merge when GitHub verify succeeds, 
 - docs/runs/run-1788895288417-2e96e5.json
 - docs/runs/run-1788897532769-c3913c.json
 - docs/runs/run-1788896583251-3a089f.json
+- docs/runs/run-1788898310839-6d486d.json
 
 ## Resume
 

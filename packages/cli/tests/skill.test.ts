@@ -17,13 +17,21 @@ test("the skill directory ships schema, examples, and local runtime instructions
   assert.match(text, /^---\nname: mapgrain\n/m);
   assert.match(text, /--agent cursor/);
   assert.match(text, /--agent codex/);
+  assert.match(text, /--agent claude-code/);
+  assert.match(text, /--agent opencode/);
+  assert.match(text, /--agent github-copilot/);
+  assert.match(text, /--agent grok/);
+  assert.match(text, /--agent gemini-cli/);
+  assert.match(text, /--agent windsurf/);
   assert.doesNotMatch(text, /copilot-codex/);
-  assert.doesNotMatch(text, /npx mapgrain@0\.1\.0 validate/);
-  assert.match(text, /not published to the npm registry/);
+  assert.match(text, /npx mapgrain@0\.1\.0 validate/);
+  assert.match(text, /npx mapgrain@0\.1\.0 layout/);
   assert.match(text, /pnpm mapgrain layout/);
+  assert.match(text, /From a Mapgrain checkout only/);
   assert.match(text, /references\/document\.schema\.json/);
   assert.match(text, /Do not invent pixel positions/);
   assert.match(text, /Do not execute the repository/);
+  assert.match(text, /One writer per artifact/);
   const schemaRaw = JSON.parse(await readFile(schema, "utf8")) as { $id?: string };
   assert.match(String(schemaRaw.$id ?? ""), /document/);
   const names = await readdir(path.join(skillDir, "examples"));
@@ -31,9 +39,9 @@ test("the skill directory ships schema, examples, and local runtime instructions
   assert.ok(names.includes("branching.json"));
 });
 
-test("copying the skill into empty Cursor and Codex project folders keeps schema and examples", async () => {
+test("copying the skill into empty agent project folders keeps schema and examples", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "mapgrain-skill-"));
-  for (const dest of [path.join(root, ".cursor", "skills", "mapgrain"), path.join(root, ".codex", "skills", "mapgrain")]) {
+  for (const dest of [path.join(root, ".agents", "skills", "mapgrain"), path.join(root, ".claude", "skills", "mapgrain")]) {
     await mkdir(dest, { recursive: true });
     await cp(skillDir, dest, { recursive: true });
     const installed = await readFile(path.join(dest, "SKILL.md"), "utf8");

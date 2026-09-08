@@ -15,7 +15,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Portable HTML viewer: search, fit, theme, pan, zoom | implemented | yes | F037: fit, search-to-focus, theme, pan, zoom, keyboard, fullscreen; no remote assets |
 | Directed reach, route, named views, stories, lenses | partial | partial | F037 ships directed reach, route, named views, and local hashes; stories and role lenses remain Task 9 / P2 |
 | CLI validate/layout/view/export/doctor/studio | implemented | yes | `mapgrain@0.1.0` on npm; internals bundled |
-| Agent skill install + live tasks across agents | partial | partial | Skill ships; unpublished `npx` copy is stale; Task 7 matrix incomplete |
+| Agent skill install + live tasks across agents | partial | partial | F038: SKILL.md pins `npx mapgrain@0.1.0`; install paths tested; live agent tasks remain untested |
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
 | Geometry diagnostics, snapshot compare, watch/reload | missing | no | Task 9 / P3 |
 | Visual presets, share-card, video, localization | missing | no | Task 9 / P4; deferred until static fidelity |
