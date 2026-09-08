@@ -19,6 +19,8 @@ interface InspectorProps {
   onOperate: (operation: Operation) => void;
   onDelete: () => void;
   onDuplicate: () => void;
+  onFocusNode?: (id: string) => void;
+  onClose?: () => void;
 }
 
 export function Inspector({
@@ -29,12 +31,14 @@ export function Inspector({
   onOperate,
   onDelete,
   onDuplicate,
+  onFocusNode,
+  onClose,
 }: InspectorProps) {
   if (!node && !edge) return null;
 
   if (edge) {
     return (
-      <Pane className="inspector" title="Inspector">
+      <Pane className="inspector" title="Inspector" onClose={onClose}>
         <dl>
           <dt>Relation</dt>
           <dd>
@@ -175,15 +179,27 @@ export function Inspector({
         <dt>Relations</dt>
         <dd>
           {relations.length === 0 ? (
-            "No relations in the diagram."
+            <p className="relation-empty">No relations yet.</p>
           ) : (
-            <ul>
-              {relations.map((item) => (
-                <li key={item.id}>
-                  {relationCaption(document, item)}
-                  {item.label ? ` (${item.label})` : ""} · {item.type}
-                </li>
-              ))}
+            <ul className="relation-list">
+              {relations.map((item) => {
+                const sourceLabel = document.nodes.find((entry) => entry.id === item.source.nodeId)?.label ?? item.source.nodeId;
+                const targetLabel = document.nodes.find((entry) => entry.id === item.target.nodeId)?.label ?? item.target.nodeId;
+                const focusId = item.source.nodeId === node.id ? item.target.nodeId : item.source.nodeId;
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      className="relation-row"
+                      onClick={() => onFocusNode?.(focusId)}
+                    >
+                      <span>{sourceLabel}</span>
+                      <span aria-hidden="true">→</span>
+                      <span>{targetLabel}</span>
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </dd>

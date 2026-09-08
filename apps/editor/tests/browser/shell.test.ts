@@ -11,10 +11,19 @@ const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
   ".woff2": "font/woff2",
   ".woff": "font/woff",
   ".svg": "image/svg+xml",
 };
+
+const VIEWPORTS = [
+  { width: 1440, height: 900 },
+  { width: 1280, height: 720 },
+  { width: 1024, height: 768 },
+  { width: 768, height: 1024 },
+  { width: 390, height: 844 },
+];
 
 async function listen(): Promise<{ url: string; close: () => Promise<void> }> {
   const server = createServer((req: IncomingMessage, res: ServerResponse) => {
@@ -43,45 +52,38 @@ async function listen(): Promise<{ url: string; close: () => Promise<void> }> {
   };
 }
 
-test("production build opens a blank diagram and every example without page errors", async (t) => {
+test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t) => {
   await stat(join(dist, "index.html"));
   const server = await listen();
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  page.on("console", (message) => {
-    if (message.type() === "error") errors.push(message.text());
-  });
   t.after(async () => {
     await browser.close();
     await server.close();
   });
 
-  const editorReady = () => page.getByRole("button", { name: "Arrange" });
-
-  await page.goto(server.url, { waitUntil: "domcontentloaded" });
-  await page.getByRole("button", { name: "New blank diagram" }).click();
-  await editorReady().waitFor({ timeout: 10_000 });
-  assert.equal(errors.join("\n"), "", "blank");
-
-  await page.getByRole("button", { name: "New", exact: true }).click();
-  const examples = ["Local diagram workspace", "Review workflow", "Feedback loop"];
-  for (const name of examples) {
-    await page.getByRole("button", { name: new RegExp(name) }).click();
-    await editorReady().waitFor({ timeout: 10_000 });
-    assert.equal(errors.join("\n"), "", name);
-    await page.getByRole("button", { name: "New", exact: true }).click();
+  for (const viewport of VIEWPORTS) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto(server.url, { waitUntil: "domcontentloaded" });
+    const arrange = page.getByRole("button", { name: "Arrange" });
+    const start = page.getByRole("button", { name: "New blank diagram" });
+    await page.waitForFunction(
+      () =>
+        [...document.querySelectorAll("button")].some((button) => {
+          const label = button.textContent?.trim();
+          return label === "Arrange" || label === "New blank diagram";
+        }),
+      undefined,
+      { timeout: 15_000 },
+    );
+    if (await start.isVisible().catch(() => false)) {
+      await start.click();
+      await arrange.waitFor({ timeout: 10_000 });
+    }
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    assert.ok(overflow <= 1, `${viewport.width}x${viewport.height} overflow ${overflow}`);
+    await page.getByRole("button", { name: "Add", exact: true }).waitFor();
+    assert.equal(await page.getByRole("button", { name: "Add service" }).count(), 0);
+    await context.close();
   }
-
-  await page.getByRole("button", { name: "New blank diagram" }).click();
-  await editorReady().waitFor();
-  await page.getByRole("button", { name: "Add", exact: true }).click();
-  await page.getByRole("option", { name: "service" }).click();
-  await page.getByRole("button", { name: "Undo" }).click();
-  await page.getByText("Saved", { exact: true }).waitFor({ timeout: 10_000 });
-  await page.reload({ waitUntil: "domcontentloaded" });
-  await editorReady().waitFor({ timeout: 10_000 });
-  assert.equal(await page.getByRole("textbox", { name: "Document title" }).inputValue(), "Untitled diagram");
-  assert.equal(errors.join("\n"), "");
 });

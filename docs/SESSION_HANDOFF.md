@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F034
+- Task: F035
 - Plan: docs/PLAN.md
-- Git: feat/offline-manifest @ 06896fb0490ac30b44c8d3160ed5820591e6aa66 (dirty)
-- Updated: 2026-09-08T19:06:53.994Z
+- Git: feat/editor-shell @ 73d2a531b101411b9908d5dffe706082bfd6c02a (dirty)
+- Updated: 2026-09-08T19:21:28.337Z
 
 ### Next action
 
-Implement F034 offline manifest on feat/offline-manifest. Verify locally, draft PR, merge when GitHub verify succeeds.
+Implement F035 editor shell on feat/editor-shell. Verify locally, draft PR, merge when GitHub verify succeeds.
 
 ### Decisions
 
@@ -36,6 +36,7 @@ Implement F034 offline manifest on feat/offline-manifest. Verify locally, draft 
 - Arrange results are bound to document id plus document and layout revisions. Presentation mode blocks mutating commands. Theme is a document property.
 - F033: Saved is shown only after the durable write finishes. Last-active document id is explicit; last-opened and last-edited times stay separate. Studio returns structured errors for missing files, conflicts, and rename failures. Unique sibling temp files are not a merge.
 - F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers.
+- F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled.
 
 ### Rejected approaches
 
@@ -91,6 +92,7 @@ Implement F034 offline manifest on feat/offline-manifest. Verify locally, draft 
 - docs/runs/run-1788873694499-14c3cf.json
 - docs/runs/run-1788890099442-23244e.json
 - docs/runs/run-1788893556151-df7074.json
+- docs/runs/run-1788894419719-d17bef.json
 
 ## Resume
 

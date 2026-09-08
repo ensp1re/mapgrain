@@ -37,7 +37,8 @@ import { ExportDialog } from "./chrome/ExportDialog.tsx";
 import { EXPORT_CHOICE } from "./constants/export.ts";
 import { rasterSvgToPng } from "./export/png.ts";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
-import { ChatDrawer } from "./chrome/ChatDrawer.tsx";
+import { SHELL_LAYOUT } from "./constants/layout.ts";
+import { shellLayoutForWidth, useViewportWidth } from "./chrome/viewport.ts";
 import { StartSurface } from "./chrome/StartSurface.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
 import { ConnectDialog } from "./chrome/ConnectDialog.tsx";
@@ -215,7 +216,7 @@ function Specimen() {
   const [theme, setTheme] = useState<Theme>(THEME.DARK);
   const [selection, setSelection] = useState<EditorSelection>({ nodeIds: ["gateway"], edgeIds: [] });
   const [outlineOpen, setOutlineOpen] = useState(true);
-  const [chatOpen, setChatOpen] = useState(false);
+  const [narrowPanel, setNarrowPanel] = useState<"outline" | "inspector" | "none">("none");
   const [presenting, setPresenting] = useState(false);
   const [commandsOpen, setCommandsOpen] = useState(false);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; text: string } | null>(null);
@@ -405,7 +406,22 @@ function Specimen() {
   const selectedNode = flow.nodes.find((node) => node.id === selection.nodeIds[0]) ?? null;
   const selectedEdge =
     documentModel?.edges.find((edge) => edge.id === selection.edgeIds[0]) ?? null;
-  const inspectorOpen = Boolean((selectedNode || selectedEdge) && !presenting);
+  const inspectorWanted = Boolean((selectedNode || selectedEdge) && !presenting);
+  const viewportWidth = useViewportWidth();
+  const shellLayout = shellLayoutForWidth(viewportWidth);
+  const showOutline =
+    !presenting &&
+    (shellLayout === SHELL_LAYOUT.SPLIT ? outlineOpen : narrowPanel === "outline");
+  const showInspector =
+    inspectorWanted &&
+    (shellLayout === SHELL_LAYOUT.SPLIT || narrowPanel === "inspector");
+
+  useEffect(() => {
+    if (shellLayout === SHELL_LAYOUT.SPLIT) return;
+    if (!selection.nodeIds[0] && !selection.edgeIds[0]) {
+      setNarrowPanel((current) => (current === "inspector" ? "none" : current));
+    }
+  }, [selection.nodeIds, selection.edgeIds, shellLayout]);
 
   useEffect(() => {
     globalThis.document.documentElement.dataset.theme = theme;
@@ -505,7 +521,10 @@ function Specimen() {
   const onSelectionChange = useCallback(({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
     const next = selectionFromFlow(selectedNodes, selectedEdges);
     setSelection((current) => retainFlowSelection(current, next));
-  }, []);
+    if (shellLayout !== SHELL_LAYOUT.SPLIT && (next.nodeIds.length > 0 || next.edgeIds.length > 0)) {
+      setNarrowPanel("inspector");
+    }
+  }, [shellLayout]);
 
   const pushPositions = useCallback((positions: PositionMap) => {
     const current = historyRef.current.present;
@@ -710,8 +729,10 @@ function Specimen() {
         setTheme(next);
         applyOp({ kind: OPERATION_KIND.SET_THEME, theme: next });
       }
-      if (id === COMMAND_ID.TOGGLE_OUTLINE) setOutlineOpen((value) => !value);
-      if (id === COMMAND_ID.TOGGLE_CHAT) setChatOpen((value) => !value);
+      if (id === COMMAND_ID.TOGGLE_OUTLINE) {
+        if (shellLayout === SHELL_LAYOUT.SPLIT) setOutlineOpen((value) => !value);
+        else setNarrowPanel((value) => (value === "outline" ? "none" : "outline"));
+      }
       if (id === COMMAND_ID.UNDO) setHistory((stack) => undoHistory(stack));
       if (id === COMMAND_ID.REDO) setHistory((stack) => redoHistory(stack));
       if (id === COMMAND_ID.PRESENT) setPresenting((value) => !value);
@@ -727,7 +748,7 @@ function Specimen() {
       if (id === COMMAND_ID.CONNECT) connectSelected();
       if (id === COMMAND_ID.NEW) flushThen(() => setSurface("start"));
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, flushThen, presenting, startArrange, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, flushThen, presenting, shellLayout, startArrange, theme],
   );
 
   useEffect(() => {
@@ -854,8 +875,9 @@ function Specimen() {
 
   const workspaceClass = [
     "workspace",
-    outlineOpen && !presenting ? "" : "is-outline-collapsed",
-    inspectorOpen ? "" : "is-inspector-hidden",
+    `is-${shellLayout}`,
+    showOutline ? "" : "is-outline-collapsed",
+    showInspector ? "" : "is-inspector-hidden",
     presenting ? "is-presenting" : "",
   ]
     .filter(Boolean)
@@ -910,7 +932,6 @@ function Specimen() {
         canUndo={history.past.length > 0}
         canRedo={history.future.length > 0}
         presenting={presenting}
-        chatOpen={chatOpen}
         onTitleCommit={(value) => applyOp({ kind: OPERATION_KIND.SET_TITLE, title: value })}
         onUndo={() => runCommand(COMMAND_ID.UNDO)}
         onRedo={() => runCommand(COMMAND_ID.REDO)}
@@ -920,14 +941,21 @@ function Specimen() {
         onExport={() => setExportOpen(true)}
         onCommand={() => setCommandsOpen(true)}
         onToggleOutline={() => runCommand(COMMAND_ID.TOGGLE_OUTLINE)}
-        onToggleChat={() => runCommand(COMMAND_ID.TOGGLE_CHAT)}
       />
       <div className={workspaceClass}>
-        {presenting ? null : (
+        {presenting || !showOutline ? null : (
           <Outline
             nodes={flow.nodes}
             selectedId={selection.nodeIds[0] ?? null}
-            onSelect={(id) => setSelection({ nodeIds: [id], edgeIds: [] })}
+            onSelect={(id) => {
+              setSelection({ nodeIds: [id], edgeIds: [] });
+              if (shellLayout !== SHELL_LAYOUT.SPLIT) setNarrowPanel("inspector");
+            }}
+            onClose={
+              shellLayout === SHELL_LAYOUT.SPLIT
+                ? undefined
+                : () => setNarrowPanel("none")
+            }
           />
         )}
         <div className={arrange.status === "preview" ? "canvas is-previewing" : "canvas"}>
@@ -991,7 +1019,12 @@ function Specimen() {
             onClose={() => setExportOpen(false)}
           />
           {presenting ? null : (
-            <AddBar onAddNode={addNode} onAddGroup={addGroup} onConnect={connectSelected} />
+            <AddBar
+              onAddNode={addNode}
+              onAddGroup={addGroup}
+              onConnect={connectSelected}
+              canConnect={selection.nodeIds.length >= 2}
+            />
           )}
           <ArrangeBar state={arrange} onApply={applyArrange} onDiscard={discardArrange} />
           {pending ? (
@@ -1001,9 +1034,8 @@ function Specimen() {
               onCancel={() => setPending(null)}
             />
           ) : null}
-          {presenting ? null : <ChatDrawer open={chatOpen} />}
         </div>
-        {presenting ? null : (
+        {presenting || !showInspector ? null : (
           <Inspector
             document={documentModel}
             node={selectedEdge ? null : selectedNode}
@@ -1012,6 +1044,12 @@ function Specimen() {
             onOperate={(operation) => applyOp(operation)}
             onDelete={deleteSelection}
             onDuplicate={duplicateSelection}
+            onFocusNode={(id) => setSelection({ nodeIds: [id], edgeIds: [] })}
+            onClose={
+              shellLayout === SHELL_LAYOUT.SPLIT
+                ? undefined
+                : () => setNarrowPanel("none")
+            }
           />
         )}
       </div>

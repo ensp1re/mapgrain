@@ -45,3 +45,9 @@ test("shell CSS keeps chat as an overlay, not a third column", async () => {
   assert.match(css, /position: absolute/);
   assert.match(css, /\.title-field input/);
 });
+
+test("chat is disabled until generation is usable", async () => {
+  const topbar = await readFile(fileURLToPath(new URL("../src/chrome/TopBar.tsx", import.meta.url)), "utf8");
+  assert.match(topbar, /Chat is unavailable/);
+  assert.match(topbar, /disabled/);
+});

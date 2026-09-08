@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { BREAKPOINT, PANE_WIDTH } from "../src/constants/layout.ts";
+import { BREAKPOINT, PANE_WIDTH, SHELL_LAYOUT } from "../src/constants/layout.ts";
+import { shellLayoutForWidth } from "../src/chrome/viewport.ts";
 
 test("layout spec names the 390/768/1024/1280/1440 breakpoints", () => {
   assert.deepEqual(BREAKPOINT, {
@@ -13,7 +14,17 @@ test("layout spec names the 390/768/1024/1280/1440 breakpoints", () => {
     WIDE: 1440,
   });
   assert.equal(PANE_WIDTH.OUTLINE, 240);
-  assert.equal(PANE_WIDTH.INSPECTOR, 304);
+  assert.equal(PANE_WIDTH.INSPECTOR, 296);
+  assert.equal(PANE_WIDTH.INSPECTOR_WIDE, 300);
+});
+
+test("shell layout is split at 1280, one panel at 768, overlay below", () => {
+  assert.equal(shellLayoutForWidth(1440), SHELL_LAYOUT.SPLIT);
+  assert.equal(shellLayoutForWidth(1280), SHELL_LAYOUT.SPLIT);
+  assert.equal(shellLayoutForWidth(1024), SHELL_LAYOUT.SINGLE);
+  assert.equal(shellLayoutForWidth(768), SHELL_LAYOUT.SINGLE);
+  assert.equal(shellLayoutForWidth(767), SHELL_LAYOUT.OVERLAY);
+  assert.equal(shellLayoutForWidth(390), SHELL_LAYOUT.OVERLAY);
 });
 
 test("chrome CSS implements the layout spec at each breakpoint", async () => {
@@ -24,12 +35,16 @@ test("chrome CSS implements the layout spec at each breakpoint", async () => {
   assert.match(css, /max-width: 1279px/);
   assert.match(css, /min-width: 1440px/);
   assert.match(css, /--outline-w: 240px/);
-  assert.match(css, /--inspector-w: 304px/);
-  assert.match(css, /--outline-w: 280px/);
-  assert.match(css, /--inspector-w: 336px/);
+  assert.match(css, /--inspector-w: 296px/);
+  assert.match(css, /--inspector-w: 300px/);
+  assert.match(css, /--outline-w: 220px/);
+  assert.match(css, /--inspector-w: 280px/);
+  assert.match(css, /grid-template-rows: 1fr/);
   assert.match(css, /\.add-bar/);
+  assert.match(css, /\.add-menu-pop/);
   assert.match(css, /\.export-dialog/);
   assert.match(css, /--node-radius/);
+  assert.match(css, /--space-4: 16px/);
 });
 
 test("outline, inspector, and export share Pane; library uses Button", async () => {
@@ -52,6 +67,8 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
   assert.match(exported, /from "\.\.\/ui\/Pane\.tsx"/);
   assert.match(library, /from "\.\.\/ui\/Button\.tsx"/);
   assert.match(library, /aria-label="Library"/);
+  assert.match(library, /Search kinds/);
+  assert.doesNotMatch(library, /Add service/);
   assert.match(node, /from "\.\/NodeCard\.tsx"/);
   assert.match(node, /from "\.\/KindLabel\.tsx"/);
 });
