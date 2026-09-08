@@ -12,7 +12,7 @@ import { packageManifest } from "./paths.ts";
 import { fail, readInput, writeBytes } from "./read.ts";
 import { runStudio } from "./studio.ts";
 import { encodeStoryVideo } from "./video.ts";
-import { applyWatchTick, writeWatchArtifact } from "./watch.ts";
+import { applyWatchTick, writeWatchArtifact, type WatchState } from "./watch.ts";
 import type { CliIo } from "./types/cli.ts";
 
 async function packageVersion(): Promise<string> {
@@ -47,15 +47,23 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
     return EXIT_CODE.OK;
   }
   if (parsed.command === CLI_COMMAND.WATCH) {
-    const input = await readInput(parsed.file, io);
-    if (!input.ok) return input.exit;
-    const rawText = JSON.stringify(input.value);
-    const tick = applyWatchTick(rawText, { lastGood: null, lastRaw: null });
-    io.stdout.write(`${JSON.stringify({ ok: tick.ok, message: tick.message })}\n`);
-    if (tick.state.lastGood) {
-      return writeWatchArtifact(tick.state.lastGood, parsed.format, io, parsed.out);
+    const tickOnce = async (previous: WatchState) => {
+      const input = await readInput(parsed.file, io);
+      if (!input.ok) return { exit: input.exit, state: previous };
+      const tick = applyWatchTick(JSON.stringify(input.value), previous);
+      io.stdout.write(`${JSON.stringify({ ok: tick.ok, message: tick.message })}\n`);
+      if (tick.state.lastGood) {
+        const written = await writeWatchArtifact(tick.state.lastGood, parsed.format, io, parsed.out);
+        return { exit: written, state: tick.state };
+      }
+      return { exit: previous.lastGood ? EXIT_CODE.OK : EXIT_CODE.ERROR, state: tick.state };
+    };
+    let round = await tickOnce({ lastGood: null, lastRaw: null });
+    if (parsed.once) return round.exit;
+    for (;;) {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      round = await tickOnce(round.state);
     }
-    return EXIT_CODE.ERROR;
   }
 
   const raw = await readInput(parsed.file, io);
