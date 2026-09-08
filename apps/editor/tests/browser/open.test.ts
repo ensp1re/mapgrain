@@ -78,7 +78,9 @@ test("production build opens a blank diagram and every example without page erro
   await editorReady().waitFor();
   await page.getByRole("button", { name: "Add service" }).click();
   await page.getByRole("button", { name: "Undo" }).click();
+  await page.getByText("Saved", { exact: true }).waitFor({ timeout: 10_000 });
   await page.reload({ waitUntil: "domcontentloaded" });
-  await page.getByRole("button", { name: "New blank diagram" }).waitFor();
+  await editorReady().waitFor({ timeout: 10_000 });
+  assert.equal(await page.getByRole("textbox", { name: "Document title" }).inputValue(), "Untitled diagram");
   assert.equal(errors.join("\n"), "");
 });

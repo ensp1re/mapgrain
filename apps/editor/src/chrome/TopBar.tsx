@@ -5,7 +5,10 @@ import type { SaveState } from "../types/persist.ts";
 interface TopBarProps {
   title: string;
   saveState: SaveState;
+  saveError?: string | null;
   onBackup: () => void;
+  onRetrySave?: () => void;
+  onReloadSaved?: () => void;
   canUndo: boolean;
   canRedo: boolean;
   presenting: boolean;
@@ -25,11 +28,14 @@ interface TopBarProps {
 export function TopBar({
   title,
   saveState,
+  saveError,
   canUndo,
   canRedo,
   presenting,
   chatOpen,
   onBackup,
+  onRetrySave,
+  onReloadSaved,
   onTitleCommit,
   onUndo,
   onRedo,
@@ -92,10 +98,27 @@ export function TopBar({
       <span className="save-state" aria-live="polite">
         {saveState}
       </span>
+      {saveError ? (
+        <span className="save-error" role="status">
+          {saveError}
+        </span>
+      ) : null}
       {saveState === SAVE_STATE.RECOVERY || saveState === SAVE_STATE.TEMPORARY ? (
-        <button type="button" className="text-btn" onClick={onBackup}>
-          Download backup
-        </button>
+        <>
+          <button type="button" className="text-btn" onClick={onBackup}>
+            Download backup
+          </button>
+          {saveState === SAVE_STATE.RECOVERY && onRetrySave ? (
+            <button type="button" className="text-btn" onClick={onRetrySave}>
+              Retry save
+            </button>
+          ) : null}
+          {saveState === SAVE_STATE.RECOVERY && onReloadSaved ? (
+            <button type="button" className="text-btn" onClick={onReloadSaved}>
+              Reload saved
+            </button>
+          ) : null}
+        </>
       ) : null}
       <div className="spacer" />
       <div className="topbar-actions">

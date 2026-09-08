@@ -1,4 +1,4 @@
-import { access, readFile, rename, writeFile } from "node:fs/promises";
+import { access, readFile, rename, unlink, writeFile } from "node:fs/promises";
 import { runCli } from "./run.ts";
 
 async function readStdin(): Promise<string> {
@@ -15,6 +15,7 @@ void runCli(process.argv.slice(2), {
   readFile: (file) => readFile(file, "utf8"),
   writeFile: (file, bytes) => writeFile(file, bytes),
   rename: (from, to) => rename(from, to),
+  unlink: (file) => unlink(file).catch(() => undefined),
   stdin: readStdin,
   exists: async (file) => {
     try {

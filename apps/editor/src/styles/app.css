@@ -11,6 +11,7 @@
   --edge: #71717a;
   --port: #52525b;
   --focus: #9aa0ff;
+  --danger: #f87171;
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
 }
 
@@ -27,6 +28,7 @@
   --edge: #a1a1aa;
   --port: #a1a1aa;
   --focus: #4f46e5;
+  --danger: #b91c1c;
   --shadow: 0 10px 28px rgba(28, 25, 23, 0.12);
 }
 
@@ -190,6 +192,23 @@ input {
 .save-state {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+}
+
+.save-error {
+  color: var(--danger);
+  font-size: 12px;
+}
+
+.recent-empty {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.recent-time {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .icon-btn,

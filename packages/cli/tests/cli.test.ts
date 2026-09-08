@@ -88,6 +88,49 @@ test("failed temp write leaves the previous output file", async () => {
   assert.equal(files["out.svg"], "old");
 });
 
+test("failed unique temp rename leaves destination and removes the temp file", async () => {
+  const files: Record<string, string> = { "out.svg": "old" };
+  const io = {
+    ...memoryIo(files),
+    files,
+    async rename() {
+      throw new Error("rename failed");
+    },
+    async unlink(path: string) {
+      delete files[path];
+    },
+  };
+  const source = await readFile(fixture, "utf8");
+  files["nested-groups.json"] = source;
+  const code = await runCli(["render", "nested-groups.json", "-o", "out.svg"], io);
+  assert.equal(code, EXIT_CODE.ERROR);
+  assert.equal(files["out.svg"], "old");
+  assert.equal(
+    Object.keys(files).some((path) => path.endsWith(".tmp")),
+    false,
+  );
+});
+
+test("two CLI writers use distinct temp paths", async () => {
+  const source = await readFile(fixture, "utf8");
+  const files: Record<string, string> = { "nested-groups.json": source };
+  const temps: string[] = [];
+  const io = {
+    ...memoryIo(files),
+    files,
+    async writeFile(path: string, bytes: Uint8Array) {
+      if (path.endsWith(".tmp")) temps.push(path);
+      files[path] = Buffer.from(bytes).toString("binary");
+    },
+  };
+  const first = await runCli(["export", "nested-groups.json", "--format", "svg", "-o", "a.svg"], io);
+  const second = await runCli(["export", "nested-groups.json", "--format", "svg", "-o", "b.svg"], io);
+  assert.equal(first, EXIT_CODE.OK);
+  assert.equal(second, EXIT_CODE.OK);
+  assert.equal(temps.length, 2);
+  assert.notEqual(temps[0], temps[1]);
+});
+
 test("invalid input exits non-zero with a structured diagnostic", async () => {
   const io = memoryIo({ "bad.json": "{" });
   const code = await runCli(["validate", "bad.json"], io);
@@ -217,6 +260,26 @@ test("CLI validates the hundred-node fixture", async () => {
   const result = JSON.parse(text(io.stdoutChunks)) as { ok: boolean; nodes: number };
   assert.equal(result.ok, true);
   assert.equal(result.nodes, 100);
+});
+
+test("two spawned CLI writers do not share a temp file or corrupt the destination", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "mapgrain-cli-race-"));
+  const out = join(dir, "out.svg");
+  const run = (): Promise<number> =>
+    new Promise((resolve, reject) => {
+      const child = spawn(process.execPath, ["--experimental-strip-types", cliEntry, "render", fixture, "-o", out], {
+        cwd: dir,
+        env: { ...process.env },
+      });
+      child.on("error", reject);
+      child.on("close", (code) => resolve(code ?? 1));
+    });
+  const [left, right] = await Promise.all([run(), run()]);
+  assert.equal(left, EXIT_CODE.OK);
+  assert.equal(right, EXIT_CODE.OK);
+  const svg = await readFile(out, "utf8");
+  assert.match(svg, /<svg/);
+  assert.match(svg, /Workspace API/);
 });
 
 test("spawned CLI validates a fixture without loading the editor", async () => {

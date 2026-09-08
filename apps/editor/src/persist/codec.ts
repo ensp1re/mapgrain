@@ -42,14 +42,17 @@ export function snapshotFromStored(value: unknown): EditorSnapshot | null {
   return placedSnapshot(validated.document, isPositionMap(record.positions) ? record.positions : undefined);
 }
 
-export function storedFromSnapshot(snapshot: EditorSnapshot, openedAt?: string): StoredWorkspace {
+export function storedFromSnapshot(
+  snapshot: EditorSnapshot,
+  times?: { updatedAt?: string; lastOpenedAt?: string },
+): StoredWorkspace {
   const document = applyPortableLayout(snapshot.document, snapshot.positions);
   const now = new Date().toISOString();
   return {
     document,
     positions: snapshot.positions,
-    updatedAt: now,
-    lastOpenedAt: openedAt ?? now,
+    updatedAt: times?.updatedAt ?? now,
+    lastOpenedAt: times?.lastOpenedAt ?? now,
   };
 }
 

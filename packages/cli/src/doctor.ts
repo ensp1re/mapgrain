@@ -15,6 +15,7 @@ import {
 import { DOCTOR_CHECK, EXIT_CODE } from "./constants/cli.ts";
 import { DOCTOR_DOCUMENT } from "./constants/doctor.ts";
 import { exampleFile, packageManifest, schemaFile, studioDir, studioFixtureDir } from "./paths.ts";
+import { uniqueSiblingTemp } from "./read.ts";
 import type { CliIo, DoctorCheck } from "./types/cli.ts";
 
 function nodeSupported(version: string): boolean {
@@ -124,7 +125,7 @@ async function checkRenderer(): Promise<DoctorCheck> {
 async function checkOutput(): Promise<DoctorCheck> {
   const dir = await mkdtemp(join(tmpdir(), "mapgrain-doctor-"));
   const dest = join(dir, "ok.txt");
-  const tmp = `${dest}.tmp`;
+  const tmp = uniqueSiblingTemp(dest);
   try {
     await writeFile(tmp, "ok");
     await rename(tmp, dest);

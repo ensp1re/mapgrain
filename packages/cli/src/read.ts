@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { DIAGNOSTIC_CODE, EXIT_CODE, MAX_INPUT_BYTES, STDIN_PATH } from "./constants/cli.ts";
 import type { CliIo, DiagnosticIssue } from "./types/cli.ts";
 
@@ -94,6 +95,10 @@ export async function readInput(
   }
 }
 
+export function uniqueSiblingTemp(path: string): string {
+  return `${path}.${randomBytes(8).toString("hex")}.tmp`;
+}
+
 export async function writeBytes(
   io: CliIo,
   out: string | null,
@@ -121,12 +126,14 @@ export async function writeBytes(
       ),
     };
   }
-  const tmp = `${out}.tmp`;
+  const tmp = uniqueSiblingTemp(out);
   try {
     await io.writeFile(tmp, bytes);
     if (io.rename) await io.rename(tmp, out);
     else await io.writeFile(out, bytes);
+    if (io.unlink) await io.unlink(tmp).catch(() => undefined);
   } catch (error) {
+    if (io.unlink) await io.unlink(tmp).catch(() => undefined);
     return {
       ok: false,
       exit: fail(

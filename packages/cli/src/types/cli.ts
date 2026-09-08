@@ -11,6 +11,7 @@ export interface CliIo {
   readFile(path: string): Promise<string>;
   writeFile(path: string, bytes: Uint8Array): Promise<void>;
   rename?(from: string, to: string): Promise<void>;
+  unlink?(path: string): Promise<void>;
   stdin?: () => Promise<string>;
   exists?: (path: string) => Promise<boolean>;
 }

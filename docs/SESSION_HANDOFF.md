@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/export-fidelity @ 02d0145af9b62e57a79bf7166a35acfb894e075d (dirty)
-- Updated: 2026-09-08T17:55:49.896Z
+- Git: feat/studio-recovery @ b4243a319121e8b69e44e2401e61767f9c588a58 (dirty)
+- Updated: 2026-09-08T18:48:18.091Z
 
 ### Next action
 
-Implement F032 export fidelity on feat/export-fidelity. Verify locally, draft PR, merge when GitHub verify succeeds.
+Open a draft PR for F033 on feat/studio-recovery and merge when GitHub verify succeeds. Next slices: F034 offline, F035 shell, F037 viewer, F038 skill.
 
 ### Decisions
 
@@ -34,6 +34,7 @@ Implement F032 export fidelity on feat/export-fidelity. Verify locally, draft PR
 - The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
 - Editor edges follow canonical scene polylines. Direction none/forward/both is visible. Text measurement uses Inter-like glyph classes including CJK and Cyrillic. Node size reserves a kind line.
 - Arrange results are bound to document id plus document and layout revisions. Presentation mode blocks mutating commands. Theme is a document property.
+- F033: Saved is shown only after the durable write finishes. Last-active document id is explicit; last-opened and last-edited times stay separate. Studio returns structured errors for missing files, conflicts, and rename failures. Unique sibling temp files are not a merge.
 
 ### Rejected approaches
 
@@ -88,6 +89,7 @@ Implement F032 export fidelity on feat/export-fidelity. Verify locally, draft PR
 - docs/runs/run-1788872404941-13d9f6.json
 - docs/runs/run-1788873694499-14c3cf.json
 - docs/runs/run-1788890099442-23244e.json
+- docs/runs/run-1788893232267-687a6a.json
 
 ## Resume
 

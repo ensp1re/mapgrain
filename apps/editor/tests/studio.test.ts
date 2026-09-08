@@ -4,6 +4,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { validateDocument } from "@mapgrain/document";
 import { STUDIO_HEADER } from "../src/constants/studio.ts";
+import { PERSIST_ERROR_CODE, PersistError } from "../src/persist/errors.ts";
 import { studioStore } from "../src/persist/studio.ts";
 
 const fixture = fileURLToPath(
@@ -43,5 +44,42 @@ test("studio store loads and saves through the session header", async () => {
       ...loaded,
       document: { ...loaded.document, id: "doc-other" },
     }),
+  );
+});
+
+test("studio store load fails closed on a missing or invalid file", async () => {
+  const missing = studioStore({ token: "secret", fileName: "diagram.json" }, (async () => {
+    return new Response(JSON.stringify({ ok: false, code: "not_found" }), { status: 404 });
+  }) as typeof fetch);
+  await assert.rejects(
+    () => missing.load(),
+    (error: unknown) => error instanceof PersistError && error.code === PERSIST_ERROR_CODE.NOT_FOUND,
+  );
+
+  const invalid = studioStore({ token: "secret", fileName: "diagram.json" }, (async () => {
+    return new Response("{", { status: 200, headers: { etag: '"v1"' } });
+  }) as typeof fetch);
+  await assert.rejects(
+    () => invalid.load(),
+    (error: unknown) => error instanceof PersistError && error.code === PERSIST_ERROR_CODE.IO,
+  );
+});
+
+test("studio store surfaces conflict separately from a missing file", async () => {
+  const original = JSON.parse(await readFile(fixture, "utf8")) as unknown;
+  const result = validateDocument(original);
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const store = studioStore({ token: "secret", fileName: "diagram.json" }, (async (_input, init) => {
+    if (!init?.method || init.method === "GET") {
+      return new Response(JSON.stringify(original), { status: 200, headers: { etag: '"v1"' } });
+    }
+    return new Response(JSON.stringify({ ok: false, error: "stale write", code: "conflict" }), { status: 409 });
+  }) as typeof fetch);
+  const loaded = await store.load();
+  assert.ok(loaded);
+  await assert.rejects(
+    () => store.save(loaded),
+    (error: unknown) => error instanceof PersistError && error.code === PERSIST_ERROR_CODE.CONFLICT,
   );
 });
