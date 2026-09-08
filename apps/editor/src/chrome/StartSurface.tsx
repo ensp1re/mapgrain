@@ -3,6 +3,8 @@ import { EXAMPLES } from "../create/examples.ts";
 interface RecentItem {
   id: string;
   title: string;
+  lastOpenedAt?: string;
+  updatedAt?: string;
 }
 
 interface StartSurfaceProps {
@@ -58,20 +60,27 @@ Create a Mapgrain architecture JSON with Browser, API, and Database nodes.
 pnpm mapgrain validate diagram.json
 pnpm mapgrain layout diagram.json`}</pre>
       </section>
-      {recents.length > 0 ? (
-        <section className="recent-list" aria-label="Recent diagrams">
-          <h2>Recent diagrams</h2>
+      <section className="recent-list" aria-label="Recent diagrams">
+        <h2>Recent diagrams</h2>
+        {recents.length === 0 ? (
+          <p className="recent-empty">No recent diagrams yet.</p>
+        ) : (
           <ul>
             {recents.map((item) => (
               <li key={item.id}>
                 <button type="button" className="text-btn" onClick={() => onOpenRecent(item.id)}>
                   {item.title}
+                  {item.lastOpenedAt || item.updatedAt ? (
+                    <span className="recent-time">
+                      {new Date(item.lastOpenedAt ?? item.updatedAt ?? "").toLocaleString()}
+                    </span>
+                  ) : null}
                 </button>
               </li>
             ))}
           </ul>
-        </section>
-      ) : null}
+        )}
+      </section>
       <section id="examples" className="example-grid" aria-label="Examples">
         <h2>Examples</h2>
         <div className="example-cards">

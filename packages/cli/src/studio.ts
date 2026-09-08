@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
-import { access, readFile, rename, writeFile } from "node:fs/promises";
+import { access, readFile, rename, unlink, writeFile } from "node:fs/promises";
 import { validateDocument } from "@mapgrain/document";
 import { extname, join, normalize, relative, resolve, sep } from "node:path";
 import {
@@ -16,8 +16,15 @@ import {
   STUDIO_PORT_TRIES,
 } from "./constants/cli.ts";
 import { studioDir, studioFixtureDir } from "./paths.ts";
-import { fail } from "./read.ts";
+import { fail, uniqueSiblingTemp } from "./read.ts";
 import type { CliIo } from "./types/cli.ts";
+
+export interface StudioDisk {
+  readFile: typeof readFile;
+  writeFile: typeof writeFile;
+  rename: typeof rename;
+  unlink: typeof unlink;
+}
 
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -100,8 +107,18 @@ function etagFor(bytes: Uint8Array): string {
   return `"${createHash("sha256").update(bytes).digest("hex")}"`;
 }
 
-function uniqueTemp(file: string): string {
-  return `${file}.${randomBytes(8).toString("hex")}.tmp`;
+function ioFailure(error: unknown): { status: number; code: string; message: string } {
+  const code = typeof error === "object" && error && "code" in error ? String((error as { code?: string }).code) : "";
+  if (code === "ENOENT") return { status: 404, code: "not_found", message: "Opened file is missing." };
+  if (code === "ENOSPC") return { status: 507, code: "disk_full", message: "Disk is full." };
+  if (code === "EACCES" || code === "EPERM") {
+    return { status: 403, code: "permission", message: "Permission denied." };
+  }
+  return {
+    status: 500,
+    code: "io",
+    message: error instanceof Error ? error.message : String(error),
+  };
 }
 
 function injectStudio(html: string, token: string, fileName: string): string {
@@ -149,7 +166,7 @@ async function resolveAssets(assets?: string): Promise<string> {
   }
 }
 
-export async function startStudio(file: string, assets?: string): Promise<StudioServer> {
+export async function startStudio(file: string, assets?: string, disk?: Partial<StudioDisk>): Promise<StudioServer> {
   const root = await resolveAssets(assets);
   await access(file);
   const token = randomBytes(16).toString("hex");
@@ -179,6 +196,13 @@ export async function startStudio(file: string, assets?: string): Promise<Studio
     return run;
   };
 
+  const io: StudioDisk = {
+    readFile: disk?.readFile ?? readFile,
+    writeFile: disk?.writeFile ?? writeFile,
+    rename: disk?.rename ?? rename,
+    unlink: disk?.unlink ?? unlink,
+  };
+
   selected.on("request", (req, res) => {
     void handle(req, res, {
       file,
@@ -187,6 +211,7 @@ export async function startStudio(file: string, assets?: string): Promise<Studio
       port: selectedPort,
       assets: root,
       enqueue,
+      disk: io,
     });
   });
 
@@ -212,6 +237,7 @@ async function handle(
     port: number;
     assets: string;
     enqueue: (task: () => Promise<void>) => Promise<void>;
+    disk: StudioDisk;
   },
 ): Promise<void> {
   if (!hostOk(req, ctx.port) || !originOk(req, ctx.port)) {
@@ -225,8 +251,13 @@ async function handle(
       return;
     }
     if (req.method === "GET") {
-      const bytes = await readFile(ctx.file);
-      send(res, 200, bytes, "application/json; charset=utf-8", { etag: etagFor(bytes) });
+      try {
+        const bytes = await ctx.disk.readFile(ctx.file);
+        send(res, 200, bytes, "application/json; charset=utf-8", { etag: etagFor(bytes) });
+      } catch (error) {
+        const failure = ioFailure(error);
+        send(res, failure.status, JSON.stringify({ ok: false, error: failure.message, code: failure.code }), "application/json");
+      }
       return;
     }
     if (req.method === "PUT") {
@@ -243,45 +274,86 @@ async function handle(
         return;
       }
       await ctx.enqueue(async () => {
-        let parsed: unknown;
         try {
-          parsed = JSON.parse(body.toString("utf8")) as unknown;
-        } catch {
-          send(res, 400, JSON.stringify({ ok: false, error: "invalid json" }), "application/json");
-          return;
-        }
-        const validated = validateDocument(parsed);
-        if (!validated.ok) {
+          let parsed: unknown;
+          try {
+            parsed = JSON.parse(body.toString("utf8")) as unknown;
+          } catch {
+            send(res, 400, JSON.stringify({ ok: false, error: "invalid json" }), "application/json");
+            return;
+          }
+          const validated = validateDocument(parsed);
+          if (!validated.ok) {
+            send(
+              res,
+              400,
+              JSON.stringify({ ok: false, error: "invalid document", errors: validated.errors }),
+              "application/json",
+            );
+            return;
+          }
+          let current: Buffer;
+          try {
+            current = await ctx.disk.readFile(ctx.file);
+          } catch (error) {
+            const failure = ioFailure(error);
+            send(res, failure.status, JSON.stringify({ ok: false, error: failure.message, code: failure.code }), "application/json");
+            return;
+          }
+          const expected = header(req, STUDIO_IF_MATCH);
+          const currentTag = etagFor(current);
+          if (!expected) {
+            send(res, 428, JSON.stringify({ ok: false, error: "if-match required", code: "if_match" }), "application/json");
+            return;
+          }
+          if (expected !== currentTag) {
+            send(res, 409, JSON.stringify({ ok: false, error: "stale write", code: "conflict" }), "application/json");
+            return;
+          }
+          const next = new TextEncoder().encode(`${JSON.stringify(validated.document, null, 2)}\n`);
+          const tmp = uniqueSiblingTemp(ctx.file);
+          try {
+            await ctx.disk.writeFile(tmp, next);
+          } catch (error) {
+            await ctx.disk.unlink(tmp).catch(() => undefined);
+            const failure = ioFailure(error);
+            send(res, failure.status, JSON.stringify({ ok: false, error: failure.message, code: failure.code }), "application/json");
+            return;
+          }
+          try {
+            await ctx.disk.rename(tmp, ctx.file);
+          } catch {
+            await ctx.disk.unlink(tmp).catch(() => undefined);
+            send(
+              res,
+              500,
+              JSON.stringify({
+                ok: false,
+                error: "Could not replace the opened file.",
+                code: "rename_failed",
+              }),
+              "application/json",
+            );
+            return;
+          }
           send(
             res,
-            400,
-            JSON.stringify({ ok: false, error: "invalid document", errors: validated.errors }),
+            200,
+            JSON.stringify({ ok: true, action: "write", path: ctx.fileName }),
             "application/json",
+            { etag: etagFor(next) },
           );
-          return;
+        } catch (error) {
+          if (!res.headersSent) {
+            const failure = ioFailure(error);
+            send(
+              res,
+              failure.status,
+              JSON.stringify({ ok: false, error: failure.message, code: failure.code }),
+              "application/json",
+            );
+          }
         }
-        const current = await readFile(ctx.file);
-        const expected = header(req, STUDIO_IF_MATCH);
-        const currentTag = etagFor(current);
-        if (!expected) {
-          send(res, 428, JSON.stringify({ ok: false, error: "if-match required" }), "application/json");
-          return;
-        }
-        if (expected !== currentTag) {
-          send(res, 409, JSON.stringify({ ok: false, error: "stale write" }), "application/json");
-          return;
-        }
-        const next = new TextEncoder().encode(`${JSON.stringify(validated.document, null, 2)}\n`);
-        const tmp = uniqueTemp(ctx.file);
-        await writeFile(tmp, next);
-        await rename(tmp, ctx.file);
-        send(
-          res,
-          200,
-          JSON.stringify({ ok: true, action: "write", path: ctx.fileName }),
-          "application/json",
-          { etag: etagFor(next) },
-        );
       });
       return;
     }

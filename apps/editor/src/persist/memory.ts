@@ -1,25 +1,58 @@
 import type { EditorSnapshot } from "../types/editor.ts";
-import type { PersistStore } from "../types/persist.ts";
+import type { PersistStore, StoredWorkspace } from "../types/persist.ts";
+import { chooseLastActive } from "./active.ts";
 import { snapshotFromStored, storedFromSnapshot } from "./codec.ts";
 
 export function memoryStore(initial: unknown = null): PersistStore {
-  const files = new Map<string, unknown>();
+  const files = new Map<string, StoredWorkspace>();
+  let lastActiveId: string | null = null;
   const first = snapshotFromStored(initial);
-  if (first) files.set(first.document.id, storedFromSnapshot(first));
+  if (first) {
+    files.set(first.document.id, storedFromSnapshot(first));
+    lastActiveId = first.document.id;
+  }
   return {
     durable: false,
     async load(id) {
-      if (id) return snapshotFromStored(files.get(id) ?? null);
-      const last = [...files.values()].at(-1);
-      return snapshotFromStored(last ?? null);
+      const records = [...files.entries()].map(([recordId, value]) => ({
+        id: recordId,
+        title: "",
+        lastOpenedAt: value.lastOpenedAt,
+        updatedAt: value.updatedAt,
+      }));
+      const chosen = id ?? chooseLastActive(records, lastActiveId);
+      if (!chosen) return null;
+      const existing = files.get(chosen);
+      if (!existing) return null;
+      lastActiveId = chosen;
+      const now = new Date().toISOString();
+      files.set(chosen, { ...existing, lastOpenedAt: now });
+      return snapshotFromStored(files.get(chosen) ?? null);
     },
     async save(snapshot: EditorSnapshot) {
-      files.set(snapshot.document.id, storedFromSnapshot(snapshot));
+      const existing = files.get(snapshot.document.id);
+      files.set(
+        snapshot.document.id,
+        storedFromSnapshot(snapshot, {
+          updatedAt: new Date().toISOString(),
+          lastOpenedAt: existing?.lastOpenedAt,
+        }),
+      );
+      lastActiveId = snapshot.document.id;
     },
     async list() {
-      return [...files.values()].flatMap((value) => {
+      return [...files.entries()].flatMap(([id, value]) => {
         const snap = snapshotFromStored(value);
-        return snap ? [{ id: snap.document.id, title: snap.document.title }] : [];
+        return snap
+          ? [
+              {
+                id,
+                title: snap.document.title,
+                lastOpenedAt: value.lastOpenedAt,
+                updatedAt: value.updatedAt,
+              },
+            ]
+          : [];
       });
     },
   };

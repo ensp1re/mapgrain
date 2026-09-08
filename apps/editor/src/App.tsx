@@ -50,7 +50,9 @@ import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
 import { AddBar } from "./chrome/AddBar.tsx";
 import { blankDocument } from "./create/blank.ts";
 import { makeNode } from "./create/nodes.ts";
-import { AUTOSAVE_MS, SAVE_STATE } from "./constants/persist.ts";
+import { AUTOSAVE_MS, PERSIST_ERROR_CODE, SAVE_STATE } from "./constants/persist.ts";
+import { PersistError, persistErrorMessage } from "./persist/errors.ts";
+import { createSaveSession, type SaveSession } from "./persist/session.ts";
 import { ComponentNode } from "./diagram/ComponentNode.tsx";
 import { GroupNode } from "./diagram/GroupNode.tsx";
 import { RelationEdge } from "./diagram/RelationEdge.tsx";
@@ -93,7 +95,7 @@ import type {
   PendingConnection,
   PositionMap,
 } from "./types/editor.ts";
-import type { PersistStore, SaveState } from "./types/persist.ts";
+import type { PersistStore, RecentDocument, SaveState } from "./types/persist.ts";
 import type { ComponentNodeData, FlowNodeDraft, GroupNodeData } from "./types/flow.ts";
 
 const nodeTypes = { component: ComponentNode, group: GroupNode };
@@ -224,8 +226,9 @@ function Specimen() {
   const [booted, setBooted] = useState(false);
   const [surface, setSurface] = useState<WorkspaceSurface>("start");
   const [importError, setImportError] = useState<string | null>(null);
-  const [recents, setRecents] = useState<Array<{ id: string; title: string }>>([]);
+  const [recents, setRecents] = useState<RecentDocument[]>([]);
   const [saveState, setSaveState] = useState<SaveState>(SAVE_STATE.SAVED);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
   const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
@@ -233,7 +236,7 @@ function Specimen() {
   historyRef.current = history;
   const layoutEngine = useRef<BrowserLayoutEngine | null>(null);
   const persistStore = useRef<PersistStore>(defaultStore());
-  const persistGen = useRef(0);
+  const saveSession = useRef<SaveSession | null>(null);
   const skipNextSave = useRef(true);
   const bootRecovery = useRef(false);
   const snapshot = history.present;
@@ -258,15 +261,33 @@ function Specimen() {
         skipNextSave.current = true;
         setBooted(true);
       })
-      .catch(() => {
+      .catch((error) => {
         if (cancelled) return;
         bootRecovery.current = true;
         skipNextSave.current = true;
+        const message =
+          error instanceof PersistError
+            ? persistErrorMessage(error.code)
+            : persistErrorMessage(PERSIST_ERROR_CODE.IO);
+        setSaveError(message);
+        setImportError(message);
         setBooted(true);
       });
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  useEffect(() => {
+    const session = createSaveSession({
+      store: persistStore.current,
+      delayMs: AUTOSAVE_MS,
+      fileBacked: Boolean(readStudioConfig()),
+      onState: setSaveState,
+      onError: setSaveError,
+    });
+    saveSession.current = session;
+    return () => session.dispose();
   }, []);
 
   useEffect(() => {
@@ -278,30 +299,33 @@ function Specimen() {
       else setSaveState(bootRecovery.current ? SAVE_STATE.RECOVERY : SAVE_STATE.SAVED);
       return;
     }
-    if (!persistStore.current.durable) {
-      setSaveState(SAVE_STATE.TEMPORARY);
-      return;
-    }
-    const fileBacked = Boolean(readStudioConfig());
-    setSaveState(fileBacked ? SAVE_STATE.FILE_SAVING : SAVE_STATE.SAVING);
-    const generation = (persistGen.current += 1);
-    const timer = window.setTimeout(() => {
-      void persistStore.current
-        .save(snapshot)
-        .then(() => {
-          if (generation === persistGen.current) {
-            setSaveState(fileBacked ? SAVE_STATE.FILE_SAVED : SAVE_STATE.SAVED);
-          }
-        })
-        .catch(() => {
-          if (generation === persistGen.current) setSaveState(SAVE_STATE.RECOVERY);
-        });
-    }, AUTOSAVE_MS);
-    return () => window.clearTimeout(timer);
+    setSaveError(null);
+    saveSession.current?.schedule(snapshot);
   }, [booted, snapshot, surface]);
 
-  const openSnapshot = useCallback((next: EditorSnapshot) => {
-    skipNextSave.current = false;
+  useEffect(() => {
+    const onLeave = (event: BeforeUnloadEvent) => {
+      if (saveState === SAVE_STATE.SAVING || saveState === SAVE_STATE.FILE_SAVING) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+      void saveSession.current?.flush();
+    };
+    window.addEventListener("beforeunload", onLeave);
+    return () => window.removeEventListener("beforeunload", onLeave);
+  }, [saveState]);
+
+  const flushThen = useCallback((next: () => void, evenIfFailed = false) => {
+    const run = saveSession.current?.flush() ?? Promise.resolve();
+    if (evenIfFailed) {
+      void run.finally(next);
+      return;
+    }
+    void run.then(next, () => undefined);
+  }, []);
+
+  const openSnapshot = useCallback((next: EditorSnapshot, options?: { skipSave?: boolean }) => {
+    skipNextSave.current = Boolean(options?.skipSave);
     setArrange({ status: "idle" });
     setTheme(next.document.theme);
     setHistory(createHistory(next));
@@ -315,7 +339,7 @@ function Specimen() {
 
   useEffect(() => {
     void persistStore.current.list().then(setRecents);
-  }, [booted, documentModel?.id, documentModel?.title]);
+  }, [booted, surface, documentModel?.id, documentModel?.title, saveState]);
 
   const displayPositions =
     arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {});
@@ -692,9 +716,9 @@ function Specimen() {
       if (id === COMMAND_ID.ALIGN_BOTTOM) alignSelection(ALIGN_KIND.BOTTOM);
       if (id === COMMAND_ID.ARRANGE) void startArrange();
       if (id === COMMAND_ID.CONNECT) connectSelected();
-      if (id === COMMAND_ID.NEW) setSurface("start");
+      if (id === COMMAND_ID.NEW) flushThen(() => setSurface("start"));
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, presenting, startArrange, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, flushThen, presenting, startArrange, theme],
   );
 
   useEffect(() => {
@@ -767,18 +791,37 @@ function Specimen() {
           importError={importError}
           recents={recents}
           onNewBlank={() => {
-            const document = blankDocument();
-            openSnapshot({ document, positions: {} });
+            flushThen(() => {
+              const document = blankDocument();
+              openSnapshot({ document, positions: {} });
+            });
           }}
           onOpenExample={(id) => {
-            const example = EXAMPLES.find((item) => item.id === id);
-            if (!example) return;
-            const next = snapshotFromStored({ document: example.document });
-            if (next) openSnapshot(next);
+            flushThen(() => {
+              const example = EXAMPLES.find((item) => item.id === id);
+              if (!example) return;
+              const next = snapshotFromStored({ document: example.document });
+              if (next) openSnapshot(next);
+            });
           }}
           onOpenRecent={(id) => {
-            void persistStore.current.load(id).then((stored) => {
-              if (stored) openSnapshot(stored);
+            flushThen(() => {
+              void persistStore.current
+                .load(id)
+                .then((stored) => {
+                  if (stored) {
+                    openSnapshot(stored, { skipSave: true });
+                    return;
+                  }
+                  setImportError("That recent diagram is missing or unreadable.");
+                })
+                .catch((error) => {
+                  setImportError(
+                    error instanceof PersistError
+                      ? persistErrorMessage(error.code)
+                      : "That recent diagram is missing or unreadable.",
+                  );
+                });
             });
           }}
           onImportFile={(file) => {
@@ -813,18 +856,47 @@ function Specimen() {
     <EditorErrorBoundary
       snapshot={snapshot}
       onReturnToLibrary={() => {
-        setSurface("start");
-        setEditingId(null);
-        setArrange({ status: "idle" });
+        flushThen(() => {
+          setSurface("start");
+          setEditingId(null);
+          setArrange({ status: "idle" });
+        }, true);
       }}
     >
     <div className={presenting ? "app is-presenting" : "app"}>
       <TopBar
         title={documentModel.title}
         saveState={saveState}
+        saveError={saveError}
         onBackup={() => {
           if (!snapshot) return;
           download("diagram.json", backupBytes(snapshot), "application/json");
+        }}
+        onRetrySave={() => {
+          if (!snapshot) return;
+          setSaveError(null);
+          saveSession.current?.schedule(snapshot);
+          void saveSession.current?.flush();
+        }}
+        onReloadSaved={() => {
+          void persistStore.current
+            .load(documentModel.id)
+            .then((stored) => {
+              if (stored) {
+                openSnapshot(stored, { skipSave: true });
+                return;
+              }
+              setSaveState(SAVE_STATE.RECOVERY);
+              setSaveError("The saved copy is missing or unreadable. Download this draft.");
+            })
+            .catch((error) => {
+              setSaveState(SAVE_STATE.RECOVERY);
+              setSaveError(
+                error instanceof PersistError
+                  ? persistErrorMessage(error.code)
+                  : persistErrorMessage(PERSIST_ERROR_CODE.IO),
+              );
+            });
         }}
         canUndo={history.past.length > 0}
         canRedo={history.future.length > 0}

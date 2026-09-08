@@ -12,3 +12,4 @@ docs/state.lock
 docs/*.tmp-*
 .env
 .env.*
+RECOMENDATIONS.md

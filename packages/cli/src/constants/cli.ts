@@ -74,8 +74,8 @@ Input:
   Pass a file path, or - to read stdin. Maximum size is 8 MiB.
 
 Overwrite:
-  -o writes a sibling .tmp file and renames it over the destination.
-  On failure the previous file is left in place.
+  -o writes a unique sibling .tmp file and renames it over the destination.
+  On failure the previous file is left in place and the temp file is removed.
 
 Studio:
   Binds 127.0.0.1 only. Writes are limited to the opened file.
