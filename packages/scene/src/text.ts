@@ -41,7 +41,21 @@ export const fontTextMeasurer: TextMeasurer = {
   },
 };
 
-export const approximateTextMeasurer: TextMeasurer = fontTextMeasurer;
+export function cachedTextMeasurer(inner: TextMeasurer): TextMeasurer {
+  const cache = new Map<string, { width: number; height: number }>();
+  return {
+    measure(text, font) {
+      const key = `${font.family}\0${font.size}\0${font.weight}\0${text}`;
+      const hit = cache.get(key);
+      if (hit) return hit;
+      const value = inner.measure(text, font);
+      cache.set(key, value);
+      return value;
+    },
+  };
+}
+
+export const approximateTextMeasurer: TextMeasurer = cachedTextMeasurer(fontTextMeasurer);
 
 export const defaultFont = {
   family: DEFAULT_FONT_FAMILY,

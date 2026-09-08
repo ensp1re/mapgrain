@@ -59,6 +59,7 @@ import { alignPositions } from "./geometry/align.ts";
 import { positionsFromFlow, positionsFromScene, samePositions } from "./geometry/positions.ts";
 import { createHistory, pushHistory, redoHistory, undoHistory } from "./history/stack.ts";
 import { reuseUnchangedEdges, reuseUnchangedNodes } from "./edit/flowNodes.ts";
+import { indexById } from "./edit/indexes.ts";
 import {
   commandAllowed,
   layoutToken,
@@ -335,8 +336,9 @@ function Specimen() {
   const computedEdges = useMemo<Edge[]>(() => {
     if (!documentModel) return [];
     const selected = new Set(selection.edgeIds);
+    const meaningById = indexById(documentModel.edges);
     return flow.edges.map((edge) => {
-      const meaning = documentModel.edges.find((item) => item.id === edge.id);
+      const meaning = meaningById.get(edge.id);
       return {
         id: edge.id,
         source: edge.source,

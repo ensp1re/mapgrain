@@ -70,4 +70,6 @@ test("service worker caches same-origin GET and serves it offline", async () => 
   assert.match(source, new RegExp(OFFLINE_CACHE));
   assert.match(source, /caches\.delete/);
   assert.match(source, /startsWith\(CACHE_PREFIX\)/);
+  assert.match(source, /elk-worker/);
+  assert.match(source, /async function precache/);
 });
