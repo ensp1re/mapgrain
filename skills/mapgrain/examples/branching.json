@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-harbor-desk",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Harbor traffic desk",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [
+    { "id": "front", "label": "Front desk", "parentId": null },
+    { "id": "core", "label": "Records", "parentId": null }
+  ],
+  "nodes": [
+    {
+      "id": "patron",
+      "kind": "actor",
+      "label": "Patron",
+      "groupId": null,
+      "ports": [{ "id": "out", "side": "east" }]
+    },
+    {
+      "id": "staff",
+      "kind": "actor",
+      "label": "Staff",
+      "groupId": "front",
+      "ports": [{ "id": "out", "side": "east" }]
+    },
+    {
+      "id": "desk",
+      "kind": "gateway",
+      "label": "Desk API",
+      "groupId": "front",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "holds",
+      "kind": "queue",
+      "label": "Hold queue",
+      "groupId": "front",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "catalog",
+      "kind": "datastore",
+      "label": "Catalog",
+      "groupId": "core",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "scan",
+      "kind": "job",
+      "label": "Scan job",
+      "groupId": "core",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "notify",
+      "kind": "service",
+      "label": "Notify",
+      "groupId": "core",
+      "ports": [
+        { "id": "in", "side": "west" },
+        { "id": "out", "side": "east" }
+      ]
+    },
+    {
+      "id": "mail",
+      "kind": "external",
+      "label": "Mail host",
+      "groupId": null,
+      "ports": [{ "id": "in", "side": "west" }]
+    },
+    {
+      "id": "audit",
+      "kind": "datastore",
+      "label": "Audit log",
+      "groupId": "core",
+      "ports": [{ "id": "in", "side": "west" }]
+    },
+    {
+      "id": "pickup",
+      "kind": "queue",
+      "label": "Pickup shelf",
+      "groupId": "front",
+      "ports": [{ "id": "in", "side": "west" }]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-patron-desk",
+      "source": { "nodeId": "patron", "portId": "out" },
+      "target": { "nodeId": "desk", "portId": "in" },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-staff-desk",
+      "source": { "nodeId": "staff", "portId": "out" },
+      "target": { "nodeId": "desk", "portId": "in" },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-desk-holds",
+      "source": { "nodeId": "desk", "portId": "out" },
+      "target": { "nodeId": "holds", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-desk-catalog",
+      "source": { "nodeId": "desk", "portId": "out" },
+      "target": { "nodeId": "catalog", "portId": "in" },
+      "type": "reads",
+      "direction": "forward"
+    },
+    {
+      "id": "e-holds-scan",
+      "source": { "nodeId": "holds", "portId": "out" },
+      "target": { "nodeId": "scan", "portId": "in" },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-scan-catalog",
+      "source": { "nodeId": "scan", "portId": "out" },
+      "target": { "nodeId": "catalog", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-scan-notify",
+      "source": { "nodeId": "scan", "portId": "out" },
+      "target": { "nodeId": "notify", "portId": "in" },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-notify-mail",
+      "source": { "nodeId": "notify", "portId": "out" },
+      "target": { "nodeId": "mail", "portId": "in" },
+      "type": "publishes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-desk-audit",
+      "source": { "nodeId": "desk", "portId": "out" },
+      "target": { "nodeId": "audit", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-notify-pickup",
+      "source": { "nodeId": "notify", "portId": "out" },
+      "target": { "nodeId": "pickup", "portId": "in" },
+      "type": "writes",
+      "direction": "forward"
+    }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "All" }]
+}

@@ -1,6 +1,6 @@
 # Document fields
 
-Authoritative schema: `packages/cli/schema/document.v1.json` (same contract as `packages/document`).
+Authoritative schema: [document.schema.json](document.schema.json) in this skill directory.
 
 Required document keys: `schemaVersion` (1), `id`, `revision`, `kind` (`architecture` | `workflow`), `title`, `nodes`, `edges`, `groups`, `views`, `layoutHints`, `theme` (`dark` | `light`).
 

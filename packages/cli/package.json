@@ -7,9 +7,6 @@
   "bin": {
     "mapgrain": "./dist/mapgrain.js"
   },
-  "exports": {
-    ".": "./src/index.ts"
-  },
   "files": [
     "dist",
     "schema",

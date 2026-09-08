@@ -66,6 +66,9 @@ test(
       assert.equal(exportPng.code, EXIT_CODE.OK, exportPng.stderr);
       const exportHtml = await run(bin, ["export", fixture, "--format", "html", "-o", html], installDir);
       assert.equal(exportHtml.code, EXIT_CODE.OK, exportHtml.stderr);
+      const laid = join(installDir, "laid.json");
+      const layout = await run(bin, ["layout", fixture, "-o", laid], installDir);
+      assert.equal(layout.code, EXIT_CODE.OK, layout.stderr);
       const spaced = await mkdtemp(join(tmpdir(), "map grain диаграмма "));
       const copy = join(spaced, "nested groups.json");
       await copyFile(fixture, copy);

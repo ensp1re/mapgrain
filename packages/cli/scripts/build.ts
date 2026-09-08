@@ -1,7 +1,8 @@
-import { chmod, cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { chmod, cp, mkdir, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as esbuild from "esbuild";
+import { requireEditorAssets } from "../src/packaging.ts";
 
 const cliRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = join(cliRoot, "..", "..");
@@ -34,15 +35,8 @@ await cp(
 );
 await cp(join(repoRoot, "LICENSE"), join(cliRoot, "LICENSE"));
 
-try {
-  await rm(studioOut, { recursive: true, force: true });
-  await cp(editorDist, studioOut, { recursive: true });
-} catch {
-  await mkdir(studioOut, { recursive: true });
-  await writeFile(
-    join(studioOut, "index.html"),
-    "<!DOCTYPE html><html><head><meta charset='utf-8'/><title>Mapgrain studio</title></head><body><p>Mapgrain studio</p></body></html>\n",
-  );
-}
+await requireEditorAssets(editorDist);
+await rm(studioOut, { recursive: true, force: true });
+await cp(editorDist, studioOut, { recursive: true });
 
 process.stdout.write(`wrote ${distFile}\n`);

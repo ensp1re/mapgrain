@@ -39,16 +39,18 @@ pnpm verify
 pnpm mapgrain validate tests/fixtures/documents/nested-groups.json
 pnpm mapgrain render tests/fixtures/documents/nested-groups.json -o diagram.svg
 pnpm mapgrain export tests/fixtures/documents/nested-groups.json --format json -o diagram.json
+pnpm mapgrain layout tests/fixtures/documents/nested-groups.json -o laid.json
 pnpm mapgrain view tests/fixtures/documents/nested-groups.json -o view.html
 pnpm mapgrain doctor
 ```
 
-The public CLI package is `mapgrain`. From this checkout, `pnpm --filter mapgrain pack` writes a tarball that installs without the monorepo. `studio` serves the editor on `127.0.0.1` for one opened file. There is no hosted service.
+The CLI package name is `mapgrain`. It is not on the npm registry yet. From this checkout, `pnpm build` then `pnpm --filter mapgrain pack` writes a tarball; install that tarball with npm. `studio` serves the editor on `127.0.0.1` for one opened file. There is no hosted service.
 
 Companion skill (Cursor / Codex first):
 
 ```sh
-npx skills add ensp1re/mapgrain --skill mapgrain --yes
+npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
+npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent codex
 ```
 
 Current work is tracked with:
