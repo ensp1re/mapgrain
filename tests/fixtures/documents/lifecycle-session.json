@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-lifecycle-session",
+  "revision": 1,
+  "kind": "lifecycle",
+  "title": "Session lifecycle",
+  "theme": "dark",
+  "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
+  "groups": [],
+  "nodes": [
+    { "id": "idle", "kind": "state", "label": "Idle", "groupId": null, "marker": "initial", "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "active", "kind": "state", "label": "Active", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "closed", "kind": "state", "label": "Closed", "groupId": null, "marker": "final", "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] }
+  ],
+  "edges": [
+    { "id": "t1", "source": { "nodeId": "idle", "portId": "out" }, "target": { "nodeId": "active", "portId": "in" }, "type": "transition", "direction": "forward", "label": "open", "guard": "token valid" },
+    { "id": "t2", "source": { "nodeId": "active", "portId": "out" }, "target": { "nodeId": "closed", "portId": "in" }, "type": "transition", "direction": "forward", "label": "expire" },
+    { "id": "t3", "source": { "nodeId": "closed", "portId": "out" }, "target": { "nodeId": "idle", "portId": "in" }, "type": "transition", "direction": "forward", "label": "reset" }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "Session" }]
+}

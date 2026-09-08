@@ -146,6 +146,9 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
         type: operation.type,
         direction: operation.direction,
         ...(operation.label ? { label: operation.label } : {}),
+        ...(operation.order !== undefined ? { order: operation.order } : {}),
+        ...(operation.guard ? { guard: operation.guard } : {}),
+        ...(operation.outcome ? { outcome: operation.outcome } : {}),
       });
       return commit(next, { kind: OPERATION_KIND.DELETE_EDGE, edgeId: operation.id }, document);
     }
@@ -163,6 +166,9 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
           type: edge.type,
           direction: edge.direction,
           label: edge.label,
+          order: edge.order,
+          guard: edge.guard,
+          outcome: edge.outcome,
         },
         document,
       );

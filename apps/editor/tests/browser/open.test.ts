@@ -66,7 +66,14 @@ test("production build opens a blank diagram and every example without page erro
   assert.equal(errors.join("\n"), "", "blank");
 
   await page.getByRole("button", { name: "New", exact: true }).click();
-  const examples = ["Local diagram workspace", "Review workflow", "Feedback loop"];
+  const examples = [
+    "Local diagram workspace",
+    "Review workflow",
+    "Feedback loop",
+    "Checkout messages",
+    "Ingest data flow",
+    "Session lifecycle",
+  ];
   for (const name of examples) {
     await page.getByRole("button", { name: new RegExp(name) }).click();
     await editorReady().waitFor({ timeout: 10_000 });

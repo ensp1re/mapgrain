@@ -1,22 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { NodeKind } from "@mapgrain/document";
-import { ADDABLE_KINDS } from "../create/nodes.ts";
 import { Button } from "../ui/Button.tsx";
 import { useFocusTrap } from "./focusTrap.ts";
 
 interface AddBarProps {
+  kinds: NodeKind[];
   onAddNode: (kind: NodeKind) => void;
   onAddGroup: () => void;
   onConnect: () => void;
   canConnect: boolean;
 }
 
-const ADD_ITEMS: Array<{ id: string; label: string; kind: NodeKind | "group" }> = [
-  ...ADDABLE_KINDS.map((kind) => ({ id: kind, label: kind, kind })),
-  { id: "group", label: "group", kind: "group" as const },
-];
-
-export function AddBar({ onAddNode, onAddGroup, onConnect, canConnect }: AddBarProps) {
+export function AddBar({ kinds, onAddNode, onAddGroup, onConnect, canConnect }: AddBarProps) {
+  const addItems: Array<{ id: string; label: string; kind: NodeKind | "group" }> = [
+    ...kinds.map((kind) => ({ id: kind, label: kind, kind })),
+    { id: "group", label: "group", kind: "group" as const },
+  ];
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -25,8 +24,8 @@ export function AddBar({ onAddNode, onAddGroup, onConnect, canConnect }: AddBarP
   useFocusTrap(popRef, open, () => setOpen(false));
   const items = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return ADD_ITEMS.filter((item) => item.label.includes(needle));
-  }, [query]);
+    return addItems.filter((item) => item.label.includes(needle));
+  }, [addItems, query]);
 
   useEffect(() => {
     if (!open) return;
@@ -35,7 +34,7 @@ export function AddBar({ onAddNode, onAddGroup, onConnect, canConnect }: AddBarP
     searchRef.current?.focus();
   }, [open]);
 
-  function insert(item: (typeof ADD_ITEMS)[number]) {
+  function insert(item: (typeof addItems)[number]) {
     if (item.kind === "group") onAddGroup();
     else onAddNode(item.kind);
     setOpen(false);

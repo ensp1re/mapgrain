@@ -40,6 +40,18 @@
         {
           "const": "workflow",
           "type": "string"
+        },
+        {
+          "const": "sequence",
+          "type": "string"
+        },
+        {
+          "const": "data-flow",
+          "type": "string"
+        },
+        {
+          "const": "lifecycle",
+          "type": "string"
         }
       ]
     },
@@ -99,6 +111,26 @@
               },
               {
                 "const": "external",
+                "type": "string"
+              },
+              {
+                "const": "decision",
+                "type": "string"
+              },
+              {
+                "const": "participant",
+                "type": "string"
+              },
+              {
+                "const": "process",
+                "type": "string"
+              },
+              {
+                "const": "entity",
+                "type": "string"
+              },
+              {
+                "const": "state",
                 "type": "string"
               }
             ]
@@ -168,6 +200,18 @@
                 }
               }
             }
+          },
+          "marker": {
+            "anyOf": [
+              {
+                "const": "initial",
+                "type": "string"
+              },
+              {
+                "const": "final",
+                "type": "string"
+              }
+            ]
           }
         }
       }
@@ -258,6 +302,26 @@
               {
                 "const": "depends-on",
                 "type": "string"
+              },
+              {
+                "const": "message",
+                "type": "string"
+              },
+              {
+                "const": "reply",
+                "type": "string"
+              },
+              {
+                "const": "data",
+                "type": "string"
+              },
+              {
+                "const": "transition",
+                "type": "string"
+              },
+              {
+                "const": "outcome",
+                "type": "string"
               }
             ]
           },
@@ -296,6 +360,18 @@
                 "type": "string"
               }
             ]
+          },
+          "order": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "guard": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "outcome": {
+            "maxLength": 200,
+            "type": "string"
           }
         }
       }

@@ -4,6 +4,9 @@ export const LAYOUT_SECTION_VERSION = 1 as const;
 export const DOCUMENT_KIND = {
   ARCHITECTURE: "architecture",
   WORKFLOW: "workflow",
+  SEQUENCE: "sequence",
+  DATA_FLOW: "data-flow",
+  LIFECYCLE: "lifecycle",
 } as const;
 
 export const NODE_KIND = {
@@ -15,6 +18,16 @@ export const NODE_KIND = {
   SYSTEM: "system",
   JOB: "job",
   EXTERNAL: "external",
+  DECISION: "decision",
+  PARTICIPANT: "participant",
+  PROCESS: "process",
+  ENTITY: "entity",
+  STATE: "state",
+} as const;
+
+export const NODE_MARKER = {
+  INITIAL: "initial",
+  FINAL: "final",
 } as const;
 
 export const EDGE_TYPE = {
@@ -24,6 +37,11 @@ export const EDGE_TYPE = {
   PUBLISHES: "publishes",
   SUBSCRIBES: "subscribes",
   DEPENDS_ON: "depends-on",
+  MESSAGE: "message",
+  REPLY: "reply",
+  DATA: "data",
+  TRANSITION: "transition",
+  OUTCOME: "outcome",
 } as const;
 
 export const EDGE_DIRECTION = {

@@ -250,3 +250,47 @@ test("exports never include selection or comment bags", async () => {
     assert.doesNotMatch(body, /"apiKey"/);
   }
 });
+
+test("sequence, data-flow, lifecycle, and decision fixtures export JSON, SVG, PNG, and HTML", async () => {
+  const cases = [
+    { name: "sequence-checkout.json", needle: /Checkout API[\s\S]*submit|submit[\s\S]*Checkout API/ },
+    { name: "data-flow-ingest.json", needle: /Analyst/ },
+    { name: "lifecycle-session.json", needle: /Idle/ },
+    { name: "workflow-decision.json", needle: /Approve\?/ },
+  ] as const;
+  for (const fixture of cases) {
+    const raw = await load(fixture.name);
+    for (const format of [
+      EXPORT_FORMAT.JSON,
+      EXPORT_FORMAT.SVG,
+      EXPORT_FORMAT.PNG,
+      EXPORT_FORMAT.HTML,
+    ] as const) {
+      const result = exportDiagram({ document: raw, format });
+      assert.equal(
+        result.ok,
+        true,
+        `${fixture.name} ${format} ${result.ok ? "" : JSON.stringify(result.errors)}`,
+      );
+      if (!result.ok) continue;
+      if (format === EXPORT_FORMAT.PNG) {
+        assert.ok(result.bytes.length > 100);
+        continue;
+      }
+      const body = text(result.bytes);
+      if (format === EXPORT_FORMAT.JSON) {
+        const parsed = JSON.parse(body) as { kind?: string; title?: string };
+        assert.ok(parsed.kind);
+        assert.ok(parsed.title);
+      }
+      if (format === EXPORT_FORMAT.SVG) {
+        assert.match(body, /<svg/);
+        assert.match(body, fixture.needle);
+      }
+      if (format === EXPORT_FORMAT.HTML) {
+        assert.match(body, /<svg/);
+        assert.match(body, fixture.needle);
+      }
+    }
+  }
+});

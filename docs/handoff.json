@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "taskId": "F039",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/outcome-gates",
-    "revision": "3057c980239d6590e14b64fd24a9024eb36397d2",
+    "branch": "feat/diagram-modes",
+    "revision": "b8b25639d0ba6da2676cbb040474fbdcf53714d8",
     "dirty": true
   },
   "evidenceRefs": [
@@ -46,7 +46,8 @@
     "docs/runs/run-1788897532769-c3913c.json",
     "docs/runs/run-1788896583251-3a089f.json",
     "docs/runs/run-1788898310839-6d486d.json",
-    "docs/runs/run-1788899490994-7d2591.json"
+    "docs/runs/run-1788899490994-7d2591.json",
+    "docs/runs/run-1788901487093-a1dd52.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -74,7 +75,8 @@
     "F037: Portable viewer uses adjacency indexes for directed reach and routes. Named views and focus restore from the local hash. Filters never mutate the document payload. Stories and role lenses remain Task 9.",
     "F036: Default fit uses a minimum zoom so 14px labels stay at least 12px. Zoom percentage is visible. Dialogs trap focus and Escape closes the topmost surface.",
     "F038: End users pin npx mapgrain@0.1.0. Installer IDs come from skills@1.5.25. Cursor/Codex/OpenCode/Copilot/Gemini share .agents/skills. Live agent tasks stay untested until a clean-directory agent run is recorded.",
-    "F039: Selection p95 is measured through next paint on alternating outline rows. The 100-node budget is 100ms. The production journey covers blank, connect, pin, arrange, undo, export, and reimport."
+    "F039: Selection p95 is measured through next paint on alternating outline rows. The 100-node budget is 100ms. The production journey covers blank, connect, pin, arrange, undo, export, and reimport.",
+    "F040: Sequence, data-flow, and lifecycle are dedicated kinds with allowlists and constraints, not relabelled architecture graphs. Diagnose warnings stay separate from invalid documents. Compare is snapshot delta only. Watch/reload, stories, presets, video, and localization stay planned."
   ],
   "rejectedApproaches": [
     "Adding Turborepo or Nx before there are packages to orchestrate.",
@@ -91,11 +93,12 @@
     "Claiming a layout-time target before measuring on a documented device.",
     "Starting R6 imports, hosted sharing, or billing before R1–R5.",
     "Scanning payload.edges on every node click to find neighbors.",
-    "Centering search hits with scrollIntoView instead of the node's bounding box."
+    "Centering search hits with scrollIntoView instead of the node's bounding box.",
+    "Relabelling generic architecture graphs as sequence, data-flow, or lifecycle without dedicated node and edge rules."
   ],
   "blockers": [
     "F025 requires five unassisted users, desktop Chrome/Firefox/Safari, and a real touch-device smoke test. That evidence cannot be collected or invented in this environment."
   ],
-  "nextAction": "Draft PR for F039 on feat/outcome-gates. Merge when GitHub verify succeeds, then stamp passing from main push.",
-  "updatedAt": "2026-09-08T20:32:13.564Z"
+  "nextAction": "Draft PR for F040 on feat/diagram-modes. Merge when GitHub verify succeeds, then stamp passing from main push.",
+  "updatedAt": "2026-09-08T21:05:32.050Z"
 }

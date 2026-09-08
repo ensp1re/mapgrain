@@ -21,6 +21,10 @@ test("layout runs off the main thread and places nested, cyclic, and parallel gr
       "parallel-edges.json",
       "disconnected.json",
       "workflow-review.json",
+      "workflow-decision.json",
+      "sequence-checkout.json",
+      "data-flow-ingest.json",
+      "lifecycle-session.json",
       "hundred-nodes.json",
     ]) {
       const result = await engine.layout({ document: await load(name) });
