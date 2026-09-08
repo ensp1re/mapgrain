@@ -53,9 +53,10 @@ export function StartSurface({
           Install the Mapgrain skill, ask your agent for a diagram JSON, then validate and open it
           here.
         </p>
-        <pre className="agent-example">{`npx skills add ensp1re/mapgrain --skill mapgrain --yes
+        <pre className="agent-example">{`npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
 Create a Mapgrain architecture JSON with Browser, API, and Database nodes.
-npx mapgrain@0.1.0 validate diagram.json`}</pre>
+pnpm mapgrain validate diagram.json
+pnpm mapgrain layout diagram.json`}</pre>
       </section>
       {recents.length > 0 ? (
         <section className="recent-list" aria-label="Recent diagrams">

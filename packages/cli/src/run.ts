@@ -4,6 +4,7 @@ import { EXPORT_FORMAT, exportDiagram } from "@mapgrain/renderer";
 import { renderView } from "@mapgrain/viewer";
 import { CLI_COMMAND, EXIT_CODE, HELP_TEXT } from "./constants/cli.ts";
 import { runDoctor } from "./doctor.ts";
+import { ensureLaidOut } from "./layout.ts";
 import { parseArgs } from "./parse.ts";
 import { packageManifest } from "./paths.ts";
 import { fail, readInput, writeBytes } from "./read.ts";
@@ -47,8 +48,20 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
     return EXIT_CODE.OK;
   }
 
+  const laid = await ensureLaidOut(
+    raw.value,
+    parsed.command === CLI_COMMAND.LAYOUT ? parsed.rearrange : false,
+  );
+  if (!laid.ok) return fail(io, laid.errors, EXIT_CODE.ERROR);
+
+  if (parsed.command === CLI_COMMAND.LAYOUT) {
+    const bytes = new TextEncoder().encode(`${JSON.stringify(laid.document, null, 2)}\n`);
+    const written = await writeBytes(io, parsed.out, bytes, parsed.noClobber);
+    return written.ok ? EXIT_CODE.OK : written.exit;
+  }
+
   if (parsed.command === CLI_COMMAND.VIEW) {
-    const view = renderView(raw.value);
+    const view = renderView(laid.document);
     if (!view.ok) {
       return fail(
         io,
@@ -66,7 +79,7 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
   }
 
   const format = parsed.command === CLI_COMMAND.RENDER ? EXPORT_FORMAT.SVG : parsed.format;
-  const exported = exportDiagram({ document: raw.value, format });
+  const exported = exportDiagram({ document: laid.document, format });
   if (!exported.ok) {
     return fail(
       io,

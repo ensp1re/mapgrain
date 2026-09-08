@@ -36,5 +36,6 @@ export type ParsedArgs =
   | { ok: true; command: "render"; file: string; out: string | null; noClobber: boolean }
   | { ok: true; command: "export"; file: string; format: ExportFormat; out: string | null; noClobber: boolean }
   | { ok: true; command: "view"; file: string; out: string | null; noClobber: boolean }
+  | { ok: true; command: "layout"; file: string; out: string | null; noClobber: boolean; rearrange: boolean }
   | { ok: true; command: "studio"; file: string }
   | { ok: false; errors: DiagnosticIssue[] };

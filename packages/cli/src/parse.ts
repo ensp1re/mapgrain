@@ -32,6 +32,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
     command !== CLI_COMMAND.RENDER &&
     command !== CLI_COMMAND.EXPORT &&
     command !== CLI_COMMAND.VIEW &&
+    command !== CLI_COMMAND.LAYOUT &&
     command !== CLI_COMMAND.DOCTOR &&
     command !== CLI_COMMAND.STUDIO
   ) {
@@ -46,6 +47,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   let out: string | null = null;
   let format: ExportFormat | undefined;
   let noClobber = false;
+  let rearrange = false;
   for (let i = 1; i < argv.length; i += 1) {
     const token = argv[i];
     if (!token) continue;
@@ -67,6 +69,11 @@ export function parseArgs(argv: string[]): ParsedArgs {
       noClobber = true;
       continue;
     }
+    if (token === "--rearrange") {
+      if (command !== CLI_COMMAND.LAYOUT) return usage("Unknown flag --rearrange.");
+      rearrange = true;
+      continue;
+    }
     if (token.startsWith("-") && token !== "-") return usage(`Unknown flag ${token}.`);
     if (file) return usage("Unexpected extra argument.");
     file = token;
@@ -74,6 +81,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   if (!file) return usage("Missing input file.");
   if (command === CLI_COMMAND.VALIDATE) return { ok: true, command, file };
   if (command === CLI_COMMAND.STUDIO) return { ok: true, command, file };
+  if (command === CLI_COMMAND.LAYOUT) return { ok: true, command, file, out: out ?? file, noClobber, rearrange };
   if (command === CLI_COMMAND.RENDER) return { ok: true, command, file, out, noClobber };
   if (command === CLI_COMMAND.VIEW) return { ok: true, command, file, out, noClobber };
   if (!format) return usage("export requires --format.");

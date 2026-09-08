@@ -5,6 +5,7 @@ export const CLI_COMMAND = {
   RENDER: "render",
   EXPORT: "export",
   VIEW: "view",
+  LAYOUT: "layout",
   DOCTOR: "doctor",
   STUDIO: "studio",
 } as const;
@@ -43,7 +44,7 @@ export const STUDIO_IF_MATCH = "if-match";
 export const STDIN_PATH = "-";
 
 export const USAGE =
-  "Usage: mapgrain <validate|render|export|view|doctor|studio> [file] [--format json|svg|png|html] [-o file] [--no-clobber]";
+  "Usage: mapgrain <validate|render|export|view|layout|doctor|studio> [file] [--format json|svg|png|html] [-o file] [--no-clobber] [--rearrange]";
 
 export const HELP_TEXT = `Mapgrain — validate, render, and export architecture diagrams.
 
@@ -57,12 +58,14 @@ Commands:
   render     Write SVG to stdout or --out
   export     Write json|svg|png|html via --format
   view       Write a read-only HTML viewer
+  layout     Resolve node positions with ELK and write JSON
   doctor     Check runtime, assets, renderer, worker, and output access
   studio     Serve the editor on loopback for one file
 
 Options:
   -o, --out <file>     Output path (atomic replace)
   -f, --format <fmt>   json, svg, png, or html
+      --rearrange      Re-run layout even when positions already exist
       --no-clobber     Refuse to overwrite an existing --out file
   -h, --help
   -v, --version
