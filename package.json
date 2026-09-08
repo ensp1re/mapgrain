@@ -18,6 +18,7 @@
     "test": "node --test --experimental-strip-types --test-reporter=spec tests/*.test.ts packages/*/tests/*.test.ts apps/*/tests/*.test.ts",
     "build": "pnpm -r --if-present --filter=!mapgrain build && pnpm --filter mapgrain build",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && node --experimental-strip-types scripts/cli.ts --root . validate",
+    "media": "pnpm --filter @mapgrain/editor exec node --experimental-strip-types tests/capture-media.ts",
     "prepare": "husky"
   },
   "lint-staged": {

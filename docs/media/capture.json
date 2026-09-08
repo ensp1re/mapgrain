@@ -1,0 +1,118 @@
+{
+  "commit": "cea0d2f040718683699889d36d9599236a5998bf",
+  "package": {
+    "name": "mapgrain",
+    "version": "0.1.0"
+  },
+  "buildCommand": "pnpm --filter @mapgrain/editor build && pnpm --filter mapgrain build",
+  "fixture": "skills/mapgrain/examples/ten-node.json",
+  "browser": {
+    "name": "chromium",
+    "headless": true,
+    "playwright": "1.63.0"
+  },
+  "deviceScaleFactor": 1,
+  "capturedAt": "2026-09-08T21:19:09.661Z",
+  "artifacts": [
+    {
+      "file": "docs/media/hero-dark.png",
+      "kind": "still",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "dark",
+      "fixture": "skills/mapgrain/examples/ten-node.json"
+    },
+    {
+      "file": "docs/media/hero-light.png",
+      "kind": "still",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "light",
+      "fixture": "skills/mapgrain/examples/ten-node.json"
+    },
+    {
+      "file": "docs/media/narrow-390.png",
+      "kind": "still",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "fixture": "skills/mapgrain/examples/ten-node.json"
+    },
+    {
+      "file": "docs/media/editing.gif",
+      "kind": "gif",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "dark",
+      "fixture": "skills/mapgrain/examples/ten-node.json",
+      "notes": "select → rename → connect → pin → arrange preview → apply → undo"
+    },
+    {
+      "file": "docs/media/viewer.gif",
+      "kind": "gif",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "dark",
+      "fixture": "skills/mapgrain/examples/ten-node.json",
+      "notes": "offline HTML from mapgrain view: search, theme, pan"
+    },
+    {
+      "file": "docs/media/cli-receipts.png",
+      "kind": "still",
+      "viewport": {
+        "width": 900,
+        "height": 560
+      },
+      "notes": "CLI validate and layout receipts; not a live agent prompt"
+    },
+    {
+      "file": "docs/media/cli-workflow.gif",
+      "kind": "gif",
+      "viewport": {
+        "width": 900,
+        "height": 560
+      },
+      "notes": "CLI validate/layout receipts. Live agent prompt runs remain untested."
+    }
+  ],
+  "sizes": {
+    "hero-dark.png": {
+      "bytes": 137459,
+      "sha256": "29d5946b5f12aa80bfbaee1bb341e473cc017c3557481f3db93c32a7fafb33e0"
+    },
+    "hero-light.png": {
+      "bytes": 140876,
+      "sha256": "69d8f061f332137711ae47777b9a8df2fdeebb1fcc8c291dc21f730d3bb80671"
+    },
+    "narrow-390.png": {
+      "bytes": 32740,
+      "sha256": "fac276fda6ef67d95cc573f2cea1e8bd27171166fd25192165856df18b4a9814"
+    },
+    "editing.gif": {
+      "bytes": 2000105,
+      "sha256": "307002995f5f26cb95871cc36db747ae48bc796fa2ca9a4b649d5aa36787f034"
+    },
+    "viewer.gif": {
+      "bytes": 455207,
+      "sha256": "81b3ddda4d157c41722ba89451789f181aaec9889a4cc13b8a6c277b0908c4d1"
+    },
+    "cli-receipts.png": {
+      "bytes": 16273,
+      "sha256": "b8376cac3622137cab33e79a6a9866cfd60b3bdf208a5d1f0dc68cf3a30ec8ad"
+    },
+    "cli-workflow.gif": {
+      "bytes": 55330,
+      "sha256": "80644833311a904d49165e26f02f649ac413bb57afaf633940c10bbfcb17ff79"
+    }
+  }
+}
