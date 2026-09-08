@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F034",
+    "behavior": "Usable-release Task 3: versioned offline asset manifest with atomic precache and disconnect journeys.",
+    "acceptance": [
+      "Fresh profile can create, arrange, export, and reload offline against the production bundle.",
+      "Version updates do not mix deleted chunks; Studio sessions stay separated."
+    ],
+    "dependsOn": [
+      "F032"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788894419719-d17bef",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T19:07:17.915Z"
+    },
+    "delivery": {
+      "implementationRevision": "73d2a531b101411b9908d5dffe706082bfd6c02a",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/37",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "73d2a531b101411b9908d5dffe706082bfd6c02a",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34267461727"
+        }
+      ],
+      "observedAt": "2026-09-08T19:12:30Z",
+      "closeoutRevision": "73d2a531b101411b9908d5dffe706082bfd6c02a"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

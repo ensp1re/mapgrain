@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F032",
+    "behavior": "Usable-release Task 1: CLI SVG/PNG use resolved paints, captions do not inherit edge stroke, Inter is the export font, and doctor inspects rendered pixels.",
+    "acceptance": [
+      "CLI SVG and PNG contain explicit theme paints and no CSS variables.",
+      "Edge captions do not inherit path stroke; arrows and nested groups still match canonical geometry.",
+      "Doctor fails if PNG is valid bytes without node/label paints."
+    ],
+    "dependsOn": [
+      "F029"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788890099442-23244e",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T17:55:15.962Z"
+    },
+    "delivery": {
+      "implementationRevision": "b4243a319121e8b69e44e2401e61767f9c588a58",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/35",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "b4243a319121e8b69e44e2401e61767f9c588a58",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34260440481"
+        }
+      ],
+      "observedAt": "2026-09-08T18:01:33Z",
+      "closeoutRevision": "b4243a319121e8b69e44e2401e61767f9c588a58"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

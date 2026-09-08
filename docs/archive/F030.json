@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F030",
+    "behavior": "P1 Coherent interface: shared primitives including a custom Select, layout spec, diagram component system.",
+    "acceptance": [
+      "Native unstyled selects are not used in outline, inspector, toolbar, or export.",
+      "Toolbar, outline, inspector, library, and export follow the layout specification at 390/768/1024/1280/1440px."
+    ],
+    "dependsOn": [
+      "F026",
+      "F029"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788872404941-13d9f6",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T13:00:21.270Z"
+    },
+    "delivery": {
+      "implementationRevision": "320e9b423ec06b3c588edf476906eff8fb0afb07",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/32",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "0213556",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34229450295/job/102071618351"
+        }
+      ],
+      "observedAt": "2026-09-08T13:04:00Z",
+      "closeoutRevision": "320e9b423ec06b3c588edf476906eff8fb0afb07"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

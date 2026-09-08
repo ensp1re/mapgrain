@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F002",
+    "behavior": "Implement a canonical scene graph for bounds, measured text, ports, edges, and groups that editor and export both consume.",
+    "acceptance": [
+      "Scene output is determined by document, fonts, and layout options.",
+      "Text measurement supports multiline labels.",
+      "Ports are explicit and stable across a layout pass."
+    ],
+    "dependsOn": [
+      "F001"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788793439005-079954",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T15:04:11.972Z"
+    },
+    "delivery": {
+      "implementationRevision": "a03d175c254be4072c3b5600a4a53be13559a817",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/4",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "a03d175c254be4072c3b5600a4a53be13559a817",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34127752616/job/101760333334"
+        }
+      ],
+      "observedAt": "2026-09-07T13:30:16Z",
+      "closeoutRevision": "a03d175c254be4072c3b5600a4a53be13559a817"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F001",
+    "behavior": "Add a versioned diagram document schema with generated TypeScript types, runtime validation, and original architecture/workflow fixtures.",
+    "acceptance": [
+      "A document schema version is stored and rejected when unsupported.",
+      "Generated types cover nodes, edges, groups, views, and layout hints.",
+      "Invalid documents fail validation with a structured error.",
+      "Original fixtures exist for nested groups, cycles, parallel edges, long labels, and disconnected components."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788793426730-62496d",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T15:03:58.813Z"
+    },
+    "delivery": {
+      "implementationRevision": "704bbde0f7bba0c7820884184b726f7d82af0fb8",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/3",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "704bbde0f7bba0c7820884184b726f7d82af0fb8",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34126154828/job/101755188986"
+        }
+      ],
+      "observedAt": "2026-09-07T13:13:06Z",
+      "closeoutRevision": "704bbde0f7bba0c7820884184b726f7d82af0fb8"
+    }
+  },
+  "archivedAt": "2026-09-08T22:14:54.583Z"
+}

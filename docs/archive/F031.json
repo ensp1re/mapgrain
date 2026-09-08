@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F031",
+    "behavior": "P2 Interaction-path performance: indexed lookups, cached measures, precache manifest, browser interaction benchmarks.",
+    "acceptance": [
+      "Selection and typing p95 are measured in the browser on 10/100-node fixtures with device and warm/cold recorded.",
+      "Offline first session includes the ELK worker before Arrange."
+    ],
+    "dependsOn": [
+      "F026"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788873694499-14c3cf",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T13:21:52.315Z"
+    },
+    "delivery": {
+      "implementationRevision": "35701a3df62e66f34cd0be008a5d7bf327fb2ec3",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/33",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "b8b25639d0ba6da2676cbb040474fbdcf53714d8",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34276655885"
+        }
+      ],
+      "observedAt": "2026-09-08T21:26:00Z",
+      "closeoutRevision": "b8b25639d0ba6da2676cbb040474fbdcf53714d8"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

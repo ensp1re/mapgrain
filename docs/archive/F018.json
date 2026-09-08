@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F018",
+    "behavior": "R1.4 Durable storage and safe CLI writes: document library, honest save states, atomic file replace, numeric JSON is invalid.",
+    "acceptance": [
+      "Two diagrams can be edited and reopened independently.",
+      "Unavailable storage never claims Saved.",
+      "Disk-write failure preserves the previous artifact; validate 0 fails."
+    ],
+    "dependsOn": [
+      "F015",
+      "F012"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788807243525-161da0",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T18:54:19.475Z"
+    },
+    "delivery": {
+      "implementationRevision": "780631167a17b1772ec5492cd1edc0e065eaecea",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/20",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "6507f2f6bd536707f43c2e12d2f9aaf7ab6db240",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34153568871/job/101840626475"
+        }
+      ],
+      "observedAt": "2026-09-07T18:56:12Z",
+      "closeoutRevision": "780631167a17b1772ec5492cd1edc0e065eaecea"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

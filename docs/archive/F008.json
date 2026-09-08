@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F008",
+    "behavior": "Preview automatic arrangement before applying it, and keep pinned nodes unless a conflict is shown.",
+    "acceptance": [
+      "Arrange diagram shows a preview and Apply/Discard.",
+      "Keep position pins survive a successful arrange.",
+      "Conflicts are visible when pins cannot be honored."
+    ],
+    "dependsOn": [
+      "F007"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788798663725-8d9cdf",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T16:31:18.496Z"
+    },
+    "delivery": {
+      "implementationRevision": "a34beb79976f01f45cb592152fb5d76d50cbffd8",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/10",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "ae6618e5ab4f4f14fcac51e697b4001c2b30022f",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34143734273/job/101811140852"
+        }
+      ],
+      "observedAt": "2026-09-07T16:35:30Z",
+      "closeoutRevision": "a34beb79976f01f45cb592152fb5d76d50cbffd8"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F026",
+    "behavior": "P0.1 Stop the editor Maximum update depth crash. Stable selection, node identity reuse, recoverable error boundary.",
+    "acceptance": [
+      "Production-browser tests open a blank document and every example without uncaught page errors.",
+      "Select, deselect, box-select, shift-select, drag, undo, inspector, open another document, and reload do not loop.",
+      "A crash shows Return to library and optional Download recovery file without erasing persisted data."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788867016008-d69612",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T11:30:36.325Z"
+    },
+    "delivery": {
+      "implementationRevision": "5b25c6e",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/28",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "f4ca828",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34221164556/job/102044354350"
+        }
+      ],
+      "observedAt": "2026-09-08T11:32:00Z",
+      "closeoutRevision": "5b25c6e"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

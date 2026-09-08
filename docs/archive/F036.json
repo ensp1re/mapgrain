@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F036",
+    "behavior": "Usable-release Task 5: readable default diagram labels, focus, and accessible controls.",
+    "acceptance": [
+      "Showcase graphs have readable labels after default fit; zoom percentage is visible.",
+      "Escape, focus trap, and Enter/Space on viewer nodes behave as specified."
+    ],
+    "dependsOn": [
+      "F035"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788897532769-c3913c",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T19:59:09.702Z"
+    },
+    "delivery": {
+      "implementationRevision": "8bb3c5a0b43526e4733f99e9b97bb34c506c363a",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/40",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "8bb3c5a0b43526e4733f99e9b97bb34c506c363a",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34272660144"
+        }
+      ],
+      "observedAt": "2026-09-08T20:05:00Z",
+      "closeoutRevision": "8bb3c5a0b43526e4733f99e9b97bb34c506c363a"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

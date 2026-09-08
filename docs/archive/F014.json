@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F014",
+    "behavior": "Add an original 100-node architecture fixture and prove validate, scene, layout, export, and CLI still work on it.",
+    "acceptance": [
+      "The fixture has 100 nodes, validates, and is original.",
+      "Scene, layout, and SVG export succeed for the fixture.",
+      "The CLI validates the fixture without the editor."
+    ],
+    "dependsOn": [
+      "F003",
+      "F004",
+      "F012"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788803958032-669084",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T17:59:33.696Z"
+    },
+    "delivery": {
+      "implementationRevision": "0c1e84e98871a827422133dc251859560b70d848",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/16",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "168063693b6a3c05961b17a357003956b420a938",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34149886277/job/101829757177"
+        }
+      ],
+      "observedAt": "2026-09-07T18:05:17Z",
+      "closeoutRevision": "0c1e84e98871a827422133dc251859560b70d848"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

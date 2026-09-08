@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F003",
+    "behavior": "Run ELK layout in a worker with pins, nesting, cycles, and parallel edges, and surface constraint conflicts instead of dropping pins.",
+    "acceptance": [
+      "Layout runs off the UI thread.",
+      "Pinned nodes keep position when space allows.",
+      "Insufficient space yields a visible conflict, not a silent pin drop.",
+      "Superseded worker results are discarded."
+    ],
+    "dependsOn": [
+      "F002"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788793452150-7deaf4",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T15:04:23.807Z"
+    },
+    "delivery": {
+      "implementationRevision": "06d0c55513974280ce57ff994db4ac1a89a1e571",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/5",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "06d0c55513974280ce57ff994db4ac1a89a1e571",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34129033890/job/101764437905"
+        }
+      ],
+      "observedAt": "2026-09-07T13:43:53Z",
+      "closeoutRevision": "06d0c55513974280ce57ff994db4ac1a89a1e571"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

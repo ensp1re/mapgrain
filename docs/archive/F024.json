@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F024",
+    "behavior": "R4 Visual and performance finish: original chrome, measured budgets, lazy ELK, versioned offline cache.",
+    "acceptance": [
+      "Toolbar does not overflow at 390px. Performance results include device, fixture, warm/cold, p50/p95."
+    ],
+    "dependsOn": [
+      "F019",
+      "F021",
+      "F022"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788811389273-62a12e",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T20:03:27.041Z"
+    },
+    "delivery": {
+      "implementationRevision": "cd30b6f6106a6342215e070d9e6fbfea7f06bdeb",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/26",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "75ad43423de73b31df090999df9832d84fe201ce",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34157985168/job/101853677180"
+        }
+      ],
+      "observedAt": "2026-09-07T20:05:44Z",
+      "closeoutRevision": "cd30b6f6106a6342215e070d9e6fbfea7f06bdeb"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

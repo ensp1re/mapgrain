@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F021",
+    "behavior": "R2.3 Offline viewer with pan/zoom/search/theme, bundled assets, no editor chrome.",
+    "acceptance": [
+      "Downloaded HTML opens without a server; search and fit work; evidence is redacted."
+    ],
+    "dependsOn": [
+      "F015",
+      "F013"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788808466921-89a20d",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T19:14:44.551Z"
+    },
+    "delivery": {
+      "implementationRevision": "02215846adcb9cc75d0818e9aeaaf0df21c19251",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/23",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "0f6e24440a179d3bc88ad2b42be866262e6454a6",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34155103824/job/101845186096"
+        }
+      ],
+      "observedAt": "2026-09-07T19:21:48Z",
+      "closeoutRevision": "02215846adcb9cc75d0818e9aeaaf0df21c19251"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

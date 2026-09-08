@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F042",
+    "behavior": "Remaining owner-brief items: sequence layout, stories, role lenses, watch/reload, evidence snapshot, presets, share-card, story video, and chrome localization.",
+    "acceptance": [
+      "Sequence layout places participants in a row and stacks messages by unique order; self-messages are valid.",
+      "Exported HTML supports stories, role lenses, and chrome locale without mutating the document.",
+      "CLI watch keeps last-good output while a file is invalid, then reloads a valid revision.",
+      "Presets change scene metrics in SVG/PNG; share-card and story video have real artifacts; evidence path/snapshot is checked without claiming source was verified."
+    ],
+    "dependsOn": [
+      "F041"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788904404786-39f041",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T21:53:42.823Z"
+    },
+    "delivery": {
+      "implementationRevision": "9c1577d01c2a4ccac1cb198fb51d761a333410b4",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/46",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "9c1577d01c2a4ccac1cb198fb51d761a333410b4",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34283325095"
+        }
+      ],
+      "observedAt": "2026-09-08T21:58:20Z",
+      "closeoutRevision": "9c1577d01c2a4ccac1cb198fb51d761a333410b4"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F039",
+    "behavior": "Usable-release Task 8: production browser journeys and measured interaction budgets.",
+    "acceptance": [
+      "Blank through export/reimport journey passes on the production build.",
+      "Selection p95 is measured through next paint on the 100-node fixture with device recorded."
+    ],
+    "dependsOn": [
+      "F032",
+      "F036"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788899490994-7d2591",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T20:31:58.281Z"
+    },
+    "delivery": {
+      "implementationRevision": "b8b25639d0ba6da2676cbb040474fbdcf53714d8",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/42",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "b8b25639d0ba6da2676cbb040474fbdcf53714d8",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34276655885"
+        }
+      ],
+      "observedAt": "2026-09-08T20:40:00Z",
+      "closeoutRevision": "b8b25639d0ba6da2676cbb040474fbdcf53714d8"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

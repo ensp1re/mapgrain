@@ -6,64 +6,24 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/stamp-f042 @ 9c1577d01c2a4ccac1cb198fb51d761a333410b4 (dirty)
-- Updated: 2026-09-08T22:00:14.972Z
+- Git: feat/harness-hygiene @ 0db065f5d7bceb7bf6347906f350c8a80a34e921 (dirty)
+- Updated: 2026-09-08T22:15:43.879Z
 
 ### Next action
 
-F042 is passing on main. No ready product tasks remain.
+No live product tasks. Next id F043.
 
 ### Decisions
 
-- Working name is Mapgrain; final name is pending.
-- Node 24 LTS, pnpm workspaces, no extra monorepo orchestrator until packages exist.
-- React + Vite editor; shared document/scene/layout/renderer packages; exports never embed the editor.
-- Quality gates: ESLint, tsc, node:test, Husky pre-commit, commitlint, GitHub Actions.
-- Document operations live in packages/document with inverses. Editor history stores document plus node positions so a label change does not rearrange other nodes.
-- New connections record explicit type and direction before they are committed.
-- Arrange runs ELK off the UI thread, shows a preview with Apply/Discard, and never silently drops keep-position pins.
-- Autosave writes document and positions to IndexedDB. Saved/Saving/Recovery are visible in the top bar. A failed write offers a JSON backup download.
-- A production service worker caches same-origin GET so edit, reload, and export work with the network disabled. Chat does not invent a reply.
-- First session is an example-backed start surface. Submit without a provider fails honestly, keeps the prompt, and offers a repair. Examples are never labelled as generated output.
-- The public CLI package is mapgrain. Internals are bundled; @resvg/resvg-js and elkjs stay real dependencies. Studio binds 127.0.0.1, checks origin/session, and writes only the opened file.
-- The companion skill lives at skills/mapgrain. Agents emit semantic JSON, call the CLI, preserve ids and layout, and must not execute a repository to discover architecture.
-- At 390px the top bar keeps Arrange and Export visible and moves the rest behind More. Browser ELK loads on first arrange. The offline cache is versioned and drops previous names. Perf numbers are Node scene/layout/svg, not browser.
-- The five-user study task was removed from the queue. No fabricated study evidence. Automated crash, studio, skill, export, and visual work is F026–F031.
-- The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
-- The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
-- The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
-- Editor edges follow canonical scene polylines. Direction none/forward/both is visible. Text measurement uses Inter-like glyph classes including CJK and Cyrillic. Node size reserves a kind line.
-- Arrange results are bound to document id plus document and layout revisions. Presentation mode blocks mutating commands. Theme is a document property.
-- F033: Saved is shown only after the durable write finishes. Last-active document id is explicit; last-opened and last-edited times stay separate. Studio returns structured errors for missing files, conflicts, and rename failures. Unique sibling temp files are not a merge.
-- F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers.
-- F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled.
-- F037: Portable viewer uses adjacency indexes for directed reach and routes. Named views and focus restore from the local hash. Filters never mutate the document payload. Stories and role lenses remain Task 9.
-- F036: Default fit uses a minimum zoom so 14px labels stay at least 12px. Zoom percentage is visible. Dialogs trap focus and Escape closes the topmost surface.
-- F038: End users pin npx mapgrain@0.1.0. Installer IDs come from skills@1.5.25. Cursor/Codex/OpenCode/Copilot/Gemini share .agents/skills. Live agent tasks stay untested until a clean-directory agent run is recorded.
-- F039: Selection p95 is measured through next paint on alternating outline rows. The 100-node budget is 100ms. The production journey covers blank, connect, pin, arrange, undo, export, and reimport.
-- F040: Sequence, data-flow, and lifecycle are dedicated kinds with allowlists and constraints, not relabelled architecture graphs. Diagnose warnings stay separate from invalid documents. Compare is snapshot delta only. Watch/reload, stories, presets, video, and localization stay planned.
-- F041: README media is captured from the production editor bundle and CLI view HTML. CLI receipt GIFs are labelled as receipts, not live agent prompts.
-- F031 original main-push CI failed on a title-input timeout. Selection and typing p95 plus ELK precache later passed on F039 main CI; F031 is closed from that evidence, not the failed 35701a3 run.
-- F042: Sequence layout is participant columns plus ordered message Y. Stories and lenses live in exported HTML. Watch keeps last-good. Presets, share-card, story video, and en/uk chrome ship. Fragments, hosted sharing, and live agent prompts stay out.
+- Public CLI is npx mapgrain@0.1.0. Internals are bundled.
+- Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
+- Do not claim sequence fragments, live agent prompt runs, Mermaid/draw.io import, hosted sharing, or a five-user study.
 
 ### Rejected approaches
 
-- Adding Turborepo or Nx before there are packages to orchestrate.
-- Implementing the editor in the harness bootstrap.
 - Copying another product's source, assets, or copy.
-- Empty app/package stubs that exist only to look like a monorepo.
-- Rebuilding default sequential placement after a label edit.
-- Running nested ELK workers inside the editor layout worker.
-- Adding an IndexedDB wrapper library for a single object store.
-- Adding vite-plugin-pwa for a single cache-first worker.
-- Walking fake interpreting/arranging/checking stages as if a model ran.
-- Adding Commander or another parser for three CLI commands.
-- Building the viewer on React Flow.
-- Claiming a layout-time target before measuring on a documented device.
-- Starting R6 imports, hosted sharing, or billing before R1–R5.
-- Scanning payload.edges on every node click to find neighbors.
-- Centering search hits with scrollIntoView instead of the node's bounding box.
-- Relabelling generic architecture graphs as sequence, data-flow, or lifecycle without dedicated node and edge rules.
+- Claiming a deferred feature is shipped.
+- Inventing AI output or user-study evidence.
 
 ### Blockers
 
@@ -71,47 +31,7 @@ F042 is passing on main. No ready product tasks remain.
 
 ### Evidence
 
-- docs/runs/run-1788793426730-62496d.json
-- docs/runs/run-1788793439005-079954.json
-- docs/runs/run-1788793452150-7deaf4.json
-- docs/runs/run-1788793463994-b89e11.json
-- docs/runs/run-1788793476030-054c9f.json
-- docs/runs/run-1788793487911-4323db.json
-- docs/runs/run-1788797500629-e310ff.json
-- docs/runs/run-1788798663725-8d9cdf.json
-- docs/runs/run-1788799557750-b00ce7.json
-- docs/runs/run-1788800481010-e56765.json
-- docs/runs/run-1788801310224-cc1501.json
-- docs/runs/run-1788802146185-c8b4da.json
-- docs/runs/run-1788802738494-8e738b.json
-- docs/runs/run-1788803958032-669084.json
-- docs/runs/run-1788805672118-b8d681.json
-- docs/runs/run-1788806341421-3200fb.json
-- docs/runs/run-1788806830014-5101bb.json
-- docs/runs/run-1788807243525-161da0.json
-- docs/runs/run-1788807797035-89e364.json
-- docs/runs/run-1788808155658-391fbf.json
-- docs/runs/run-1788808466921-89a20d.json
-- docs/runs/run-1788810303070-9860f2.json
-- docs/runs/run-1788810829197-3a7bb9.json
-- docs/runs/run-1788811389273-62a12e.json
-- docs/runs/run-1788867016008-d69612.json
-- docs/runs/run-1788867525031-56f8ef.json
-- docs/runs/run-1788868221099-132ed3.json
-- docs/runs/run-1788871573124-9da51d.json
-- docs/runs/run-1788872404941-13d9f6.json
-- docs/runs/run-1788873694499-14c3cf.json
-- docs/runs/run-1788890099442-23244e.json
-- docs/runs/run-1788893556151-df7074.json
-- docs/runs/run-1788894419719-d17bef.json
-- docs/runs/run-1788895288417-2e96e5.json
-- docs/runs/run-1788897532769-c3913c.json
-- docs/runs/run-1788896583251-3a089f.json
-- docs/runs/run-1788898310839-6d486d.json
-- docs/runs/run-1788899490994-7d2591.json
-- docs/runs/run-1788901487093-a1dd52.json
-- docs/runs/run-1788902383419-1b12dc.json
-- docs/runs/run-1788904404786-39f041.json
+- none
 
 ## Resume
 

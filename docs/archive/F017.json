@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F017",
+    "behavior": "R1.3 Safe editing: one selection model, layout results bound to document and layout revisions, presentation is read-only.",
+    "acceptance": [
+      "Arrange then edit/undo/open another file cannot apply a stale layout.",
+      "Presentation mode ignores delete, duplicate, undo, and connect.",
+      "Failed operations leave the last valid snapshot intact."
+    ],
+    "dependsOn": [
+      "F015"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788806830014-5101bb",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T18:47:27.353Z"
+    },
+    "delivery": {
+      "implementationRevision": "f3a7c2ed2cb3fe01390ec5a29ae0cba4a1c925dc",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/19",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "c6539acf20ce07fa32aa278c9c58a0e4aaa95a23",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34153107534/job/101839268293"
+        }
+      ],
+      "observedAt": "2026-09-07T18:49:05Z",
+      "closeoutRevision": "f3a7c2ed2cb3fe01390ec5a29ae0cba4a1c925dc"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}
