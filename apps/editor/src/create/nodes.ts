@@ -1,7 +1,8 @@
 import {
-  NODE_KIND,
+  NODES_FOR_KIND,
   PORT_SIDE,
   type DiagramNode,
+  type DocumentKind,
   type NodeKind,
 } from "@mapgrain/document";
 
@@ -18,13 +19,6 @@ export function makeNode(id: string, kind: NodeKind, label: string): DiagramNode
   };
 }
 
-export const ADDABLE_KINDS: NodeKind[] = [
-  NODE_KIND.SERVICE,
-  NODE_KIND.DATASTORE,
-  NODE_KIND.GATEWAY,
-  NODE_KIND.QUEUE,
-  NODE_KIND.ACTOR,
-  NODE_KIND.JOB,
-  NODE_KIND.SYSTEM,
-  NODE_KIND.EXTERNAL,
-];
+export function addableKinds(kind: DocumentKind): NodeKind[] {
+  return [...NODES_FOR_KIND[kind]];
+}

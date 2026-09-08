@@ -8,6 +8,7 @@ import {
   LAYOUT_DIRECTION,
   LAYOUT_SECTION_VERSION,
   NODE_KIND,
+  NODE_MARKER,
   PORT_SIDE,
   SCHEMA_VERSION,
   THEME,
@@ -42,6 +43,7 @@ export const NodeSchema = Type.Object(
     description: Type.Optional(Type.String({ maxLength: 4000 })),
     groupId: Type.Union([Id, Type.Null()]),
     ports: Type.Array(PortSchema, { default: [] }),
+    marker: Type.Optional(stringUnion(valuesOf(NODE_MARKER))),
   },
   { additionalProperties: false },
 );
@@ -63,6 +65,9 @@ export const EdgeSchema = Type.Object(
     direction: stringUnion(valuesOf(EDGE_DIRECTION)),
     label: Type.Optional(Type.String({ maxLength: 200 })),
     evidenceState: Type.Optional(stringUnion(valuesOf(EVIDENCE_STATE))),
+    order: Type.Optional(Type.Integer({ minimum: 1 })),
+    guard: Type.Optional(Type.String({ maxLength: 200 })),
+    outcome: Type.Optional(Type.String({ maxLength: 200 })),
   },
   { additionalProperties: false },
 );

@@ -6,6 +6,8 @@ export {
   KIND_FONT_SIZE,
   KIND_LINE_HEIGHT,
 } from "./constants/metrics.ts";
+export { DIAGNOSTIC_SEVERITY, GEOMETRY_DIAGNOSTIC } from "./constants/diagnostics.ts";
+export { diagnoseGeometry } from "./diagnostics.ts";
 export { buildScene } from "./build.ts";
 export { defaultSceneOptions } from "./options.ts";
 export { facingSide, placePortsOnRect, portOffset } from "./ports.ts";
@@ -25,6 +27,7 @@ export {
   fontTextMeasurer,
   measureText,
 } from "./text.ts";
+export type { GeometryDiagnostic } from "./diagnostics.ts";
 export type { Point, Rect, Size } from "./types/geometry.ts";
 export type { FontSpec, SceneOptions, TextMeasurer } from "./types/options.ts";
 export type {

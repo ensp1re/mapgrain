@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
-import { validateDocument } from "@mapgrain/document";
+import { compareDocuments, validateDocument } from "@mapgrain/document";
 import { EXPORT_FORMAT, exportDiagram } from "@mapgrain/renderer";
+import { buildScene, diagnoseGeometry } from "@mapgrain/scene";
 import { renderView } from "@mapgrain/viewer";
 import { CLI_COMMAND, EXIT_CODE, HELP_TEXT } from "./constants/cli.ts";
 import { runDoctor } from "./doctor.ts";
@@ -30,6 +31,18 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
   }
   if (parsed.command === CLI_COMMAND.DOCTOR) return runDoctor(io);
   if (parsed.command === CLI_COMMAND.STUDIO) return runStudio(parsed.file, io);
+  if (parsed.command === CLI_COMMAND.COMPARE) {
+    const left = await readInput(parsed.file, io);
+    if (!left.ok) return left.exit;
+    const right = await readInput(parsed.other, io);
+    if (!right.ok) return right.exit;
+    const before = validateDocument(left.value);
+    const after = validateDocument(right.value);
+    if (!before.ok) return fail(io, before.errors, EXIT_CODE.ERROR);
+    if (!after.ok) return fail(io, after.errors, EXIT_CODE.ERROR);
+    io.stdout.write(`${JSON.stringify({ ok: true, ...compareDocuments(before.document, after.document) })}\n`);
+    return EXIT_CODE.OK;
+  }
 
   const raw = await readInput(parsed.file, io);
   if (!raw.ok) return raw.exit;
@@ -45,6 +58,16 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
         nodes: result.document.nodes.length,
       })}\n`,
     );
+    return EXIT_CODE.OK;
+  }
+
+  if (parsed.command === CLI_COMMAND.DIAGNOSE) {
+    const laid = await ensureLaidOut(raw.value, false);
+    if (!laid.ok) return fail(io, laid.errors, EXIT_CODE.ERROR);
+    const scene = buildScene(laid.document);
+    if (!scene.ok) return fail(io, scene.errors, EXIT_CODE.ERROR);
+    const issues = diagnoseGeometry(scene.scene);
+    io.stdout.write(`${JSON.stringify({ ok: true, id: laid.document.id, issues })}\n`);
     return EXIT_CODE.OK;
   }
 

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-workflow-decision",
+  "revision": 1,
+  "kind": "workflow",
+  "title": "Review decision",
+  "theme": "light",
+  "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
+  "groups": [],
+  "nodes": [
+    { "id": "author", "kind": "actor", "label": "Author", "groupId": null, "ports": [{ "id": "out", "side": "east" }] },
+    { "id": "route", "kind": "decision", "label": "Approve?", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "publish", "kind": "job", "label": "Publish", "groupId": null, "ports": [{ "id": "in", "side": "west" }] },
+    { "id": "revise", "kind": "job", "label": "Revise", "groupId": null, "ports": [{ "id": "in", "side": "west" }] }
+  ],
+  "edges": [
+    { "id": "e-start", "source": { "nodeId": "author", "portId": "out" }, "target": { "nodeId": "route", "portId": "in" }, "type": "calls", "direction": "forward" },
+    { "id": "e-yes", "source": { "nodeId": "route", "portId": "out" }, "target": { "nodeId": "publish", "portId": "in" }, "type": "outcome", "direction": "forward", "outcome": "yes" },
+    { "id": "e-no", "source": { "nodeId": "route", "portId": "out" }, "target": { "nodeId": "revise", "portId": "in" }, "type": "outcome", "direction": "forward", "outcome": "no" }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "Review" }]
+}

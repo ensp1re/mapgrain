@@ -14,8 +14,11 @@ import {
   type OnSelectionChangeParams,
 } from "@xyflow/react";
 import {
+  DOCUMENT_KIND,
   EDGE_DIRECTION,
   EDGE_TYPE,
+  NODE_KIND,
+  defaultEdgeType,
   OPERATION_KIND,
   THEME,
   applyOperation,
@@ -52,7 +55,7 @@ import { COMMAND_ID, type CommandId } from "./constants/commands.ts";
 import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
 import { AddBar } from "./chrome/AddBar.tsx";
 import { blankDocument } from "./create/blank.ts";
-import { makeNode } from "./create/nodes.ts";
+import { addableKinds, makeNode } from "./create/nodes.ts";
 import { AUTOSAVE_MS, PERSIST_ERROR_CODE, SAVE_STATE } from "./constants/persist.ts";
 import { PersistError, persistErrorMessage } from "./persist/errors.ts";
 import { setOfflineUpdateAllowed } from "./offline/register.ts";
@@ -476,13 +479,25 @@ function Specimen() {
     if (ids.length < 2 || !ids[0] || !ids[1]) return;
     const current = historyRef.current.present;
     const edgeId = nextPrefixedId("e", usedIds(current.document));
+    const sourceNode = current.document.nodes.find((node) => node.id === ids[0]);
+    const type =
+      sourceNode?.kind === NODE_KIND.DECISION
+        ? EDGE_TYPE.OUTCOME
+        : defaultEdgeType(current.document.kind);
+    const orders = current.document.edges
+      .map((edge) => edge.order)
+      .filter((value): value is number => typeof value === "number");
     applyOp({
       kind: OPERATION_KIND.ADD_EDGE,
       id: edgeId,
       source: { nodeId: ids[0], portId: "out" },
       target: { nodeId: ids[1], portId: "in" },
-      type: EDGE_TYPE.CALLS,
+      type,
       direction: EDGE_DIRECTION.FORWARD,
+      ...(current.document.kind === DOCUMENT_KIND.SEQUENCE
+        ? { order: (orders.length > 0 ? Math.max(...orders) : 0) + 1 }
+        : {}),
+      ...(sourceNode?.kind === NODE_KIND.DECISION ? { outcome: "yes" } : {}),
     });
   }, [applyOp, selection.nodeIds]);
 
@@ -1055,6 +1070,7 @@ function Specimen() {
           />
           {presenting ? null : (
             <AddBar
+              kinds={addableKinds(documentModel.kind)}
               onAddNode={addNode}
               onAddGroup={addGroup}
               onConnect={connectSelected}

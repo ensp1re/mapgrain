@@ -7,6 +7,8 @@ export const CLI_COMMAND = {
   VIEW: "view",
   LAYOUT: "layout",
   DOCTOR: "doctor",
+  DIAGNOSE: "diagnose",
+  COMPARE: "compare",
   STUDIO: "studio",
 } as const;
 
@@ -44,7 +46,7 @@ export const STUDIO_IF_MATCH = "if-match";
 export const STDIN_PATH = "-";
 
 export const USAGE =
-  "Usage: mapgrain <validate|render|export|view|layout|doctor|studio> [file] [--format json|svg|png|html] [-o file] [--no-clobber] [--rearrange]";
+  "Usage: mapgrain <validate|render|export|view|layout|doctor|diagnose|compare|studio> [file] [--format json|svg|png|html] [-o file] [--no-clobber] [--rearrange]";
 
 export const HELP_TEXT = `Mapgrain — validate, render, and export architecture diagrams.
 
@@ -60,6 +62,8 @@ Commands:
   view       Write a read-only HTML viewer
   layout     Resolve node positions with ELK and write JSON
   doctor     Check runtime, assets, renderer, worker, and output access
+  diagnose   Report geometry warnings for a laid-out document
+  compare    Show added/removed/changed nodes and edges between two files
   studio     Serve the editor on loopback for one file
 
 Options:

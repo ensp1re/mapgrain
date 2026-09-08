@@ -85,7 +85,7 @@ test("start surface offers blank, file, examples, and agent path", async () => {
 });
 
 test("examples are original fixtures labelled as examples, not generated output", () => {
-  assert.equal(EXAMPLES.length, 3);
+  assert.equal(EXAMPLES.length, 6);
   for (const example of EXAMPLES) {
     assert.equal(example.kind, "example");
     assert.equal(/generated output/i.test(`${example.title} ${example.blurb}`), false);

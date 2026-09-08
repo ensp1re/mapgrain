@@ -150,6 +150,34 @@ test("help exits 0 and lists commands", async () => {
   assert.match(body, /studio/);
   assert.match(body, /doctor/);
   assert.match(body, /layout/);
+  assert.match(body, /diagnose/);
+  assert.match(body, /compare/);
+});
+
+test("diagnose reports geometry issues as JSON", async () => {
+  const source = await readFile(fixture, "utf8");
+  const io = memoryIo({ "nested-groups.json": source });
+  const code = await runCli(["diagnose", "nested-groups.json"], io);
+  assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
+  const result = JSON.parse(text(io.stdoutChunks)) as { ok: boolean; issues: unknown[] };
+  assert.equal(result.ok, true);
+  assert.ok(Array.isArray(result.issues));
+});
+
+test("compare reports a removed node between two documents", async () => {
+  const source = await readFile(fixture, "utf8");
+  const left = JSON.parse(source) as { nodes: Array<{ id: string }>; edges: Array<{ source: { nodeId: string }; target: { nodeId: string } }> };
+  const right = structuredClone(left);
+  right.nodes = right.nodes.filter((node) => node.id !== "provider");
+  right.edges = right.edges.filter((edge) => edge.source.nodeId !== "provider" && edge.target.nodeId !== "provider");
+  const io = memoryIo({
+    "before.json": JSON.stringify(left),
+    "after.json": JSON.stringify(right),
+  });
+  const code = await runCli(["compare", "before.json", "after.json"], io);
+  assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
+  const result = JSON.parse(text(io.stdoutChunks)) as { removedNodeIds: string[] };
+  assert.deepEqual(result.removedNodeIds, ["provider"]);
 });
 
 test("unknown command exits 2 with a structured diagnostic", async () => {
@@ -169,6 +197,19 @@ test("validate succeeds on a fixture", async () => {
   assert.equal(result.ok, true);
   assert.equal(result.id, "doc-nested-groups");
   assert.equal(result.nodes, 5);
+});
+
+test("validate and export succeed on sequence, data-flow, and lifecycle fixtures", async () => {
+  const names = ["sequence-checkout.json", "data-flow-ingest.json", "lifecycle-session.json"] as const;
+  for (const name of names) {
+    const source = await readFile(
+      fileURLToPath(new URL(`../../../tests/fixtures/documents/${name}`, import.meta.url)),
+      "utf8",
+    );
+    const io = memoryIo({ [name]: source });
+    const code = await runCli(["validate", name], io);
+    assert.equal(code, EXIT_CODE.OK, `${name} ${text(io.stderrChunks)}`);
+  }
 });
 
 test("render and export match the canonical scene for a fixture", async () => {

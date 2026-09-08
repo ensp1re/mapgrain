@@ -236,7 +236,9 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       index,
       count,
     );
-    const caption = edgeCaption(edge.type, edge.label);
+    const extra =
+      edge.outcome ?? edge.guard ?? (edge.order !== undefined ? String(edge.order) : undefined);
+    const caption = edgeCaption(edge.type, edge.label, extra);
     const label = measureText(caption || " ", options.font, options.maxLabelWidth, options.measurer);
     const placed = placeEdgeLabel(points, caption ? label : { width: 0, height: 0 });
     return {

@@ -34,6 +34,9 @@ export type Operation =
       type: EdgeType;
       direction: EdgeDirection;
       label?: string;
+      order?: number;
+      guard?: string;
+      outcome?: string;
     }
   | { kind: typeof OPERATION_KIND.DELETE_NODE; nodeId: string }
   | { kind: typeof OPERATION_KIND.DELETE_EDGE; edgeId: string }

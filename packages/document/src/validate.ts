@@ -1,6 +1,7 @@
 import { Value } from "@sinclair/typebox/value";
-import { SCHEMA_VERSION } from "./constants/document.ts";
+import { DOCUMENT_KIND, NODE_KIND, NODE_MARKER, SCHEMA_VERSION } from "./constants/document.ts";
 import { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
+import { EDGES_FOR_KIND, NODES_FOR_KIND } from "./constants/modes.ts";
 import { DiagramDocumentSchema } from "./schema/document.ts";
 import type { DiagramDocument } from "./types/document.ts";
 import type { ValidationIssue, ValidationResult } from "./types/validation.ts";
@@ -257,6 +258,109 @@ function semanticErrors(document: DiagramDocument): ValidationIssue[] {
           `/evidence/${index}/targetId`,
           item.id,
         ),
+      );
+    }
+  }
+
+  const allowedNodes = new Set(NODES_FOR_KIND[document.kind]);
+  const allowedEdges = new Set(EDGES_FOR_KIND[document.kind]);
+  document.nodes.forEach((node, index) => {
+    if (!allowedNodes.has(node.kind)) {
+      errors.push(
+        issue(
+          VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+          `node kind "${node.kind}" is not valid on a ${document.kind} diagram`,
+          `/nodes/${index}/kind`,
+          node.id,
+        ),
+      );
+    }
+    if (node.marker && document.kind !== DOCUMENT_KIND.LIFECYCLE) {
+      errors.push(
+        issue(
+          VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+          "node marker is only valid on lifecycle diagrams",
+          `/nodes/${index}/marker`,
+          node.id,
+        ),
+      );
+    }
+  });
+  document.edges.forEach((edge, index) => {
+    if (!allowedEdges.has(edge.type)) {
+      errors.push(
+        issue(
+          VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+          `edge type "${edge.type}" is not valid on a ${document.kind} diagram`,
+          `/edges/${index}/type`,
+          edge.id,
+        ),
+      );
+    }
+  });
+
+  if (document.kind === DOCUMENT_KIND.WORKFLOW) {
+    document.nodes.forEach((node, index) => {
+      if (node.kind !== NODE_KIND.DECISION) return;
+      const outgoing = document.edges.filter((edge) => edge.source.nodeId === node.id);
+      if (outgoing.length < 2) {
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+            `decision "${node.id}" needs at least two labelled outcomes`,
+            `/nodes/${index}/id`,
+            node.id,
+          ),
+        );
+      }
+      for (const edge of outgoing) {
+        if (edge.outcome ?? edge.label) continue;
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+            `decision outcome on edge "${edge.id}" is missing a label`,
+            `/edges/${document.edges.indexOf(edge)}/outcome`,
+            edge.id,
+          ),
+        );
+      }
+    });
+  }
+
+  if (document.kind === DOCUMENT_KIND.SEQUENCE) {
+    const seenOrder = new Map<number, string>();
+    document.edges.forEach((edge, index) => {
+      if (edge.order === undefined) {
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+            `sequence edge "${edge.id}" needs an order`,
+            `/edges/${index}/order`,
+            edge.id,
+          ),
+        );
+        return;
+      }
+      const previous = seenOrder.get(edge.order);
+      if (previous) {
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+            `sequence order ${edge.order} is used by "${previous}" and "${edge.id}"`,
+            `/edges/${index}/order`,
+            edge.id,
+          ),
+        );
+      }
+      seenOrder.set(edge.order, edge.id);
+    });
+  }
+
+  if (document.kind === DOCUMENT_KIND.LIFECYCLE) {
+    const initials = document.nodes.filter((node) => node.marker === NODE_MARKER.INITIAL);
+    if (initials.length === 0) {
+      errors.push(
+        issue(VALIDATION_ERROR_CODE.MODE_CONSTRAINT, "lifecycle diagrams need an initial state", "/nodes"),
       );
     }
   }

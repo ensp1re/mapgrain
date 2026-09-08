@@ -82,6 +82,7 @@ test("explicit port ids survive the scene pass", async () => {
 test("parallel edges keep type and label as a single caption", async () => {
   assert.equal(edgeCaption("reads", "get"), "reads · get");
   assert.equal(edgeCaption("writes", "set"), "writes · set");
+  assert.equal(edgeCaption("message", "submit", "1"), "message · 1 · submit");
   const raw = await load("parallel-edges.json");
   const result = buildScene(raw);
   assert.equal(result.ok, true);
@@ -91,6 +92,15 @@ test("parallel edges keep type and label as a single caption", async () => {
   assert.equal(read?.caption, "reads · get");
   assert.equal(write?.caption, "writes · set");
   assert.notEqual(read?.labelAnchor.y, write?.labelAnchor.y);
+});
+
+test("sequence captions include message order", async () => {
+  const raw = await load("sequence-checkout.json");
+  const result = buildScene(raw);
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const first = result.scene.edges.find((edge) => edge.id === "m1");
+  assert.equal(first?.caption, "message · 1 · submit");
 });
 
 test("multiline labels become multiple lines", () => {

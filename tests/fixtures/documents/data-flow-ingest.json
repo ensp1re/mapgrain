@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-data-flow-ingest",
+  "revision": 1,
+  "kind": "data-flow",
+  "title": "Ingest data flow",
+  "theme": "light",
+  "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
+  "groups": [],
+  "nodes": [
+    { "id": "user", "kind": "entity", "label": "Analyst", "groupId": null, "ports": [{ "id": "out", "side": "east" }] },
+    { "id": "capture", "kind": "process", "label": "Capture", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "records", "kind": "datastore", "label": "Records", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "report", "kind": "process", "label": "Report", "groupId": null, "ports": [{ "id": "in", "side": "west" }] }
+  ],
+  "edges": [
+    { "id": "d1", "source": { "nodeId": "user", "portId": "out" }, "target": { "nodeId": "capture", "portId": "in" }, "type": "data", "direction": "forward", "label": "file" },
+    { "id": "d2", "source": { "nodeId": "capture", "portId": "out" }, "target": { "nodeId": "records", "portId": "in" }, "type": "writes", "direction": "forward", "label": "rows" },
+    { "id": "d3", "source": { "nodeId": "records", "portId": "out" }, "target": { "nodeId": "report", "portId": "in" }, "type": "reads", "direction": "forward", "label": "rows" }
+  ],
+  "views": [{ "id": "overview", "kind": "overview", "name": "Ingest" }]
+}

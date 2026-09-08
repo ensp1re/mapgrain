@@ -34,9 +34,16 @@ export function parseArgs(argv: string[]): ParsedArgs {
     command !== CLI_COMMAND.VIEW &&
     command !== CLI_COMMAND.LAYOUT &&
     command !== CLI_COMMAND.DOCTOR &&
+    command !== CLI_COMMAND.DIAGNOSE &&
+    command !== CLI_COMMAND.COMPARE &&
     command !== CLI_COMMAND.STUDIO
   ) {
     return usage("Unknown command.");
+  }
+  if (command === CLI_COMMAND.COMPARE) {
+    const files = argv.slice(1).filter((token) => token && !token.startsWith("-"));
+    if (files.length !== 2 || !files[0] || !files[1]) return usage("compare needs two files.");
+    return { ok: true, command, file: files[0], other: files[1] };
   }
   if (command === CLI_COMMAND.DOCTOR) {
     if (argv.slice(1).some((token) => token.startsWith("-"))) return usage(`Unknown flag ${argv[1]}.`);
@@ -80,6 +87,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   }
   if (!file) return usage("Missing input file.");
   if (command === CLI_COMMAND.VALIDATE) return { ok: true, command, file };
+  if (command === CLI_COMMAND.DIAGNOSE) return { ok: true, command, file };
   if (command === CLI_COMMAND.STUDIO) return { ok: true, command, file };
   if (command === CLI_COMMAND.LAYOUT) return { ok: true, command, file, out: out ?? file, noClobber, rearrange };
   if (command === CLI_COMMAND.RENDER) return { ok: true, command, file, out, noClobber };

@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F039
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/outcome-gates @ 3057c980239d6590e14b64fd24a9024eb36397d2 (dirty)
-- Updated: 2026-09-08T20:32:13.564Z
+- Git: feat/diagram-modes @ b8b25639d0ba6da2676cbb040474fbdcf53714d8 (dirty)
+- Updated: 2026-09-08T21:05:32.050Z
 
 ### Next action
 
-Draft PR for F039 on feat/outcome-gates. Merge when GitHub verify succeeds, then stamp passing from main push.
+Draft PR for F040 on feat/diagram-modes. Merge when GitHub verify succeeds, then stamp passing from main push.
 
 ### Decisions
 
@@ -41,6 +41,7 @@ Draft PR for F039 on feat/outcome-gates. Merge when GitHub verify succeeds, then
 - F036: Default fit uses a minimum zoom so 14px labels stay at least 12px. Zoom percentage is visible. Dialogs trap focus and Escape closes the topmost surface.
 - F038: End users pin npx mapgrain@0.1.0. Installer IDs come from skills@1.5.25. Cursor/Codex/OpenCode/Copilot/Gemini share .agents/skills. Live agent tasks stay untested until a clean-directory agent run is recorded.
 - F039: Selection p95 is measured through next paint on alternating outline rows. The 100-node budget is 100ms. The production journey covers blank, connect, pin, arrange, undo, export, and reimport.
+- F040: Sequence, data-flow, and lifecycle are dedicated kinds with allowlists and constraints, not relabelled architecture graphs. Diagnose warnings stay separate from invalid documents. Compare is snapshot delta only. Watch/reload, stories, presets, video, and localization stay planned.
 
 ### Rejected approaches
 
@@ -59,6 +60,7 @@ Draft PR for F039 on feat/outcome-gates. Merge when GitHub verify succeeds, then
 - Starting R6 imports, hosted sharing, or billing before R1–R5.
 - Scanning payload.edges on every node click to find neighbors.
 - Centering search hits with scrollIntoView instead of the node's bounding box.
+- Relabelling generic architecture graphs as sequence, data-flow, or lifecycle without dedicated node and edge rules.
 
 ### Blockers
 
@@ -104,6 +106,7 @@ Draft PR for F039 on feat/outcome-gates. Merge when GitHub verify succeeds, then
 - docs/runs/run-1788896583251-3a089f.json
 - docs/runs/run-1788898310839-6d486d.json
 - docs/runs/run-1788899490994-7d2591.json
+- docs/runs/run-1788901487093-a1dd52.json
 
 ## Resume
 
