@@ -7,6 +7,7 @@ import {
 import { buildScene, type Point, type Size } from "@mapgrain/scene";
 import { LAYOUT_STATUS } from "../constants/codes.ts";
 import { applyPins } from "../pins.ts";
+import { isSequenceDocument, sequencePositions } from "../sequence.ts";
 import type { LayoutConflict, WorkerLayoutResponse } from "../types/layout.ts";
 import { collectPositions, toElkGraph, type ElkNode } from "./graph.ts";
 
@@ -44,6 +45,25 @@ export async function runLayout(
   const sizes = sizesFromDocument(validated.document);
   if (!(sizes instanceof Map)) {
     return { id, threadId, status: LAYOUT_STATUS.INVALID, errors: sizes.errors ?? [] };
+  }
+
+  if (isSequenceDocument(validated.document)) {
+    const positions = sequencePositions(validated.document, sizes);
+    const applied = applyPins(positions, sizes, pins);
+    if (applied.conflict) {
+      return {
+        id,
+        threadId,
+        status: LAYOUT_STATUS.CONFLICT,
+        conflict: applied.conflict satisfies LayoutConflict,
+      };
+    }
+    return {
+      id,
+      threadId,
+      status: LAYOUT_STATUS.LAID_OUT,
+      positions: applied.positions,
+    };
   }
 
   const graph = toElkGraph(validated.document, sizes);

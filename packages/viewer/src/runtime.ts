@@ -8,6 +8,8 @@ const zoomLabel = document.querySelector("[data-zoom]");
 const fromSel = document.querySelector("[data-act=route-from]");
 const toSel = document.querySelector("[data-act=route-to]");
 const viewSel = document.querySelector("[data-act=view]");
+const storySel = document.querySelector("[data-act=story]");
+const lensSel = document.querySelector("[data-act=lens]");
 const svg = board.querySelector("svg");
 const PAD = 24;
 const MIN = 0.1, MAX = 8;
@@ -23,6 +25,9 @@ Object.freeze(payload.views || []);
 let scale = 1, x = 0, y = 0, dragging = false, last = {x:0,y:0};
 let reachMode = "off";
 let focusId = null;
+let storyId = "";
+let storyStep = 0;
+let lens = "";
 
 function buildIndex(edges) {
   const down = new Map();
@@ -161,7 +166,10 @@ function currentState() {
     from: fromSel && fromSel.value || undefined,
     to: toSel && toSel.value || undefined,
     view: viewSel && viewSel.value || undefined,
-    theme: document.documentElement.dataset.theme
+    theme: document.documentElement.dataset.theme,
+    story: storyId || undefined,
+    step: storyId ? String(storyStep) : undefined,
+    lens: lens || undefined
   };
 }
 function persist() { writeHash(currentState()); }
@@ -173,6 +181,9 @@ function writeHash(state) {
   if (state.to) params.set("to", state.to);
   if (state.view) params.set("view", state.view);
   if (state.theme) params.set("theme", state.theme);
+  if (state.story) params.set("story", state.story);
+  if (state.step) params.set("step", state.step);
+  if (state.lens) params.set("lens", state.lens);
   const next = params.toString();
   const hash = next ? "#" + next : "";
   if (location.hash !== hash) history.replaceState(null, "", hash || location.pathname + location.search);
@@ -283,6 +294,76 @@ if (viewSel) {
 }
 fillSelect(fromSel, "");
 fillSelect(toSel, "");
+const stories = payload.stories || [];
+const storyById = new Map(stories.map((item) => [item.id, item]));
+if (storySel) {
+  const blank = document.createElement("option");
+  blank.value = "";
+  blank.textContent = "";
+  storySel.appendChild(blank);
+  for (const story of stories) {
+    const opt = document.createElement("option");
+    opt.value = story.id;
+    opt.textContent = story.name;
+    storySel.appendChild(opt);
+  }
+}
+const roles = [...new Set((payload.nodes || []).map((n) => n.role).filter(Boolean))];
+if (lensSel) {
+  const blank = document.createElement("option");
+  blank.value = "";
+  blank.textContent = "";
+  lensSel.appendChild(blank);
+  for (const role of roles) {
+    const opt = document.createElement("option");
+    opt.value = role;
+    opt.textContent = role;
+    lensSel.appendChild(opt);
+  }
+}
+function applyLens(next) {
+  lens = next || "";
+  if (lensSel) lensSel.value = lens;
+  for (const node of document.querySelectorAll("g[data-kind=node]")) {
+    const role = node.getAttribute("data-role") || "";
+    node.classList.toggle("is-dim", Boolean(lens) && role !== lens);
+  }
+  persist();
+}
+function applyStoryStep() {
+  const story = storyById.get(storyId);
+  if (!story || !story.steps || !story.steps[storyStep]) { persist(); return; }
+  const step = story.steps[storyStep];
+  if (step.viewId) applyView(step.viewId);
+  if (step.nodeId && nodeIds.has(step.nodeId)) {
+    focusId = step.nodeId;
+    selectNode(step.nodeId);
+  }
+  setStatus(step.name + (step.description ? " — " + step.description : ""));
+  persist();
+}
+function moveStory(delta) {
+  const story = storyById.get(storyId);
+  if (!story) return;
+  const next = storyStep + delta;
+  if (next < 0 || next >= story.steps.length) return;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  storyStep = next;
+  if (!reduce) applyStoryStep();
+  else applyStoryStep();
+}
+if (storySel) storySel.onchange = () => {
+  storyId = storySel.value;
+  storyStep = 0;
+  applyStoryStep();
+};
+const prevBtn = document.querySelector("[data-act=story-prev]");
+const nextBtn = document.querySelector("[data-act=story-next]");
+if (prevBtn) prevBtn.onclick = () => moveStory(-1);
+if (nextBtn) nextBtn.onclick = () => moveStory(1);
+if (lensSel) lensSel.onchange = () => applyLens(lensSel.value);
+const lensReset = document.querySelector("[data-act=lens-reset]");
+if (lensReset) lensReset.onclick = () => applyLens("");
 stage.addEventListener("pointerdown", (e) => {
   if (e.target.closest("g[data-kind=node]")) return;
   dragging = true;
@@ -362,6 +443,8 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") { x -= 40; apply(); }
   if (e.key === "ArrowUp") { y += 40; apply(); }
   if (e.key === "ArrowDown") { y -= 40; apply(); }
+  if (e.key === "[") moveStory(-1);
+  if (e.key === "]") moveStory(1);
 });
 window.addEventListener("resize", () => { if (!visible()) fit(); });
 window.addEventListener("hashchange", () => restore(parseHash(location.hash)));
@@ -378,6 +461,13 @@ function restore(state) {
     if (reachMode !== "off") applyReach(state.focus, reachMode);
   } else if (state.focus) {
     focusId = null;
+  }
+  if (state.lens) applyLens(state.lens);
+  if (state.story && storyById.has(state.story)) {
+    storyId = state.story;
+    if (storySel) storySel.value = storyId;
+    storyStep = Math.max(0, Number(state.step) || 0);
+    applyStoryStep();
   }
   persist();
 }

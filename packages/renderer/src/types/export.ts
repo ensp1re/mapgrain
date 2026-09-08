@@ -22,6 +22,7 @@ export interface ExportRequest {
   maxPixels?: number;
   nodeIds?: string[];
   includeEvidence?: boolean;
+  viewId?: string;
 }
 
 export interface ExportSuccess {

@@ -10,10 +10,12 @@ export {
   NODE_KIND,
   NODE_MARKER,
   PORT_SIDE,
+  PRESET,
   SCHEMA_VERSION,
   THEME,
   VIEW_KIND,
 } from "./constants/document.ts";
+export { snapshotMatches } from "./evidence.ts";
 export { defaultEdgeType, EDGES_FOR_KIND, NODES_FOR_KIND } from "./constants/modes.ts";
 export { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
 export { OPERATION_KIND } from "./constants/operations.ts";
@@ -27,6 +29,8 @@ export type {
   DiagramGroup,
   DiagramNode,
   DiagramPort,
+  DiagramStory,
+  DiagramStoryStep,
   DiagramView,
   DocumentKind,
   EdgeDirection,
@@ -37,9 +41,12 @@ export type {
   LayoutPoint,
   LayoutSection,
   NodeKind,
+  NodeMarker,
   PortSide,
+  Preset,
   Theme,
 } from "./types/document.ts";
+
 export type { DocumentDelta } from "./compare.ts";
 export type { ApplyResult, Operation, OperationKind } from "./types/operation.ts";
 export type { ValidationErrorCode, ValidationIssue, ValidationResult } from "./types/validation.ts";

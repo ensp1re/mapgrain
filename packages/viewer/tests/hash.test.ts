@@ -11,6 +11,9 @@ test("view hashes round-trip focus, reach, route, named view, and theme", () => 
     to: "renderer",
     view: "request-path",
     theme: "light" as const,
+    story: "checkout-story",
+    step: "1",
+    lens: "client",
   };
   const hash = serializeViewHash(state);
   assert.equal(hash.startsWith("#"), true);

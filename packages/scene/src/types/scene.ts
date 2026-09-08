@@ -1,4 +1,4 @@
-import type { EdgeDirection, NodeKind, PortSide, ValidationIssue } from "@mapgrain/document";
+import type { EdgeDirection, NodeKind, NodeMarker, PortSide, ValidationIssue } from "@mapgrain/document";
 import type { Point, Rect } from "./geometry.ts";
 
 export interface TextLine {
@@ -28,6 +28,15 @@ export interface SceneNode {
   rect: Rect;
   ports: ScenePort[];
   groupId: string | null;
+  marker?: NodeMarker;
+  role?: string;
+}
+
+export interface SceneLifeline {
+  nodeId: string;
+  x: number;
+  y1: number;
+  y2: number;
 }
 
 export interface SceneEdge {
@@ -56,6 +65,7 @@ export interface Scene {
   nodes: SceneNode[];
   edges: SceneEdge[];
   groups: SceneGroup[];
+  lifelines: SceneLifeline[];
 }
 
 export type SceneResult =

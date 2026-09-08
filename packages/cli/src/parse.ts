@@ -36,6 +36,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
     command !== CLI_COMMAND.DOCTOR &&
     command !== CLI_COMMAND.DIAGNOSE &&
     command !== CLI_COMMAND.COMPARE &&
+    command !== CLI_COMMAND.WATCH &&
     command !== CLI_COMMAND.STUDIO
   ) {
     return usage("Unknown command.");
@@ -55,6 +56,9 @@ export function parseArgs(argv: string[]): ParsedArgs {
   let format: ExportFormat | undefined;
   let noClobber = false;
   let rearrange = false;
+  let once = false;
+  let viewId: string | undefined;
+  let lang: string | undefined;
   for (let i = 1; i < argv.length; i += 1) {
     const token = argv[i];
     if (!token) continue;
@@ -67,7 +71,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
     }
     if (token === "--format" || token === "-f") {
       const value = argv[i + 1];
-      if (!value || !isFormat(value)) return usage("Format must be json, svg, png, or html.");
+      if (!value || !isFormat(value)) return usage("Format must be json, svg, png, html, card, or video.");
       format = value;
       i += 1;
       continue;
@@ -81,6 +85,25 @@ export function parseArgs(argv: string[]): ParsedArgs {
       rearrange = true;
       continue;
     }
+    if (token === "--once") {
+      if (command !== CLI_COMMAND.WATCH) return usage("Unknown flag --once.");
+      once = true;
+      continue;
+    }
+    if (token === "--view") {
+      const value = argv[i + 1];
+      if (!value) return usage("Missing value for --view.");
+      viewId = value;
+      i += 1;
+      continue;
+    }
+    if (token === "--lang") {
+      const value = argv[i + 1];
+      if (value !== "en" && value !== "uk") return usage("Language must be en or uk.");
+      lang = value;
+      i += 1;
+      continue;
+    }
     if (token.startsWith("-") && token !== "-") return usage(`Unknown flag ${token}.`);
     if (file) return usage("Unexpected extra argument.");
     file = token;
@@ -91,7 +114,11 @@ export function parseArgs(argv: string[]): ParsedArgs {
   if (command === CLI_COMMAND.STUDIO) return { ok: true, command, file };
   if (command === CLI_COMMAND.LAYOUT) return { ok: true, command, file, out: out ?? file, noClobber, rearrange };
   if (command === CLI_COMMAND.RENDER) return { ok: true, command, file, out, noClobber };
-  if (command === CLI_COMMAND.VIEW) return { ok: true, command, file, out, noClobber };
+  if (command === CLI_COMMAND.VIEW) return { ok: true, command, file, out, noClobber, lang };
+  if (command === CLI_COMMAND.WATCH) {
+    const watchFormat = format === "svg" || format === "png" || format === "json" ? format : "html";
+    return { ok: true, command, file, out, format: watchFormat, once };
+  }
   if (!format) return usage("export requires --format.");
-  return { ok: true, command, file, format, out, noClobber };
+  return { ok: true, command, file, format, out, noClobber, viewId, lang };
 }

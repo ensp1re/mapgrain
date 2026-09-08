@@ -35,10 +35,27 @@ export type ParsedArgs =
   | { ok: true; command: "doctor" }
   | { ok: true; command: "validate"; file: string }
   | { ok: true; command: "render"; file: string; out: string | null; noClobber: boolean }
-  | { ok: true; command: "export"; file: string; format: ExportFormat; out: string | null; noClobber: boolean }
-  | { ok: true; command: "view"; file: string; out: string | null; noClobber: boolean }
+  | {
+      ok: true;
+      command: "export";
+      file: string;
+      format: ExportFormat;
+      out: string | null;
+      noClobber: boolean;
+      viewId?: string;
+      lang?: string;
+    }
+  | { ok: true; command: "view"; file: string; out: string | null; noClobber: boolean; lang?: string }
   | { ok: true; command: "layout"; file: string; out: string | null; noClobber: boolean; rearrange: boolean }
   | { ok: true; command: "studio"; file: string }
   | { ok: true; command: "diagnose"; file: string }
   | { ok: true; command: "compare"; file: string; other: string }
+  | {
+      ok: true;
+      command: "watch";
+      file: string;
+      out: string | null;
+      format: "json" | "html" | "svg" | "png";
+      once: boolean;
+    }
   | { ok: false; errors: DiagnosticIssue[] };

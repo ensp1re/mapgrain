@@ -212,6 +212,11 @@
                 "type": "string"
               }
             ]
+          },
+          "role": {
+            "minLength": 1,
+            "maxLength": 40,
+            "type": "string"
           }
         }
       }
@@ -574,6 +579,22 @@
         }
       ]
     },
+    "preset": {
+      "anyOf": [
+        {
+          "const": "compact",
+          "type": "string"
+        },
+        {
+          "const": "comfortable",
+          "type": "string"
+        },
+        {
+          "const": "presentation",
+          "type": "string"
+        }
+      ]
+    },
     "evidence": {
       "type": "array",
       "items": {
@@ -633,6 +654,92 @@
           "note": {
             "maxLength": 2000,
             "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "maxLength": 400,
+            "type": "string"
+          },
+          "revision": {
+            "minLength": 1,
+            "maxLength": 80,
+            "type": "string"
+          },
+          "location": {
+            "minLength": 1,
+            "maxLength": 80,
+            "type": "string"
+          },
+          "snapshot": {
+            "minLength": 1,
+            "maxLength": 128,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "stories": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "steps"
+        ],
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "maxLength": 200,
+            "type": "string"
+          },
+          "steps": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "name"
+              ],
+              "properties": {
+                "id": {
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                "description": {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                "nodeId": {
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                  "type": "string"
+                },
+                "viewId": {
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }

@@ -10,6 +10,7 @@ import {
   NODE_KIND,
   NODE_MARKER,
   PORT_SIDE,
+  PRESET,
   SCHEMA_VERSION,
   THEME,
   VIEW_KIND,
@@ -44,6 +45,7 @@ export const NodeSchema = Type.Object(
     groupId: Type.Union([Id, Type.Null()]),
     ports: Type.Array(PortSchema, { default: [] }),
     marker: Type.Optional(stringUnion(valuesOf(NODE_MARKER))),
+    role: Type.Optional(Type.String({ minLength: 1, maxLength: 40 })),
   },
   { additionalProperties: false },
 );
@@ -133,6 +135,30 @@ export const EvidenceSchema = Type.Object(
     targetId: Id,
     state: stringUnion(valuesOf(EVIDENCE_STATE)),
     note: Type.Optional(Type.String({ maxLength: 2000 })),
+    path: Type.Optional(Type.String({ minLength: 1, maxLength: 400 })),
+    revision: Type.Optional(Type.String({ minLength: 1, maxLength: 80 })),
+    location: Type.Optional(Type.String({ minLength: 1, maxLength: 80 })),
+    snapshot: Type.Optional(Type.String({ minLength: 1, maxLength: 128 })),
+  },
+  { additionalProperties: false },
+);
+
+export const StoryStepSchema = Type.Object(
+  {
+    id: Id,
+    name: Type.String({ minLength: 1, maxLength: 200 }),
+    description: Type.Optional(Type.String({ maxLength: 2000 })),
+    nodeId: Type.Optional(Id),
+    viewId: Type.Optional(Id),
+  },
+  { additionalProperties: false },
+);
+
+export const StorySchema = Type.Object(
+  {
+    id: Id,
+    name: Type.String({ minLength: 1, maxLength: 200 }),
+    steps: Type.Array(StoryStepSchema, { minItems: 1 }),
   },
   { additionalProperties: false },
 );
@@ -151,7 +177,9 @@ export const DiagramDocumentSchema = Type.Object(
     layoutHints: LayoutHintsSchema,
     layout: Type.Optional(LayoutSectionSchema),
     theme: stringUnion(valuesOf(THEME)),
+    preset: Type.Optional(stringUnion(valuesOf(PRESET))),
     evidence: Type.Optional(Type.Array(EvidenceSchema)),
+    stories: Type.Optional(Type.Array(StorySchema)),
   },
   {
     additionalProperties: false,

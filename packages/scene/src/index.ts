@@ -9,7 +9,9 @@ export {
 export { DIAGNOSTIC_SEVERITY, GEOMETRY_DIAGNOSTIC } from "./constants/diagnostics.ts";
 export { diagnoseGeometry } from "./diagnostics.ts";
 export { buildScene } from "./build.ts";
+export { isSequenceDocument, sequencePositions } from "./sequence.ts";
 export { defaultSceneOptions } from "./options.ts";
+export { presetOverrides } from "./presets.ts";
 export { facingSide, placePortsOnRect, portOffset } from "./ports.ts";
 export { edgeCaption } from "./caption.ts";
 export {
@@ -35,6 +37,7 @@ export type {
   Scene,
   SceneEdge,
   SceneGroup,
+  SceneLifeline,
   SceneNode,
   ScenePort,
   SceneResult,

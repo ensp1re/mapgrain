@@ -1,4 +1,5 @@
 import {
+  DOCUMENT_KIND,
   EDGE_DIRECTION,
   LAYOUT_DIRECTION,
   validateDocument,
@@ -11,6 +12,8 @@ import { edgeCaption } from "./caption.ts";
 import { expandTop, inflate, midpoint, normalize, unionRects } from "./geometry.ts";
 import { placeEdgeLabel } from "./routes.ts";
 import { defaultSceneOptions } from "./options.ts";
+import { presetOverrides } from "./presets.ts";
+import { isSequenceDocument, sequencePositions } from "./sequence.ts";
 import {
   facingSide,
   placePortsOnRect,
@@ -19,7 +22,41 @@ import {
 import { measureText } from "./text.ts";
 import type { Point, Rect } from "./types/geometry.ts";
 import type { SceneOptions } from "./types/options.ts";
-import type { Scene, SceneEdge, SceneGroup, SceneNode, ScenePort, SceneResult } from "./types/scene.ts";
+import type {
+  Scene,
+  SceneEdge,
+  SceneGroup,
+  SceneLifeline,
+  SceneNode,
+  ScenePort,
+  SceneResult,
+} from "./types/scene.ts";
+
+const SEQUENCE_MESSAGE_GAP = 40;
+const SEQUENCE_HEADER_GAP = 28;
+
+function sequenceMessagePoints(
+  source: SceneNode,
+  target: SceneNode,
+  order: number,
+  headerBottom: number,
+): Point[] {
+  const y = headerBottom + SEQUENCE_HEADER_GAP + (order - 1) * SEQUENCE_MESSAGE_GAP;
+  const fromX = source.rect.x + source.rect.width / 2;
+  const toX = target.rect.x + target.rect.width / 2;
+  if (source.id === target.id) {
+    return [
+      { x: fromX, y },
+      { x: fromX + 28, y },
+      { x: fromX + 28, y: y + 16 },
+      { x: fromX, y: y + 16 },
+    ];
+  }
+  return [
+    { x: fromX, y },
+    { x: toX, y },
+  ];
+}
 
 function nodeSize(
   label: { width: number; height: number },
@@ -170,6 +207,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   const options = defaultSceneOptions({
     direction: document.layoutHints.direction,
     positions: document.layout?.positions ?? {},
+    ...presetOverrides(document.preset),
     ...optionOverrides,
   });
 
@@ -183,7 +221,12 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     sizes.set(node.id, nodeSize(label, kind, options));
   }
 
-  const positions = placeNodes(document, sizes, options);
+  const positions = isSequenceDocument(document)
+    ? sequencePositions(document, sizes)
+    : placeNodes(document, sizes, options);
+  for (const [id, point] of Object.entries(options.positions)) {
+    positions.set(id, point);
+  }
   const nodes: SceneNode[] = document.nodes.map((node) => {
     const size = sizes.get(node.id) ?? { width: options.minNodeWidth, height: options.minNodeHeight };
     const origin = positions.get(node.id) ?? { x: 0, y: 0 };
@@ -195,6 +238,8 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       label,
       rect,
       groupId: node.groupId,
+      marker: node.marker,
+      role: node.role,
       ports: placePortsOnRect(node.id, rect, node.ports),
     };
   });
@@ -230,12 +275,19 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     const count = pairCounts.get(key) ?? 1;
     const index = pairSeen.get(key) ?? 0;
     pairSeen.set(key, index + 1);
-    const points = offsetEdge(
-      { x: sourcePort.x, y: sourcePort.y },
-      { x: targetPort.x, y: targetPort.y },
-      index,
-      count,
+    const headerBottom = Math.max(
+      ...nodes.map((item) => item.rect.y + item.rect.height),
+      sourceNode.rect.y + sourceNode.rect.height,
     );
+    const points =
+      document.kind === DOCUMENT_KIND.SEQUENCE
+        ? sequenceMessagePoints(sourceNode, targetNode, edge.order ?? index + 1, headerBottom)
+        : offsetEdge(
+            { x: sourcePort.x, y: sourcePort.y },
+            { x: targetPort.x, y: targetPort.y },
+            index,
+            count,
+          );
     const extra =
       edge.outcome ?? edge.guard ?? (edge.order !== undefined ? String(edge.order) : undefined);
     const caption = edgeCaption(edge.type, edge.label, extra);
@@ -255,6 +307,19 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   });
 
   const groups = buildGroups(document, nodes, options);
+  const messageBottom = Math.max(
+    0,
+    ...edges.flatMap((edge) => edge.points.map((point) => point.y)),
+  );
+  const lifelines: SceneLifeline[] =
+    document.kind === DOCUMENT_KIND.SEQUENCE
+      ? nodes.map((node) => ({
+          nodeId: node.id,
+          x: node.rect.x + node.rect.width / 2,
+          y1: node.rect.y + node.rect.height,
+          y2: Math.max(node.rect.y + node.rect.height + 48, messageBottom + 24),
+        }))
+      : [];
   const bounds = unionRects([
     ...nodes.map((node) => node.rect),
     ...groups.map((group) => group.rect),
@@ -262,6 +327,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       ...edge.points.map((point) => ({ x: point.x, y: point.y, width: 0, height: 0 })),
       edge.labelBox,
     ]),
+    ...lifelines.map((line) => ({ x: line.x, y: line.y1, width: 0, height: line.y2 - line.y1 })),
   ]);
 
   const scene: Scene = {
@@ -271,6 +337,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     nodes,
     edges,
     groups,
+    lifelines,
   };
   return { ok: true, scene };
 }

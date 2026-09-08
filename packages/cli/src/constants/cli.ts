@@ -9,6 +9,7 @@ export const CLI_COMMAND = {
   DOCTOR: "doctor",
   DIAGNOSE: "diagnose",
   COMPARE: "compare",
+  WATCH: "watch",
   STUDIO: "studio",
 } as const;
 
@@ -46,7 +47,7 @@ export const STUDIO_IF_MATCH = "if-match";
 export const STDIN_PATH = "-";
 
 export const USAGE =
-  "Usage: mapgrain <validate|render|export|view|layout|doctor|diagnose|compare|studio> [file] [--format json|svg|png|html] [-o file] [--no-clobber] [--rearrange]";
+  "Usage: mapgrain <validate|render|export|view|layout|doctor|diagnose|compare|watch|studio> [file] [--format json|svg|png|html|card|video] [-o file] [--no-clobber] [--rearrange] [--view id] [--lang en|uk]";
 
 export const HELP_TEXT = `Mapgrain — validate, render, and export architecture diagrams.
 
@@ -58,17 +59,20 @@ Usage:
 Commands:
   validate   Check a diagram JSON document
   render     Write SVG to stdout or --out
-  export     Write json|svg|png|html via --format
+  export     Write json|svg|png|html|card|video via --format
   view       Write a read-only HTML viewer
   layout     Resolve node positions with ELK and write JSON
   doctor     Check runtime, assets, renderer, worker, and output access
   diagnose   Report geometry warnings for a laid-out document
   compare    Show added/removed/changed nodes and edges between two files
+  watch      Reload a file; keep last-good output while it is invalid
   studio     Serve the editor on loopback for one file
 
 Options:
   -o, --out <file>     Output path (atomic replace)
-  -f, --format <fmt>   json, svg, png, or html
+  -f, --format <fmt>   json, svg, png, html, card, or video
+      --view <id>      Named view for share-card export
+      --lang en|uk     Viewer chrome locale
       --rearrange      Re-run layout even when positions already exist
       --no-clobber     Refuse to overwrite an existing --out file
   -h, --help

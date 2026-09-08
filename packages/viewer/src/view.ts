@@ -1,6 +1,7 @@
 import { THEME, validateDocument, type Theme } from "@mapgrain/document";
 import { COLOR_MODE, EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
 import { wrapViewer } from "./html.ts";
+import { localeFrom, type Locale } from "./messages.ts";
 
 export interface ViewResult {
   ok: true;
@@ -11,6 +12,7 @@ export interface ViewResult {
 export function renderView(
   document: unknown,
   theme?: Theme,
+  locale?: Locale,
 ): ViewResult | { ok: false; errors: Array<{ code: string; message: string; path: string }> } {
   const validated = validateDocument(document);
   const resolvedTheme = theme ?? (validated.ok ? validated.document.theme : THEME.DARK);
@@ -32,7 +34,12 @@ export function renderView(
       ? { ...validated.document, evidence: undefined }
       : { title },
     nodes: validated.ok
-      ? validated.document.nodes.map((node) => ({ id: node.id, label: node.label, kind: node.kind }))
+      ? validated.document.nodes.map((node) => ({
+          id: node.id,
+          label: node.label,
+          kind: node.kind,
+          role: node.role,
+        }))
       : [],
     edges: validated.ok
       ? validated.document.edges.map((edge) => ({
@@ -52,10 +59,18 @@ export function renderView(
           path: view.path,
         }))
       : [],
+    stories: validated.ok ? validated.document.stories ?? [] : [],
   };
   return {
     ok: true,
     svg,
-    html: wrapViewer(title, svg, JSON.stringify(payload), background, resolvedTheme),
+    html: wrapViewer(
+      title,
+      svg,
+      JSON.stringify(payload),
+      background,
+      resolvedTheme,
+      localeFrom(locale),
+    ),
   };
 }

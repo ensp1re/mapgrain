@@ -152,6 +152,7 @@ test("help exits 0 and lists commands", async () => {
   assert.match(body, /layout/);
   assert.match(body, /diagnose/);
   assert.match(body, /compare/);
+  assert.match(body, /watch/);
 });
 
 test("diagnose reports geometry issues as JSON", async () => {

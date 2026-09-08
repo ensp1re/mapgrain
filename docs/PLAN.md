@@ -8,9 +8,9 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 
 ## State
 
-- Status: `passing`
-- Current task ID: F041
-- Active slice: Queue closeout — F025 removed, F031 stamped
+- Status: `verified`
+- Current task ID: F042
+- Active slice: Remaining owner-brief items — stories, watch, presets, sequence layout
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -59,6 +59,7 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F039 | Usable-release T8: outcome and performance gates | F032, F036 | unit, lint, typecheck, build, browser | passing |
 | F040 | Full product T9: remaining feature gaps (modes, diagnostics, stories) | F039 | unit, lint, typecheck, build | passing |
 | F041 | Production README, getting-started, screenshots, and GIFs | F040 | unit, lint, typecheck, build | passing |
+| F042 | Remaining brief: sequence layout, stories, lenses, watch, presets, share-card, video, locale | F041 | unit, lint, typecheck, build | verified |
 
 The master product brief (usable release then full product) supersedes the shorter V3 plan for remaining scope. The five-user study is not in the queue. Do not start hosted sharing or billing. README media rewrite is F041.
 

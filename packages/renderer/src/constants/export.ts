@@ -3,6 +3,8 @@ export const EXPORT_FORMAT = {
   SVG: "svg",
   PNG: "png",
   HTML: "html",
+  CARD: "card",
+  VIDEO: "video",
 } as const;
 
 export const EXPORT_ERROR_CODE = {
