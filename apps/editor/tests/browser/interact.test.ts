@@ -71,8 +71,9 @@ async function measureSelection(page: Page, reps: number): Promise<number[]> {
 
 async function measureTyping(page: Page, reps: number): Promise<number[]> {
   const samples: number[] = [];
-  const input = page.getByLabel("Document title");
-  await input.click({ timeout: 10_000 });
+  const input = page.locator('input[aria-label="Document title"]');
+  await input.waitFor({ state: "attached", timeout: 10_000 });
+  await input.focus();
   for (let i = 0; i < reps; i += 1) {
     const start = performance.now();
     await page.keyboard.press("a");
