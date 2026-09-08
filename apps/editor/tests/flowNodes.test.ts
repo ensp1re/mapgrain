@@ -31,6 +31,15 @@ test("reuseUnchangedNodes replaces a node when its label or selection changes", 
   assert.equal(sameNodeContent(first[0]!, node("n1")), true);
 });
 
+test("reuseUnchangedNodes keeps measured size when only selection changes", () => {
+  const first = [node("n1", { measured: { width: 180, height: 72 }, width: 180, height: 72 })];
+  const next = reuseUnchangedNodes(first, [node("n1", { selected: true })]);
+  assert.equal(next[0]?.selected, true);
+  assert.deepEqual(next[0]?.measured, { width: 180, height: 72 });
+  assert.equal(next[0]?.width, 180);
+  assert.equal(next[0]?.height, 72);
+});
+
 test("reuseUnchangedEdges keeps the previous object when content is equal", () => {
   const first: Edge[] = [
     { id: "e1", source: "a", target: "b", selected: false, data: { label: "calls", type: "calls", direction: "forward" } },

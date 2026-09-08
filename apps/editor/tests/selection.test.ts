@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { retainSelection, sameIdSet, sameSelection } from "../src/edit/selection.ts";
+import { retainFlowSelection, retainSelection, sameIdSet, sameSelection } from "../src/edit/selection.ts";
 
 test("id sets compare membership, not JSON or order", () => {
   assert.equal(sameIdSet(["a", "b"], ["b", "a"]), true);
@@ -18,6 +18,15 @@ test("retainSelection returns the previous object when ids are unchanged", () =>
   const changed = retainSelection(current, { nodeIds: ["n2"], edgeIds: [] });
   assert.notEqual(changed, current);
   assert.deepEqual(changed.nodeIds, ["n2"]);
+});
+
+test("retainFlowSelection ignores empty React Flow echoes", () => {
+  const current = { nodeIds: ["n1"], edgeIds: [] };
+  assert.equal(retainFlowSelection(current, { nodeIds: [], edgeIds: [] }), current);
+  const selected = retainFlowSelection(current, { nodeIds: ["n2"], edgeIds: [] });
+  assert.deepEqual(selected, { nodeIds: ["n2"], edgeIds: [] });
+  const withEdge = retainFlowSelection(current, { nodeIds: [], edgeIds: ["e1"] });
+  assert.deepEqual(withEdge, { nodeIds: [], edgeIds: ["e1"] });
 });
 
 test("sameSelection treats empty and group selections as first-class", () => {

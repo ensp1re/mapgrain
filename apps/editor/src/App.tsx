@@ -66,7 +66,7 @@ import {
   layoutTokenMatches,
   selectionFromFlow,
 } from "./edit/safety.ts";
-import { retainSelection } from "./edit/selection.ts";
+import { retainFlowSelection } from "./edit/selection.ts";
 import { EditorErrorBoundary } from "./chrome/ErrorBoundary.tsx";
 import {
   isDeleteEvent,
@@ -471,7 +471,7 @@ function Specimen() {
 
   const onSelectionChange = useCallback(({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
     const next = selectionFromFlow(selectedNodes, selectedEdges);
-    setSelection((current) => retainSelection(current, next));
+    setSelection((current) => retainFlowSelection(current, next));
   }, []);
 
   const pushPositions = useCallback((positions: PositionMap) => {
@@ -729,7 +729,9 @@ function Specimen() {
   }, [runCommand]);
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
-    setNodes((current) => applyNodeChanges(changes, current));
+    const structural = changes.filter((change) => change.type !== "select");
+    if (structural.length === 0) return;
+    setNodes((current) => applyNodeChanges(structural, current));
   }, []);
 
   const onNodeDragStart = useCallback(() => setDragging(true), []);

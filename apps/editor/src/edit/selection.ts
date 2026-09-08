@@ -16,3 +16,8 @@ export function sameSelection(left: EditorSelection, right: EditorSelection): bo
 export function retainSelection(current: EditorSelection, next: EditorSelection): EditorSelection {
   return sameSelection(current, next) ? current : next;
 }
+
+export function retainFlowSelection(current: EditorSelection, next: EditorSelection): EditorSelection {
+  if (next.nodeIds.length === 0 && next.edgeIds.length === 0) return current;
+  return retainSelection(current, next);
+}
