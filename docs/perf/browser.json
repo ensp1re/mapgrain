@@ -1,10 +1,11 @@
 {
-  "measuredAt": "2026-09-08T13:15:02.892Z",
+  "measuredAt": "2026-09-08T20:31:49.914Z",
+  "paint": "next-paint",
   "runtime": {
     "node": "26.5.0",
     "platform": "darwin",
     "arch": "arm64",
-    "device": "darwin arm64"
+    "device": "Apple M4 Pro"
   },
   "browser": {
     "name": "chromium",
@@ -15,21 +16,39 @@
     {
       "name": "branching.json",
       "nodes": 10,
-      "cold": { "selectMs": 43.488, "typeMs": 2.418 },
+      "cold": {
+        "selectMs": 26.300000000745058,
+        "typeMs": 16.600000001490116
+      },
       "warm": {
-        "reps": 8,
-        "p50": { "selectMs": 32.913, "typeMs": 0.974 },
-        "p95": { "selectMs": 36.572, "typeMs": 1.505 }
+        "reps": 12,
+        "p50": {
+          "selectMs": 32.5,
+          "typeMs": 33.30000000074506
+        },
+        "p95": {
+          "selectMs": 33,
+          "typeMs": 33.70000000298023
+        }
       }
     },
     {
       "name": "hundred-nodes.json",
       "nodes": 100,
-      "cold": { "selectMs": 47.061, "typeMs": 4.149 },
+      "cold": {
+        "selectMs": 20.899999998509884,
+        "typeMs": 16.800000000745058
+      },
       "warm": {
-        "reps": 8,
-        "p50": { "selectMs": 43.752, "typeMs": 2.974 },
-        "p95": { "selectMs": 67.568, "typeMs": 3.651 }
+        "reps": 12,
+        "p50": {
+          "selectMs": 32.5,
+          "typeMs": 33.100000001490116
+        },
+        "p95": {
+          "selectMs": 33.399999998509884,
+          "typeMs": 34.600000001490116
+        }
       }
     }
   ]

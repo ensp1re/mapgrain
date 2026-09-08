@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F038
+- Task: F039
 - Plan: docs/PLAN.md
-- Git: feat/skill-install @ 8bb3c5a0b43526e4733f99e9b97bb34c506c363a (dirty)
-- Updated: 2026-09-08T20:12:23.824Z
+- Git: feat/outcome-gates @ 3057c980239d6590e14b64fd24a9024eb36397d2 (dirty)
+- Updated: 2026-09-08T20:32:13.564Z
 
 ### Next action
 
-Draft PR for F038 on feat/skill-install. Merge when GitHub verify succeeds, then stamp passing from main push.
+Draft PR for F039 on feat/outcome-gates. Merge when GitHub verify succeeds, then stamp passing from main push.
 
 ### Decisions
 
@@ -40,6 +40,7 @@ Draft PR for F038 on feat/skill-install. Merge when GitHub verify succeeds, then
 - F037: Portable viewer uses adjacency indexes for directed reach and routes. Named views and focus restore from the local hash. Filters never mutate the document payload. Stories and role lenses remain Task 9.
 - F036: Default fit uses a minimum zoom so 14px labels stay at least 12px. Zoom percentage is visible. Dialogs trap focus and Escape closes the topmost surface.
 - F038: End users pin npx mapgrain@0.1.0. Installer IDs come from skills@1.5.25. Cursor/Codex/OpenCode/Copilot/Gemini share .agents/skills. Live agent tasks stay untested until a clean-directory agent run is recorded.
+- F039: Selection p95 is measured through next paint on alternating outline rows. The 100-node budget is 100ms. The production journey covers blank, connect, pin, arrange, undo, export, and reimport.
 
 ### Rejected approaches
 
@@ -102,6 +103,7 @@ Draft PR for F038 on feat/skill-install. Merge when GitHub verify succeeds, then
 - docs/runs/run-1788897532769-c3913c.json
 - docs/runs/run-1788896583251-3a089f.json
 - docs/runs/run-1788898310839-6d486d.json
+- docs/runs/run-1788899490994-7d2591.json
 
 ## Resume
 
