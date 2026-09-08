@@ -98,6 +98,6 @@ test("production bundle stays usable after disconnect, arrange, and reload", asy
   await page.getByRole("button", { name: "Export" }).click();
   await page.getByRole("button", { name: "JSON" }).click();
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
-  await arrange.waitFor({ timeout: 10_000 });
+  await reachEditor();
   assert.equal(errors.join("\n"), "");
 });

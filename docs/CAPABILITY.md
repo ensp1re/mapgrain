@@ -7,7 +7,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Architecture diagrams (typed nodes, directed edges, nested groups, stable IDs) | implemented | yes | Fixtures cover nested groups, parallel edges, cycles, long labels |
 | Workflow / sequence / data-flow / lifecycle modes | missing | no | Architecture/workflow kinds exist; dedicated mode semantics are Task 9 |
 | Blank / open / three examples / agent setup on start | implemented | partial | Start surface exists; agent setup is copy, not a picker with troubleshooting |
-| Direct edit, connect, arrange preview, undo, export | implemented | partial | Browser journeys are thin; full Task 8 journey is outstanding |
+| Direct edit, connect, arrange preview, undo, export | implemented | yes | F039: production blank→edit→export→reimport journey; selection p95 through next paint |
 | Save status, last-active reopen, Studio conflict recovery | implemented | yes | F033: last-active id, last-opened vs edited times, Saved after durable write, structured Studio errors |
 | Offline first session (SW + worker + export) | implemented | yes | F034: versioned asset manifest, atomic precache, API/session excluded; production disconnect journey |
 | Responsive shell 1440→390 | implemented | yes | F035: compact Add, disabled Chat, exclusive narrow panels, no page-level horizontal scroll |

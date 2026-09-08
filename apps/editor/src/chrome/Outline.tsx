@@ -7,7 +7,7 @@ import { Pane } from "../ui/Pane.tsx";
 interface OutlineProps {
   nodes: FlowNodeDraft[];
   selectedId: string | null;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, additive?: boolean) => void;
   onClose?: () => void;
 }
 
@@ -59,7 +59,9 @@ export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) 
             ]
               .filter(Boolean)
               .join(" ")}
-            onClick={() => onSelect(entry.node.id)}
+            onClick={(event) =>
+              onSelect(entry.node.id, event.shiftKey || event.metaKey || event.ctrlKey)
+            }
           >
             <span>{entry.node.data.label}</span>
             {entry.node.data.kind ? <span className="kind">{entry.node.data.kind}</span> : null}

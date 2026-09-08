@@ -456,7 +456,7 @@ function Specimen() {
       const node = makeNode(id, kind, kind);
       const positions = {
         ...current.positions,
-        [id]: { x: 40 + current.document.nodes.length * 24, y: 40 },
+        [id]: { x: 40 + current.document.nodes.length * 220, y: 80 },
       };
       applyOp({ kind: OPERATION_KIND.ADD_NODE, node }, positions);
     },
@@ -971,8 +971,17 @@ function Specimen() {
           <Outline
             nodes={flow.nodes}
             selectedId={selection.nodeIds[0] ?? null}
-            onSelect={(id) => {
-              setSelection({ nodeIds: [id], edgeIds: [] });
+            onSelect={(id, additive) => {
+              setSelection((current) => {
+                if (additive) {
+                  const has = current.nodeIds.includes(id);
+                  return {
+                    nodeIds: has ? current.nodeIds.filter((item) => item !== id) : [...current.nodeIds, id],
+                    edgeIds: [],
+                  };
+                }
+                return { nodeIds: [id], edgeIds: [] };
+              });
               if (shellLayout !== SHELL_LAYOUT.SPLIT) setNarrowPanel("inspector");
             }}
             onClose={

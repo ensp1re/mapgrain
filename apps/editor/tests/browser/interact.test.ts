@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
-import { readFile, stat } from "node:fs/promises";
+import { readFile, stat, writeFile } from "node:fs/promises";
+import { cpus } from "node:os";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium, type Browser, type Page } from "playwright";
+import { PAINT_MEASURE, PERF_WARM_REPS, SELECT_P95_BUDGET_MS } from "../../src/constants/perf.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const fixtures = fileURLToPath(new URL("../../../../tests/fixtures/documents", import.meta.url));
@@ -77,14 +79,36 @@ async function openImported(page: Page, file: string): Promise<void> {
   await waitEditor(page);
 }
 
+async function nodeLabels(page: Page): Promise<string[]> {
+  return page.evaluate(() =>
+    [...document.querySelectorAll(".outline-row:not(.is-group)")].map((row) => row.textContent ?? "").filter(Boolean),
+  );
+}
+
 async function measureSelection(page: Page, reps: number): Promise<number[]> {
-  const row = page.locator(".outline-row").first();
-  await row.waitFor({ state: "attached", timeout: 15_000 });
+  const labels = await nodeLabels(page);
+  assert.ok(labels.length >= 2, "need two nodes to alternate selection");
+  const first = labels[0] ?? "";
+  const second = labels[1] ?? "";
   const samples: number[] = [];
   for (let i = 0; i < reps; i += 1) {
-    const start = performance.now();
-    await row.click({ timeout: 15_000, force: true });
-    samples.push(performance.now() - start);
+    const label = i % 2 === 0 ? first : second;
+    const ms = await page.evaluate(async (targetLabel) => {
+      const buttons = [...document.querySelectorAll<HTMLButtonElement>(".outline-row:not(.is-group)")];
+      const target = buttons.find((button) => (button.textContent ?? "").includes(targetLabel));
+      if (!target) throw new Error(`missing ${targetLabel}`);
+      const start = performance.now();
+      target.click();
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
+      const selected = document.querySelector(".outline-row.is-selected");
+      if (!selected || !(selected.textContent ?? "").includes(targetLabel)) {
+        throw new Error(`selection did not paint ${targetLabel}`);
+      }
+      return performance.now() - start;
+    }, label);
+    samples.push(ms);
   }
   return samples;
 }
@@ -92,24 +116,23 @@ async function measureSelection(page: Page, reps: number): Promise<number[]> {
 async function measureTyping(page: Page, reps: number): Promise<number[]> {
   const input = page.getByRole("textbox", { name: "Search components" });
   await input.waitFor({ state: "attached", timeout: 15_000 });
-  await input.evaluate((el) => {
+  return input.evaluate(async (el, count) => {
     if (!(el instanceof HTMLInputElement)) throw new Error("search input missing");
-    el.value = "";
-    el.dispatchEvent(new Event("input", { bubbles: true }));
     el.focus();
-  });
-  const samples: number[] = [];
-  for (let i = 0; i < reps; i += 1) {
-    const start = performance.now();
-    await page.keyboard.press("a");
-    samples.push(performance.now() - start);
-  }
-  await input.evaluate((el) => {
-    if (!(el instanceof HTMLInputElement)) return;
+    const samples: number[] = [];
+    for (let i = 0; i < count; i += 1) {
+      const start = performance.now();
+      el.value = i % 2 === 0 ? "a" : "b";
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
+      samples.push(performance.now() - start);
+    }
     el.value = "";
     el.dispatchEvent(new Event("input", { bubbles: true }));
-  });
-  return samples;
+    return samples;
+  }, reps);
 }
 
 async function measureFixture(
@@ -129,15 +152,13 @@ async function measureFixture(
     const userAgent = await page.evaluate(() => navigator.userAgent);
     try {
       await openImported(page, file);
-      const coldSelect = await measureSelection(page, 1);
-      const coldType = await measureTyping(page, 1);
-      const warmSelect = await measureSelection(page, 8);
-      const warmType = await measureTyping(page, 8);
+      const select = await measureSelection(page, 1 + PERF_WARM_REPS);
+      const type = await measureTyping(page, 1 + PERF_WARM_REPS);
       if (errors.length > 0) throw new Error(errors.join("\n"));
       return {
         userAgent,
-        select: [...coldSelect, ...warmSelect],
-        type: [...coldType, ...warmType],
+        select,
+        type,
       };
     } catch (error) {
       const dump = await chromeDump(page).catch(() => "dump failed");
@@ -165,11 +186,12 @@ test("selection and typing p95 are measured on 10 and 100 node maps", async (t) 
 
   const report = {
     measuredAt: new Date().toISOString(),
+    paint: PAINT_MEASURE,
     runtime: {
       node: process.versions.node,
       platform: process.platform,
       arch: process.arch,
-      device: `${process.platform} ${process.arch}`,
+      device: cpus()[0]?.model?.trim() || `${process.platform} ${process.arch}`,
     },
     browser: {
       name: "chromium",
@@ -194,7 +216,7 @@ test("selection and typing p95 are measured on 10 and 100 node maps", async (t) 
       nodes: fixture.nodes,
       cold: { selectMs: measured.select[0] ?? 0, typeMs: measured.type[0] ?? 0 },
       warm: {
-        reps: 8,
+        reps: PERF_WARM_REPS,
         p50: { selectMs: percentile(selectWarm, 50), typeMs: percentile(typeWarm, 50) },
         p95: { selectMs: percentile(selectWarm, 95), typeMs: percentile(typeWarm, 95) },
       },
@@ -206,7 +228,15 @@ test("selection and typing p95 are measured on 10 and 100 node maps", async (t) 
     assert.ok(fixture.warm.p95.selectMs >= fixture.warm.p50.selectMs);
     assert.ok(fixture.warm.p95.typeMs >= fixture.warm.p50.typeMs);
   }
+  const hundred = report.fixtures.find((item) => item.nodes === 100);
+  assert.ok(hundred);
+  assert.ok(
+    hundred.warm.p95.selectMs <= SELECT_P95_BUDGET_MS,
+    `100-node select p95 ${hundred.warm.p95.selectMs}ms exceeds ${SELECT_P95_BUDGET_MS}ms on ${report.runtime.device}`,
+  );
   assert.equal(report.browser.name, "chromium");
   assert.ok(report.browser.userAgent.includes("Chrome") || report.browser.userAgent.includes("Chromium"));
+  const stored = fileURLToPath(new URL("../../../../docs/perf/browser.json", import.meta.url));
+  await writeFile(stored, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report));
 });
