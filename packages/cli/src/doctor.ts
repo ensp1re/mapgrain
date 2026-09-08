@@ -3,7 +3,15 @@ import { mkdtemp, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { LAYOUT_STATUS, runLayout, type ElkEngine } from "@mapgrain/layout/run";
-import { EXPORT_FORMAT, exportDiagram } from "@mapgrain/renderer";
+import {
+  DARK_TOKENS,
+  EXPORT_FORMAT,
+  colorNear,
+  exportDiagram,
+  parseHexRgb,
+  pixelAt,
+  rasterizeSvg,
+} from "@mapgrain/renderer";
 import { DOCTOR_CHECK, EXIT_CODE } from "./constants/cli.ts";
 import { DOCTOR_DOCUMENT } from "./constants/doctor.ts";
 import { exampleFile, packageManifest, schemaFile, studioDir, studioFixtureDir } from "./paths.ts";
@@ -67,9 +75,43 @@ async function checkRenderer(): Promise<DoctorCheck> {
   try {
     const svg = exportDiagram({ document: DOCTOR_DOCUMENT, format: EXPORT_FORMAT.SVG });
     if (!svg.ok) return { id: DOCTOR_CHECK.RENDERER, ok: false, message: svg.errors[0]?.message ?? "svg failed" };
+    const markup = new TextDecoder().decode(svg.bytes);
+    if (markup.includes("var(--")) {
+      return { id: DOCTOR_CHECK.RENDERER, ok: false, message: "SVG still uses CSS variables" };
+    }
+    if (!markup.includes(">A</text>") || !markup.includes("data-kind=\"node\"")) {
+      return { id: DOCTOR_CHECK.RENDERER, ok: false, message: "SVG is missing node labels" };
+    }
     const png = exportDiagram({ document: DOCTOR_DOCUMENT, format: EXPORT_FORMAT.PNG });
     if (!png.ok) return { id: DOCTOR_CHECK.RENDERER, ok: false, message: png.errors[0]?.message ?? "png failed" };
-    return { id: DOCTOR_CHECK.RENDERER, ok: true, message: "SVG and PNG export succeeded" };
+    const raster = rasterizeSvg(markup, 1, DARK_TOKENS.background);
+    const corner = pixelAt(raster.pixels, raster.width, 2, 2);
+    const background = parseHexRgb(DARK_TOKENS.background);
+    if (!colorNear([corner[0], corner[1], corner[2]], background)) {
+      return {
+        id: DOCTOR_CHECK.RENDERER,
+        ok: false,
+        message: `PNG background ${corner.slice(0, 3).join(",")} does not match ${DARK_TOKENS.background}`,
+      };
+    }
+    let painted = false;
+    const surface = parseHexRgb(DARK_TOKENS.surface);
+    const text = parseHexRgb(DARK_TOKENS.text);
+    for (let i = 0; i < raster.pixels.length; i += 16) {
+      const sample: [number, number, number] = [
+        raster.pixels[i] ?? 0,
+        raster.pixels[i + 1] ?? 0,
+        raster.pixels[i + 2] ?? 0,
+      ];
+      if (colorNear(sample, surface, 18) || colorNear(sample, text, 18)) {
+        painted = true;
+        break;
+      }
+    }
+    if (!painted) {
+      return { id: DOCTOR_CHECK.RENDERER, ok: false, message: "PNG has no node surface or label paint" };
+    }
+    return { id: DOCTOR_CHECK.RENDERER, ok: true, message: "SVG and PNG show labeled nodes with theme paints" };
   } catch (error) {
     return {
       id: DOCTOR_CHECK.RENDERER,

@@ -34,6 +34,9 @@ await cp(
   join(cliRoot, "examples", "nested-groups.json"),
 );
 await cp(join(repoRoot, "LICENSE"), join(cliRoot, "LICENSE"));
+const fontsOut = join(cliRoot, "fonts");
+await rm(fontsOut, { recursive: true, force: true });
+await cp(join(repoRoot, "packages", "renderer", "fonts"), fontsOut, { recursive: true });
 
 await requireEditorAssets(editorDist);
 await rm(studioOut, { recursive: true, force: true });

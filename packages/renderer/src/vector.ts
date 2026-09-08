@@ -1,6 +1,7 @@
 import { THEME, validateDocument, type DiagramDocument, type Theme } from "@mapgrain/document";
 import { buildScene } from "@mapgrain/scene";
 import { EXPORT_ERROR_CODE, EXPORT_FORMAT } from "./constants/export.ts";
+import { COLOR_MODE, type ColorMode } from "./constants/paint.ts";
 import { tokensFor } from "./constants/tokens.ts";
 import { wrapHtml } from "./html.ts";
 import { sanitizeDocument, subsetDocument } from "./sanitize.ts";
@@ -14,6 +15,7 @@ export {
   MAX_PIXELS,
   MAX_SCALE,
 } from "./constants/export.ts";
+export { COLOR_MODE } from "./constants/paint.ts";
 export { rasterLimits } from "./limits.ts";
 
 function encodeUtf8(value: string): Uint8Array {
@@ -68,6 +70,7 @@ export function prepareDocument(
 export function renderDocumentSvg(
   document: DiagramDocument,
   theme: Theme,
+  colorMode: ColorMode = COLOR_MODE.RESOLVED,
 ): { svg: string; width: number; height: number } | { ok: false; errors: ExportIssue[] } {
   const scene = buildScene(document, { positions: document.layout?.positions ?? {} });
   if (!scene.ok) {
@@ -80,7 +83,7 @@ export function renderDocumentSvg(
       })),
     };
   }
-  return renderSvg(scene.scene, theme);
+  return renderSvg(scene.scene, theme, colorMode);
 }
 
 export function exportVector(request: ExportRequest): ExportResult {
@@ -88,6 +91,7 @@ export function exportVector(request: ExportRequest): ExportResult {
   if ("ok" in prepared) return prepared;
   const { document } = prepared;
   const theme = request.theme ?? document.theme ?? THEME.DARK;
+  const colorMode = request.colorMode ?? COLOR_MODE.RESOLVED;
 
   if (request.format === EXPORT_FORMAT.JSON) {
     return {
@@ -98,7 +102,7 @@ export function exportVector(request: ExportRequest): ExportResult {
     };
   }
 
-  const drawn = renderDocumentSvg(document, theme);
+  const drawn = renderDocumentSvg(document, theme, colorMode);
   if ("ok" in drawn) return drawn;
   const { svg, width, height } = drawn;
 

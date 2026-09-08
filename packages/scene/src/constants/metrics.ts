@@ -1,7 +1,7 @@
 export const DEFAULT_FONT_SIZE = 14;
 export const DEFAULT_LINE_HEIGHT = 20;
 export const DEFAULT_FONT_WEIGHT = 500;
-export const DEFAULT_FONT_FAMILY = "sans-serif";
+export const DEFAULT_FONT_FAMILY = "Inter";
 
 export const DEFAULT_NODE_PADDING_X = 16;
 export const DEFAULT_NODE_PADDING_Y = 12;

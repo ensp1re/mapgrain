@@ -11,6 +11,7 @@ test("font-backed measurer makes W wider than i and CJK wider than latin", () =>
   assert.ok(cjk > latin);
   const cyrillic = fontTextMeasurer.measure("Привет", defaultFont).width;
   assert.ok(cyrillic > 0);
+  assert.equal(defaultFont.family, "Inter");
   const wrapped = measureText("very-long-identifier-token", defaultFont, 80, fontTextMeasurer);
   assert.ok(wrapped.lines.length > 1);
 });

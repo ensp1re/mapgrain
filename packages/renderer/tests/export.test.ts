@@ -4,7 +4,18 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { applyPortableLayout, validateDocument } from "@mapgrain/document";
-import { EXPORT_ERROR_CODE, EXPORT_FORMAT, exportDiagram } from "../src/index.ts";
+import {
+  COLOR_MODE,
+  DARK_TOKENS,
+  LIGHT_TOKENS,
+  EXPORT_ERROR_CODE,
+  EXPORT_FORMAT,
+  colorNear,
+  exportDiagram,
+  parseHexRgb,
+  pixelAt,
+  rasterizeSvg,
+} from "../src/index.ts";
 
 const fixturesDir = fileURLToPath(new URL("../../../tests/fixtures/documents", import.meta.url));
 
@@ -92,9 +103,12 @@ test("SVG captions and CSS variables match the canonical scene", async () => {
   const svg = text(result.bytes);
   assert.match(svg, /reads · get/);
   assert.match(svg, /writes · set/);
-  assert.match(svg, /var\(--mg-bg,/);
-  assert.match(svg, /var\(--mg-text,/);
+  const body = svg.replace(/<style><!\[CDATA\[[\s\S]*?\]\]><\/style>/, "");
+  assert.match(body, new RegExp(`class="mg-bg"[^>]*fill="${LIGHT_TOKENS.background}"`));
+  assert.match(body, new RegExp(`fill="${LIGHT_TOKENS.text}"`));
+  assert.doesNotMatch(body, /var\(--/);
   assert.match(svg, / Q/);
+  assert.doesNotMatch(body, /<g data-kind="edge"[^>]*stroke="/);
 });
 
 test("SVG is drawn from the scene, not a screenshot, and keeps labels", async () => {
@@ -141,6 +155,41 @@ test("selection export omits unselected nodes", async () => {
   assert.equal(parsed.edges.length, 1);
 });
 
+test("PNG raster uses resolved theme paints, not CSS variables", async () => {
+  const raw = await load("cycle.json");
+  const dark = exportDiagram({ document: raw, format: EXPORT_FORMAT.PNG, scale: 1, theme: "dark" });
+  const light = exportDiagram({ document: raw, format: EXPORT_FORMAT.PNG, scale: 1, theme: "light" });
+  assert.equal(dark.ok && light.ok, true);
+  if (!dark.ok || !light.ok) return;
+  assert.notEqual(Buffer.from(dark.bytes).toString("hex"), Buffer.from(light.bytes).toString("hex"));
+  const svg = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG, theme: "dark" });
+  assert.equal(svg.ok, true);
+  if (!svg.ok) return;
+  const markup = text(svg.bytes);
+  const raster = rasterizeSvg(markup, 1, DARK_TOKENS.background);
+  const corner = pixelAt(raster.pixels, raster.width, 1, 1);
+  assert.equal(
+    colorNear([corner[0], corner[1], corner[2]], parseHexRgb(DARK_TOKENS.background)),
+    true,
+    `corner ${corner.slice(0, 3).join(",")}`,
+  );
+  let foundPaint = false;
+  const surface = parseHexRgb(DARK_TOKENS.surface);
+  const label = parseHexRgb(DARK_TOKENS.text);
+  for (let i = 0; i < raster.pixels.length; i += 4) {
+    const sample: [number, number, number] = [
+      raster.pixels[i] ?? 0,
+      raster.pixels[i + 1] ?? 0,
+      raster.pixels[i + 2] ?? 0,
+    ];
+    if (colorNear(sample, surface, 24) || colorNear(sample, label, 24)) {
+      foundPaint = true;
+      break;
+    }
+  }
+  assert.equal(foundPaint, true);
+});
+
 test("PNG is a raster of the SVG and oversized jobs fail with a smaller scale", async () => {
   const raw = await load("cycle.json");
   const png = exportDiagram({ document: raw, format: EXPORT_FORMAT.PNG, scale: 1 });
@@ -162,6 +211,31 @@ test("PNG is a raster of the SVG and oversized jobs fail with a smaller scale", 
   if (tooBig.ok) return;
   assert.equal(tooBig.errors[0]?.code, EXPORT_ERROR_CODE.EXPORT_TOO_LARGE);
   assert.ok((tooBig.errors[0]?.suggestedScale ?? 1) < 4);
+});
+
+test("long labels, Cyrillic, and CJK survive SVG even when glyphs are missing from Inter latin", async () => {
+  const raw = await load("long-labels.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = text(result.bytes);
+  assert.match(svg, /Регіональний/);
+  assert.match(svg, /Працівник/);
+  assert.match(svg, /font-family="Inter"/);
+  const png = exportDiagram({ document: raw, format: EXPORT_FORMAT.PNG, scale: 1 });
+  assert.equal(png.ok, true);
+});
+
+test("themed SVG keeps CSS variables for the viewer palette", async () => {
+  const raw = await load("parallel-edges.json");
+  const result = exportDiagram({
+    document: raw,
+    format: EXPORT_FORMAT.SVG,
+    colorMode: COLOR_MODE.THEMED,
+  });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.match(text(result.bytes), /var\(--mg-bg,/);
 });
 
 test("exports never include selection or comment bags", async () => {

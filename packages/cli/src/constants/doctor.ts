@@ -8,6 +8,7 @@ import {
   SCHEMA_VERSION,
   THEME,
   VIEW_KIND,
+  LAYOUT_SECTION_VERSION,
 } from "@mapgrain/document";
 
 export const DOCTOR_DOCUMENT = {
@@ -45,4 +46,12 @@ export const DOCTOR_DOCUMENT = {
     },
   ],
   views: [{ id: "overview", kind: VIEW_KIND.OVERVIEW, name: "All" }],
+  layout: {
+    version: LAYOUT_SECTION_VERSION,
+    revision: 1,
+    positions: {
+      n1: { x: 40, y: 40 },
+      n2: { x: 240, y: 40 },
+    },
+  },
 };
