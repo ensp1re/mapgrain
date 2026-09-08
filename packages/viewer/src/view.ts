@@ -39,6 +39,17 @@ export function renderView(
           id: edge.id,
           source: edge.source.nodeId,
           target: edge.target.nodeId,
+          direction: edge.direction,
+        }))
+      : [],
+    views: validated.ok
+      ? validated.document.views.map((view) => ({
+          id: view.id,
+          kind: view.kind,
+          name: view.name,
+          nodeIds: view.nodeIds,
+          edgeIds: view.edgeIds,
+          path: view.path,
         }))
       : [],
   };

@@ -12,8 +12,8 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Offline first session (SW + worker + export) | implemented | yes | F034: versioned asset manifest, atomic precache, API/session excluded; production disconnect journey |
 | Responsive shell 1440→390 | implemented | yes | F035: compact Add, disabled Chat, exclusive narrow panels, no page-level horizontal scroll |
 | Readable default labels after fit | partial | no | 14px declared; not proven after default fit (Task 5) |
-| Portable HTML viewer: search, fit, theme, pan, zoom | partial | partial | Present; reach/route/named views/deep links are Task 6 |
-| Directed reach, route, named views, stories, lenses | missing | no | Task 6 / P2 |
+| Portable HTML viewer: search, fit, theme, pan, zoom | implemented | yes | F037: fit, search-to-focus, theme, pan, zoom, keyboard, fullscreen; no remote assets |
+| Directed reach, route, named views, stories, lenses | partial | partial | F037 ships directed reach, route, named views, and local hashes; stories and role lenses remain Task 9 / P2 |
 | CLI validate/layout/view/export/doctor/studio | implemented | yes | `mapgrain@0.1.0` on npm; internals bundled |
 | Agent skill install + live tasks across agents | partial | partial | Skill ships; unpublished `npx` copy is stale; Task 7 matrix incomplete |
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
