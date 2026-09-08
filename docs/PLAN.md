@@ -9,8 +9,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 ## State
 
 - Status: `active`
-- Current task ID: F033
-- Active slice: Usable-release Task 2 — saving and Studio recovery
+- Current task ID: F034
+- Active slice: Usable-release Task 3 — actual offline support
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -51,8 +51,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F030 | P1 Coherent interface and custom Select | F026, F029 | unit, lint, typecheck, build | passing |
 | F031 | P2 Interaction-path performance | F026 | unit, lint, typecheck, build | verified |
 | F032 | Usable-release T1: export fidelity (resolved paints, captions, Inter, doctor pixels) | F029 | unit, lint, typecheck, build | passing |
-| F033 | Usable-release T2: saving and Studio recovery | F032 | unit, lint, typecheck, build | verified |
-| F034 | Usable-release T3: actual offline support | F032 | unit, lint, typecheck, build | not_started |
+| F033 | Usable-release T2: saving and Studio recovery | F032 | unit, lint, typecheck, build | passing |
+| F034 | Usable-release T3: actual offline support | F032 | unit, lint, typecheck, build | active |
 | F035 | Usable-release T4: editor shell and spacing | F030 | unit, lint, typecheck, build | not_started |
 | F036 | Usable-release T5: readable diagrams and interaction | F035 | unit, lint, typecheck, build | not_started |
 | F037 | Usable-release T6: portable viewing | F032 | unit, lint, typecheck, build | not_started |

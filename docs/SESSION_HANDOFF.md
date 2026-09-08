@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F034
 - Plan: docs/PLAN.md
-- Git: feat/studio-recovery @ b4243a319121e8b69e44e2401e61767f9c588a58 (dirty)
-- Updated: 2026-09-08T18:48:18.091Z
+- Git: feat/offline-manifest @ 06896fb0490ac30b44c8d3160ed5820591e6aa66 (dirty)
+- Updated: 2026-09-08T19:06:53.994Z
 
 ### Next action
 
-Open a draft PR for F033 on feat/studio-recovery and merge when GitHub verify succeeds. Next slices: F034 offline, F035 shell, F037 viewer, F038 skill.
+Implement F034 offline manifest on feat/offline-manifest. Verify locally, draft PR, merge when GitHub verify succeeds.
 
 ### Decisions
 
@@ -35,6 +35,7 @@ Open a draft PR for F033 on feat/studio-recovery and merge when GitHub verify su
 - Editor edges follow canonical scene polylines. Direction none/forward/both is visible. Text measurement uses Inter-like glyph classes including CJK and Cyrillic. Node size reserves a kind line.
 - Arrange results are bound to document id plus document and layout revisions. Presentation mode blocks mutating commands. Theme is a document property.
 - F033: Saved is shown only after the durable write finishes. Last-active document id is explicit; last-opened and last-edited times stay separate. Studio returns structured errors for missing files, conflicts, and rename failures. Unique sibling temp files are not a merge.
+- F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers.
 
 ### Rejected approaches
 
@@ -89,7 +90,7 @@ Open a draft PR for F033 on feat/studio-recovery and merge when GitHub verify su
 - docs/runs/run-1788872404941-13d9f6.json
 - docs/runs/run-1788873694499-14c3cf.json
 - docs/runs/run-1788890099442-23244e.json
-- docs/runs/run-1788893232267-687a6a.json
+- docs/runs/run-1788893556151-df7074.json
 
 ## Resume
 
