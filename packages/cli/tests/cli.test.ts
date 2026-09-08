@@ -202,6 +202,7 @@ test("the CLI package is public, bundled, and does not depend on the editor", as
   assert.equal(manifest.bin.mapgrain, "./dist/mapgrain.js");
   assert.ok(manifest.files.includes("dist"));
   assert.ok(manifest.files.includes("schema"));
+  assert.ok(manifest.files.includes("fonts"));
   assert.equal(manifest.exports, undefined);
   assert.equal(Object.hasOwn(manifest.dependencies, "@mapgrain/editor"), false);
   assert.equal(Object.hasOwn(manifest.devDependencies ?? {}, "@mapgrain/editor"), false);

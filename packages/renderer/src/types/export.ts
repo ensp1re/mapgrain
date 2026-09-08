@@ -1,4 +1,5 @@
 import type { Theme } from "@mapgrain/document";
+import type { ColorMode } from "../constants/paint.ts";
 import type { EXPORT_ERROR_CODE, EXPORT_FORMAT } from "../constants/export.ts";
 
 export type ExportFormat = (typeof EXPORT_FORMAT)[keyof typeof EXPORT_FORMAT];
@@ -16,6 +17,7 @@ export interface ExportRequest {
   document: unknown;
   format: ExportFormat;
   theme?: Theme;
+  colorMode?: ColorMode;
   scale?: number;
   maxPixels?: number;
   nodeIds?: string[];

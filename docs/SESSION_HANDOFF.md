@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F026
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/editor-selection-loop @ 06d22944621712707201bc2b189fe089c3eaef31 (dirty)
-- Updated: 2026-09-08T11:29:35.371Z
+- Git: feat/export-fidelity @ 02d0145af9b62e57a79bf7166a35acfb894e075d (dirty)
+- Updated: 2026-09-08T17:55:49.896Z
 
 ### Next action
 
-Open a draft PR for F026. Merge when GitHub verify succeeds. Next is F027.
+Implement F032 export fidelity on feat/export-fidelity. Verify locally, draft PR, merge when GitHub verify succeeds.
 
 ### Decisions
 
@@ -81,6 +81,13 @@ Open a draft PR for F026. Merge when GitHub verify succeeds. Next is F027.
 - docs/runs/run-1788810303070-9860f2.json
 - docs/runs/run-1788810829197-3a7bb9.json
 - docs/runs/run-1788811389273-62a12e.json
+- docs/runs/run-1788867016008-d69612.json
+- docs/runs/run-1788867525031-56f8ef.json
+- docs/runs/run-1788868221099-132ed3.json
+- docs/runs/run-1788871573124-9da51d.json
+- docs/runs/run-1788872404941-13d9f6.json
+- docs/runs/run-1788873694499-14c3cf.json
+- docs/runs/run-1788890099442-23244e.json
 
 ## Resume
 

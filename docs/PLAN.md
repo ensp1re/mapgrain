@@ -9,8 +9,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 ## State
 
 - Status: `active`
-- Current task ID: F031
-- Active slice: P2 Interaction-path performance
+- Current task ID: F032
+- Active slice: Usable-release Task 1 — export fidelity
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -49,9 +49,18 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F028 | P0.3 Skill and distribution contract | F026 | unit, lint, typecheck, build | passing |
 | F029 | P0.4 Exports and interactive viewer | F026 | unit, lint, typecheck, build | passing |
 | F030 | P1 Coherent interface and custom Select | F026, F029 | unit, lint, typecheck, build | passing |
-| F031 | P2 Interaction-path performance | F026 | unit, lint, typecheck, build | active |
+| F031 | P2 Interaction-path performance | F026 | unit, lint, typecheck, build | verified |
+| F032 | Usable-release T1: export fidelity (resolved paints, captions, Inter, doctor pixels) | F029 | unit, lint, typecheck, build | not_started |
+| F033 | Usable-release T2: saving and Studio recovery | F032 | unit, lint, typecheck, build | not_started |
+| F034 | Usable-release T3: actual offline support | F032 | unit, lint, typecheck, build | not_started |
+| F035 | Usable-release T4: editor shell and spacing | F030 | unit, lint, typecheck, build | not_started |
+| F036 | Usable-release T5: readable diagrams and interaction | F035 | unit, lint, typecheck, build | not_started |
+| F037 | Usable-release T6: portable viewing | F032 | unit, lint, typecheck, build | not_started |
+| F038 | Usable-release T7: skill install and agent workflows | F028 | unit, lint, typecheck, build | not_started |
+| F039 | Usable-release T8: outcome and performance gates | F032, F036 | unit, lint, typecheck, build, browser | not_started |
+| F040 | Full product T9: remaining feature gaps (modes, diagnostics, stories) | F039 | unit, lint, typecheck, build | not_started |
 
-Do not start R6 (imports, evidence, comparison, hosted) until R5. No backend or billing in R1–R5.
+The master product brief (usable release then full product) supersedes the shorter V3 plan for remaining scope. F025 stays blocked on external user-study evidence. Do not start hosted sharing or billing. README media rewrite is last, after F039.
 
 ## Stages
 

@@ -18,7 +18,11 @@ test("viewer HTML contains the same node labels as the SVG export", async () => 
   const exported = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
   assert.equal(exported.ok, true);
   if (!exported.ok) return;
-  assert.equal(view.svg, new TextDecoder().decode(exported.bytes));
+  const exportedSvg = new TextDecoder().decode(exported.bytes);
+  assert.match(view.svg, /Workspace API/);
+  assert.match(exportedSvg, /Workspace API/);
+  assert.match(view.svg, /var\(--mg-bg,/);
+  assert.doesNotMatch(exportedSvg, /var\(--/);
   assert.match(view.html, /Workspace API/);
   assert.match(view.html, /<svg /);
 });

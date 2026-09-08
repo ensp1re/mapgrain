@@ -1,5 +1,5 @@
 import { THEME, validateDocument, type Theme } from "@mapgrain/document";
-import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
+import { COLOR_MODE, EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
 import { wrapViewer } from "./html.ts";
 
 export interface ViewResult {
@@ -18,6 +18,7 @@ export function renderView(
     document,
     format: EXPORT_FORMAT.SVG,
     theme: resolvedTheme,
+    colorMode: COLOR_MODE.THEMED,
   });
   if (!exported.ok) return exported;
   const svg = new TextDecoder().decode(exported.bytes);

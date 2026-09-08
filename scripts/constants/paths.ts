@@ -16,4 +16,5 @@ export const GENERATED_OUTPUT_PREFIXES = [
   HARNESS_PATHS.archive,
   HARNESS_PATHS.lock,
   "packages/cli/studio",
+  "packages/cli/fonts",
 ] as const;
