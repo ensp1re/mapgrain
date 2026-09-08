@@ -1,5 +1,6 @@
 import { THEME, type Theme } from "@mapgrain/document";
 import { EXPORT_CHOICE } from "../constants/export.ts";
+import { Select } from "../ui/Select.tsx";
 
 export { EXPORT_CHOICE };
 
@@ -19,10 +20,15 @@ export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }:
       <div className="pane-label">Export</div>
       <label>
         Theme
-        <select aria-label="Export theme" value={theme} onChange={(event) => onTheme(event.target.value as Theme)}>
-          <option value={THEME.DARK}>Dark</option>
-          <option value={THEME.LIGHT}>Light</option>
-        </select>
+        <Select
+          label="Export theme"
+          value={theme}
+          options={[
+            { value: THEME.DARK, label: "Dark" },
+            { value: THEME.LIGHT, label: "Light" },
+          ]}
+          onChange={(value) => onTheme(value as Theme)}
+        />
       </label>
       <div className="export-actions">
         <button type="button" className="text-btn" onClick={() => onExport(EXPORT_CHOICE.SVG)}>

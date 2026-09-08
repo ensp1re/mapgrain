@@ -8,6 +8,7 @@ import {
 } from "@mapgrain/document";
 import { directionLabel, relationCaption } from "../export/labels.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
+import { Select } from "../ui/Select.tsx";
 
 interface InspectorProps {
   document: DiagramDocument;
@@ -41,43 +42,36 @@ export function Inspector({
           </dd>
           <dt>Meaning</dt>
           <dd>
-            <select
-              aria-label="Relation type"
+            <Select
+              label="Relation type"
               value={edge.type}
-              onChange={(event) =>
+              options={Object.values(EDGE_TYPE).map((value) => ({ value, label: value }))}
+              onChange={(value) =>
                 onOperate({
                   kind: OPERATION_KIND.SET_EDGE_TYPE,
                   edgeId: edge.id,
-                  type: event.target.value as typeof edge.type,
+                  type: value as typeof edge.type,
                 })
               }
-            >
-              {Object.values(EDGE_TYPE).map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
+            />
           </dd>
           <dt>Direction</dt>
           <dd>
-            <select
-              aria-label="Relation direction"
+            <Select
+              label="Relation direction"
               value={edge.direction}
-              onChange={(event) =>
+              options={Object.values(EDGE_DIRECTION).map((value) => ({
+                value,
+                label: directionLabel(value),
+              }))}
+              onChange={(value) =>
                 onOperate({
                   kind: OPERATION_KIND.SET_EDGE_DIRECTION,
                   edgeId: edge.id,
-                  direction: event.target.value as typeof edge.direction,
+                  direction: value as typeof edge.direction,
                 })
               }
-            >
-              {Object.values(EDGE_DIRECTION).map((value) => (
-                <option key={value} value={value}>
-                  {directionLabel(value)}
-                </option>
-              ))}
-            </select>
+            />
           </dd>
           <dt>Label</dt>
           <dd>
@@ -155,24 +149,21 @@ export function Inspector({
             </dd>
             <dt>Group</dt>
             <dd>
-              <select
-                aria-label="Node group"
+              <Select
+                label="Node group"
                 value={source.groupId ?? ""}
-                onChange={(event) =>
+                options={[
+                  { value: "", label: "No group" },
+                  ...document.groups.map((group) => ({ value: group.id, label: group.label })),
+                ]}
+                onChange={(value) =>
                   onOperate({
                     kind: OPERATION_KIND.SET_NODE_GROUP,
                     nodeId: source.id,
-                    groupId: event.target.value || null,
+                    groupId: value || null,
                   })
                 }
-              >
-                <option value="">No group</option>
-                {document.groups.map((group) => (
-                  <option key={group.id} value={group.id}>
-                    {group.label}
-                  </option>
-                ))}
-              </select>
+              />
             </dd>
           </>
         ) : null}

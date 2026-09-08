@@ -1,6 +1,8 @@
 import { EDGE_DIRECTION, EDGE_TYPE, type EdgeDirection, type EdgeType } from "@mapgrain/document";
 import { useState } from "react";
+import { directionLabel } from "../export/labels.ts";
 import type { ConnectionDraft, PendingConnection } from "../types/editor.ts";
+import { Select } from "../ui/Select.tsx";
 
 interface ConnectDialogProps {
   pending: PendingConnection;
@@ -28,31 +30,24 @@ export function ConnectDialog({ pending, onConfirm, onCancel }: ConnectDialogPro
       </p>
       <label>
         Meaning
-        <select
-          aria-label="Relation type"
+        <Select
+          label="Relation type"
           value={type}
-          onChange={(event) => setType(event.target.value as EdgeType)}
-        >
-          {Object.values(EDGE_TYPE).map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
+          options={Object.values(EDGE_TYPE).map((value) => ({ value, label: value }))}
+          onChange={(value) => setType(value as EdgeType)}
+        />
       </label>
       <label>
         Direction
-        <select
-          aria-label="Relation direction"
+        <Select
+          label="Relation direction"
           value={direction}
-          onChange={(event) => setDirection(event.target.value as EdgeDirection)}
-        >
-          {Object.values(EDGE_DIRECTION).map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
+          options={Object.values(EDGE_DIRECTION).map((value) => ({
+            value,
+            label: directionLabel(value),
+          }))}
+          onChange={(value) => setDirection(value as EdgeDirection)}
+        />
       </label>
       <label>
         Label

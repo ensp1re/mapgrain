@@ -28,6 +28,13 @@
       "cwd": ".",
       "timeoutSeconds": 60,
       "required": true
+    },
+    {
+      "id": "browser",
+      "argv": ["pnpm", "--filter", "@mapgrain/editor", "test:browser"],
+      "cwd": ".",
+      "timeoutSeconds": 180,
+      "required": true
     }
   ],
   "fingerprintPaths": [
