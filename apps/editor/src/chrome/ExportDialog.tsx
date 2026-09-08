@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { THEME, type Theme } from "@mapgrain/document";
 import { EXPORT_CHOICE, PNG_SCALE_OPTIONS } from "../constants/export.ts";
+import { Button } from "../ui/Button.tsx";
+import { Pane } from "../ui/Pane.tsx";
 import { Select } from "../ui/Select.tsx";
 
 export { EXPORT_CHOICE };
@@ -18,8 +20,7 @@ export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }:
   const [scale, setScale] = useState("2");
   if (!open) return null;
   return (
-    <div className="export-dialog" role="dialog" aria-label="Export">
-      <div className="pane-label">Export</div>
+    <Pane className="export-dialog" title="Export" role="dialog" as="div">
       <label>
         Theme
         <Select
@@ -42,23 +43,13 @@ export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }:
         />
       </label>
       <div className="export-actions">
-        <button type="button" className="text-btn" onClick={() => onExport(EXPORT_CHOICE.SVG, Number(scale))}>
-          SVG
-        </button>
-        <button type="button" className="text-btn" onClick={() => onExport(EXPORT_CHOICE.PNG, Number(scale))}>
-          PNG
-        </button>
-        <button type="button" className="text-btn" onClick={() => onExport(EXPORT_CHOICE.HTML, Number(scale))}>
-          HTML
-        </button>
-        <button type="button" className="text-btn" onClick={() => onExport(EXPORT_CHOICE.JSON, Number(scale))}>
-          JSON
-        </button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.SVG, Number(scale))}>SVG</Button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.PNG, Number(scale))}>PNG</Button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.HTML, Number(scale))}>HTML</Button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.JSON, Number(scale))}>JSON</Button>
       </div>
       {error ? <p className="edit-error">{error}</p> : null}
-      <button type="button" className="text-btn" onClick={onClose}>
-        Close
-      </button>
-    </div>
+      <Button onClick={onClose}>Close</Button>
+    </Pane>
   );
 }

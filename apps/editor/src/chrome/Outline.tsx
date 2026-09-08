@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { matchesQuery } from "../outline/search.ts";
 import { outlineTree } from "../outline/tree.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
+import { Pane } from "../ui/Pane.tsx";
 
 interface OutlineProps {
   nodes: FlowNodeDraft[];
@@ -24,8 +25,7 @@ export function Outline({ nodes, selectedId, onSelect }: OutlineProps) {
   }, [collapsed, nodes, query]);
 
   return (
-    <nav className="outline" aria-label="Components">
-      <div className="pane-label">Outline</div>
+    <Pane as="nav" className="outline" title="Outline" ariaLabel="Components">
       <input
         aria-label="Search components"
         placeholder="Search label or kind"
@@ -65,6 +65,6 @@ export function Outline({ nodes, selectedId, onSelect }: OutlineProps) {
           </button>
         </div>
       ))}
-    </nav>
+    </Pane>
   );
 }

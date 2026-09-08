@@ -17,6 +17,10 @@ export function Select({ label, value, options, onChange }: SelectProps) {
   const root = useRef<HTMLDivElement>(null);
   const listId = useId();
   const current = options.find((option) => option.value === value)?.label ?? value;
+  const selectedIndex = Math.max(
+    0,
+    options.findIndex((option) => option.value === value),
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -26,6 +30,13 @@ export function Select({ label, value, options, onChange }: SelectProps) {
     window.addEventListener("mousedown", close);
     return () => window.removeEventListener("mousedown", close);
   }, [open]);
+
+  const move = (delta: number) => {
+    if (options.length === 0) return;
+    const next = (selectedIndex + delta + options.length) % options.length;
+    const option = options[next];
+    if (option) onChange(option.value);
+  };
 
   return (
     <div className="ui-select" ref={root}>
@@ -38,7 +49,21 @@ export function Select({ label, value, options, onChange }: SelectProps) {
         aria-controls={listId}
         onClick={() => setOpen((value) => !value)}
         onKeyDown={(event) => {
-          if (event.key === "Escape") setOpen(false);
+          if (event.key === "Escape") {
+            setOpen(false);
+            return;
+          }
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            if (!open) setOpen(true);
+            else move(1);
+            return;
+          }
+          if (event.key === "ArrowUp") {
+            event.preventDefault();
+            if (!open) setOpen(true);
+            else move(-1);
+          }
         }}
       >
         {current}
