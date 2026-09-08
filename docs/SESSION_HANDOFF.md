@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/readme-media @ cea0d2f040718683699889d36d9599236a5998bf (dirty)
-- Updated: 2026-09-08T21:20:28.993Z
+- Git: feat/closeout-queue @ 25a4d29108fc47949ca944ae565d05079a064799 (dirty)
+- Updated: 2026-09-08T21:30:20.958Z
 
 ### Next action
 
-Verify F041, draft PR on feat/readme-media. Merge when GitHub verify succeeds, then stamp passing from main push.
+Draft closeout PR: F025 removed, F031 and F041 stamped passing. Remaining brief items stay planned, not queued.
 
 ### Decisions
 
@@ -28,7 +28,7 @@ Verify F041, draft PR on feat/readme-media. Merge when GitHub verify succeeds, t
 - The public CLI package is mapgrain. Internals are bundled; @resvg/resvg-js and elkjs stay real dependencies. Studio binds 127.0.0.1, checks origin/session, and writes only the opened file.
 - The companion skill lives at skills/mapgrain. Agents emit semantic JSON, call the CLI, preserve ids and layout, and must not execute a repository to discover architecture.
 - At 390px the top bar keeps Arrange and Export visible and moves the rest behind More. Browser ELK loads on first arrange. The offline cache is versioned and drops previous names. Perf numbers are Node scene/layout/svg, not browser.
-- F025 is only external user-study and device smoke. Automated crash, studio, skill, export, and visual work is F026–F031 and must not wait on F025.
+- The five-user study task was removed from the queue. No fabricated study evidence. Automated crash, studio, skill, export, and visual work is F026–F031.
 - The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
 - The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
 - The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.
@@ -43,6 +43,7 @@ Verify F041, draft PR on feat/readme-media. Merge when GitHub verify succeeds, t
 - F039: Selection p95 is measured through next paint on alternating outline rows. The 100-node budget is 100ms. The production journey covers blank, connect, pin, arrange, undo, export, and reimport.
 - F040: Sequence, data-flow, and lifecycle are dedicated kinds with allowlists and constraints, not relabelled architecture graphs. Diagnose warnings stay separate from invalid documents. Compare is snapshot delta only. Watch/reload, stories, presets, video, and localization stay planned.
 - F041: README media is captured from the production editor bundle and CLI view HTML. CLI receipt GIFs are labelled as receipts, not live agent prompts.
+- F031 original main-push CI failed on a title-input timeout. Selection and typing p95 plus ELK precache later passed on F039 main CI; F031 is closed from that evidence, not the failed 35701a3 run.
 
 ### Rejected approaches
 
@@ -65,7 +66,7 @@ Verify F041, draft PR on feat/readme-media. Merge when GitHub verify succeeds, t
 
 ### Blockers
 
-- F025 requires five unassisted users, desktop Chrome/Firefox/Safari, and a real touch-device smoke test. That evidence cannot be collected or invented in this environment.
+- none
 
 ### Evidence
 

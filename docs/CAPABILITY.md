@@ -19,7 +19,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
 | Geometry diagnostics, snapshot compare, watch/reload | partial | partial | F040: diagnose warnings and `mapgrain compare`; watch/reload remains planned |
 | Visual presets, share-card, video, localization | missing | no | Task 9 / P4; deferred until static fidelity |
-| Five-user study / physical-device smoke | deferred | no | F025 blocked: participants and devices are not available here |
+| Five-user study / physical-device smoke | deferred | no | Dropped from the task queue; no fabricated user-study evidence |
 | Mermaid/draw.io import, hosted sharing | deferred | no | Demand not validated; out of first usable release |
 
 Status values: `implemented`, `partial`, `missing`, `deferred`.
