@@ -1,12 +1,40 @@
-import { THEME } from "@mapgrain/document";
-import { DEFAULT_SCALE, EXPORT_FORMAT, MAX_PIXELS } from "./constants/export.ts";
+import { THEME, validateDocument } from "@mapgrain/document";
+import { DEFAULT_SCALE, EXPORT_ERROR_CODE, EXPORT_FORMAT, MAX_PIXELS } from "./constants/export.ts";
 import { tokensFor } from "./constants/tokens.ts";
 import { rasterLimits } from "./limits.ts";
 import { svgToPng } from "./png.ts";
 import type { ExportRequest, ExportResult } from "./types/export.ts";
 import { exportVector, prepareDocument, renderDocumentSvg } from "./vector.ts";
 
+function nodeIdsForView(request: ExportRequest): string[] | undefined {
+  if (!request.viewId) return undefined;
+  const validated = validateDocument(request.document);
+  if (!validated.ok) return undefined;
+  const view = validated.document.views.find((item) => item.id === request.viewId);
+  return view?.nodeIds;
+}
+
 export function exportDiagram(request: ExportRequest): ExportResult {
+  if (request.format === EXPORT_FORMAT.CARD) {
+    const prepared = prepareDocument({
+      ...request,
+      nodeIds: request.nodeIds ?? nodeIdsForView(request),
+    });
+    if ("ok" in prepared) return prepared;
+    return exportDiagram({ ...request, document: prepared.document, format: EXPORT_FORMAT.PNG });
+  }
+  if (request.format === EXPORT_FORMAT.VIDEO) {
+    return {
+      ok: false,
+      errors: [
+        {
+          code: EXPORT_ERROR_CODE.INVALID_DOCUMENT,
+          message: "video export is produced by the CLI from story frames",
+          path: "/format",
+        },
+      ],
+    };
+  }
   if (request.format !== EXPORT_FORMAT.PNG) {
     return exportVector(request);
   }

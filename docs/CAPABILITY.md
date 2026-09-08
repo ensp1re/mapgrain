@@ -13,12 +13,12 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Responsive shell 1440→390 | implemented | yes | F035: compact Add, disabled Chat, exclusive narrow panels, no page-level horizontal scroll |
 | Readable default labels after fit | implemented | yes | F036: default fit floors zoom so 14px labels stay ≥12px; zoom % visible; dialogs trap focus |
 | Portable HTML viewer: search, fit, theme, pan, zoom | implemented | yes | F037: fit, search-to-focus, theme, pan, zoom, keyboard, fullscreen; no remote assets |
-| Directed reach, route, named views, stories, lenses | partial | partial | F037 ships reach/route/named views; stories and role lenses remain planned |
+| Directed reach, route, named views, stories, lenses | implemented | yes | F037 reach/route/views; F042 stories and role lenses in exported HTML |
 | CLI validate/layout/view/export/doctor/studio | implemented | yes | `mapgrain@0.1.0` on npm; internals bundled |
 | Agent skill install + live tasks across agents | partial | partial | F038: SKILL.md pins `npx mapgrain@0.1.0`; install paths tested; live agent tasks remain untested |
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
-| Geometry diagnostics, snapshot compare, watch/reload | partial | partial | F040: diagnose warnings and `mapgrain compare`; watch/reload remains planned |
-| Visual presets, share-card, video, localization | missing | no | Task 9 / P4; deferred until static fidelity |
+| Geometry diagnostics, snapshot compare, watch/reload | implemented | yes | Diagnose, compare, and `mapgrain watch` last-good reload |
+| Visual presets, share-card, video, localization | implemented | yes | Presets change scene metrics; card PNG; story mp4; en/uk viewer chrome |
 | Five-user study / physical-device smoke | deferred | no | Dropped from the task queue; no fabricated user-study evidence |
 | Mermaid/draw.io import, hosted sharing | deferred | no | Demand not validated; out of first usable release |
 

@@ -27,6 +27,20 @@ test("viewer HTML contains the same node labels as the SVG export", async () => 
   assert.match(view.html, /<svg /);
 });
 
+test("viewer chrome localizes and exposes stories and lenses", async () => {
+  const raw = JSON.parse(
+    await readFile(fileURLToPath(new URL("../../../tests/fixtures/documents/sequence-checkout.json", import.meta.url)), "utf8"),
+  ) as unknown;
+  const uk = renderView(raw, undefined, "uk");
+  assert.equal(uk.ok, true);
+  if (!uk.ok) return;
+  assert.match(uk.html, /lang="uk"/);
+  assert.match(uk.html, /Лише перегляд/);
+  assert.match(uk.html, /data-act="story"/);
+  assert.match(uk.html, /data-act="lens"/);
+  assert.match(uk.html, /checkout-story/);
+});
+
 test("the view has no edit controls, chat, or inspector", async () => {
   const raw = JSON.parse(await readFile(fixture, "utf8")) as unknown;
   const view = renderView(raw);

@@ -3,5 +3,7 @@ export { wrapViewer } from "./html.ts";
 export { renderView } from "./view.ts";
 export { buildGraphIndex, directedReach, findRoute, visibleIdsForView } from "./graph.ts";
 export { parseViewHash, serializeViewHash, knownId } from "./hash.ts";
+export { LOCALE, MESSAGES, localeFrom, messagesFor } from "./messages.ts";
+export type { Locale } from "./messages.ts";
 export type { ViewResult } from "./view.ts";
 export type { GraphEdge, NamedView, ReachResult, RouteResult, ViewerHashState } from "./types/view.ts";

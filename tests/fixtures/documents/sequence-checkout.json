@@ -5,17 +5,29 @@
   "kind": "sequence",
   "title": "Checkout messages",
   "theme": "dark",
+  "preset": "comfortable",
   "layoutHints": { "direction": "down", "pinnedNodeIds": [] },
   "groups": [],
   "nodes": [
-    { "id": "browser", "kind": "participant", "label": "Browser", "groupId": null, "ports": [{ "id": "out", "side": "south" }, { "id": "in", "side": "north" }] },
-    { "id": "api", "kind": "participant", "label": "Checkout API", "groupId": null, "ports": [{ "id": "in", "side": "north" }, { "id": "out", "side": "south" }] },
-    { "id": "ledger", "kind": "participant", "label": "Ledger", "groupId": null, "ports": [{ "id": "in", "side": "north" }, { "id": "out", "side": "south" }] }
+    { "id": "browser", "kind": "participant", "label": "Browser", "role": "client", "groupId": null, "ports": [{ "id": "out", "side": "south" }, { "id": "in", "side": "north" }] },
+    { "id": "api", "kind": "participant", "label": "Checkout API", "role": "service", "groupId": null, "ports": [{ "id": "in", "side": "north" }, { "id": "out", "side": "south" }] },
+    { "id": "ledger", "kind": "participant", "label": "Ledger", "role": "service", "groupId": null, "ports": [{ "id": "in", "side": "north" }, { "id": "out", "side": "south" }] }
   ],
   "edges": [
     { "id": "m1", "source": { "nodeId": "browser", "portId": "out" }, "target": { "nodeId": "api", "portId": "in" }, "type": "message", "direction": "forward", "label": "submit", "order": 1 },
     { "id": "m2", "source": { "nodeId": "api", "portId": "out" }, "target": { "nodeId": "ledger", "portId": "in" }, "type": "message", "direction": "forward", "label": "reserve", "order": 2 },
-    { "id": "m3", "source": { "nodeId": "ledger", "portId": "out" }, "target": { "nodeId": "api", "portId": "in" }, "type": "reply", "direction": "forward", "label": "ok", "order": 3 }
+    { "id": "m3", "source": { "nodeId": "ledger", "portId": "out" }, "target": { "nodeId": "api", "portId": "in" }, "type": "reply", "direction": "forward", "label": "ok", "order": 3 },
+    { "id": "m4", "source": { "nodeId": "browser", "portId": "out" }, "target": { "nodeId": "browser", "portId": "in" }, "type": "message", "direction": "forward", "label": "retry locally", "order": 4 }
   ],
-  "views": [{ "id": "happy-path", "kind": "path", "name": "Submit to reserve", "path": { "from": "browser", "to": "ledger" } }]
+  "views": [{ "id": "happy-path", "kind": "path", "name": "Submit to reserve", "path": { "from": "browser", "to": "ledger" }, "nodeIds": ["browser", "api", "ledger"] }],
+  "stories": [
+    {
+      "id": "checkout-story",
+      "name": "Happy path",
+      "steps": [
+        { "id": "step-submit", "name": "Submit", "description": "Browser sends the cart.", "nodeId": "browser" },
+        { "id": "step-reserve", "name": "Reserve", "description": "API asks the ledger.", "nodeId": "ledger", "viewId": "happy-path" }
+      ]
+    }
+  ]
 }

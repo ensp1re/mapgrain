@@ -13,12 +13,20 @@ export function parseViewHash(hash: string): ViewerHashState {
   const to = params.get("to");
   const view = params.get("view");
   const theme = params.get("theme");
+  const story = params.get("story");
+  const step = params.get("step");
+  const lens = params.get("lens");
+  const lang = params.get("lang");
   if (focus) state.focus = focus;
   if (reach && REACH_VALUES.has(reach)) state.reach = reach as ReachMode;
   if (from) state.from = from;
   if (to) state.to = to;
   if (view) state.view = view;
   if (theme === "dark" || theme === "light") state.theme = theme;
+  if (story) state.story = story;
+  if (step) state.step = step;
+  if (lens) state.lens = lens;
+  if (lang) state.lang = lang;
   return state;
 }
 
@@ -30,6 +38,10 @@ export function serializeViewHash(state: ViewerHashState): string {
   if (state.to) params.set("to", state.to);
   if (state.view) params.set("view", state.view);
   if (state.theme) params.set("theme", state.theme);
+  if (state.story) params.set("story", state.story);
+  if (state.step) params.set("step", state.step);
+  if (state.lens) params.set("lens", state.lens);
+  if (state.lang) params.set("lang", state.lang);
   const encoded = params.toString();
   return encoded ? `#${encoded}` : "";
 }

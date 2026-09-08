@@ -39,10 +39,11 @@ See [docs/FEATURES.md](docs/FEATURES.md) for shipped, partial, planned, and defe
 
 - Architecture, workflow, sequence, data-flow, and lifecycle documents with mode-specific validation
 - Editor: direct edit, arrange preview, save, export, offline production bundle
-- Portable HTML: search, fit, reach, route, named views
-- CLI: validate, layout, view, export, diagnose, compare, doctor, studio
+- Portable HTML: search, fit, reach, route, named views, stories, role lenses, en/uk chrome
+- CLI: validate, layout, view, export, diagnose, compare, watch, doctor, studio
+- Presets, share-card PNG, and story video from the first authored story
 
-Not shipped: watch/reload of a dirty agent file, stories, visual presets, video export, localization, hosted sharing, Mermaid/draw.io import. Five-user and device smoke evidence is still outstanding.
+Not shipped: hosted sharing, Mermaid/draw.io import, and live agent prompt runs. Five-user and device smoke evidence is still outstanding. Sequence fragments (alt/opt) are not modeled.
 
 ## Examples
 

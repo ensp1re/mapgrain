@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextId": 42,
+  "nextId": 43,
   "tasks": [
     {
       "id": "F001",
@@ -25,8 +25,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793426730-62496d",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -87,8 +87,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793439005-079954",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -150,8 +150,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793452150-7deaf4",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -213,8 +213,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793463994-b89e11",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -277,8 +277,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793476030-054c9f",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -339,8 +339,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788793487911-4323db",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -402,8 +402,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788797500629-e310ff",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -464,8 +464,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788798663725-8d9cdf",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -526,8 +526,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788799557750-b00ce7",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -591,8 +591,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788800481010-e56765",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -654,8 +654,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788801310224-cc1501",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -717,8 +717,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788802146185-c8b4da",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -780,8 +780,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788802738494-8e738b",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -844,8 +844,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788803958032-669084",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -910,8 +910,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788805672118-b8d681",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -972,8 +972,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788806341421-3200fb",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1034,8 +1034,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788806830014-5101bb",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1097,8 +1097,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788807243525-161da0",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1158,8 +1158,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788807797035-89e364",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1219,8 +1219,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788808155658-391fbf",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1280,8 +1280,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788808466921-89a20d",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1341,8 +1341,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788810303070-9860f2",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1402,8 +1402,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788810829197-3a7bb9",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1464,8 +1464,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788811389273-62a12e",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1525,8 +1525,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788867016008-d69612",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1591,8 +1591,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788867525031-56f8ef",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1653,8 +1653,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788868221099-132ed3",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1715,8 +1715,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788871573124-9da51d",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1777,8 +1777,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788872404941-13d9f6",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1838,8 +1838,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788873694499-14c3cf",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1900,8 +1900,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788890099442-23244e",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -1961,8 +1961,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788893556151-df7074",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2022,8 +2022,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788894419719-d17bef",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2083,8 +2083,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788895288417-2e96e5",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2144,8 +2144,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788897532769-c3913c",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2205,8 +2205,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788896583251-3a089f",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2266,8 +2266,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788898310839-6d486d",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2329,8 +2329,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788899490994-7d2591",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2394,8 +2394,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788901487093-a1dd52",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2455,8 +2455,8 @@
       "evidence": {
         "status": "passed",
         "attemptId": "run-1788902383419-1b12dc",
-        "fingerprintBefore": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
-        "fingerprintAfter": "2b8de2da7d8253ec43811b618f3b97c0a0edc01533d9a8d2cf0191b6427ef5af",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
         "checks": [
           {
             "id": "unit",
@@ -2492,6 +2492,55 @@
         "observedAt": "2026-09-08T21:26:30Z",
         "closeoutRevision": "25a4d29108fc47949ca944ae565d05079a064799"
       }
+    },
+    {
+      "id": "F042",
+      "behavior": "Remaining owner-brief items: sequence layout, stories, role lenses, watch/reload, evidence snapshot, presets, share-card, story video, and chrome localization.",
+      "acceptance": [
+        "Sequence layout places participants in a row and stacks messages by unique order; self-messages are valid.",
+        "Exported HTML supports stories, role lenses, and chrome locale without mutating the document.",
+        "CLI watch keeps last-good output while a file is invalid, then reloads a valid revision.",
+        "Presets change scene metrics in SVG/PNG; share-card and story video have real artifacts; evidence path/snapshot is checked without claiming source was verified."
+      ],
+      "dependsOn": [
+        "F041"
+      ],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788904239707-a95a76",
+        "fingerprintBefore": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "fingerprintAfter": "329d430357d91eea2f90daf99d5e7ed5466efb8d624fb3a60dcc050f21c3cda8",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-08T21:50:57.719Z"
+      },
+      "delivery": null
     }
   ]
 }

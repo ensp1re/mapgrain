@@ -1,4 +1,4 @@
-import { EDGE_DIRECTION, type Theme } from "@mapgrain/document";
+import { EDGE_DIRECTION, NODE_MARKER, type Theme } from "@mapgrain/document";
 import {
   KIND_FONT_SIZE,
   KIND_LINE_HEIGHT,
@@ -92,8 +92,19 @@ export function renderSvg(
             `<circle data-port="${escapeXml(item.id)}" cx="${n(item.x + ox)}" cy="${n(item.y + oy)}" r="${PORT_RADIUS}" fill="${port}" stroke="none"/>`,
         )
         .join("\n  ");
-      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}" tabindex="0" role="img" aria-label="${escapeXml(node.label.lines.map((line) => line.text).join(" ") || node.id)}">
+      const initial =
+        node.marker === NODE_MARKER.INITIAL
+          ? `<circle data-marker="initial" cx="${n(node.rect.x + ox - 10)}" cy="${n(node.rect.y + oy + node.rect.height / 2)}" r="5" fill="${border}" stroke="none"/>`
+          : "";
+      const final =
+        node.marker === NODE_MARKER.FINAL
+          ? `<rect x="${n(node.rect.x + ox + 3)}" y="${n(node.rect.y + oy + 3)}" width="${n(node.rect.width - 6)}" height="${n(node.rect.height - 6)}" rx="${NODE_RADIUS - 2}" fill="none" stroke="${border}" stroke-width="1"/>`
+          : "";
+      const roleAttr = node.role ? ` data-role="${escapeXml(node.role)}"` : "";
+      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${roleAttr} tabindex="0" role="img" aria-label="${escapeXml(node.label.lines.map((line) => line.text).join(" ") || node.id)}">
   <rect x="${n(node.rect.x + ox)}" y="${n(node.rect.y + oy)}" width="${n(node.rect.width)}" height="${n(node.rect.height)}" rx="${NODE_RADIUS}" fill="${surface}" stroke="${border}" stroke-width="1"/>
+  ${final}
+  ${initial}
   ${kind}
   ${lines}
   ${ports}
@@ -101,11 +112,19 @@ export function renderSvg(
     })
     .join("\n");
 
+  const lifelines = (scene.lifelines ?? [])
+    .map(
+      (line) =>
+        `<line data-kind="lifeline" data-id="${escapeXml(line.nodeId)}" x1="${n(line.x + ox)}" y1="${n(line.y1 + oy)}" x2="${n(line.x + ox)}" y2="${n(line.y2 + oy)}" stroke="${edgeColor}" stroke-width="1" stroke-dasharray="4 4"/>`,
+    )
+    .join("\n");
+
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img">
 <title>${escapeXml(scene.documentId)}</title>
 <style><![CDATA[${interFontFaceCss()}]]></style>
 <rect class="mg-bg" width="${width}" height="${height}" fill="${bg}"/>
 ${groups}
+${lifelines}
 ${edges}
 ${nodes}
 </svg>`;

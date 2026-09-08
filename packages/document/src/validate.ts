@@ -111,6 +111,13 @@ function semanticErrors(document: DiagramDocument): ValidationIssue[] {
   for (const [index, item] of (document.evidence ?? []).entries()) {
     uniquePush(seen, item.id, `/evidence/${index}/id`, errors);
   }
+  const viewIds = new Set(document.views.map((view) => view.id));
+  for (const [storyIndex, story] of (document.stories ?? []).entries()) {
+    uniquePush(seen, story.id, `/stories/${storyIndex}/id`, errors);
+    for (const [stepIndex, step] of story.steps.entries()) {
+      uniquePush(seen, step.id, `/stories/${storyIndex}/steps/${stepIndex}/id`, errors);
+    }
+  }
 
   document.nodes.forEach((node, index) => {
     if (node.groupId && !groupIds.has(node.groupId)) {
@@ -259,6 +266,31 @@ function semanticErrors(document: DiagramDocument): ValidationIssue[] {
           item.id,
         ),
       );
+    }
+  }
+
+  for (const [storyIndex, story] of (document.stories ?? []).entries()) {
+    for (const [stepIndex, step] of story.steps.entries()) {
+      if (step.nodeId && !nodeIds.has(step.nodeId)) {
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.DANGLING_REFERENCE,
+            `story step "${step.id}" references missing node "${step.nodeId}"`,
+            `/stories/${storyIndex}/steps/${stepIndex}/nodeId`,
+            step.id,
+          ),
+        );
+      }
+      if (step.viewId && !viewIds.has(step.viewId)) {
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.DANGLING_REFERENCE,
+            `story step "${step.id}" references missing view "${step.viewId}"`,
+            `/stories/${storyIndex}/steps/${stepIndex}/viewId`,
+            step.id,
+          ),
+        );
+      }
     }
   }
 

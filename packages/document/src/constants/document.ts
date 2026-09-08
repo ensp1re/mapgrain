@@ -72,6 +72,12 @@ export const THEME = {
   LIGHT: "light",
 } as const;
 
+export const PRESET = {
+  COMPACT: "compact",
+  COMFORTABLE: "comfortable",
+  PRESENTATION: "presentation",
+} as const;
+
 export const EVIDENCE_STATE = {
   OBSERVED: "observed",
   ASSERTED: "asserted",

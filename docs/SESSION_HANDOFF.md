@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/closeout-queue @ 25a4d29108fc47949ca944ae565d05079a064799 (dirty)
-- Updated: 2026-09-08T21:30:20.958Z
+- Git: feat/remaining-brief @ 8034785e7fe8b650e306e96efa570667670ba943 (dirty)
+- Updated: 2026-09-08T21:51:20.904Z
 
 ### Next action
 
-Draft closeout PR: F025 removed, F031 and F041 stamped passing. Remaining brief items stay planned, not queued.
+Verify F042 and draft PR on feat/remaining-brief.
 
 ### Decisions
 
@@ -44,6 +44,7 @@ Draft closeout PR: F025 removed, F031 and F041 stamped passing. Remaining brief 
 - F040: Sequence, data-flow, and lifecycle are dedicated kinds with allowlists and constraints, not relabelled architecture graphs. Diagnose warnings stay separate from invalid documents. Compare is snapshot delta only. Watch/reload, stories, presets, video, and localization stay planned.
 - F041: README media is captured from the production editor bundle and CLI view HTML. CLI receipt GIFs are labelled as receipts, not live agent prompts.
 - F031 original main-push CI failed on a title-input timeout. Selection and typing p95 plus ELK precache later passed on F039 main CI; F031 is closed from that evidence, not the failed 35701a3 run.
+- F042: Sequence layout is participant columns plus ordered message Y. Stories and lenses live in exported HTML. Watch keeps last-good. Presets, share-card, story video, and en/uk chrome ship. Fragments, hosted sharing, and live agent prompts stay out.
 
 ### Rejected approaches
 
@@ -110,6 +111,7 @@ Draft closeout PR: F025 removed, F031 and F041 stamped passing. Remaining brief 
 - docs/runs/run-1788899490994-7d2591.json
 - docs/runs/run-1788901487093-a1dd52.json
 - docs/runs/run-1788902383419-1b12dc.json
+- docs/runs/run-1788904239707-a95a76.json
 
 ## Resume
 

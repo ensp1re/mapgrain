@@ -26,14 +26,16 @@ End users pin the published package:
 ```sh
 npx mapgrain@0.1.0 validate diagram.json
 npx mapgrain@0.1.0 layout diagram.json
-npx mapgrain@0.1.0 view diagram.json -o view.html
+npx mapgrain@0.1.0 view diagram.json --lang uk -o view.html
 npx mapgrain@0.1.0 export diagram.json --format svg -o diagram.svg
+npx mapgrain@0.1.0 export diagram.json --format card --view overview -o card.png
+npx mapgrain@0.1.0 watch diagram.json --once --format html -o view.html
 npx mapgrain@0.1.0 doctor
 ```
 
 From this checkout, `pnpm mapgrain` is the development command. Internals are bundled; do not import `@mapgrain/*` from an application.
 
-`diagnose` reports geometry warnings. `compare` reports added, removed, and changed nodes and edges. Warnings are not invalid documents.
+`diagnose` reports geometry warnings and evidence path checks without claiming the source was verified. `compare` reports added, removed, and changed nodes and edges. `watch` keeps last-good output while a file is invalid.
 
 ## Skill
 

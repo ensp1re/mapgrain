@@ -10,7 +10,7 @@ export interface DocumentDelta {
 }
 
 function nodeKey(node: DiagramDocument["nodes"][number]): string {
-  return JSON.stringify([node.kind, node.label, node.groupId, node.marker ?? null]);
+  return JSON.stringify([node.kind, node.label, node.groupId, node.marker ?? null, node.role ?? null]);
 }
 
 function edgeKey(edge: DiagramDocument["edges"][number]): string {

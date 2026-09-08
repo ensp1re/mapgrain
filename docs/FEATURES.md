@@ -6,7 +6,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | --- | --- | --- |
 | Architecture diagrams | shipped | Typed nodes, directed edges, nested groups, stable IDs |
 | Workflow diagrams | shipped | Jobs, actors, decisions with labelled outcomes |
-| Sequence diagrams | shipped | Participants and ordered messages/replies |
+| Sequence diagrams | shipped | Participants in a row; messages stacked by order; self-messages |
 | Data-flow diagrams | shipped | Processes, stores, entities, and data movement |
 | Lifecycle diagrams | shipped | States, initial/final markers, guarded transitions |
 | Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings |
@@ -15,8 +15,8 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Portable HTML viewer | shipped | Search, fit, reach, route, named views, local hashes |
 | Offline editor | shipped | Versioned precache; API and studio sessions excluded |
 | Agent skill | partial | Install paths proven; live agent prompt runs untested |
-| Stories and role lenses | planned | Not in this release |
-| Visual presets, share-card, video, localization | planned | After static fidelity |
-| Watch/reload last-good agent file | planned | Compare exists; watch is not shipped |
+| Stories and role lenses | shipped | Viewer prev/next and role filter; source unchanged |
+| Visual presets, share-card, video, localization | shipped | compact/comfortable/presentation; card PNG; story mp4; en/uk chrome |
+| Watch/reload last-good agent file | shipped | `mapgrain watch` keeps last-good while JSON is invalid |
 | Five-user study / device smoke | deferred | Not queued; no fabricated study |
 | Mermaid/draw.io import, hosted sharing | deferred | Demand not validated |

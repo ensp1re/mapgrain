@@ -251,6 +251,15 @@ test("exports never include selection or comment bags", async () => {
   }
 });
 
+test("share-card export is a PNG of a named view", async () => {
+  const raw = await load("sequence-checkout.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.CARD, viewId: "happy-path" });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.format, EXPORT_FORMAT.PNG);
+  assert.ok(result.bytes.length > 100);
+});
+
 test("sequence, data-flow, lifecycle, and decision fixtures export JSON, SVG, PNG, and HTML", async () => {
   const cases = [
     { name: "sequence-checkout.json", needle: /Checkout API[\s\S]*submit|submit[\s\S]*Checkout API/ },

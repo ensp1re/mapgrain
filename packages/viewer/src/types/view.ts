@@ -34,6 +34,10 @@ export interface ViewerHashState {
   to?: string;
   view?: string;
   theme?: "dark" | "light";
+  story?: string;
+  step?: string;
+  lens?: string;
+  lang?: string;
 }
 
 export interface NamedView {
