@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { THEME, type Theme } from "@mapgrain/document";
 import { EXPORT_CHOICE, PNG_SCALE_OPTIONS } from "../constants/export.ts";
 import { Button } from "../ui/Button.tsx";
 import { Pane } from "../ui/Pane.tsx";
 import { Select } from "../ui/Select.tsx";
+import { useFocusTrap } from "./focusTrap.ts";
 
 export { EXPORT_CHOICE };
 
@@ -18,8 +19,11 @@ interface ExportDialogProps {
 
 export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }: ExportDialogProps) {
   const [scale, setScale] = useState("2");
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, open, onClose);
   if (!open) return null;
   return (
+    <div ref={dialogRef}>
     <Pane className="export-dialog" title="Export" role="dialog" as="div">
       <label>
         Theme
@@ -51,5 +55,6 @@ export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }:
       {error ? <p className="edit-error">{error}</p> : null}
       <Button onClick={onClose}>Close</Button>
     </Pane>
+    </div>
   );
 }

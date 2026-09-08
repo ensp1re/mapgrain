@@ -27,6 +27,13 @@ export function ComponentNode({ data, selected }: NodeProps) {
       onDoubleClick={() => {
         if (!node.editing) node.onStartEdit();
       }}
+      onKeyDown={(event) => {
+        if (node.editing) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          node.onStartEdit();
+        }
+      }}
     >
       {node.ports.map((port) => (
         <Handle

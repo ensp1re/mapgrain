@@ -38,6 +38,8 @@ import { EXPORT_CHOICE } from "./constants/export.ts";
 import { rasterSvgToPng } from "./export/png.ts";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { SHELL_LAYOUT } from "./constants/layout.ts";
+import { USER_MAX_ZOOM, USER_MIN_ZOOM, readableFitOptions } from "./constants/diagram.ts";
+import { ZoomReadout } from "./chrome/ZoomReadout.tsx";
 import { shellLayoutForWidth, useViewportWidth } from "./chrome/viewport.ts";
 import { StartSurface } from "./chrome/StartSurface.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
@@ -570,7 +572,7 @@ function Specimen() {
     if (arrange.status !== "preview") return;
     pushPositions(arrange.positions);
     setArrange({ status: "idle" });
-    void fitView({ padding: 0.2 });
+    void fitView(readableFitOptions());
   }, [arrange, fitView, pushPositions]);
 
   const discardArrange = useCallback(() => setArrange({ status: "idle" }), []);
@@ -736,7 +738,7 @@ function Specimen() {
       if (id === COMMAND_ID.UNDO) setHistory((stack) => undoHistory(stack));
       if (id === COMMAND_ID.REDO) setHistory((stack) => redoHistory(stack));
       if (id === COMMAND_ID.PRESENT) setPresenting((value) => !value);
-      if (id === COMMAND_ID.FIT) void fitView({ padding: 0.2 });
+      if (id === COMMAND_ID.FIT) void fitView(readableFitOptions());
       if (id === COMMAND_ID.EXPORT_SVG || id === COMMAND_ID.EXPORT_JSON) setExportOpen(true);
       if (id === COMMAND_ID.DELETE) deleteSelection();
       if (id === COMMAND_ID.DUPLICATE) duplicateSelection();
@@ -753,6 +755,28 @@ function Specimen() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        if (commandsOpen) {
+          setCommandsOpen(false);
+          return;
+        }
+        if (exportOpen) {
+          setExportOpen(false);
+          return;
+        }
+        if (pending) {
+          setPending(null);
+          return;
+        }
+        if (editingId) {
+          setEditingId(null);
+          return;
+        }
+        if (narrowPanel !== "none") {
+          setNarrowPanel("none");
+          return;
+        }
+      }
       if (shouldOpenCommandMenu(event)) {
         event.preventDefault();
         setCommandsOpen(true);
@@ -780,7 +804,7 @@ function Specimen() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [runCommand]);
+  }, [commandsOpen, editingId, exportOpen, narrowPanel, pending, runCommand]);
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     const structural = changes.filter((change) => change.type !== "select");
@@ -991,14 +1015,16 @@ function Specimen() {
               });
             }}
             onNodeMouseLeave={() => setTooltip(null)}
-            onInit={(instance) => void instance.fitView({ padding: 0.2 })}
+            onInit={(instance) => void instance.fitView(readableFitOptions())}
             deleteKeyCode={null}
             nodeDragThreshold={NODE_DRAG_THRESHOLD}
-            minZoom={0.3}
+            minZoom={USER_MIN_ZOOM}
+            maxZoom={USER_MAX_ZOOM}
             proOptions={{ hideAttribution: true }}
           >
             <Background gap={16} size={1} />
             {presenting ? null : <Controls showInteractive={false} />}
+            <ZoomReadout />
           </ReactFlow>
           {tooltip ? (
             <div className="tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip">

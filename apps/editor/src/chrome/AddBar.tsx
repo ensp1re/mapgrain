@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { NodeKind } from "@mapgrain/document";
 import { ADDABLE_KINDS } from "../create/nodes.ts";
 import { Button } from "../ui/Button.tsx";
+import { useFocusTrap } from "./focusTrap.ts";
 
 interface AddBarProps {
   onAddNode: (kind: NodeKind) => void;
@@ -20,6 +21,8 @@ export function AddBar({ onAddNode, onAddGroup, onConnect, canConnect }: AddBarP
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const searchRef = useRef<HTMLInputElement>(null);
+  const popRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(popRef, open, () => setOpen(false));
   const items = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return ADD_ITEMS.filter((item) => item.label.includes(needle));
@@ -30,18 +33,6 @@ export function AddBar({ onAddNode, onAddGroup, onConnect, canConnect }: AddBarP
     setQuery("");
     setActive(0);
     searchRef.current?.focus();
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setOpen(false);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   function insert(item: (typeof ADD_ITEMS)[number]) {
@@ -63,7 +54,7 @@ export function AddBar({ onAddNode, onAddGroup, onConnect, canConnect }: AddBarP
           Add
         </Button>
         {open ? (
-          <div className="add-menu-pop" role="listbox" aria-label="Add component">
+          <div ref={popRef} className="add-menu-pop" role="listbox" aria-label="Add component">
             <input
               ref={searchRef}
               aria-label="Search kinds"

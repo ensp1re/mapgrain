@@ -43,9 +43,9 @@
   --outline-w: 240px;
   --inspector-w: 296px;
   --panel-pad: 16px;
-  --node-radius: 7px;
-  --node-pad-x: 12px;
-  --node-pad-y: 8px;
+  --node-radius: 8px;
+  --node-pad-x: 16px;
+  --node-pad-y: 12px;
 }
 
 * { box-sizing: border-box; }
@@ -59,7 +59,7 @@ body,
 
 body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
   color: var(--text);
   background: var(--bg);
@@ -224,10 +224,10 @@ input {
 
 .icon-btn,
 .text-btn {
-  height: 28px;
+  height: 32px;
   border: 1px solid transparent;
   background: transparent;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 0 10px;
   cursor: pointer;
 }
@@ -245,7 +245,10 @@ input {
 .icon-btn:focus-visible,
 .text-btn:focus-visible,
 .outline-row:focus-visible,
-.cmd-item:focus-visible {
+.cmd-item:focus-visible,
+.node-card:focus-visible,
+.add-menu-pop input:focus-visible,
+.title-field input:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 1px;
 }
@@ -292,11 +295,10 @@ input {
 
 .pane-label {
   padding: var(--panel-pad) var(--panel-pad) var(--space-2);
-  color: var(--muted);
-  font-size: 11px;
+  color: var(--text);
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 .pane-close {
@@ -320,7 +322,7 @@ input {
 .outline-row.is-group { color: var(--muted); }
 .outline-row .kind {
   margin-left: auto;
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--muted);
@@ -333,6 +335,18 @@ input {
   background: var(--bg);
 }
 
+.zoom-readout {
+  margin: 0 0 44px 8px !important;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
 .inspector dl {
   margin: 0;
   padding: 0 var(--panel-pad) var(--panel-pad);
@@ -340,7 +354,7 @@ input {
 
 .inspector dt {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   margin-top: var(--space-5);
 }
 
@@ -438,14 +452,14 @@ input {
 }
 
 .node-kind {
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
 .node-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
 }
 

@@ -53,6 +53,18 @@ export function Select({ label, value, options, onChange }: SelectProps) {
             setOpen(false);
             return;
           }
+          if (event.key === "Home") {
+            event.preventDefault();
+            const first = options[0];
+            if (first) onChange(first.value);
+            return;
+          }
+          if (event.key === "End") {
+            event.preventDefault();
+            const last = options[options.length - 1];
+            if (last) onChange(last.value);
+            return;
+          }
           if (event.key === "ArrowDown") {
             event.preventDefault();
             if (!open) setOpen(true);
@@ -63,6 +75,14 @@ export function Select({ label, value, options, onChange }: SelectProps) {
             event.preventDefault();
             if (!open) setOpen(true);
             else move(-1);
+            return;
+          }
+          if (event.key.length === 1 && !event.metaKey && !event.ctrlKey) {
+            const needle = event.key.toLowerCase();
+            const start = selectedIndex + 1;
+            const ordered = options.slice(start).concat(options.slice(0, start));
+            const match = ordered.find((option) => option.label.toLowerCase().startsWith(needle));
+            if (match) onChange(match.value);
           }
         }}
       >
