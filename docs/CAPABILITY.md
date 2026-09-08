@@ -10,7 +10,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Direct edit, connect, arrange preview, undo, export | implemented | partial | Browser journeys are thin; full Task 8 journey is outstanding |
 | Save status, last-active reopen, Studio conflict recovery | implemented | yes | F033: last-active id, last-opened vs edited times, Saved after durable write, structured Studio errors |
 | Offline first session (SW + worker + export) | implemented | yes | F034: versioned asset manifest, atomic precache, API/session excluded; production disconnect journey |
-| Responsive shell 1440→390 | partial | partial | Breakpoints and More menu exist; Task 4 density/Add menu still open |
+| Responsive shell 1440→390 | implemented | yes | F035: compact Add, disabled Chat, exclusive narrow panels, no page-level horizontal scroll |
 | Readable default labels after fit | partial | no | 14px declared; not proven after default fit (Task 5) |
 | Portable HTML viewer: search, fit, theme, pan, zoom | partial | partial | Present; reach/route/named views/deep links are Task 6 |
 | Directed reach, route, named views, stories, lenses | missing | no | Task 6 / P2 |

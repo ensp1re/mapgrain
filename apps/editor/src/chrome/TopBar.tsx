@@ -12,7 +12,6 @@ interface TopBarProps {
   canUndo: boolean;
   canRedo: boolean;
   presenting: boolean;
-  chatOpen: boolean;
   onTitleCommit: (value: string) => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -22,7 +21,6 @@ interface TopBarProps {
   onExport: () => void;
   onCommand: () => void;
   onToggleOutline: () => void;
-  onToggleChat: () => void;
 }
 
 export function TopBar({
@@ -32,7 +30,6 @@ export function TopBar({
   canUndo,
   canRedo,
   presenting,
-  chatOpen,
   onBackup,
   onRetrySave,
   onReloadSaved,
@@ -45,7 +42,6 @@ export function TopBar({
   onExport,
   onCommand,
   onToggleOutline,
-  onToggleChat,
 }: TopBarProps) {
   const [draft, setDraft] = useState(title);
   useEffect(() => {
@@ -80,6 +76,7 @@ export function TopBar({
         <span className="visually-hidden">Document title</span>
         <input
           aria-label="Document title"
+          title={title}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           onBlur={commitTitle}
@@ -146,14 +143,6 @@ export function TopBar({
         <button type="button" className="text-btn topbar-wide" onClick={onCommand}>
           Commands
         </button>
-        <button
-          type="button"
-          className={chatOpen ? "text-btn is-on topbar-wide" : "text-btn topbar-wide"}
-          aria-pressed={chatOpen}
-          onClick={onToggleChat}
-        >
-          Chat
-        </button>
         <details className="topbar-more">
           <summary className="text-btn">More</summary>
           <div className="topbar-more-menu">
@@ -175,12 +164,7 @@ export function TopBar({
             <button type="button" className="text-btn" onClick={onCommand}>
               Commands
             </button>
-            <button
-              type="button"
-              className={chatOpen ? "text-btn is-on" : "text-btn"}
-              aria-pressed={chatOpen}
-              onClick={onToggleChat}
-            >
+            <button type="button" className="text-btn" disabled aria-label="Chat is unavailable">
               Chat
             </button>
           </div>

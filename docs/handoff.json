@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "taskId": "F034",
+  "taskId": "F035",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/offline-manifest",
-    "revision": "06896fb0490ac30b44c8d3160ed5820591e6aa66",
+    "branch": "feat/editor-shell",
+    "revision": "73d2a531b101411b9908d5dffe706082bfd6c02a",
     "dirty": true
   },
   "evidenceRefs": [
@@ -40,7 +40,8 @@
     "docs/runs/run-1788872404941-13d9f6.json",
     "docs/runs/run-1788873694499-14c3cf.json",
     "docs/runs/run-1788890099442-23244e.json",
-    "docs/runs/run-1788893556151-df7074.json"
+    "docs/runs/run-1788893556151-df7074.json",
+    "docs/runs/run-1788894419719-d17bef.json"
   ],
   "decisions": [
     "Working name is Mapgrain; final name is pending.",
@@ -63,7 +64,8 @@
     "Editor edges follow canonical scene polylines. Direction none/forward/both is visible. Text measurement uses Inter-like glyph classes including CJK and Cyrillic. Node size reserves a kind line.",
     "Arrange results are bound to document id plus document and layout revisions. Presentation mode blocks mutating commands. Theme is a document property.",
     "F033: Saved is shown only after the durable write finishes. Last-active document id is explicit; last-opened and last-edited times stay separate. Studio returns structured errors for missing files, conflicts, and rename failures. Unique sibling temp files are not a merge.",
-    "F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers."
+    "F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers.",
+    "F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled."
   ],
   "rejectedApproaches": [
     "Adding Turborepo or Nx before there are packages to orchestrate.",
@@ -83,6 +85,6 @@
   "blockers": [
     "F025 requires five unassisted users, desktop Chrome/Firefox/Safari, and a real touch-device smoke test. That evidence cannot be collected or invented in this environment."
   ],
-  "nextAction": "Implement F034 offline manifest on feat/offline-manifest. Verify locally, draft PR, merge when GitHub verify succeeds.",
-  "updatedAt": "2026-09-08T19:06:53.994Z"
+  "nextAction": "Implement F035 editor shell on feat/editor-shell. Verify locally, draft PR, merge when GitHub verify succeeds.",
+  "updatedAt": "2026-09-08T19:21:28.337Z"
 }

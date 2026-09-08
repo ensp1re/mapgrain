@@ -8,9 +8,10 @@ interface OutlineProps {
   nodes: FlowNodeDraft[];
   selectedId: string | null;
   onSelect: (id: string) => void;
+  onClose?: () => void;
 }
 
-export function Outline({ nodes, selectedId, onSelect }: OutlineProps) {
+export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) {
   const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const rows = useMemo(() => {
@@ -25,7 +26,7 @@ export function Outline({ nodes, selectedId, onSelect }: OutlineProps) {
   }, [collapsed, nodes, query]);
 
   return (
-    <Pane as="nav" className="outline" title="Outline" ariaLabel="Components">
+    <Pane as="nav" className="outline" title="Outline" ariaLabel="Components" onClose={onClose}>
       <input
         aria-label="Search components"
         placeholder="Search label or kind"
