@@ -57,9 +57,22 @@ export function reuseUnchangedNodes(previous: Node[], next: Node[]): Node[] {
   let changed = previous.length !== next.length;
   const reused = next.map((node) => {
     const existing = prior.get(node.id);
-    if (existing && sameNodeContent(existing, node)) return existing;
+    if (!existing) {
+      changed = true;
+      return node;
+    }
+    if (sameNodeContent(existing, node)) return existing;
     changed = true;
-    return node;
+    return {
+      ...existing,
+      type: node.type,
+      parentId: node.parentId,
+      extent: node.extent,
+      position: node.position,
+      selected: node.selected,
+      style: node.style,
+      data: node.data,
+    };
   });
   return changed ? reused : previous;
 }

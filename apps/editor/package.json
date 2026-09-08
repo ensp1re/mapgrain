@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "preview": "vite preview",
     "test": "node --test --experimental-strip-types --test-reporter=spec tests/*.test.ts",
-    "test:browser": "node --test --experimental-strip-types --test-reporter=spec tests/browser/*.test.ts"
+    "test:browser": "node --test --test-concurrency=1 --experimental-strip-types --test-reporter=spec tests/browser/*.test.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.6",
