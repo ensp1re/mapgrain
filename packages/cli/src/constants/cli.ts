@@ -39,6 +39,7 @@ export const STUDIO_PORT = 4173;
 export const STUDIO_PORT_TRIES = 20;
 export const STUDIO_HEADER = "x-mapgrain-session";
 export const STUDIO_COOKIE = "mapgrain_session";
+export const STUDIO_IF_MATCH = "if-match";
 export const STDIN_PATH = "-";
 
 export const USAGE =

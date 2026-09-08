@@ -13,4 +13,6 @@ export interface PersistStore {
 export interface StoredWorkspace {
   document: unknown;
   positions: EditorSnapshot["positions"];
+  updatedAt?: string;
+  lastOpenedAt?: string;
 }

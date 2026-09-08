@@ -8,7 +8,8 @@ export const SAVE_STATE = {
 } as const;
 
 export const DB_NAME = "mapgrain";
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
+export const LEGACY_STORE = "workspace";
 export const STORE_NAME = "documents";
 export const WORKSPACE_KEY = "current";
 export const AUTOSAVE_MS = 250;

@@ -312,7 +312,7 @@ function Specimen() {
 
   useEffect(() => {
     void persistStore.current.list().then(setRecents);
-  }, [booted, snapshot]);
+  }, [booted, documentModel?.id, documentModel?.title]);
 
   const displayPositions =
     arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {});

@@ -1,7 +1,8 @@
 import { spawn } from "node:child_process";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { access, readFile, rename, writeFile } from "node:fs/promises";
+import { validateDocument } from "@mapgrain/document";
 import { extname, join, normalize, relative, resolve, sep } from "node:path";
 import {
   DIAGNOSTIC_CODE,
@@ -9,6 +10,7 @@ import {
   MAX_INPUT_BYTES,
   STUDIO_COOKIE,
   STUDIO_HEADER,
+  STUDIO_IF_MATCH,
   STUDIO_HOST,
   STUDIO_PORT,
   STUDIO_PORT_TRIES,
@@ -94,6 +96,14 @@ function send(res: ServerResponse, status: number, body: string | Buffer, type: 
   res.end(body);
 }
 
+function etagFor(bytes: Uint8Array): string {
+  return `"${createHash("sha256").update(bytes).digest("hex")}"`;
+}
+
+function uniqueTemp(file: string): string {
+  return `${file}.${randomBytes(8).toString("hex")}.tmp`;
+}
+
 function injectStudio(html: string, token: string, fileName: string): string {
   const snippet = `<script>window.__MAPGRAIN_STUDIO__=${JSON.stringify({ token, fileName })};</script>`;
   return html.includes("</head>") ? html.replace("</head>", `${snippet}</head>`) : `${snippet}${html}`;
@@ -159,6 +169,16 @@ export async function startStudio(file: string, assets?: string): Promise<Studio
   }
   if (!selected) throw new Error(`could not bind ${STUDIO_HOST} from port ${STUDIO_PORT}`);
 
+  let writes: Promise<void> = Promise.resolve();
+  const enqueue = (task: () => Promise<void>): Promise<void> => {
+    const run = writes.then(task, task);
+    writes = run.then(
+      () => undefined,
+      () => undefined,
+    );
+    return run;
+  };
+
   selected.on("request", (req, res) => {
     void handle(req, res, {
       file,
@@ -166,6 +186,7 @@ export async function startStudio(file: string, assets?: string): Promise<Studio
       token,
       port: selectedPort,
       assets: root,
+      enqueue,
     });
   });
 
@@ -184,7 +205,14 @@ export async function startStudio(file: string, assets?: string): Promise<Studio
 async function handle(
   req: IncomingMessage,
   res: ServerResponse,
-  ctx: { file: string; fileName: string; token: string; port: number; assets: string },
+  ctx: {
+    file: string;
+    fileName: string;
+    token: string;
+    port: number;
+    assets: string;
+    enqueue: (task: () => Promise<void>) => Promise<void>;
+  },
 ): Promise<void> {
   if (!hostOk(req, ctx.port) || !originOk(req, ctx.port)) {
     send(res, 403, JSON.stringify({ ok: false, error: "forbidden origin" }), "application/json");
@@ -197,18 +225,14 @@ async function handle(
       return;
     }
     if (req.method === "GET") {
-      const text = await readFile(ctx.file, "utf8");
-      send(res, 200, text, "application/json; charset=utf-8");
+      const bytes = await readFile(ctx.file);
+      send(res, 200, bytes, "application/json; charset=utf-8", { etag: etagFor(bytes) });
       return;
     }
     if (req.method === "PUT") {
+      let body: Buffer;
       try {
-        const body = await readBody(req);
-        JSON.parse(body.toString("utf8"));
-        const tmp = `${ctx.file}.tmp`;
-        await writeFile(tmp, body);
-        await rename(tmp, ctx.file);
-        send(res, 200, JSON.stringify({ ok: true, action: "write", path: ctx.fileName }), "application/json");
+        body = await readBody(req);
       } catch (error) {
         send(
           res,
@@ -216,7 +240,49 @@ async function handle(
           JSON.stringify({ ok: false, error: error instanceof Error ? error.message : String(error) }),
           "application/json",
         );
+        return;
       }
+      await ctx.enqueue(async () => {
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(body.toString("utf8")) as unknown;
+        } catch {
+          send(res, 400, JSON.stringify({ ok: false, error: "invalid json" }), "application/json");
+          return;
+        }
+        const validated = validateDocument(parsed);
+        if (!validated.ok) {
+          send(
+            res,
+            400,
+            JSON.stringify({ ok: false, error: "invalid document", errors: validated.errors }),
+            "application/json",
+          );
+          return;
+        }
+        const current = await readFile(ctx.file);
+        const expected = header(req, STUDIO_IF_MATCH);
+        const currentTag = etagFor(current);
+        if (!expected) {
+          send(res, 428, JSON.stringify({ ok: false, error: "if-match required" }), "application/json");
+          return;
+        }
+        if (expected !== currentTag) {
+          send(res, 409, JSON.stringify({ ok: false, error: "stale write" }), "application/json");
+          return;
+        }
+        const next = new TextEncoder().encode(`${JSON.stringify(validated.document, null, 2)}\n`);
+        const tmp = uniqueTemp(ctx.file);
+        await writeFile(tmp, next);
+        await rename(tmp, ctx.file);
+        send(
+          res,
+          200,
+          JSON.stringify({ ok: true, action: "write", path: ctx.fileName }),
+          "application/json",
+          { etag: etagFor(next) },
+        );
+      });
       return;
     }
     send(res, 405, JSON.stringify({ ok: false, error: "method not allowed" }), "application/json");

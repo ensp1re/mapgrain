@@ -16,14 +16,17 @@ test("studio store loads and saves through the session header", async () => {
   assert.equal(result.ok, true);
   if (!result.ok) return;
   let stored = original;
+  let etag = '"v1"';
   const store = studioStore({ token: "secret", fileName: "diagram.json" }, (async (input, init) => {
     const headers = new Headers(init?.headers);
     assert.equal(headers.get(STUDIO_HEADER), "secret");
     if (!init?.method || init.method === "GET") {
-      return new Response(JSON.stringify(stored), { status: 200 });
+      return new Response(JSON.stringify(stored), { status: 200, headers: { etag } });
     }
+    assert.equal(headers.get("If-Match"), etag);
     stored = JSON.parse(String(init.body)) as unknown;
-    return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    etag = '"v2"';
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { etag } });
   }) as typeof fetch);
   const loaded = await store.load();
   assert.equal(loaded?.document.id, "doc-nested-groups");
@@ -35,4 +38,10 @@ test("studio store loads and saves through the session header", async () => {
   assert.equal(saved.title, "Studio map");
   const listed = await store.list();
   assert.equal(listed[0]?.title, "diagram.json");
+  await assert.rejects(() =>
+    store.save({
+      ...loaded,
+      document: { ...loaded.document, id: "doc-other" },
+    }),
+  );
 });
