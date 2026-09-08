@@ -1,4 +1,4 @@
-import { DB_NAME, DB_VERSION, STORE_NAME } from "../constants/persist.ts";
+import { DB_NAME, DB_VERSION, LEGACY_STORE, STORE_NAME } from "../constants/persist.ts";
 import type { EditorSnapshot } from "../types/editor.ts";
 import type { PersistStore } from "../types/persist.ts";
 import { snapshotFromStored, storedFromSnapshot } from "./codec.ts";
@@ -15,12 +15,19 @@ function openDb(): Promise<IDBDatabase> {
   if (!indexedDB) throw new Error("IndexedDB is not available");
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = () => {
+    request.onupgradeneeded = (event) => {
       const db = request.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
-      if (db.objectStoreNames.contains("workspace")) {
-        const legacy = request.transaction?.objectStore("workspace");
-        void legacy;
+      const tx = request.transaction;
+      if (event.oldVersion < 3 && tx && db.objectStoreNames.contains(LEGACY_STORE)) {
+        const legacy = tx.objectStore(LEGACY_STORE);
+        const read = legacy.get("current");
+        read.onsuccess = () => {
+          const value = read.result;
+          const snap = snapshotFromStored(value);
+          if (!snap) return;
+          tx.objectStore(STORE_NAME).put(storedFromSnapshot(snap), snap.document.id);
+        };
       }
     };
     request.onsuccess = () => resolve(request.result);
@@ -64,10 +71,21 @@ export function indexedDbStore(): PersistStore {
           db.transaction(STORE_NAME, "readonly").objectStore(STORE_NAME).getAll(),
         );
         const records = Array.isArray(all) ? all : [];
-        return records.flatMap((value) => {
-          const snap = snapshotFromStored(value);
-          return snap ? [{ id: snap.document.id, title: snap.document.title }] : [];
-        });
+        return records
+          .flatMap((value) => {
+            const snap = snapshotFromStored(value);
+            if (!snap) return [];
+            const rec = value as { lastOpenedAt?: string; updatedAt?: string };
+            return [
+              {
+                id: snap.document.id,
+                title: snap.document.title,
+                at: rec.lastOpenedAt ?? rec.updatedAt ?? "",
+              },
+            ];
+          })
+          .sort((left, right) => right.at.localeCompare(left.at))
+          .map(({ id, title }) => ({ id, title }));
       } finally {
         db.close();
       }

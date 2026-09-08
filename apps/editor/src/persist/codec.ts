@@ -42,9 +42,15 @@ export function snapshotFromStored(value: unknown): EditorSnapshot | null {
   return placedSnapshot(validated.document, isPositionMap(record.positions) ? record.positions : undefined);
 }
 
-export function storedFromSnapshot(snapshot: EditorSnapshot): StoredWorkspace {
+export function storedFromSnapshot(snapshot: EditorSnapshot, openedAt?: string): StoredWorkspace {
   const document = applyPortableLayout(snapshot.document, snapshot.positions);
-  return { document, positions: snapshot.positions };
+  const now = new Date().toISOString();
+  return {
+    document,
+    positions: snapshot.positions,
+    updatedAt: now,
+    lastOpenedAt: openedAt ?? now,
+  };
 }
 
 export function backupBytes(snapshot: EditorSnapshot): Uint8Array {

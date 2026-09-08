@@ -27,6 +27,8 @@ test("studio serves the opened file and rejects a bad session", async () => {
       headers: { [STUDIO_HEADER]: server.token },
     });
     const body = (await doc.json()) as { title?: string };
+    const etag = doc.headers.get("etag");
+    assert.ok(etag);
     assert.equal(body.title, "Local diagram workspace");
     const denied = await fetch(`http://127.0.0.1:${server.port}/api/document`, {
       method: "PUT",
@@ -37,7 +39,11 @@ test("studio serves the opened file and rejects a bad session", async () => {
     const next = { ...(body as object), title: "Studio edit" };
     const saved = await fetch(`http://127.0.0.1:${server.port}/api/document`, {
       method: "PUT",
-      headers: { [STUDIO_HEADER]: server.token, "content-type": "application/json" },
+      headers: {
+        [STUDIO_HEADER]: server.token,
+        "content-type": "application/json",
+        "if-match": etag,
+      },
       body: JSON.stringify(next),
     });
     assert.equal(saved.status, 200);
@@ -45,6 +51,43 @@ test("studio serves the opened file and rejects a bad session", async () => {
     assert.equal(written.title, "Studio edit");
     const traversal = await fetch(`http://127.0.0.1:${server.port}/%2e%2e/package.json`);
     assert.equal(traversal.status, 404);
+  } finally {
+    await server.close();
+  }
+});
+
+test("invalid studio writes leave the opened file byte-identical", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "mapgrain-studio-invalid-"));
+  const file = join(dir, "diagram.json");
+  const original = await readFile(fixture);
+  await writeFile(file, original);
+  const server = await startStudio(file, assets);
+  try {
+    const loaded = await fetch(`http://127.0.0.1:${server.port}/api/document`, {
+      headers: { [STUDIO_HEADER]: server.token },
+    });
+    const etag = loaded.headers.get("etag") ?? "";
+    const numeric = await fetch(`http://127.0.0.1:${server.port}/api/document`, {
+      method: "PUT",
+      headers: {
+        [STUDIO_HEADER]: server.token,
+        "content-type": "application/json",
+        "if-match": etag,
+      },
+      body: "0",
+    });
+    assert.equal(numeric.status, 400);
+    const stale = await fetch(`http://127.0.0.1:${server.port}/api/document`, {
+      method: "PUT",
+      headers: {
+        [STUDIO_HEADER]: server.token,
+        "content-type": "application/json",
+        "if-match": '"deadbeef"',
+      },
+      body: await readFile(fixture, "utf8"),
+    });
+    assert.equal(stale.status, 409);
+    assert.deepEqual(await readFile(file), original);
   } finally {
     await server.close();
   }

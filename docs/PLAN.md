@@ -9,8 +9,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 ## State
 
 - Status: `active`
-- Current task ID: F026
-- Active slice: P0.1 Stop the editor crash
+- Current task ID: F027
+- Active slice: P0.2 Protect Studio writes
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -44,8 +44,8 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F023 | R3.2 Companion agent skill | F015, F022 | unit, lint, typecheck, build | passing |
 | F024 | R4 Visual and performance finish | F019, F021, F022 | unit, lint, typecheck, build | passing |
 | F025 | R5 external user-study and device smoke | F024 | unit, lint, typecheck, build | blocked |
-| F026 | P0.1 Stop the editor selection-loop crash | — | unit, lint, typecheck, build, browser | active |
-| F027 | P0.2 Protect Studio writes and document ownership | F026 | unit, lint, typecheck, build | not_started |
+| F026 | P0.1 Stop the editor selection-loop crash | — | unit, lint, typecheck, build, browser | passing |
+| F027 | P0.2 Protect Studio writes and document ownership | F026 | unit, lint, typecheck, build | active |
 | F028 | P0.3 Skill and distribution contract | F026 | unit, lint, typecheck, build | not_started |
 | F029 | P0.4 Exports and interactive viewer | F026 | unit, lint, typecheck, build | not_started |
 | F030 | P1 Coherent interface and custom Select | F026, F029 | unit, lint, typecheck, build | not_started |
