@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { COMMANDS, type CommandId } from "../constants/commands.ts";
+import { useFocusTrap } from "./focusTrap.ts";
 
 interface CommandMenuProps {
   open: boolean;
@@ -10,6 +11,8 @@ interface CommandMenuProps {
 export function CommandMenu({ open, onClose, onRun }: CommandMenuProps) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, open, onClose);
   const items = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return COMMANDS.filter((item) => item.label.toLowerCase().includes(needle));
@@ -27,8 +30,10 @@ export function CommandMenu({ open, onClose, onRun }: CommandMenuProps) {
   return (
     <div className="command-scrim" onClick={onClose}>
       <div
+        ref={dialogRef}
         className="command-menu"
         role="dialog"
+        aria-modal="true"
         aria-label="Command menu"
         onClick={(event) => event.stopPropagation()}
       >

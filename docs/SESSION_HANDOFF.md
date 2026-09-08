@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F037
+- Task: F036
 - Plan: docs/PLAN.md
-- Git: feat/portable-viewer @ 00bc62e2b3541395c6f0366b7ed67f39ceac04a6 (dirty)
-- Updated: 2026-09-08T19:44:39.912Z
+- Git: feat/readable-diagrams @ bc86b9d3988a04b5de21b0c0403f2f4afef924c8 (dirty)
+- Updated: 2026-09-08T19:59:30.768Z
 
 ### Next action
 
-Draft PR for F037 on feat/portable-viewer. Merge when GitHub verify succeeds, then stamp passing from main push.
+Draft PR for F036 on feat/readable-diagrams. Merge when GitHub verify succeeds, then stamp passing from main push.
 
 ### Decisions
 
@@ -38,6 +38,7 @@ Draft PR for F037 on feat/portable-viewer. Merge when GitHub verify succeeds, th
 - F034: Offline uses a build-time versioned asset manifest. Precache is atomic. API routes and studio session URLs are not cached. Studio unregisters leftover workers.
 - F035: Desktop split uses 240/296 panes. 768–1279 shows one side panel. Below 768 the canvas is full-bleed with exclusive outline/inspector overlays. Add is a searchable palette. Chat is disabled.
 - F037: Portable viewer uses adjacency indexes for directed reach and routes. Named views and focus restore from the local hash. Filters never mutate the document payload. Stories and role lenses remain Task 9.
+- F036: Default fit uses a minimum zoom so 14px labels stay at least 12px. Zoom percentage is visible. Dialogs trap focus and Escape closes the topmost surface.
 
 ### Rejected approaches
 
@@ -97,6 +98,7 @@ Draft PR for F037 on feat/portable-viewer. Merge when GitHub verify succeeds, th
 - docs/runs/run-1788893556151-df7074.json
 - docs/runs/run-1788894419719-d17bef.json
 - docs/runs/run-1788895288417-2e96e5.json
+- docs/runs/run-1788897532769-c3913c.json
 - docs/runs/run-1788896583251-3a089f.json
 
 ## Resume

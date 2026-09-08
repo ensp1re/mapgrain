@@ -11,7 +11,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Save status, last-active reopen, Studio conflict recovery | implemented | yes | F033: last-active id, last-opened vs edited times, Saved after durable write, structured Studio errors |
 | Offline first session (SW + worker + export) | implemented | yes | F034: versioned asset manifest, atomic precache, API/session excluded; production disconnect journey |
 | Responsive shell 1440→390 | implemented | yes | F035: compact Add, disabled Chat, exclusive narrow panels, no page-level horizontal scroll |
-| Readable default labels after fit | partial | no | 14px declared; not proven after default fit (Task 5) |
+| Readable default labels after fit | implemented | yes | F036: default fit floors zoom so 14px labels stay ≥12px; zoom % visible; dialogs trap focus |
 | Portable HTML viewer: search, fit, theme, pan, zoom | implemented | yes | F037: fit, search-to-focus, theme, pan, zoom, keyboard, fullscreen; no remote assets |
 | Directed reach, route, named views, stories, lenses | partial | partial | F037 ships directed reach, route, named views, and local hashes; stories and role lenses remain Task 9 / P2 |
 | CLI validate/layout/view/export/doctor/studio | implemented | yes | `mapgrain@0.1.0` on npm; internals bundled |

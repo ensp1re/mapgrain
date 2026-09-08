@@ -46,6 +46,13 @@ test("shell CSS keeps chat as an overlay, not a third column", async () => {
   assert.match(css, /\.title-field input/);
 });
 
+test("select supports Home, End, and typeahead", async () => {
+  const source = await readFile(fileURLToPath(new URL("../src/ui/Select.tsx", import.meta.url)), "utf8");
+  assert.match(source, /event\.key === "Home"/);
+  assert.match(source, /event\.key === "End"/);
+  assert.match(source, /startsWith\(needle\)/);
+});
+
 test("chat is disabled until generation is usable", async () => {
   const topbar = await readFile(fileURLToPath(new URL("../src/chrome/TopBar.tsx", import.meta.url)), "utf8");
   assert.match(topbar, /Chat is unavailable/);
