@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F026
 - Plan: docs/PLAN.md
-- Git: chore/block-f025 @ cd30b6f6106a6342215e070d9e6fbfea7f06bdeb (dirty)
-- Updated: 2026-09-07T20:07:27.185Z
+- Git: feat/editor-selection-loop @ 06d22944621712707201bc2b189fe089c3eaef31 (dirty)
+- Updated: 2026-09-08T11:29:35.371Z
 
 ### Next action
 
-F025 is blocked: five unassisted users and multi-browser smoke cannot be completed here. Do not invent user-study evidence.
+Open a draft PR for F026. Merge when GitHub verify succeeds. Next is F027.
 
 ### Decisions
 
@@ -28,6 +28,7 @@ F025 is blocked: five unassisted users and multi-browser smoke cannot be complet
 - The public CLI package is mapgrain. Internals are bundled; @resvg/resvg-js and elkjs stay real dependencies. Studio binds 127.0.0.1, checks origin/session, and writes only the opened file.
 - The companion skill lives at skills/mapgrain. Agents emit semantic JSON, call the CLI, preserve ids and layout, and must not execute a repository to discover architecture.
 - At 390px the top bar keeps Arrange and Export visible and moves the rest behind More. Browser ELK loads on first arrange. The offline cache is versioned and drops previous names. Perf numbers are Node scene/layout/svg, not browser.
+- F025 is only external user-study and device smoke. Automated crash, studio, skill, export, and visual work is F026–F031 and must not wait on F025.
 - The read-only viewer wraps the canonical SVG export. It has no editor chrome and no GUI dependency.
 - The 100-node Local telemetry mesh fixture is original. Validate, scene, layout, SVG export, and CLI succeed on it. Performance targets are still unclaimed.
 - The usable-release plan supersedes feature expansion. Current work is R1 correctness. Portable layout lives on the document and is used by editor, backup, import, CLI, and SVG/PNG/HTML export. Viewport and selection stay out.

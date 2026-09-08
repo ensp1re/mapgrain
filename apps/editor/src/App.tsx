@@ -11,6 +11,7 @@ import {
   type Edge,
   type Node,
   type NodeChange,
+  type OnSelectionChangeParams,
 } from "@xyflow/react";
 import {
   EDGE_DIRECTION,
@@ -55,12 +56,15 @@ import { sceneToFlow } from "./diagram/sceneToFlow.ts";
 import { alignPositions } from "./geometry/align.ts";
 import { positionsFromFlow, positionsFromScene, samePositions } from "./geometry/positions.ts";
 import { createHistory, pushHistory, redoHistory, undoHistory } from "./history/stack.ts";
+import { reuseUnchangedEdges, reuseUnchangedNodes } from "./edit/flowNodes.ts";
 import {
   commandAllowed,
   layoutToken,
   layoutTokenMatches,
   selectionFromFlow,
 } from "./edit/safety.ts";
+import { retainSelection } from "./edit/selection.ts";
+import { EditorErrorBoundary } from "./chrome/ErrorBoundary.tsx";
 import {
   isDeleteEvent,
   isDuplicateEvent,
@@ -324,8 +328,9 @@ function Specimen() {
 
   const cancelEdit = useCallback(() => setEditingId(null), []);
   const [nodes, setNodes] = useState<Node[]>([]);
+  const edgesRef = useRef<Edge[]>([]);
 
-  const rfEdges = useMemo<Edge[]>(() => {
+  const computedEdges = useMemo<Edge[]>(() => {
     if (!documentModel) return [];
     const selected = new Set(selection.edgeIds);
     return flow.edges.map((edge) => {
@@ -355,6 +360,8 @@ function Specimen() {
       };
     });
   }, [documentModel, flow.edges, selection.edgeIds]);
+  const rfEdges = reuseUnchangedEdges(edgesRef.current, computedEdges);
+  edgesRef.current = rfEdges;
 
   const selectedNode = flow.nodes.find((node) => node.id === selection.nodeIds[0]) ?? null;
   const selectedEdge =
@@ -441,17 +448,25 @@ function Specimen() {
 
   useEffect(() => {
     if (!dragging) {
-      setNodes(derivedNodes);
+      setNodes((current) => reuseUnchangedNodes(current, derivedNodes));
       return;
     }
     setNodes((current) =>
-      current.map((node) => {
-        const derived = derivedNodes.find((item) => item.id === node.id);
-        if (!derived) return node;
-        return { ...derived, position: node.position, selected: node.selected };
-      }),
+      reuseUnchangedNodes(
+        current,
+        derivedNodes.map((derived) => {
+          const live = current.find((item) => item.id === derived.id);
+          if (!live) return derived;
+          return { ...derived, position: live.position, selected: live.selected };
+        }),
+      ),
     );
   }, [derivedNodes, dragging]);
+
+  const onSelectionChange = useCallback(({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
+    const next = selectionFromFlow(selectedNodes, selectedEdges);
+    setSelection((current) => retainSelection(current, next));
+  }, []);
 
   const pushPositions = useCallback((positions: PositionMap) => {
     const current = historyRef.current.present;
@@ -760,6 +775,14 @@ function Specimen() {
     .join(" ");
 
   return (
+    <EditorErrorBoundary
+      snapshot={snapshot}
+      onReturnToLibrary={() => {
+        setSurface("start");
+        setEditingId(null);
+        setArrange({ status: "idle" });
+      }}
+    >
     <div className={presenting ? "app is-presenting" : "app"}>
       <TopBar
         title={documentModel.title}
@@ -803,9 +826,7 @@ function Specimen() {
             nodesConnectable={arrange.status === "idle" && !presenting}
             onNodeDragStart={onNodeDragStart}
             onNodeDragStop={onNodeDragStop}
-            onSelectionChange={({ nodes: selectedNodes, edges: selectedEdges }) => {
-              setSelection(selectionFromFlow(selectedNodes, selectedEdges));
-            }}
+            onSelectionChange={onSelectionChange}
             onPaneClick={(event) => {
               const target = event.target;
               if (target instanceof Element && target.closest(".node-card, .group-frame, .label-input")) {
@@ -882,6 +903,7 @@ function Specimen() {
         <CommandMenu open={commandsOpen} onClose={() => setCommandsOpen(false)} onRun={runCommand} />
       )}
     </div>
+    </EditorErrorBoundary>
   );
 }
 

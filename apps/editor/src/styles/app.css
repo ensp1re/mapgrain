@@ -739,6 +739,76 @@ input {
   margin-top: 24px;
 }
 
+.error-recovery {
+  max-width: 36rem;
+  margin: 48px auto;
+  padding: 0 16px;
+}
+
+.error-recovery h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.error-recovery p {
+  color: var(--muted);
+}
+
+.ui-select {
+  position: relative;
+}
+
+.ui-select-trigger,
+.ui-select-option {
+  width: 100%;
+  height: 32px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--surface);
+  color: var(--text);
+  text-align: left;
+}
+
+.ui-select-trigger {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a1a1aa' d='M3 4.5L6 8l3-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.ui-select-trigger:hover,
+.ui-select-option:hover {
+  background-color: var(--surface-hover);
+}
+
+.ui-select-trigger:focus-visible,
+.ui-select-option:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.ui-select-list {
+  position: absolute;
+  z-index: 8;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 4px;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.ui-select-option {
+  padding-right: 10px;
+}
+
+.ui-select-option.is-selected {
+  background: var(--accent-soft);
+}
+
 @media (max-width: 720px) {
   .workspace {
     grid-template-columns: 1fr;

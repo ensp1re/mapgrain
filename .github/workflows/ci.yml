@@ -19,5 +19,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm verify
       - run: pnpm build
+      - run: pnpm --filter @mapgrain/editor exec playwright install chromium
+      - run: pnpm --filter @mapgrain/editor test:browser
       - run: MAPGRAIN_PACK_TEST=1 node --test --experimental-strip-types --test-reporter=spec packages/cli/tests/pack.test.ts
         timeout-minutes: 5
