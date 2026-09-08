@@ -8,9 +8,9 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 
 ## State
 
-- Status: `verified`
+- Status: `passing`
 - Current task ID: F041
-- Active slice: Production README, getting-started, and media capture
+- Active slice: Queue closeout — F025 removed, F031 stamped
 - Base branch: `main`
 - Tracking record: [tasks.json](tasks.json)
 - Current handoff: [SESSION_HANDOFF.md](SESSION_HANDOFF.md)
@@ -43,13 +43,12 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F022 | R3.1 Publishable CLI and studio | F015, F018 | unit, lint, typecheck, build | passing |
 | F023 | R3.2 Companion agent skill | F015, F022 | unit, lint, typecheck, build | passing |
 | F024 | R4 Visual and performance finish | F019, F021, F022 | unit, lint, typecheck, build | passing |
-| F025 | R5 external user-study and device smoke | F024 | unit, lint, typecheck, build | blocked |
 | F026 | P0.1 Stop the editor selection-loop crash | — | unit, lint, typecheck, build, browser | passing |
 | F027 | P0.2 Protect Studio writes and document ownership | F026 | unit, lint, typecheck, build | passing |
 | F028 | P0.3 Skill and distribution contract | F026 | unit, lint, typecheck, build | passing |
 | F029 | P0.4 Exports and interactive viewer | F026 | unit, lint, typecheck, build | passing |
 | F030 | P1 Coherent interface and custom Select | F026, F029 | unit, lint, typecheck, build | passing |
-| F031 | P2 Interaction-path performance | F026 | unit, lint, typecheck, build | verified |
+| F031 | P2 Interaction-path performance | F026 | unit, lint, typecheck, build | passing |
 | F032 | Usable-release T1: export fidelity (resolved paints, captions, Inter, doctor pixels) | F029 | unit, lint, typecheck, build | passing |
 | F033 | Usable-release T2: saving and Studio recovery | F032 | unit, lint, typecheck, build | passing |
 | F034 | Usable-release T3: actual offline support | F032 | unit, lint, typecheck, build | passing |
@@ -59,9 +58,9 @@ This plan supersedes broad feature expansion from the earlier brief. Visual dire
 | F038 | Usable-release T7: skill install and agent workflows | F028 | unit, lint, typecheck, build | passing |
 | F039 | Usable-release T8: outcome and performance gates | F032, F036 | unit, lint, typecheck, build, browser | passing |
 | F040 | Full product T9: remaining feature gaps (modes, diagnostics, stories) | F039 | unit, lint, typecheck, build | passing |
-| F041 | Production README, getting-started, screenshots, and GIFs | F040 | unit, lint, typecheck, build | verified |
+| F041 | Production README, getting-started, screenshots, and GIFs | F040 | unit, lint, typecheck, build | passing |
 
-The master product brief (usable release then full product) supersedes the shorter V3 plan for remaining scope. F025 stays blocked on external user-study evidence. Do not start hosted sharing or billing. README media rewrite is last, after F040.
+The master product brief (usable release then full product) supersedes the shorter V3 plan for remaining scope. The five-user study is not in the queue. Do not start hosted sharing or billing. README media rewrite is F041.
 
 ## Stages
 

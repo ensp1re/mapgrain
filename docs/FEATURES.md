@@ -18,5 +18,5 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Stories and role lenses | planned | Not in this release |
 | Visual presets, share-card, video, localization | planned | After static fidelity |
 | Watch/reload last-good agent file | planned | Compare exists; watch is not shipped |
-| Five-user study / device smoke | deferred | External evidence |
+| Five-user study / device smoke | deferred | Not queued; no fabricated study |
 | Mermaid/draw.io import, hosted sharing | deferred | Demand not validated |
