@@ -52,6 +52,7 @@ import { blankDocument } from "./create/blank.ts";
 import { makeNode } from "./create/nodes.ts";
 import { AUTOSAVE_MS, PERSIST_ERROR_CODE, SAVE_STATE } from "./constants/persist.ts";
 import { PersistError, persistErrorMessage } from "./persist/errors.ts";
+import { setOfflineUpdateAllowed } from "./offline/register.ts";
 import { createSaveSession, type SaveSession } from "./persist/session.ts";
 import { ComponentNode } from "./diagram/ComponentNode.tsx";
 import { GroupNode } from "./diagram/GroupNode.tsx";
@@ -302,6 +303,14 @@ function Specimen() {
     setSaveError(null);
     saveSession.current?.schedule(snapshot);
   }, [booted, snapshot, surface]);
+
+  useEffect(() => {
+    setOfflineUpdateAllowed(
+      saveState !== SAVE_STATE.SAVING &&
+        saveState !== SAVE_STATE.FILE_SAVING &&
+        saveState !== SAVE_STATE.RECOVERY,
+    );
+  }, [saveState]);
 
   useEffect(() => {
     const onLeave = (event: BeforeUnloadEvent) => {
