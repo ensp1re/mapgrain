@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F019",
+    "behavior": "R2.1 Real creation: blank diagram, open file, examples, recent, add palette; agent path instead of fake generation.",
+    "acceptance": [
+      "A new user can build Browser, API, Database, group, pin, undo, reopen, and export without writing JSON."
+    ],
+    "dependsOn": [
+      "F015",
+      "F017"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788807797035-89e364",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T19:03:33.840Z"
+    },
+    "delivery": {
+      "implementationRevision": "70a79c8044fc05033e3566beb808141b6635c1b6",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/21",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "8a26a82802d51bda04f9a131dbcb34f85d09a9f9",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34154150627/job/101842356477"
+        }
+      ],
+      "observedAt": "2026-09-07T19:05:02Z",
+      "closeoutRevision": "70a79c8044fc05033e3566beb808141b6635c1b6"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

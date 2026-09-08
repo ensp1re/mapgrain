@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F006",
+    "behavior": "Build the editor shell with a compact top bar, dominant canvas, collapsible outline, and command menu. Chat is collapsed by default.",
+    "acceptance": [
+      "Title, save state, undo/redo, Present, and Export are reachable without chat.",
+      "Cmd/Ctrl+K opens the command menu and is ignored while typing in an input.",
+      "Inspector appears only for a selected element."
+    ],
+    "dependsOn": [
+      "F005"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788793487911-4323db",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T15:05:00.573Z"
+    },
+    "delivery": {
+      "implementationRevision": "06b4b6c0bd8b938fdfeafab8669a9f7b81f07d5a",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/8",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "a5847e6a978fd1e086ed596a3dcd47548fe775fb",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34136486911/job/101788573299"
+        }
+      ],
+      "observedAt": "2026-09-07T15:16:26Z",
+      "closeoutRevision": "06b4b6c0bd8b938fdfeafab8669a9f7b81f07d5a"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

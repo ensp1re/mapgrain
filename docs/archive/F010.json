@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F010",
+    "behavior": "Prove the offline loop: create, edit, reload, and export without network or fake actions.",
+    "acceptance": [
+      "An example can be edited and exported with the network disabled.",
+      "Reload after edit restores the same document ids and meaning.",
+      "No control claims a capability it does not have."
+    ],
+    "dependsOn": [
+      "F004",
+      "F007",
+      "F008",
+      "F009"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788800481010-e56765",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T17:01:35.839Z"
+    },
+    "delivery": {
+      "implementationRevision": "7781ea220562fc63b2de1839f6ee998f5af4cd71",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/12",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "969a1427f25167694b5d6ae4c509e2d47a843092",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34145937145/job/101817872438"
+        }
+      ],
+      "observedAt": "2026-09-07T17:05:45Z",
+      "closeoutRevision": "7781ea220562fc63b2de1839f6ee998f5af4cd71"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F011",
+    "behavior": "Land on an example-backed creation surface with three original examples and Import. Generation is disabled until a provider is configured.",
+    "acceptance": [
+      "Examples load and edit without model credentials.",
+      "Submit shows interpreting / arranging / checking and can be cancelled.",
+      "A first-run failure returns the entered text and a repair action.",
+      "Sample content is never labelled as generated output."
+    ],
+    "dependsOn": [
+      "F006"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788801310224-cc1501",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T17:15:25.649Z"
+    },
+    "delivery": {
+      "implementationRevision": "100eae6de35440539fffd4905adc3ab53e97486e",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/13",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "e3d9fb77bebb22c8168c62fd839956e4677bbf46",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34146919212/job/101820834652"
+        }
+      ],
+      "observedAt": "2026-09-07T17:23:41Z",
+      "closeoutRevision": "100eae6de35440539fffd4905adc3ab53e97486e"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

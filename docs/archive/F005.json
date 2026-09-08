@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F005",
+    "behavior": "Ship an original visual specimen in a running app: toolbar, outline row, node, relation, tooltip, command menu, inspector, and one interactive architecture diagram.",
+    "acceptance": [
+      "Dark and light themes render the specimen.",
+      "The diagram uses original nodes and edges, not library defaults as the finished look.",
+      "390px and 1440px layouts remain usable.",
+      "Reduced-motion preferences disable non-essential motion."
+    ],
+    "dependsOn": [
+      "F003",
+      "F004"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788793476030-054c9f",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T15:04:47.697Z"
+    },
+    "delivery": {
+      "implementationRevision": "6114aa61a72db6aa510f59670eae209e662b07f1",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/7",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "6114aa61a72db6aa510f59670eae209e662b07f1",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34135389650/job/101785019526"
+        }
+      ],
+      "observedAt": "2026-09-07T14:53:16Z",
+      "closeoutRevision": "6114aa61a72db6aa510f59670eae209e662b07f1"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

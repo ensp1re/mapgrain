@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F004",
+    "behavior": "Export JSON, SVG, PNG, and offline HTML from the canonical scene with bounded raster size and no editor-only data.",
+    "acceptance": [
+      "Exports are generated from the scene, not a DOM screenshot.",
+      "HTML opens offline without remote assets or credentials.",
+      "Oversized PNG fails with a smaller-size option.",
+      "Secrets, comments, and selection do not appear in the artifact."
+    ],
+    "dependsOn": [
+      "F002"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788793463994-b89e11",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T15:04:35.851Z"
+    },
+    "delivery": {
+      "implementationRevision": "6599006bd1782ce7481ecee778bc78ddb18d9c24",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/6",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "6599006bd1782ce7481ecee778bc78ddb18d9c24",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34130529545/job/101769296395"
+        }
+      ],
+      "observedAt": "2026-09-07T14:00:13Z",
+      "closeoutRevision": "6599006bd1782ce7481ecee778bc78ddb18d9c24"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

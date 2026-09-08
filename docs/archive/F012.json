@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F012",
+    "behavior": "Ship a CLI that validates, renders, and exports a document using the same schema and scene as the editor.",
+    "acceptance": [
+      "Invalid input exits non-zero with a structured diagnostic.",
+      "Render and export match the canonical scene for a fixture.",
+      "The CLI works without the editor installed as a GUI."
+    ],
+    "dependsOn": [
+      "F001",
+      "F004"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788802146185-c8b4da",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T17:29:22.399Z"
+    },
+    "delivery": {
+      "implementationRevision": "4fe444230910c56c53a2bcb645d9799083b5346b",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/14",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "c7a96f44bbe1aee4e83dfa29d6e3b4485a1947c3",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34147894425/job/101823761722"
+        }
+      ],
+      "observedAt": "2026-09-07T17:34:40Z",
+      "closeoutRevision": "4fe444230910c56c53a2bcb645d9799083b5346b"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

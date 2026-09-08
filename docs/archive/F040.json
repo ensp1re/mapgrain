@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F040",
+    "behavior": "Full-product Task 9: remaining modes, geometry diagnostics, evidence, and presentation breadth.",
+    "acceptance": [
+      "Public feature table distinguishes shipped, partial, and planned.",
+      "Each new diagram mode has validation, editor/CLI/viewer behavior, and export fixtures."
+    ],
+    "dependsOn": [
+      "F039"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788901487093-a1dd52",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T21:05:04.449Z"
+    },
+    "delivery": {
+      "implementationRevision": "cea0d2f040718683699889d36d9599236a5998bf",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/43",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "cea0d2f040718683699889d36d9599236a5998bf",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34278919445"
+        }
+      ],
+      "observedAt": "2026-09-08T21:10:30Z",
+      "closeoutRevision": "cea0d2f040718683699889d36d9599236a5998bf"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

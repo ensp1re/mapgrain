@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F015",
+    "behavior": "R1.1 Portable layout and export parity: positions and pins travel with JSON, backup, import, CLI, and SVG/PNG/HTML.",
+    "acceptance": [
+      "Move, pin, arrange, apply, rename, then export JSON/SVG/PNG/HTML and reimport; IDs, labels, groups, positions, and routes stay consistent.",
+      "Negative coordinates and nested groups round-trip.",
+      "Backup after a storage failure restores the arrangement.",
+      "Export uses the committed layout, not an arrange preview."
+    ],
+    "dependsOn": [
+      "F004",
+      "F007",
+      "F009",
+      "F012"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788805672118-b8d681",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T18:28:07.958Z"
+    },
+    "delivery": {
+      "implementationRevision": "d949236bd925ab84375eb922c5a79c8b1daa06b3",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/17",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "b0bad42c6425099448d2548eb80efa8f1cf5f388",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34151891813/job/101835717010"
+        }
+      ],
+      "observedAt": "2026-09-07T18:30:55Z",
+      "closeoutRevision": "d949236bd925ab84375eb922c5a79c8b1daa06b3"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F016",
+    "behavior": "R1.2 One geometry pipeline: editor and export share scene dimensions, routes, arrows, and font-backed text metrics.",
+    "acceptance": [
+      "Visual comparisons across fixtures at both themes: no clipped text, coincident parallel labels, or false arrows.",
+      "Canonical routes govern the editor; direction none/forward/both is visible.",
+      "Browser and Node text measurement agree for long, multiline, Cyrillic, and CJK labels."
+    ],
+    "dependsOn": [
+      "F015"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788806341421-3200fb",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T18:39:17.511Z"
+    },
+    "delivery": {
+      "implementationRevision": "a1821e1e73c9f9532501480aed1037c87da59fd3",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/18",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "d6348530df51b9eaf462ab687315716e0c201b19",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34152552410/job/101837655448"
+        }
+      ],
+      "observedAt": "2026-09-07T18:40:47Z",
+      "closeoutRevision": "a1821e1e73c9f9532501480aed1037c87da59fd3"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

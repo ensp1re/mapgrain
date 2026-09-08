@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F038",
+    "behavior": "Usable-release Task 7: skill install matrix and proven agent workflows outside the monorepo.",
+    "acceptance": [
+      "SKILL.md matches the published CLI; npx commands work in a clean directory.",
+      "Install-only versus live-task rows are listed honestly for each tested agent."
+    ],
+    "dependsOn": [
+      "F028"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788898310839-6d486d",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T20:12:09.776Z"
+    },
+    "delivery": {
+      "implementationRevision": "3057c980239d6590e14b64fd24a9024eb36397d2",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/41",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "3057c980239d6590e14b64fd24a9024eb36397d2",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34273984635"
+        }
+      ],
+      "observedAt": "2026-09-08T20:18:00Z",
+      "closeoutRevision": "3057c980239d6590e14b64fd24a9024eb36397d2"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

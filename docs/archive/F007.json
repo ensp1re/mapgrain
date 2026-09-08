@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F007",
+    "behavior": "Support direct label edits, connections, rename, delete, duplicate, regroup, align, move, and undo/redo without rearranging unrelated nodes on a label change.",
+    "acceptance": [
+      "Double-click edits a label.",
+      "A connection has explicit direction and meaning.",
+      "Undo restores the previous document.",
+      "A rejected edit leaves the last valid document in place."
+    ],
+    "dependsOn": [
+      "F006"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788797500629-e310ff",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T16:11:52.653Z"
+    },
+    "delivery": {
+      "implementationRevision": "9d608b6d6dedc3daca3c3a8cdc244a7aac6360a5",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/9",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "4f91f4f72a4f4be3f4f6b47f267f7774f90aab73",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34142400524/job/101807038525"
+        }
+      ],
+      "observedAt": "2026-09-07T16:18:00Z",
+      "closeoutRevision": "9d608b6d6dedc3daca3c3a8cdc244a7aac6360a5"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

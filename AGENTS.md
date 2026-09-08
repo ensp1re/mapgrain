@@ -13,6 +13,7 @@ Mapgrain is a local-first technical diagram workspace. This file is the router: 
 ## Working rules
 
 - One task at a time. Keep unrelated cleanup out of the slice.
+- Keep [the plan](docs/PLAN.md), [the live queue](docs/tasks.json), and [the handoff](docs/handoff.json) brief. When a slice is `passing`, archive it. If those files grow into shipped history, archive passing work and rewrite them to the live slice plus open gaps only.
 - State the intended change and affected packages before editing.
 - Prefer a smaller, boring implementation that meets the acceptance criteria.
 - Put named types and domain unions in `types/` modules, and runtime domain literals in `constants/` modules, inside the owning package.

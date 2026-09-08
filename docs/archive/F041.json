@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F041",
+    "behavior": "Rewrite README and getting-started with production screenshots, GIFs, and a capture manifest.",
+    "acceptance": [
+      "README leads with a one-sentence outcome, production hero stills, editing and viewer demos, CLI/skill quick starts, the shipped feature table, and honest limitations.",
+      "docs/media contains a capture manifest and artifacts from the production bundle with recorded commit, viewport, theme, and fixture."
+    ],
+    "dependsOn": [
+      "F040"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788902383419-1b12dc",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-08T21:20:01.794Z"
+    },
+    "delivery": {
+      "implementationRevision": "25a4d29108fc47949ca944ae565d05079a064799",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/44",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "25a4d29108fc47949ca944ae565d05079a064799",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34280519050"
+        }
+      ],
+      "observedAt": "2026-09-08T21:26:30Z",
+      "closeoutRevision": "25a4d29108fc47949ca944ae565d05079a064799"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

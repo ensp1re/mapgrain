@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F020",
+    "behavior": "R2.2 Useful editing: context menus, search, nested outline, fit/zoom, export dialog, browser PNG.",
+    "acceptance": [
+      "Export dialog covers SVG, PNG, HTML, and JSON with theme and errors.",
+      "Search and outline can focus a node; keep-position is labeled as arrange-only."
+    ],
+    "dependsOn": [
+      "F019"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788808155658-391fbf",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T19:09:33.024Z"
+    },
+    "delivery": {
+      "implementationRevision": "978bcfa66a3c4d775f68417fa4fbee743a846e56",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/22",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "d9cc9c9a0f917e2c8ee5fa83143aaf1cbd256df3",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34154546582/job/101843539069"
+        }
+      ],
+      "observedAt": "2026-09-07T19:10:56Z",
+      "closeoutRevision": "978bcfa66a3c4d775f68417fa4fbee743a846e56"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}

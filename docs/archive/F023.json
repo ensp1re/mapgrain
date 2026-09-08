@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F023",
+    "behavior": "R3.2 Companion agent skill that emits JSON or operations and calls the CLI; no guessed pixel positions.",
+    "acceptance": [
+      "A clean agent install can generate a 10-node map, refine one node without destroying layout, and deliver offline HTML."
+    ],
+    "dependsOn": [
+      "F015",
+      "F022"
+    ],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788810829197-3a7bb9",
+      "fingerprintBefore": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "fingerprintAfter": "a2a873f38cdeaef9c30dc0ef382aab6a82378b1ad5c3cbc8e48323cf2903caf6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-07T19:54:09.101Z"
+    },
+    "delivery": {
+      "implementationRevision": "d2ca50f1a3038bc981bb4ba4139f7eb3792b46a8",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/25",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "42feb8f62b5b9d5825caa6074f0d06e097543284",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34157400754/job/101851969635"
+        }
+      ],
+      "observedAt": "2026-09-07T19:57:02Z",
+      "closeoutRevision": "d2ca50f1a3038bc981bb4ba4139f7eb3792b46a8"
+    }
+  },
+  "archivedAt": "2026-09-08T22:15:14.236Z"
+}
