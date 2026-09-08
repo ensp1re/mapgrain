@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/remaining-brief @ 8034785e7fe8b650e306e96efa570667670ba943 (dirty)
-- Updated: 2026-09-08T21:51:20.904Z
+- Git: feat/stamp-f042 @ 9c1577d01c2a4ccac1cb198fb51d761a333410b4 (dirty)
+- Updated: 2026-09-08T22:00:14.972Z
 
 ### Next action
 
-Verify F042 and draft PR on feat/remaining-brief.
+F042 is passing on main. No ready product tasks remain.
 
 ### Decisions
 
@@ -111,7 +111,7 @@ Verify F042 and draft PR on feat/remaining-brief.
 - docs/runs/run-1788899490994-7d2591.json
 - docs/runs/run-1788901487093-a1dd52.json
 - docs/runs/run-1788902383419-1b12dc.json
-- docs/runs/run-1788904239707-a95a76.json
+- docs/runs/run-1788904404786-39f041.json
 
 ## Resume
 
