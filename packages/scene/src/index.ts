@@ -9,7 +9,15 @@ export {
 export { buildScene } from "./build.ts";
 export { defaultSceneOptions } from "./options.ts";
 export { facingSide, placePortsOnRect, portOffset } from "./ports.ts";
-export { mapScenePolyline, polylinePath } from "./routes.ts";
+export { edgeCaption } from "./caption.ts";
+export {
+  mapScenePolyline,
+  placeEdgeLabel,
+  pointAlongPolyline,
+  polylineLength,
+  polylinePath,
+  roundedPolylinePath,
+} from "./routes.ts";
 export { approximateTextMeasurer, defaultFont, fontTextMeasurer, measureText } from "./text.ts";
 export type { Point, Rect, Size } from "./types/geometry.ts";
 export type { FontSpec, SceneOptions, TextMeasurer } from "./types/options.ts";

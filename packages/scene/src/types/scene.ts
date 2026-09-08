@@ -36,6 +36,10 @@ export interface SceneEdge {
   target: { nodeId: string; portId: string };
   points: Point[];
   direction: EdgeDirection;
+  caption: string;
+  label: MeasuredText;
+  labelAnchor: Point;
+  labelBox: Rect;
 }
 
 export interface SceneGroup {

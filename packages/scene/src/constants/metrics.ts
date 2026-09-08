@@ -16,6 +16,8 @@ export const DEFAULT_SPACING_X = 64;
 export const DEFAULT_SPACING_Y = 48;
 
 export const PARALLEL_EDGE_OFFSET = 14;
+export const CORNER_RADIUS = 8;
+export const EDGE_LABEL_PAD = 4;
 
 export const LATIN_WIDTH = 0.56;
 export const SPACE_WIDTH = 0.3;

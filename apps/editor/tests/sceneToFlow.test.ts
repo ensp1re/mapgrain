@@ -25,6 +25,8 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.ok((edge?.points.length ?? 0) >= 2);
   const sceneEdge = scene.scene.edges.find((item) => item.id === "e-gateway-document");
   assert.deepEqual(edge?.points, sceneEdge?.points);
+  assert.equal(edge?.caption, sceneEdge?.caption);
+  assert.deepEqual(edge?.labelAnchor, sceneEdge?.labelAnchor);
 });
 
 test("specimen CSS covers both themes, a 390px layout, and reduced motion", async () => {

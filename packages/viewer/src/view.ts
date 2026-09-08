@@ -1,5 +1,5 @@
 import { THEME, validateDocument, type Theme } from "@mapgrain/document";
-import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer";
+import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
 import { wrapViewer } from "./html.ts";
 
 export interface ViewResult {
@@ -12,10 +12,12 @@ export function renderView(
   document: unknown,
   theme?: Theme,
 ): ViewResult | { ok: false; errors: Array<{ code: string; message: string; path: string }> } {
+  const validated = validateDocument(document);
+  const resolvedTheme = theme ?? (validated.ok ? validated.document.theme : THEME.DARK);
   const exported = exportVector({
     document,
     format: EXPORT_FORMAT.SVG,
-    theme,
+    theme: resolvedTheme,
   });
   if (!exported.ok) return exported;
   const svg = new TextDecoder().decode(exported.bytes);
@@ -23,8 +25,7 @@ export function renderView(
     typeof document === "object" && document && "title" in document && typeof document.title === "string"
       ? document.title
       : "Mapgrain";
-  const background = (theme ?? THEME.DARK) === THEME.LIGHT ? "#f4f1ea" : "#1c1c1f";
-  const validated = validateDocument(document);
+  const background = resolvedTheme === THEME.LIGHT ? "#f4f1ea" : "#1c1c1f";
   const payload = {
     document: validated.ok
       ? { ...validated.document, evidence: undefined }
@@ -40,5 +41,9 @@ export function renderView(
         }))
       : [],
   };
-  return { ok: true, svg, html: wrapViewer(title, svg, JSON.stringify(payload), background) };
+  return {
+    ok: true,
+    svg,
+    html: wrapViewer(title, svg, JSON.stringify(payload), background, resolvedTheme),
+  };
 }

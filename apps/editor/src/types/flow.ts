@@ -24,6 +24,8 @@ export interface FlowEdgeDraft {
   targetHandle: string;
   points: Array<{ x: number; y: number }>;
   direction: EdgeDirection;
+  caption: string;
+  labelAnchor: { x: number; y: number };
 }
 
 export interface ComponentNodeData extends Record<string, unknown> {
@@ -50,4 +52,6 @@ export interface RelationEdgeData extends Record<string, unknown> {
   type: EdgeType;
   direction: EdgeDirection;
   points: Array<{ x: number; y: number }>;
+  caption: string;
+  labelAnchor: { x: number; y: number };
 }

@@ -17,6 +17,7 @@
     "@mapgrain/layout": "workspace:*",
     "@mapgrain/renderer": "workspace:*",
     "@mapgrain/scene": "workspace:*",
+    "@mapgrain/viewer": "workspace:*",
     "@xyflow/react": "^12.8.2",
     "elkjs": "^0.10.0",
     "react": "^19.1.1",

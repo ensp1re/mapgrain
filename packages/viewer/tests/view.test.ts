@@ -39,6 +39,10 @@ test("the view has no edit controls, chat, or inspector", async () => {
   assert.match(view.html, /data-act="theme"/);
   assert.match(view.html, /Download JSON/);
   assert.match(view.html, /static graph, not a live system/);
+  assert.match(view.html, /Math\.min\(availW \/ size\.w, availH \/ size\.h\)/);
+  assert.match(view.html, /--mg-bg:/);
+  assert.match(view.html, /html\[data-theme="light"\]/);
+  assert.match(view.html, /dataset\.theme === "light" \? "dark" : "light"/);
 });
 
 test("viewer payload omits evidence and includes authored edges", async () => {
@@ -49,6 +53,12 @@ test("viewer payload omits evidence and includes authored edges", async () => {
   if (!view.ok) return;
   assert.doesNotMatch(view.html, /secret/);
   assert.match(view.html, /"source":"gateway"/);
+});
+
+test("the viewer builds HTML from the vector renderer, not Node PNG", async () => {
+  const source = await readFile(fileURLToPath(new URL("../src/view.ts", import.meta.url)), "utf8");
+  assert.match(source, /@mapgrain\/renderer\/vector/);
+  assert.doesNotMatch(source, /exportDiagram/);
 });
 
 test("the viewer package does not depend on the editor", async () => {

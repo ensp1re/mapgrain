@@ -29,11 +29,13 @@ import {
   type Theme,
 } from "@mapgrain/document";
 import { LAYOUT_STATUS } from "@mapgrain/layout/run";
-import { exportVector } from "@mapgrain/renderer/vector";
+import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
+import { buildScene } from "@mapgrain/scene";
+import { renderView } from "@mapgrain/viewer";
+import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json" with { type: "json" };
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
 import { EXPORT_CHOICE } from "./constants/export.ts";
-import { buildScene } from "@mapgrain/scene";
-import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json";
+import { rasterSvgToPng } from "./export/png.ts";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { ChatDrawer } from "./chrome/ChatDrawer.tsx";
 import { StartSurface } from "./chrome/StartSurface.tsx";
@@ -356,6 +358,8 @@ function Specimen() {
           type: meaning?.type ?? EDGE_TYPE.CALLS,
           direction: edge.direction,
           points: edge.points,
+          caption: edge.caption,
+          labelAnchor: edge.labelAnchor,
         },
       };
     });
@@ -613,25 +617,52 @@ function Specimen() {
   }, [applyOp, pending]);
 
   const exportFormat = useCallback(
-    (format: (typeof EXPORT_CHOICE)[keyof typeof EXPORT_CHOICE]) => {
+    (format: (typeof EXPORT_CHOICE)[keyof typeof EXPORT_CHOICE], scale = 1) => {
       if (!documentModel) return;
-      if (format === EXPORT_CHOICE.PNG) {
-        setExportError("PNG in the browser needs a canvas raster. Use pnpm mapgrain export --format png.");
-        return;
-      }
-      const result = exportVector({ document: documentModel, format, theme });
-      if (!result.ok) {
-        setExportError(result.errors[0]?.message ?? "Export failed");
-        return;
-      }
-      setExportError(null);
-      const name =
-        format === EXPORT_CHOICE.JSON
-          ? "diagram.json"
-          : format === EXPORT_CHOICE.HTML
-            ? "diagram.html"
-            : "diagram.svg";
-      download(name, result.bytes, result.mediaType);
+      void (async () => {
+        if (format === EXPORT_CHOICE.PNG) {
+          const vector = exportVector({
+            document: documentModel,
+            format: EXPORT_FORMAT.SVG,
+            theme,
+          });
+          if (!vector.ok) {
+            setExportError(vector.errors[0]?.message ?? "Export failed");
+            return;
+          }
+          const png = await rasterSvgToPng(
+            new TextDecoder().decode(vector.bytes),
+            vector.width ?? 1,
+            vector.height ?? 1,
+            scale,
+          );
+          if (!png.ok) {
+            setExportError(png.message);
+            return;
+          }
+          setExportError(null);
+          download("diagram.png", png.bytes, "image/png");
+          return;
+        }
+        if (format === EXPORT_CHOICE.HTML) {
+          const view = renderView(documentModel, theme);
+          if (!view.ok) {
+            setExportError(view.errors[0]?.message ?? "Export failed");
+            return;
+          }
+          setExportError(null);
+          download("diagram.html", new TextEncoder().encode(view.html), "text/html");
+          return;
+        }
+        const result = exportVector({ document: documentModel, format, theme });
+        if (!result.ok) {
+          setExportError(result.errors[0]?.message ?? "Export failed");
+          return;
+        }
+        setExportError(null);
+        const name = format === EXPORT_CHOICE.JSON ? "diagram.json" : "diagram.svg";
+        download(name, result.bytes, result.mediaType);
+      })();
     },
     [documentModel, theme],
   );

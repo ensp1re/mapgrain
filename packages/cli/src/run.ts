@@ -60,7 +60,10 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
     return written.ok ? EXIT_CODE.OK : written.exit;
   }
 
-  if (parsed.command === CLI_COMMAND.VIEW) {
+  if (
+    parsed.command === CLI_COMMAND.VIEW ||
+    (parsed.command === CLI_COMMAND.EXPORT && parsed.format === EXPORT_FORMAT.HTML)
+  ) {
     const view = renderView(laid.document);
     if (!view.ok) {
       return fail(

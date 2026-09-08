@@ -173,6 +173,22 @@ test("view writes read-only HTML from the canonical scene", async () => {
   assert.doesNotMatch(html, /Inspector/);
 });
 
+test("export html writes the same interactive viewer as view", async () => {
+  const source = await readFile(fixture, "utf8");
+  const viewIo = memoryIo({ "nested-groups.json": source });
+  const exportIo = memoryIo({ "nested-groups.json": source });
+  const viewCode = await runCli(["view", "nested-groups.json", "-o", "view.html"], viewIo);
+  const exportCode = await runCli(
+    ["export", "nested-groups.json", "--format", "html", "-o", "out.html"],
+    exportIo,
+  );
+  assert.equal(viewCode, EXIT_CODE.OK);
+  assert.equal(exportCode, EXIT_CODE.OK);
+  assert.equal(exportIo.files["out.html"], viewIo.files["view.html"]);
+  assert.match(exportIo.files["out.html"] ?? "", /Math\.min\(availW \/ size\.w, availH \/ size\.h\)/);
+  assert.match(exportIo.files["out.html"] ?? "", /--mg-bg:/);
+});
+
 test("the CLI package is public, bundled, and does not depend on the editor", async () => {
   const manifest = JSON.parse(await readFile(pkg, "utf8")) as {
     name: string;

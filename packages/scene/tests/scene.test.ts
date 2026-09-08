@@ -4,7 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { validateDocument } from "@mapgrain/document";
-import { buildScene, portOffset } from "../src/index.ts";
+import { buildScene, edgeCaption, portOffset } from "../src/index.ts";
 import type { TextMeasurer } from "../src/types/options.ts";
 import type { ScenePort } from "../src/types/scene.ts";
 
@@ -77,6 +77,20 @@ test("explicit port ids survive the scene pass", async () => {
     assert.equal(edge?.source.portId, "out");
     assert.equal(edge?.target.portId, "in");
   }
+});
+
+test("parallel edges keep type and label as a single caption", async () => {
+  assert.equal(edgeCaption("reads", "get"), "reads · get");
+  assert.equal(edgeCaption("writes", "set"), "writes · set");
+  const raw = await load("parallel-edges.json");
+  const result = buildScene(raw);
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const read = result.scene.edges.find((edge) => edge.id === "e-read");
+  const write = result.scene.edges.find((edge) => edge.id === "e-write");
+  assert.equal(read?.caption, "reads · get");
+  assert.equal(write?.caption, "writes · set");
+  assert.notEqual(read?.labelAnchor.y, write?.labelAnchor.y);
 });
 
 test("multiline labels become multiple lines", () => {
