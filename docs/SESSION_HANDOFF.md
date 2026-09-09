@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F051
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/codex-chrome @ dc65944bf4c94f888bee6469b23ee092c262a49b (dirty)
-- Updated: 2026-09-09T20:06:48.174Z
+- Git: chore/stamp-f051 @ 67ecd5dabdab51217e693e7782328617835ac74e (dirty)
+- Updated: 2026-09-09T20:13:50.000Z
 
 ### Next action
 
-Implement F051 Codex HTML chrome composition, verify, draft PR against main.
+No live product tasks. Next id F052.
 
 ### Decisions
 
@@ -21,6 +21,7 @@ Implement F051 Codex HTML chrome composition, verify, draft PR against main.
 - Sequence alt/opt fragments are in npm mapgrain@0.2.0. npm 0.1.0 still rejects them.
 - Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
 - Do not claim live agent prompt runs, Mermaid/draw.io import, or hosted sharing.
+- The Codex HTML is a review prototype. Editor chrome follows its composition; Help, Focus, and Commands stay.
 
 ### Rejected approaches
 
@@ -34,7 +35,8 @@ Implement F051 Codex HTML chrome composition, verify, draft PR against main.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/66
+- https://github.com/ensp1re/mapgrain/actions/runs/34399600010
 
 ## Resume
 
