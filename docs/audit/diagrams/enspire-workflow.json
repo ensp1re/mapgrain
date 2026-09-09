@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-enspire-login-2fa",
+  "revision": 1,
+  "kind": "workflow",
+  "title": "Enspire login and 2FA",
+  "theme": "dark",
+  "preset": "comfortable",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [],
+  "nodes": [
+    {
+      "id": "owner",
+      "kind": "actor",
+      "label": "Owner",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "signin",
+      "kind": "job",
+      "label": "POST credentials sign-in",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "provider",
+      "kind": "decision",
+      "label": "Google OAuth?",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "google",
+      "kind": "job",
+      "label": "Link Google account",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "password",
+      "kind": "job",
+      "label": "Verify password hash",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "twofa",
+      "kind": "decision",
+      "label": "2FA enabled?",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "send",
+      "kind": "job",
+      "label": "Send TOTP or SMS code",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "verify",
+      "kind": "job",
+      "label": "Verify 2FA token",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "jwt",
+      "kind": "system",
+      "label": "Mint JWT session",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-start",
+      "source": {
+        "nodeId": "owner",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "signin",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-to-provider",
+      "source": {
+        "nodeId": "signin",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "provider",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-google-yes",
+      "source": {
+        "nodeId": "provider",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "google",
+        "portId": "in"
+      },
+      "type": "outcome",
+      "direction": "forward",
+      "outcome": "yes"
+    },
+    {
+      "id": "e-google-no",
+      "source": {
+        "nodeId": "provider",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "password",
+        "portId": "in"
+      },
+      "type": "outcome",
+      "direction": "forward",
+      "outcome": "no"
+    },
+    {
+      "id": "e-google-jwt",
+      "source": {
+        "nodeId": "google",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "jwt",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-password-twofa",
+      "source": {
+        "nodeId": "password",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "twofa",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-twofa-yes",
+      "source": {
+        "nodeId": "twofa",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "send",
+        "portId": "in"
+      },
+      "type": "outcome",
+      "direction": "forward",
+      "outcome": "yes"
+    },
+    {
+      "id": "e-twofa-no",
+      "source": {
+        "nodeId": "twofa",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "jwt",
+        "portId": "in"
+      },
+      "type": "outcome",
+      "direction": "forward",
+      "outcome": "no"
+    },
+    {
+      "id": "e-send-verify",
+      "source": {
+        "nodeId": "send",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "verify",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-verify-jwt",
+      "source": {
+        "nodeId": "verify",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "jwt",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "Login"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-flow",
+      "targetKind": "node",
+      "targetId": "twofa",
+      "state": "observed",
+      "path": "ARCHITECTURE.md",
+      "location": "Authentication Flow",
+      "note": "TWO_FACTOR_REQUIRED when enabled and no token."
+    },
+    {
+      "id": "ev-svc",
+      "targetKind": "node",
+      "targetId": "verify",
+      "state": "observed",
+      "path": "modules/auth/server/two-factor-service.ts"
+    }
+  ],
+  "layout": {
+    "version": 1,
+    "revision": 1,
+    "positions": {
+      "owner": {
+        "x": 12,
+        "y": 33.33333333333333
+      },
+      "signin": {
+        "x": 173,
+        "y": 33.33333333333333
+      },
+      "provider": {
+        "x": 442.48,
+        "y": 33.33333333333333
+      },
+      "google": {
+        "x": 889.6000000000001,
+        "y": 158.66666666666666
+      },
+      "password": {
+        "x": 638.6,
+        "y": 22.666666666666664
+      },
+      "twofa": {
+        "x": 919.6533333333335,
+        "y": 22.666666666666664
+      },
+      "send": {
+        "x": 1126.0400000000002,
+        "y": 12
+      },
+      "verify": {
+        "x": 1383.7600000000002,
+        "y": 12
+      },
+      "jwt": {
+        "x": 1596.6800000000003,
+        "y": 54
+      }
+    }
+  }
+}

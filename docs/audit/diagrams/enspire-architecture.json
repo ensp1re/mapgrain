@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-enspire-architecture",
+  "revision": 1,
+  "kind": "architecture",
+  "title": "Enspire CRM runtime",
+  "theme": "dark",
+  "preset": "comfortable",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": [
+      "nextjs"
+    ]
+  },
+  "groups": [
+    {
+      "id": "client",
+      "label": "Owner device",
+      "parentId": null
+    },
+    {
+      "id": "app",
+      "label": "Next.js monolith",
+      "parentId": null
+    },
+    {
+      "id": "data",
+      "label": "Stores",
+      "parentId": null
+    },
+    {
+      "id": "vendors",
+      "label": "Externals",
+      "parentId": null
+    }
+  ],
+  "nodes": [
+    {
+      "id": "owner",
+      "kind": "actor",
+      "label": "Signed-in owner",
+      "groupId": "client",
+      "ports": [
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "browser",
+      "kind": "system",
+      "label": "Browser + Redux",
+      "groupId": "client",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "nextjs",
+      "kind": "gateway",
+      "label": "App Router + authedRoute",
+      "groupId": "app",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "kind": "service",
+      "label": "NextAuth + 2FA",
+      "groupId": "app",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "modules",
+      "kind": "service",
+      "label": "Domain services",
+      "groupId": "app",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "sse",
+      "kind": "queue",
+      "label": "Board/notes SSE",
+      "groupId": "app",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "prisma",
+      "kind": "job",
+      "label": "Prisma client",
+      "groupId": "app",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "postgres",
+      "kind": "datastore",
+      "label": "CRM PostgreSQL",
+      "groupId": "data",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "gitfame",
+      "kind": "datastore",
+      "label": "GitFame Postgres (read-only)",
+      "groupId": "data",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "google",
+      "kind": "external",
+      "label": "Google OAuth",
+      "groupId": "vendors",
+      "ports": [
+        {
+          "id": "out",
+          "side": "west"
+        }
+      ]
+    },
+    {
+      "id": "twilio",
+      "kind": "external",
+      "label": "Twilio SMS",
+      "groupId": "vendors",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        }
+      ]
+    },
+    {
+      "id": "coinstats",
+      "kind": "external",
+      "label": "CoinStats API",
+      "groupId": "vendors",
+      "ports": [
+        {
+          "id": "out",
+          "side": "west"
+        }
+      ]
+    },
+    {
+      "id": "xscraper",
+      "kind": "external",
+      "label": "X scraper",
+      "groupId": "vendors",
+      "ports": [
+        {
+          "id": "out",
+          "side": "west"
+        }
+      ]
+    },
+    {
+      "id": "llm",
+      "kind": "external",
+      "label": "LLM provider",
+      "groupId": "vendors",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "west"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-owner-browser",
+      "source": {
+        "nodeId": "owner",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "browser",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-browser-nextjs",
+      "source": {
+        "nodeId": "browser",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "nextjs",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward",
+      "label": "fetch"
+    },
+    {
+      "id": "e-nextjs-auth",
+      "source": {
+        "nodeId": "nextjs",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "auth",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-nextjs-modules",
+      "source": {
+        "nodeId": "nextjs",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "modules",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-modules-sse",
+      "source": {
+        "nodeId": "modules",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "sse",
+        "portId": "in"
+      },
+      "type": "publishes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-sse-browser",
+      "source": {
+        "nodeId": "sse",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "browser",
+        "portId": "in"
+      },
+      "type": "subscribes",
+      "direction": "forward"
+    },
+    {
+      "id": "e-modules-prisma",
+      "source": {
+        "nodeId": "modules",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "prisma",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-prisma-postgres",
+      "source": {
+        "nodeId": "prisma",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "postgres",
+        "portId": "in"
+      },
+      "type": "writes",
+      "direction": "both"
+    },
+    {
+      "id": "e-modules-gitfame",
+      "source": {
+        "nodeId": "modules",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "gitfame",
+        "portId": "in"
+      },
+      "type": "reads",
+      "direction": "forward"
+    },
+    {
+      "id": "e-google-auth",
+      "source": {
+        "nodeId": "google",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "auth",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e-auth-twilio",
+      "source": {
+        "nodeId": "auth",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "twilio",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward",
+      "label": "SMS 2FA"
+    },
+    {
+      "id": "e-coinstats-modules",
+      "source": {
+        "nodeId": "coinstats",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "modules",
+        "portId": "in"
+      },
+      "type": "reads",
+      "direction": "forward"
+    },
+    {
+      "id": "e-xscraper-modules",
+      "source": {
+        "nodeId": "xscraper",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "modules",
+        "portId": "in"
+      },
+      "type": "reads",
+      "direction": "forward"
+    },
+    {
+      "id": "e-modules-llm",
+      "source": {
+        "nodeId": "modules",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "llm",
+        "portId": "in"
+      },
+      "type": "calls",
+      "direction": "forward"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "Runtime"
+    },
+    {
+      "id": "request-path",
+      "kind": "path",
+      "name": "Browser to Postgres",
+      "path": {
+        "from": "browser",
+        "to": "postgres"
+      }
+    }
+  ],
+  "stories": [
+    {
+      "id": "owner-session",
+      "name": "Owner opens the board",
+      "steps": [
+        {
+          "id": "step-browser",
+          "name": "Open",
+          "nodeId": "browser"
+        },
+        {
+          "id": "step-auth",
+          "name": "Authorize",
+          "nodeId": "auth"
+        },
+        {
+          "id": "step-db",
+          "name": "Load cards",
+          "nodeId": "postgres",
+          "viewId": "request-path"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-arch",
+      "targetKind": "node",
+      "targetId": "nextjs",
+      "state": "observed",
+      "path": "ARCHITECTURE.md",
+      "note": "App Router monolith; authedRoute wraps API handlers."
+    },
+    {
+      "id": "ev-gitfame",
+      "targetKind": "node",
+      "targetId": "gitfame",
+      "state": "observed",
+      "path": "README.md",
+      "note": "GitFame is a separate Postgres; this app does not write to it."
+    },
+    {
+      "id": "ev-sse",
+      "targetKind": "node",
+      "targetId": "sse",
+      "state": "observed",
+      "path": "modules/board/server/board-events.ts"
+    }
+  ],
+  "layout": {
+    "version": 1,
+    "revision": 1,
+    "positions": {
+      "owner": {
+        "x": 61,
+        "y": 68
+      },
+      "browser": {
+        "x": 224.44000000000003,
+        "y": 78.66666666666666
+      },
+      "nextjs": {
+        "x": 500.4000000000001,
+        "y": 408.4666666666667
+      },
+      "auth": {
+        "x": 725.44,
+        "y": 429.8
+      },
+      "modules": {
+        "x": 720.4000000000001,
+        "y": 301
+      },
+      "sse": {
+        "x": 903.8400000000001,
+        "y": 281.8
+      },
+      "prisma": {
+        "x": 914.4800000000001,
+        "y": 365.8
+      },
+      "postgres": {
+        "x": 1176.7200000000003,
+        "y": 365.8
+      },
+      "gitfame": {
+        "x": 1176.7200000000003,
+        "y": 449.8
+      },
+      "google": {
+        "x": 254.12000000000006,
+        "y": 453
+      },
+      "twilio": {
+        "x": 247.40000000000006,
+        "y": 621
+      },
+      "coinstats": {
+        "x": 252.44000000000005,
+        "y": 369
+      },
+      "xscraper": {
+        "x": 261.2700000000001,
+        "y": 285
+      },
+      "llm": {
+        "x": 247.40000000000006,
+        "y": 537
+      }
+    }
+  }
+}

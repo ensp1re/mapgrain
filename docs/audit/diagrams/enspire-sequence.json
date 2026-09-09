@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-enspire-board-get",
+  "revision": 1,
+  "kind": "sequence",
+  "title": "Authed board GET",
+  "theme": "dark",
+  "preset": "comfortable",
+  "layoutHints": {
+    "direction": "down",
+    "pinnedNodeIds": []
+  },
+  "groups": [],
+  "nodes": [
+    {
+      "id": "browser",
+      "kind": "participant",
+      "label": "Browser",
+      "role": "client",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "out",
+          "side": "south"
+        },
+        {
+          "id": "in",
+          "side": "north"
+        }
+      ]
+    },
+    {
+      "id": "route",
+      "kind": "participant",
+      "label": "authedRoute",
+      "role": "gateway",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "north"
+        },
+        {
+          "id": "out",
+          "side": "south"
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "kind": "participant",
+      "label": "auth()",
+      "role": "service",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "north"
+        },
+        {
+          "id": "out",
+          "side": "south"
+        }
+      ]
+    },
+    {
+      "id": "board",
+      "kind": "participant",
+      "label": "board-service",
+      "role": "service",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "north"
+        },
+        {
+          "id": "out",
+          "side": "south"
+        }
+      ]
+    },
+    {
+      "id": "prisma",
+      "kind": "participant",
+      "label": "Prisma",
+      "role": "service",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "north"
+        },
+        {
+          "id": "out",
+          "side": "south"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "m1",
+      "source": {
+        "nodeId": "browser",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "route",
+        "portId": "in"
+      },
+      "type": "message",
+      "direction": "forward",
+      "label": "GET /api/board",
+      "order": 1
+    },
+    {
+      "id": "m2",
+      "source": {
+        "nodeId": "route",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "auth",
+        "portId": "in"
+      },
+      "type": "message",
+      "direction": "forward",
+      "label": "session",
+      "order": 2
+    },
+    {
+      "id": "m3",
+      "source": {
+        "nodeId": "auth",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "route",
+        "portId": "in"
+      },
+      "type": "reply",
+      "direction": "forward",
+      "label": "userId",
+      "order": 3
+    },
+    {
+      "id": "m4",
+      "source": {
+        "nodeId": "route",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "board",
+        "portId": "in"
+      },
+      "type": "message",
+      "direction": "forward",
+      "label": "Zod + list",
+      "order": 4
+    },
+    {
+      "id": "m5",
+      "source": {
+        "nodeId": "board",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "prisma",
+        "portId": "in"
+      },
+      "type": "message",
+      "direction": "forward",
+      "label": "findMany",
+      "order": 5
+    },
+    {
+      "id": "m6",
+      "source": {
+        "nodeId": "prisma",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "board",
+        "portId": "in"
+      },
+      "type": "reply",
+      "direction": "forward",
+      "label": "rows",
+      "order": 6
+    },
+    {
+      "id": "m7",
+      "source": {
+        "nodeId": "board",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "route",
+        "portId": "in"
+      },
+      "type": "reply",
+      "direction": "forward",
+      "label": "cards",
+      "order": 7
+    },
+    {
+      "id": "m8",
+      "source": {
+        "nodeId": "route",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "browser",
+        "portId": "in"
+      },
+      "type": "reply",
+      "direction": "forward",
+      "label": "JSON",
+      "order": 8
+    },
+    {
+      "id": "m9",
+      "source": {
+        "nodeId": "auth",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "route",
+        "portId": "in"
+      },
+      "type": "reply",
+      "direction": "forward",
+      "label": "401",
+      "order": 9
+    }
+  ],
+  "fragments": [
+    {
+      "id": "frag-alt-auth",
+      "kind": "alt",
+      "operands": [
+        {
+          "label": "[session]",
+          "startOrder": 3,
+          "endOrder": 8
+        },
+        {
+          "label": "[unauthorized]",
+          "startOrder": 9,
+          "endOrder": 9
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "id": "happy-path",
+      "kind": "path",
+      "name": "Authorized list",
+      "path": {
+        "from": "browser",
+        "to": "prisma"
+      },
+      "nodeIds": [
+        "browser",
+        "route",
+        "auth",
+        "board",
+        "prisma"
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "list-cards",
+      "name": "List cards",
+      "steps": [
+        {
+          "id": "step-get",
+          "name": "Request",
+          "nodeId": "browser"
+        },
+        {
+          "id": "step-auth",
+          "name": "Authorize",
+          "nodeId": "auth"
+        },
+        {
+          "id": "step-db",
+          "name": "Query",
+          "nodeId": "prisma",
+          "viewId": "happy-path"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-route",
+      "targetKind": "node",
+      "targetId": "route",
+      "state": "observed",
+      "path": "lib/api-route.ts"
+    },
+    {
+      "id": "ev-board",
+      "targetKind": "node",
+      "targetId": "board",
+      "state": "observed",
+      "path": "modules/board/server/board-service.ts"
+    }
+  ],
+  "layout": {
+    "version": 1,
+    "revision": 1,
+    "positions": {
+      "browser": {
+        "x": 0,
+        "y": 0
+      },
+      "route": {
+        "x": 172.42000000000002,
+        "y": 0
+      },
+      "auth": {
+        "x": 344.84000000000003,
+        "y": 0
+      },
+      "board": {
+        "x": 517.26,
+        "y": 0
+      },
+      "prisma": {
+        "x": 696.1,
+        "y": 0
+      }
+    }
+  }
+}

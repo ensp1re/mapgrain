@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F054
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f053 @ f81d43266e21cf71e286e938fc5decdca758c2ab (dirty)
-- Updated: 2026-09-09T20:50:05.086Z
+- Git: docs/audit-enspire-crm @ 78eef36ee86841c51d57d04009e00cc9a9efde01 (dirty)
+- Updated: 2026-09-09T21:23:22.920Z
 
 ### Next action
 
-Open gaps remain. Do not claim live agent runs, Mermaid/draw.io, or hosted sharing.
+Verify F054, open a draft PR with the Enspire CRM audit ledger.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Open gaps remain. Do not claim live agent runs, Mermaid/draw.io, or hosted shari
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/70
-- https://github.com/ensp1re/mapgrain/actions/runs/34403116822
+- none
 
 ## Resume
 

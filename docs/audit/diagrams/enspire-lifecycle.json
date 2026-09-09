@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-enspire-tweet-lifecycle",
+  "revision": 1,
+  "kind": "lifecycle",
+  "title": "Alpha tweet status",
+  "theme": "dark",
+  "preset": "comfortable",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [],
+  "nodes": [
+    {
+      "id": "pending",
+      "kind": "state",
+      "label": "pending",
+      "groupId": null,
+      "marker": "initial",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "processing",
+      "kind": "state",
+      "label": "processing",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "analyzed",
+      "kind": "state",
+      "label": "analyzed",
+      "groupId": null,
+      "marker": "final",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "failed",
+      "kind": "state",
+      "label": "failed",
+      "groupId": null,
+      "marker": "final",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "skipped",
+      "kind": "state",
+      "label": "skipped",
+      "groupId": null,
+      "marker": "final",
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "t-claim",
+      "source": {
+        "nodeId": "pending",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "processing",
+        "portId": "in"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "drain claims",
+      "guard": "drain enabled"
+    },
+    {
+      "id": "t-ok",
+      "source": {
+        "nodeId": "processing",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "analyzed",
+        "portId": "in"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "ok"
+    },
+    {
+      "id": "t-fail",
+      "source": {
+        "nodeId": "processing",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "failed",
+        "portId": "in"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "provider error"
+    },
+    {
+      "id": "t-skip",
+      "source": {
+        "nodeId": "pending",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "skipped",
+        "portId": "in"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "policy skip"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "Tweet status"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-enum",
+      "targetKind": "node",
+      "targetId": "pending",
+      "state": "observed",
+      "path": "prisma/schema.prisma",
+      "location": "enum AlphaTweetStatus"
+    }
+  ],
+  "layout": {
+    "version": 1,
+    "revision": 1,
+    "positions": {
+      "pending": {
+        "x": 12,
+        "y": 33.33333333333333
+      },
+      "processing": {
+        "x": 173,
+        "y": 22.666666666666664
+      },
+      "analyzed": {
+        "x": 352.32,
+        "y": 12
+      },
+      "failed": {
+        "x": 352.32,
+        "y": 148
+      },
+      "skipped": {
+        "x": 173,
+        "y": 158.66666666666666
+      }
+    }
+  }
+}

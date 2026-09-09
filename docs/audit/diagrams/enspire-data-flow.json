@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-enspire-alpha-flow",
+  "revision": 1,
+  "kind": "data-flow",
+  "title": "Alpha Terminal ingest",
+  "theme": "dark",
+  "preset": "comfortable",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [],
+  "nodes": [
+    {
+      "id": "owner",
+      "kind": "entity",
+      "label": "Owner",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "out",
+          "side": "east"
+        },
+        {
+          "id": "in",
+          "side": "west"
+        }
+      ]
+    },
+    {
+      "id": "x",
+      "kind": "external",
+      "label": "X / Twitter",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "fetch",
+      "kind": "process",
+      "label": "Fetch jobs",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "filter",
+      "kind": "process",
+      "label": "Local spam filter",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "pool",
+      "kind": "datastore",
+      "label": "Pending pool",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "drain",
+      "kind": "process",
+      "label": "AI drain",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "llm",
+      "kind": "external",
+      "label": "LLM",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "feed",
+      "kind": "datastore",
+      "label": "Analysed tweets",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    },
+    {
+      "id": "brief",
+      "kind": "process",
+      "label": "Period brief",
+      "groupId": null,
+      "ports": [
+        {
+          "id": "in",
+          "side": "west"
+        },
+        {
+          "id": "out",
+          "side": "east"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "d-owner-fetch",
+      "source": {
+        "nodeId": "owner",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "fetch",
+        "portId": "in"
+      },
+      "type": "data",
+      "direction": "forward",
+      "label": "sources"
+    },
+    {
+      "id": "d-x-fetch",
+      "source": {
+        "nodeId": "x",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "fetch",
+        "portId": "in"
+      },
+      "type": "data",
+      "direction": "forward",
+      "label": "tweets"
+    },
+    {
+      "id": "d-fetch-filter",
+      "source": {
+        "nodeId": "fetch",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "filter",
+        "portId": "in"
+      },
+      "type": "data",
+      "direction": "forward"
+    },
+    {
+      "id": "d-filter-pool",
+      "source": {
+        "nodeId": "filter",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "pool",
+        "portId": "in"
+      },
+      "type": "writes",
+      "direction": "forward",
+      "label": "pending"
+    },
+    {
+      "id": "d-pool-drain",
+      "source": {
+        "nodeId": "pool",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "drain",
+        "portId": "in"
+      },
+      "type": "reads",
+      "direction": "forward"
+    },
+    {
+      "id": "d-drain-llm",
+      "source": {
+        "nodeId": "drain",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "llm",
+        "portId": "in"
+      },
+      "type": "data",
+      "direction": "forward",
+      "label": "batch"
+    },
+    {
+      "id": "d-llm-drain",
+      "source": {
+        "nodeId": "llm",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "drain",
+        "portId": "in"
+      },
+      "type": "data",
+      "direction": "forward",
+      "label": "verdict"
+    },
+    {
+      "id": "d-drain-feed",
+      "source": {
+        "nodeId": "drain",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "feed",
+        "portId": "in"
+      },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "d-feed-brief",
+      "source": {
+        "nodeId": "feed",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "brief",
+        "portId": "in"
+      },
+      "type": "reads",
+      "direction": "forward"
+    },
+    {
+      "id": "d-brief-owner",
+      "source": {
+        "nodeId": "brief",
+        "portId": "out"
+      },
+      "target": {
+        "nodeId": "owner",
+        "portId": "in"
+      },
+      "type": "data",
+      "direction": "forward",
+      "label": "English brief"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "Alpha ingest"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-pipe",
+      "targetKind": "node",
+      "targetId": "drain",
+      "state": "observed",
+      "path": "modules/alpha/server/alpha-pipeline.ts"
+    },
+    {
+      "id": "ev-status",
+      "targetKind": "node",
+      "targetId": "pool",
+      "state": "observed",
+      "path": "prisma/schema.prisma",
+      "note": "AlphaTweetStatus pending|processing|analyzed|failed|skipped."
+    }
+  ],
+  "layout": {
+    "version": 1,
+    "revision": 1,
+    "positions": {
+      "owner": {
+        "x": 773.0300000000001,
+        "y": 148
+      },
+      "x": {
+        "x": 765.1100000000001,
+        "y": 12
+      },
+      "fetch": {
+        "x": 946.2400000000001,
+        "y": 22.666666666666664
+      },
+      "filter": {
+        "x": 1120.66,
+        "y": 22.666666666666664
+      },
+      "pool": {
+        "x": 1338.9,
+        "y": 33.33333333333333
+      },
+      "drain": {
+        "x": 193.13,
+        "y": 158.66666666666666
+      },
+      "llm": {
+        "x": 12,
+        "y": 158.66666666666666
+      },
+      "feed": {
+        "x": 367.55,
+        "y": 148
+      },
+      "brief": {
+        "x": 579.9100000000001,
+        "y": 148
+      }
+    }
+  }
+}

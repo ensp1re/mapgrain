@@ -1,5 +1,52 @@
 {
   "schemaVersion": 1,
-  "nextId": 54,
-  "tasks": []
+  "nextId": 55,
+  "tasks": [
+    {
+      "id": "F054",
+      "behavior": "Human-product audit of Mapgrain 0.2.1 against Enspire CRM; write a findings ledger with screenshots.",
+      "acceptance": [
+        "docs/audit/2026-09-10-enspire-crm.md records every shipped diagram kind exercised on Enspire CRM with repro steps and screenshot paths.",
+        "docs/audit/diagrams/ contains one validating JSON document per kind (architecture, workflow, sequence, data-flow, lifecycle) sourced from CRM files without secrets.",
+        "Findings distinguish bugs from competitive gaps; deferred features are not claimed as shipped."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788989002999-c764ae",
+        "fingerprintBefore": "6e2126b9cd20965e22a49169ec628eee6b4ea26334e39c641acab46fb68ba12d",
+        "fingerprintAfter": "6e2126b9cd20965e22a49169ec628eee6b4ea26334e39c641acab46fb68ba12d",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-09T21:23:44.901Z"
+      },
+      "delivery": null
+    }
+  ]
 }
