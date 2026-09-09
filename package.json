@@ -12,6 +12,7 @@
   "scripts": {
     "harness": "node --experimental-strip-types scripts/cli.ts",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "dev": "pnpm --filter @mapgrain/editor dev",
     "mapgrain": "node --experimental-strip-types packages/cli/src/cli.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json && pnpm -r --if-present typecheck",
