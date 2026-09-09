@@ -1,15 +1,16 @@
 {
   "schemaVersion": 1,
-  "taskId": "F044",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/v4-export-review",
-    "revision": "6238ca1",
+    "branch": "chore/stamp-f044",
+    "revision": "6009eafd54a230d4be520580c559b24499a1bf06",
     "dirty": true
   },
   "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/49"
+    "https://github.com/ensp1re/mapgrain/pull/51",
+    "https://github.com/ensp1re/mapgrain/actions/runs/34377888006"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.1.0 (architecture/workflow). Source CLI is 0.2.0 and is not on npm yet.",
@@ -23,6 +24,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "F044 is locally verified. Push a draft PR against main.",
-  "updatedAt": "2026-09-09T16:32:00.000Z"
+  "nextAction": "No live product tasks. Next id F045.",
+  "updatedAt": "2026-09-09T16:40:00.000Z"
 }
