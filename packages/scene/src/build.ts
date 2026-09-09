@@ -6,12 +6,13 @@ import {
   type DiagramDocument,
   type PortSide,
 } from "@mapgrain/document";
-import { KIND_FONT_SIZE, KIND_LINE_HEIGHT } from "./constants/metrics.ts";
-import { PARALLEL_EDGE_OFFSET } from "./constants/metrics.ts";
+import { ICON_GAP, KIND_TITLE_GAP, PARALLEL_EDGE_OFFSET } from "./constants/metrics.ts";
 import { edgeCaption } from "./caption.ts";
 import { expandTop, inflate, midpoint, normalize, unionRects } from "./geometry.ts";
+import { iconSizeFor, kindDisplayText, kindFontFor } from "./kind.ts";
 import { placeEdgeLabel } from "./routes.ts";
 import { defaultSceneOptions } from "./options.ts";
+import { presentationFromOptions } from "./presentation.ts";
 import { presetOverrides } from "./presets.ts";
 import { isSequenceDocument, sequencePositions } from "./sequence.ts";
 import {
@@ -61,11 +62,18 @@ function sequenceMessagePoints(
 function nodeSize(
   label: { width: number; height: number },
   kind: { width: number; height: number },
+  iconSize: number,
   options: SceneOptions,
 ): { width: number; height: number } {
+  const kindRow = Math.max(iconSize, kind.height);
+  const headerWidth = iconSize + ICON_GAP + kind.width;
+  const contentWidth = Math.max(label.width, headerWidth);
   return {
-    width: Math.max(options.minNodeWidth, Math.max(label.width, kind.width) + options.padding.x * 2),
-    height: Math.max(options.minNodeHeight, label.height + kind.height + options.padding.y * 2),
+    width: Math.max(options.minNodeWidth, contentWidth + options.padding.x * 2),
+    height: Math.max(
+      options.minNodeHeight,
+      kindRow + KIND_TITLE_GAP + label.height + options.padding.y * 2,
+    ),
   };
 }
 
@@ -213,12 +221,21 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
 
   const sizes = new Map<string, { width: number; height: number }>();
   const labels = new Map<string, ReturnType<typeof measureText>>();
-  const kindFont = { ...options.font, size: KIND_FONT_SIZE, lineHeight: KIND_LINE_HEIGHT };
+  const kinds = new Map<string, ReturnType<typeof measureText>>();
+  const kindFont = kindFontFor(options.font);
+  const iconSize = iconSizeFor(options.font);
+  const presentation = presentationFromOptions(options);
   for (const node of document.nodes) {
     const label = measureText(node.label, options.font, options.maxLabelWidth, options.measurer);
-    const kind = measureText(node.kind, kindFont, options.maxLabelWidth, options.measurer);
+    const kind = measureText(
+      kindDisplayText(node.kind),
+      kindFont,
+      options.maxLabelWidth,
+      options.measurer,
+    );
     labels.set(node.id, label);
-    sizes.set(node.id, nodeSize(label, kind, options));
+    kinds.set(node.id, kind);
+    sizes.set(node.id, nodeSize(label, kind, iconSize, options));
   }
 
   const positions = isSequenceDocument(document)
@@ -232,14 +249,19 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     const origin = positions.get(node.id) ?? { x: 0, y: 0 };
     const rect = { x: origin.x, y: origin.y, width: size.width, height: size.height };
     const label = labels.get(node.id) ?? measureText(node.label, options.font, options.maxLabelWidth, options.measurer);
+    const kindLabel =
+      kinds.get(node.id) ??
+      measureText(kindDisplayText(node.kind), kindFont, options.maxLabelWidth, options.measurer);
     return {
       id: node.id,
       kind: node.kind,
+      kindLabel,
       label,
       rect,
       groupId: node.groupId,
       marker: node.marker,
       role: node.role,
+      iconSize,
       ports: placePortsOnRect(node.id, rect, node.ports),
     };
   });
@@ -338,6 +360,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     edges,
     groups,
     lifelines,
+    presentation,
   };
   return { ok: true, scene };
 }

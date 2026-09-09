@@ -70,6 +70,20 @@ function fit() {
   y = (stage.clientHeight - size.h * scale) / 2;
   apply();
 }
+function focusRead() {
+  if (focusId) {
+    scale = Math.max(12 / 14, scale);
+    focusNode(focusId);
+    return;
+  }
+  const size = diagramSize();
+  const availW = Math.max(1, stage.clientWidth - 2 * PAD);
+  const availH = Math.max(1, stage.clientHeight - 2 * PAD);
+  scale = clamp(Math.max(12 / 14, Math.min(availW / size.w, availH / size.h)));
+  x = (stage.clientWidth - size.w * scale) / 2;
+  y = (stage.clientHeight - size.h * scale) / 2;
+  apply();
+}
 function visible() {
   const size = diagramSize();
   return x + size.w * scale > 0 && y + size.h * scale > 0 && x < stage.clientWidth && y < stage.clientHeight;
@@ -149,7 +163,7 @@ function fillSelect(select, selected) {
   select.innerHTML = "";
   const blank = document.createElement("option");
   blank.value = "";
-  blank.textContent = "Select node";
+  blank.textContent = select.getAttribute("data-empty") || "Choose node";
   select.appendChild(blank);
   for (const node of payload.nodes || []) {
     const opt = document.createElement("option");
@@ -247,6 +261,14 @@ function resetView() {
 }
 
 document.querySelector("[data-act=fit]").onclick = fit;
+const focusBtn = document.querySelector("[data-act=focus]");
+if (focusBtn) focusBtn.onclick = focusRead;
+const moreBtn = document.querySelector("[data-act=more]");
+const advanced = document.querySelector("[data-advanced]");
+if (moreBtn && advanced) moreBtn.onclick = () => {
+  const open = advanced.classList.toggle("is-open");
+  moreBtn.setAttribute("aria-expanded", String(open));
+};
 document.querySelector("[data-act=zoom-in]").onclick = () => { scale = clamp(scale * 1.15); apply(); };
 document.querySelector("[data-act=zoom-out]").onclick = () => { scale = clamp(scale / 1.15); apply(); };
 document.querySelector("[data-act=theme]").onclick = () => {
@@ -282,7 +304,7 @@ document.querySelector("[data-act=route]").onclick = applyRoute;
 if (viewSel) {
   const blank = document.createElement("option");
   blank.value = "";
-  blank.textContent = "All";
+  blank.textContent = viewSel.getAttribute("data-empty") || "All views";
   viewSel.appendChild(blank);
   for (const view of payload.views || []) {
     const opt = document.createElement("option");
@@ -299,7 +321,7 @@ const storyById = new Map(stories.map((item) => [item.id, item]));
 if (storySel) {
   const blank = document.createElement("option");
   blank.value = "";
-  blank.textContent = "";
+  blank.textContent = storySel.getAttribute("data-empty") || "Choose story";
   storySel.appendChild(blank);
   for (const story of stories) {
     const opt = document.createElement("option");
@@ -312,7 +334,7 @@ const roles = [...new Set((payload.nodes || []).map((n) => n.role).filter(Boolea
 if (lensSel) {
   const blank = document.createElement("option");
   blank.value = "";
-  blank.textContent = "";
+  blank.textContent = lensSel.getAttribute("data-empty") || "All roles";
   lensSel.appendChild(blank);
   for (const role of roles) {
     const opt = document.createElement("option");

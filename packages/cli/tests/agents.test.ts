@@ -13,6 +13,7 @@ import {
   SHARED_PROJECT_SKILL_PATH,
   SKILL_NAME,
   SKILLS_CLI_VERSION,
+  SOURCE_CLI_VERSION,
 } from "../src/constants/agents.ts";
 import { EXIT_CODE } from "../src/constants/cli.ts";
 
@@ -52,6 +53,7 @@ test("priority installer ids and paths match skills 1.5.25 and the matrix", asyn
   const matrix = await readFile(agentsDoc, "utf8");
   assert.equal(SKILLS_CLI_VERSION, "1.5.25");
   assert.equal(PUBLISHED_CLI, "mapgrain@0.1.0");
+  assert.equal(SOURCE_CLI_VERSION, "0.2.0");
   assert.equal(SHARED_PROJECT_SKILL_PATH, ".agents/skills/mapgrain");
   assert.equal(PRIORITY_AGENTS.length, 8);
   for (const agent of PRIORITY_AGENTS) {

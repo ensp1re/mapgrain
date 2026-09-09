@@ -6,6 +6,7 @@ export interface FontSpec {
   size: number;
   weight: number;
   lineHeight: number;
+  letterSpacingEm?: number;
 }
 
 export interface TextMeasurer {

@@ -1,22 +1,40 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { COMMANDS, type CommandId } from "../constants/commands.ts";
+import type { FlowNodeDraft } from "../types/flow.ts";
 import { useFocusTrap } from "./focusTrap.ts";
 
 interface CommandMenuProps {
   open: boolean;
+  nodes: FlowNodeDraft[];
   onClose: () => void;
   onRun: (id: CommandId) => void;
+  onFocusNode: (id: string) => void;
 }
 
-export function CommandMenu({ open, onClose, onRun }: CommandMenuProps) {
+export function CommandMenu({ open, nodes, onClose, onRun, onFocusNode }: CommandMenuProps) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const dialogRef = useRef<HTMLDivElement>(null);
   useFocusTrap(dialogRef, open, onClose);
   const items = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return COMMANDS.filter((item) => item.label.toLowerCase().includes(needle));
-  }, [query]);
+    const commands = COMMANDS.filter((item) => item.label.toLowerCase().includes(needle)).map(
+      (item) => ({ kind: "command" as const, id: item.id, label: item.label, shortcut: item.shortcut }),
+    );
+    const components = nodes
+      .filter((node) => {
+        if (!needle) return false;
+        const hay = `${node.data.label} ${node.data.kind ?? ""} ${node.data.kindLabel ?? ""}`.toLowerCase();
+        return hay.includes(needle);
+      })
+      .map((node) => ({
+        kind: "node" as const,
+        id: node.id,
+        label: node.data.label,
+        shortcut: node.data.kindLabel ?? node.data.kind ?? "",
+      }));
+    return [...components, ...commands];
+  }, [nodes, query]);
 
   useEffect(() => {
     if (open) {
@@ -39,7 +57,7 @@ export function CommandMenu({ open, onClose, onRun }: CommandMenuProps) {
       >
         <input
           autoFocus
-          placeholder="Find component, arrange, export…"
+          placeholder="Find component or command"
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);
@@ -56,23 +74,26 @@ export function CommandMenu({ open, onClose, onRun }: CommandMenuProps) {
               setActive((index) => Math.max(index - 1, 0));
             }
             if (event.key === "Enter" && current) {
-              onRun(current.id);
+              if (current.kind === "node") onFocusNode(current.id);
+              else onRun(current.id);
               onClose();
             }
           }}
         />
+        {items.length === 0 ? <p className="cmd-empty">No matching components or commands.</p> : null}
         {items.map((item, index) => (
           <button
-            key={item.id}
+            key={`${item.kind}:${item.id}`}
             type="button"
             className={index === active ? "cmd-item is-active" : "cmd-item"}
             onMouseEnter={() => setActive(index)}
             onClick={() => {
-              onRun(item.id);
+              if (item.kind === "node") onFocusNode(item.id);
+              else onRun(item.id);
               onClose();
             }}
           >
-            <span>{item.label}</span>
+            <span>{item.kind === "node" ? item.label : item.label}</span>
             {item.shortcut ? <kbd>{item.shortcut}</kbd> : null}
           </button>
         ))}

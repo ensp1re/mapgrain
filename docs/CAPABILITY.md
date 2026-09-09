@@ -5,17 +5,17 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Capability | Status | Tested | Notes |
 | --- | --- | --- | --- |
 | Architecture diagrams (typed nodes, directed edges, nested groups, stable IDs) | implemented | yes | Fixtures cover nested groups, parallel edges, cycles, long labels |
-| Workflow / sequence / data-flow / lifecycle modes | implemented | yes | F040: mode-specific node/edge rules, fixtures, editor palette, CLI validate/export/view |
+| Workflow / sequence / data-flow / lifecycle modes | partial | yes | Editor/CLI in this checkout; npm `mapgrain@0.1.0` does not validate sequence/data-flow/lifecycle |
 | Blank / open / three examples / agent setup on start | implemented | partial | Start surface exists; agent setup is copy, not a picker with troubleshooting |
 | Direct edit, connect, arrange preview, undo, export | implemented | yes | F039: production blank→edit→export→reimport journey; selection p95 through next paint |
 | Save status, last-active reopen, Studio conflict recovery | implemented | yes | F033: last-active id, last-opened vs edited times, Saved after durable write, structured Studio errors |
 | Offline first session (SW + worker + export) | implemented | yes | F034: versioned asset manifest, atomic precache, API/session excluded; production disconnect journey |
-| Responsive shell 1440→390 | implemented | yes | F035: compact Add, disabled Chat, exclusive narrow panels, no page-level horizontal scroll |
-| Readable default labels after fit | implemented | yes | F036: default fit floors zoom so 14px labels stay ≥12px; zoom % visible; dialogs trap focus |
+| Responsive shell 1440→390 | partial | yes | Content-driven header collapse and unclipped overlays in F043; remaining widths still need production hit-tests |
+| Readable default labels after fit | partial | yes | Fit all shows the whole graph; Focus keeps labels readable. Default open uses Fit all |
 | Portable HTML viewer: search, fit, theme, pan, zoom | implemented | yes | F037: fit, search-to-focus, theme, pan, zoom, keyboard, fullscreen; no remote assets |
 | Directed reach, route, named views, stories, lenses | implemented | yes | F037 reach/route/views; F042 stories and role lenses in exported HTML |
-| CLI validate/layout/view/export/doctor/studio | implemented | yes | `mapgrain@0.1.0` on npm; internals bundled |
-| Agent skill install + live tasks across agents | partial | partial | F038: SKILL.md pins `npx mapgrain@0.1.0`; install paths tested; live agent tasks remain untested |
+| CLI validate/layout/view/export/doctor/studio | partial | yes | npm `mapgrain@0.1.0` is last published; source CLI is `0.2.0` and is not on npm yet |
+| Agent skill install + live tasks across agents | partial | partial | Install paths tested; live agent tasks untested; skill must not send sequence fixtures to `npx mapgrain@0.1.0` |
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
 | Geometry diagnostics, snapshot compare, watch/reload | implemented | yes | Diagnose, compare, and `mapgrain watch` last-good reload |
 | Visual presets, share-card, video, localization | implemented | yes | Presets change scene metrics; card PNG; story mp4; en/uk viewer chrome |

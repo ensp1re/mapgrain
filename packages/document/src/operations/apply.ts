@@ -138,6 +138,65 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
       edge.direction = operation.direction;
       return commit(next, inverse, document);
     }
+    case OPERATION_KIND.SET_EDGE_ORDER: {
+      const edge = findEdge(next, operation.edgeId);
+      if (!edge) return fail(document, `unknown edge ${operation.edgeId}`, "/edges", operation.edgeId);
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_EDGE_ORDER,
+        edgeId: edge.id,
+        order: edge.order ?? null,
+      };
+      if (operation.order === null) delete edge.order;
+      else edge.order = operation.order;
+      return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_EDGE_GUARD: {
+      const edge = findEdge(next, operation.edgeId);
+      if (!edge) return fail(document, `unknown edge ${operation.edgeId}`, "/edges", operation.edgeId);
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_EDGE_GUARD,
+        edgeId: edge.id,
+        guard: edge.guard ?? "",
+      };
+      if (operation.guard) edge.guard = operation.guard;
+      else delete edge.guard;
+      return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_EDGE_OUTCOME: {
+      const edge = findEdge(next, operation.edgeId);
+      if (!edge) return fail(document, `unknown edge ${operation.edgeId}`, "/edges", operation.edgeId);
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_EDGE_OUTCOME,
+        edgeId: edge.id,
+        outcome: edge.outcome ?? "",
+      };
+      if (operation.outcome) edge.outcome = operation.outcome;
+      else delete edge.outcome;
+      return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_NODE_KIND: {
+      const node = findNode(next, operation.nodeId);
+      if (!node) return fail(document, `unknown node ${operation.nodeId}`, "/nodes", operation.nodeId);
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_NODE_KIND,
+        nodeId: node.id,
+        nodeKind: node.kind,
+      };
+      node.kind = operation.nodeKind;
+      return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_NODE_MARKER: {
+      const node = findNode(next, operation.nodeId);
+      if (!node) return fail(document, `unknown node ${operation.nodeId}`, "/nodes", operation.nodeId);
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_NODE_MARKER,
+        nodeId: node.id,
+        marker: node.marker ?? null,
+      };
+      if (operation.marker) node.marker = operation.marker;
+      else delete node.marker;
+      return commit(next, inverse, document);
+    }
     case OPERATION_KIND.ADD_EDGE: {
       next.edges.push({
         id: operation.id,

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Background,
-  Controls,
   MarkerType,
   ReactFlow,
   ReactFlowProvider,
@@ -17,6 +16,7 @@ import {
   DOCUMENT_KIND,
   EDGE_DIRECTION,
   EDGE_TYPE,
+  EDGES_FOR_KIND,
   NODE_KIND,
   defaultEdgeType,
   OPERATION_KIND,
@@ -27,13 +27,14 @@ import {
   portablePositions,
   validateDocument,
   type DiagramDocument,
+  type DocumentKind,
   type NodeKind,
   type Operation,
   type Theme,
 } from "@mapgrain/document";
 import { LAYOUT_STATUS } from "@mapgrain/layout/run";
 import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
-import { buildScene } from "@mapgrain/scene";
+import { buildScene, localOverlapRepair, overlappingIds, presentationCssVars } from "@mapgrain/scene";
 import { renderView } from "@mapgrain/viewer";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json" with { type: "json" };
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
@@ -41,8 +42,8 @@ import { EXPORT_CHOICE } from "./constants/export.ts";
 import { rasterSvgToPng } from "./export/png.ts";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { SHELL_LAYOUT } from "./constants/layout.ts";
-import { USER_MAX_ZOOM, USER_MIN_ZOOM, readableFitOptions } from "./constants/diagram.ts";
-import { ZoomReadout } from "./chrome/ZoomReadout.tsx";
+import { USER_MAX_ZOOM, USER_MIN_ZOOM, fitAllOptions, readableFitOptions } from "./constants/diagram.ts";
+import { ViewportBar } from "./chrome/ViewportBar.tsx";
 import { shellLayoutForWidth, useViewportWidth } from "./chrome/viewport.ts";
 import { StartSurface } from "./chrome/StartSurface.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
@@ -62,6 +63,7 @@ import { setOfflineUpdateAllowed } from "./offline/register.ts";
 import { createSaveSession, type SaveSession } from "./persist/session.ts";
 import { ComponentNode } from "./diagram/ComponentNode.tsx";
 import { GroupNode } from "./diagram/GroupNode.tsx";
+import { LifelineLayer } from "./diagram/LifelineLayer.tsx";
 import { RelationEdge } from "./diagram/RelationEdge.tsx";
 import { sceneToFlow } from "./diagram/sceneToFlow.ts";
 import { alignPositions } from "./geometry/align.ts";
@@ -167,6 +169,16 @@ function isNoOp(document: DiagramDocument, operation: Operation): boolean {
       return document.nodes.find((node) => node.id === operation.nodeId)?.groupId === operation.groupId;
     case OPERATION_KIND.SET_NODE_PINNED:
       return document.layoutHints.pinnedNodeIds.includes(operation.nodeId) === operation.pinned;
+    case OPERATION_KIND.SET_NODE_KIND:
+      return document.nodes.find((node) => node.id === operation.nodeId)?.kind === operation.nodeKind;
+    case OPERATION_KIND.SET_NODE_MARKER:
+      return (document.nodes.find((node) => node.id === operation.nodeId)?.marker ?? null) === operation.marker;
+    case OPERATION_KIND.SET_EDGE_ORDER:
+      return (document.edges.find((edge) => edge.id === operation.edgeId)?.order ?? null) === operation.order;
+    case OPERATION_KIND.SET_EDGE_GUARD:
+      return (document.edges.find((edge) => edge.id === operation.edgeId)?.guard ?? "") === operation.guard;
+    case OPERATION_KIND.SET_EDGE_OUTCOME:
+      return (document.edges.find((edge) => edge.id === operation.edgeId)?.outcome ?? "") === operation.outcome;
     case OPERATION_KIND.SET_LAYOUT:
       return JSON.stringify(portablePositions(document)) === JSON.stringify(operation.positions);
     case OPERATION_KIND.SET_THEME:
@@ -204,6 +216,7 @@ function toFlow(
           } satisfies GroupNodeData)
         : ({
             kind: node.data.kind ?? "service",
+            kindLabel: node.data.kindLabel ?? (node.data.kind ?? "service").toUpperCase(),
             label: node.data.label,
             lines: node.data.lines,
             ports: node.data.ports,
@@ -238,6 +251,11 @@ function Specimen() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
+  const [collision, setCollision] = useState<{
+    nodeId: string;
+    neighborIds: string[];
+    positions: PositionMap;
+  } | null>(null);
   const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
   const historyRef = useRef(history);
   historyRef.current = history;
@@ -364,7 +382,7 @@ function Specimen() {
     [documentModel, displayPositions],
   );
   const flow = useMemo(() => {
-    if (!scene?.ok) return { nodes: [] as FlowNodeDraft[], edges: [] };
+    if (!scene?.ok) return { nodes: [] as FlowNodeDraft[], edges: [], lifelines: [] };
     return sceneToFlow(scene.scene);
   }, [scene]);
 
@@ -401,6 +419,7 @@ function Specimen() {
           points: edge.points,
           caption: edge.caption,
           labelAnchor: edge.labelAnchor,
+          preserveGeometry: edge.preserveGeometry,
         },
       };
     });
@@ -449,6 +468,28 @@ function Specimen() {
         : applyPortableLayout(result.document, positions);
     setArrange({ status: "idle" });
     setHistory((stack) => pushHistory(stack, { document, positions }));
+    if (operation.kind === OPERATION_KIND.SET_NODE_LABEL) {
+      const nextScene = buildScene(document, { positions });
+      if (nextScene.ok) {
+        const neighborIds = overlappingIds(nextScene.scene.nodes, operation.nodeId);
+        if (neighborIds.length > 0) {
+          const repair = localOverlapRepair(
+            nextScene.scene.nodes,
+            operation.nodeId,
+            document.layoutHints.pinnedNodeIds,
+          );
+          setCollision(
+            repair
+              ? { nodeId: operation.nodeId, neighborIds, positions: repair }
+              : { nodeId: operation.nodeId, neighborIds, positions },
+          );
+        } else {
+          setCollision(null);
+        }
+      }
+    } else {
+      setCollision(null);
+    }
     return true;
   }, [presenting]);
 
@@ -668,6 +709,9 @@ function Specimen() {
     if (!pending) return;
     const current = historyRef.current.present;
     const id = nextPrefixedId("e", usedIds(current.document));
+    const orders = current.document.edges
+      .map((edge) => edge.order)
+      .filter((value): value is number => typeof value === "number");
     const ok = applyOp({
       kind: OPERATION_KIND.ADD_EDGE,
       id,
@@ -682,6 +726,9 @@ function Specimen() {
       type: draft.type,
       direction: draft.direction,
       ...(draft.label ? { label: draft.label } : {}),
+      ...(current.document.kind === DOCUMENT_KIND.SEQUENCE
+        ? { order: (orders.length > 0 ? Math.max(...orders) : 0) + 1 }
+        : {}),
     });
     if (ok) setSelection({ nodeIds: [], edgeIds: [id] });
     setPending(null);
@@ -753,8 +800,20 @@ function Specimen() {
       if (id === COMMAND_ID.UNDO) setHistory((stack) => undoHistory(stack));
       if (id === COMMAND_ID.REDO) setHistory((stack) => redoHistory(stack));
       if (id === COMMAND_ID.PRESENT) setPresenting((value) => !value);
-      if (id === COMMAND_ID.FIT) void fitView(readableFitOptions());
-      if (id === COMMAND_ID.EXPORT_SVG || id === COMMAND_ID.EXPORT_JSON) setExportOpen(true);
+      if (id === COMMAND_ID.FIT || id === COMMAND_ID.FIT_ALL) void fitView(fitAllOptions());
+      if (id === COMMAND_ID.FOCUS) {
+        const selected = getNodes().filter((node) => selection.nodeIds.includes(node.id));
+        void fitView(
+          selected.length > 0 ? { ...readableFitOptions(), nodes: selected } : readableFitOptions(),
+        );
+      }
+      if (id === COMMAND_ID.TOGGLE_INSPECTOR) {
+        if (shellLayout === SHELL_LAYOUT.SPLIT) setSelection(emptySelection);
+        else setNarrowPanel((value) => (value === "inspector" ? "none" : "inspector"));
+      }
+      if (id === COMMAND_ID.EXPORT || id === COMMAND_ID.EXPORT_SVG || id === COMMAND_ID.EXPORT_JSON) {
+        setExportOpen(true);
+      }
       if (id === COMMAND_ID.DELETE) deleteSelection();
       if (id === COMMAND_ID.DUPLICATE) duplicateSelection();
       if (id === COMMAND_ID.ALIGN_LEFT) alignSelection(ALIGN_KIND.LEFT);
@@ -765,7 +824,7 @@ function Specimen() {
       if (id === COMMAND_ID.CONNECT) connectSelected();
       if (id === COMMAND_ID.NEW) flushThen(() => setSurface("start"));
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, flushThen, presenting, shellLayout, startArrange, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, flushThen, getNodes, presenting, selection.nodeIds, shellLayout, startArrange, theme],
   );
 
   useEffect(() => {
@@ -837,7 +896,10 @@ function Specimen() {
   const onConnect = useCallback((connection: Connection) => {
     if (presenting) return;
     if (!connection.source || !connection.target) return;
-    if (connection.source === connection.target) {
+    if (
+      connection.source === connection.target &&
+      historyRef.current.present.document.kind !== DOCUMENT_KIND.SEQUENCE
+    ) {
       setEditError("Self-loops are not supported. Connect two different nodes.");
       return;
     }
@@ -859,9 +921,9 @@ function Specimen() {
         <StartSurface
           importError={importError}
           recents={recents}
-          onNewBlank={() => {
+          onNewBlank={(kind?: DocumentKind) => {
             flushThen(() => {
-              const document = blankDocument();
+              const document = blankDocument(kind);
               openSnapshot({ document, positions: {} });
             });
           }}
@@ -980,6 +1042,7 @@ function Specimen() {
         onExport={() => setExportOpen(true)}
         onCommand={() => setCommandsOpen(true)}
         onToggleOutline={() => runCommand(COMMAND_ID.TOGGLE_OUTLINE)}
+        onToggleDetails={() => runCommand(COMMAND_ID.TOGGLE_INSPECTOR)}
       />
       <div className={workspaceClass}>
         {presenting || !showOutline ? null : (
@@ -1006,7 +1069,10 @@ function Specimen() {
             }
           />
         )}
-        <div className={arrange.status === "preview" ? "canvas is-previewing" : "canvas"}>
+        <div
+          className={arrange.status === "preview" ? "canvas is-previewing" : "canvas"}
+          style={presentationCssVars(scene.scene.presentation)}
+        >
           <ReactFlow
             nodes={nodes}
             edges={rfEdges}
@@ -1039,7 +1105,7 @@ function Specimen() {
               });
             }}
             onNodeMouseLeave={() => setTooltip(null)}
-            onInit={(instance) => void instance.fitView(readableFitOptions())}
+            onInit={(instance) => void instance.fitView(fitAllOptions())}
             deleteKeyCode={null}
             nodeDragThreshold={NODE_DRAG_THRESHOLD}
             minZoom={USER_MIN_ZOOM}
@@ -1047,9 +1113,35 @@ function Specimen() {
             proOptions={{ hideAttribution: true }}
           >
             <Background gap={16} size={1} />
-            {presenting ? null : <Controls showInteractive={false} />}
-            <ZoomReadout />
+            <LifelineLayer lifelines={flow.lifelines} />
+            {presenting ? null : (
+              <ViewportBar
+                canFocus={selection.nodeIds.length > 0}
+                onFitAll={() => runCommand(COMMAND_ID.FIT_ALL)}
+                onFocus={() => runCommand(COMMAND_ID.FOCUS)}
+              />
+            )}
           </ReactFlow>
+          {selectedNode ? (
+            <div className="selection-bar">
+              {selectedNode.data.label} selected · Enter to edit
+            </div>
+          ) : null}
+          {shellLayout === SHELL_LAYOUT.OVERLAY && !presenting ? (
+            <div className="phone-controls">
+              <button type="button" className="text-btn" onClick={() => runCommand(COMMAND_ID.TOGGLE_OUTLINE)}>
+                Outline
+              </button>
+              <button
+                type="button"
+                className="text-btn"
+                onClick={() => runCommand(COMMAND_ID.TOGGLE_INSPECTOR)}
+                disabled={!inspectorWanted}
+              >
+                Details
+              </button>
+            </div>
+          ) : null}
           {tooltip ? (
             <div className="tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip">
               {tooltip.text}
@@ -1081,6 +1173,8 @@ function Specimen() {
           {pending ? (
             <ConnectDialog
               pending={pending}
+              documentKind={documentModel.kind}
+              edgeTypes={EDGES_FOR_KIND[documentModel.kind]}
               onConfirm={confirmConnection}
               onCancel={() => setPending(null)}
             />
@@ -1092,20 +1186,42 @@ function Specimen() {
             node={selectedEdge ? null : selectedNode}
             edge={selectedEdge}
             error={editError}
+            collision={
+              collision && selectedNode?.id === collision.nodeId
+                ? { neighborIds: collision.neighborIds }
+                : null
+            }
             onOperate={(operation) => applyOp(operation)}
             onDelete={deleteSelection}
             onDuplicate={duplicateSelection}
             onFocusNode={(id) => setSelection({ nodeIds: [id], edgeIds: [] })}
-            onClose={
-              shellLayout === SHELL_LAYOUT.SPLIT
-                ? undefined
-                : () => setNarrowPanel("none")
-            }
+            onClose={() => {
+              if (shellLayout === SHELL_LAYOUT.SPLIT) setSelection(emptySelection);
+              else setNarrowPanel("none");
+            }}
+            onApplyCollision={() => {
+              if (!collision) return;
+              pushPositions(collision.positions);
+              setCollision(null);
+            }}
+            onCancelCollision={() => setCollision(null)}
           />
         )}
       </div>
       {presenting ? null : (
-        <CommandMenu open={commandsOpen} onClose={() => setCommandsOpen(false)} onRun={runCommand} />
+        <CommandMenu
+          open={commandsOpen}
+          nodes={flow.nodes}
+          onClose={() => setCommandsOpen(false)}
+          onRun={runCommand}
+          onFocusNode={(id) => {
+            setSelection({ nodeIds: [id], edgeIds: [] });
+            void fitView({
+              ...readableFitOptions(),
+              nodes: getNodes().filter((node) => node.id === id),
+            });
+          }}
+        />
       )}
     </div>
     </EditorErrorBoundary>

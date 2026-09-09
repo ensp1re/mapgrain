@@ -27,6 +27,9 @@ test("the skill directory ships schema, examples, and local runtime instructions
   assert.match(text, /npx mapgrain@0\.1\.0 validate/);
   assert.match(text, /npx mapgrain@0\.1\.0 layout/);
   assert.match(text, /pnpm mapgrain layout/);
+  assert.match(text, /sequence, data-flow, or lifecycle/);
+  assert.match(text, /0\.2\.0/);
+  assert.doesNotMatch(text, /npx mapgrain@latest/);
   assert.match(text, /From a Mapgrain checkout only/);
   assert.match(text, /references\/document\.schema\.json/);
   assert.match(text, /Do not invent pixel positions/);

@@ -53,6 +53,9 @@ test("the view has no edit controls, chat, or inspector", async () => {
   assert.doesNotMatch(view.html, /https:\/\//);
   assert.doesNotMatch(view.html, /contenteditable/i);
   assert.match(view.html, /data-act="fit"/);
+  assert.match(view.html, /data-act="focus"/);
+  assert.match(view.html, /data-act="more"/);
+  assert.match(view.html, /Fit all/);
   assert.match(view.html, /aria-label="Search"/);
   assert.match(view.html, /data-act="theme"/);
   assert.match(view.html, /data-act="reach-up"/);

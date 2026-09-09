@@ -63,4 +63,6 @@ test("direction none draws no arrow; forward and both do", () => {
   assert.match(forward, /<polygon /);
   assert.equal((both.match(/<polygon /g) ?? []).length, 2);
   assert.match(forward, /data-node-kind="service"/);
+  assert.match(forward, /data-icon="service"/);
+  assert.match(forward, /letter-spacing=/);
 });

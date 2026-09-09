@@ -18,8 +18,13 @@ function groupOrigin(group: SceneGroup, groups: Map<string, SceneGroup>): { x: n
   return { x: group.rect.x - parent.rect.x, y: group.rect.y - parent.rect.y };
 }
 
-export function sceneToFlow(scene: Scene): { nodes: FlowNodeDraft[]; edges: FlowEdgeDraft[] } {
+export function sceneToFlow(scene: Scene): {
+  nodes: FlowNodeDraft[];
+  edges: FlowEdgeDraft[];
+  lifelines: Scene["lifelines"];
+} {
   const groups = new Map(scene.groups.map((group) => [group.id, group]));
+  const sequence = scene.lifelines.length > 0;
   const groupNodes: FlowNodeDraft[] = scene.groups.map((group) => ({
     id: group.id,
     type: "group",
@@ -42,6 +47,7 @@ export function sceneToFlow(scene: Scene): { nodes: FlowNodeDraft[]; edges: Flow
     height: node.rect.height,
     data: {
       kind: node.kind,
+      kindLabel: node.kindLabel.lines[0]?.text ?? node.kind.toUpperCase(),
       label: node.label.lines.map((line) => line.text).join(" "),
       lines: node.label.lines.map((line) => line.text),
       ports: node.ports.map((port) => ({ id: port.id, side: port.side })),
@@ -57,8 +63,9 @@ export function sceneToFlow(scene: Scene): { nodes: FlowNodeDraft[]; edges: Flow
     direction: edge.direction,
     caption: edge.caption,
     labelAnchor: edge.labelAnchor,
+    preserveGeometry: sequence,
   }));
-  return { nodes: [...groupNodes, ...componentNodes], edges };
+  return { nodes: [...groupNodes, ...componentNodes], edges, lifelines: scene.lifelines };
 }
 
 export function handlePosition(side: PortSide): "top" | "bottom" | "left" | "right" {

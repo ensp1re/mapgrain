@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { KindIcon } from "../diagram/KindIcon.tsx";
 import { matchesQuery } from "../outline/search.ts";
 import { outlineTree } from "../outline/tree.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
@@ -63,8 +64,13 @@ export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) 
               onSelect(entry.node.id, event.shiftKey || event.metaKey || event.ctrlKey)
             }
           >
+            {entry.node.data.kind ? <KindIcon kind={entry.node.data.kind} /> : null}
             <span>{entry.node.data.label}</span>
-            {entry.node.data.kind ? <span className="kind">{entry.node.data.kind}</span> : null}
+            {entry.node.data.kindLabel ? (
+              <span className="kind">{entry.node.data.kindLabel}</span>
+            ) : entry.node.data.kind ? (
+              <span className="kind">{entry.node.data.kind}</span>
+            ) : null}
           </button>
         </div>
       ))}

@@ -1,6 +1,6 @@
 ---
 name: mapgrain
-description: Create and edit Mapgrain architecture or workflow JSON, then validate, layout, and export with the mapgrain CLI. Use when the user wants a system map, architecture diagram, workflow diagram, offline HTML, or to refine an existing Mapgrain document.
+description: Create and edit Mapgrain architecture, workflow, sequence, data-flow, or lifecycle JSON, then validate, layout, and export with the matching Mapgrain CLI. Use when the user wants a system map, sequence of messages, data flow, lifecycle, offline HTML, or to refine an existing Mapgrain document.
 ---
 
 # Mapgrain
@@ -9,7 +9,9 @@ Emit semantic diagram JSON. Call the Mapgrain CLI for validation, layout, and ex
 
 ## Runtime (end users)
 
-Published CLI: `mapgrain@0.1.0`. Requires Node 24 or newer. Pin the version.
+Published npm CLI: `mapgrain@0.1.0`. Requires Node 24 or newer. That package validates architecture and workflow documents from its release. Do not run it against sequence, data-flow, or lifecycle fixtures from this skill.
+
+This skill matches source CLI `0.2.0`. Until that version is on npm, use the checkout CLI or a packed tarball of this repository. Do not pin an unversioned latest tag and do not overwrite `0.1.0`.
 
 ```sh
 npx mapgrain@0.1.0 validate diagram.json
@@ -17,7 +19,7 @@ npx mapgrain@0.1.0 layout diagram.json
 npx mapgrain@0.1.0 view diagram.json -o diagram.html
 ```
 
-If `mapgrain` is already on PATH from that install, use that binary. Do not guess a newer registry version.
+If `mapgrain` is already on PATH from that install, use that binary for architecture/workflow files only.
 
 ## Repository development
 
@@ -53,7 +55,7 @@ npx skills update mapgrain --yes
 npx skills remove mapgrain --yes
 ```
 
-Copy fallback when the installer is unavailable. After copy, this directory must contain `SKILL.md`, `references/document.schema.json`, and `examples/`.
+Copy fallback when the installer is unavailable. After copy, the skill root is the directory that contains `SKILL.md` (not a source checkout). That directory must contain `SKILL.md`, `references/document.schema.json`, and `examples/`.
 
 ```sh
 mkdir -p .agents/skills .claude/skills .grok/skills .windsurf/skills

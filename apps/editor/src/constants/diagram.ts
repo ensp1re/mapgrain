@@ -11,6 +11,10 @@ export function readableFitOptions(): { padding: number; minZoom: number; maxZoo
   return { padding: FIT_PADDING, minZoom: MIN_READABLE_ZOOM, maxZoom: USER_MAX_ZOOM };
 }
 
+export function fitAllOptions(): { padding: number; minZoom: number; maxZoom: number } {
+  return { padding: FIT_PADDING, minZoom: USER_MIN_ZOOM, maxZoom: USER_MAX_ZOOM };
+}
+
 export function effectiveLabelSize(fontSize: number, zoom: number): number {
   return fontSize * zoom;
 }

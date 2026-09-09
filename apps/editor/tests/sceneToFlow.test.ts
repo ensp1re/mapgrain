@@ -27,6 +27,27 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.deepEqual(edge?.points, sceneEdge?.points);
   assert.equal(edge?.caption, sceneEdge?.caption);
   assert.deepEqual(edge?.labelAnchor, sceneEdge?.labelAnchor);
+  assert.equal(edge?.preserveGeometry, false);
+});
+
+test("sequence flow keeps lifelines and does not remap message geometry", async () => {
+  const raw = JSON.parse(
+    await readFile(
+      fileURLToPath(new URL("../../../tests/fixtures/documents/sequence-checkout.json", import.meta.url)),
+      "utf8",
+    ),
+  ) as unknown;
+  const scene = buildScene(raw);
+  assert.equal(scene.ok, true);
+  if (!scene.ok) return;
+  const flow = sceneToFlow(scene.scene);
+  assert.equal(flow.lifelines.length, scene.scene.lifelines.length);
+  assert.ok(flow.lifelines.length >= 3);
+  const message = flow.edges.find((item) => item.id === "m1");
+  const sceneEdge = scene.scene.edges.find((item) => item.id === "m1");
+  assert.equal(message?.preserveGeometry, true);
+  assert.deepEqual(message?.points, sceneEdge?.points);
+  assert.deepEqual(message?.labelAnchor, sceneEdge?.labelAnchor);
 });
 
 test("specimen CSS covers both themes, a 390px layout, and reduced motion", async () => {
@@ -42,5 +63,6 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /--topbar-h: 48px/);
   assert.match(css, /\.react-flow__node-group/);
   assert.match(css, /\.topbar-wide/);
-  assert.match(css, /\.topbar \{[\s\S]*overflow: hidden/);
+  assert.match(css, /\.overlay-panel/);
+  assert.match(css, /\.topbar \{[\s\S]*overflow: visible/);
 });

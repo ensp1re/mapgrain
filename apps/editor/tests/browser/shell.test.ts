@@ -84,6 +84,18 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     assert.ok(overflow <= 1, `${viewport.width}x${viewport.height} overflow ${overflow}`);
     await page.getByRole("button", { name: "Add", exact: true }).waitFor();
     assert.equal(await page.getByRole("button", { name: "Add service" }).count(), 0);
+    const arrangeBox = await page.getByRole("button", { name: "Arrange" }).boundingBox();
+    assert.ok(arrangeBox && arrangeBox.width > 8 && arrangeBox.height > 8, `${viewport.width} Arrange not hittable`);
+    const more = page.getByRole("button", { name: "More" });
+    if (viewport.width <= 390) {
+      await more.click();
+      const undo = page.getByRole("button", { name: "Undo" }).first();
+      await undo.waitFor();
+      const undoBox = await undo.boundingBox();
+      assert.ok(undoBox && undoBox.height > 8, `${viewport.width} More menu clipped`);
+      await page.keyboard.press("Escape");
+    }
+    await page.getByRole("button", { name: "Fit all" }).waitFor();
     await context.close();
   }
 });

@@ -1,6 +1,6 @@
 # Getting started
 
-Mapgrain is a local editor, CLI, and agent skill for architecture and workflow diagrams. There is no hosted account.
+Mapgrain is a local editor, CLI, and agent skill for architecture, workflow, sequence, data-flow, and lifecycle diagrams. There is no hosted account.
 
 ## Editor
 
@@ -33,7 +33,7 @@ npx mapgrain@0.1.0 watch diagram.json --once --format html -o view.html
 npx mapgrain@0.1.0 doctor
 ```
 
-From this checkout, `pnpm mapgrain` is the development command. Internals are bundled; do not import `@mapgrain/*` from an application.
+From this checkout, `pnpm mapgrain` is the development command (source CLI `0.2.0`). `npx mapgrain@0.1.0` is the last published package and does not validate sequence, data-flow, or lifecycle fixtures from this checkout. Internals are bundled; do not import `@mapgrain/*` from an application. Do not use an unversioned latest tag.
 
 `diagnose` reports geometry warnings and evidence path checks without claiming the source was verified. `compare` reports added, removed, and changed nodes and edges. `watch` keeps last-good output while a file is invalid.
 

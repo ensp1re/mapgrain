@@ -24,6 +24,15 @@ test("outline, inspector, toolbar, and export have no native unstyled select", a
   }
 });
 
+test("node inspector forwards onClose to Pane", async () => {
+  const source = await readFile(
+    fileURLToPath(new URL("../src/chrome/Inspector.tsx", import.meta.url)),
+    "utf8",
+  );
+  assert.match(source, /title="Component" onClose=\{onClose\}/);
+  assert.match(source, /title="Connection" onClose=\{onClose\}/);
+});
+
 test("export dialog offers PNG scale without a native select", async () => {
   const source = await readFile(
     fileURLToPath(new URL("../src/chrome/ExportDialog.tsx", import.meta.url)),

@@ -1,9 +1,14 @@
 import {
+  DOCUMENT_KIND,
+  EDGES_FOR_KIND,
   EDGE_DIRECTION,
-  EDGE_TYPE,
+  NODE_MARKER,
+  NODES_FOR_KIND,
   OPERATION_KIND,
   type DiagramDocument,
   type DiagramEdge,
+  type NodeKind,
+  type NodeMarker,
   type Operation,
 } from "@mapgrain/document";
 import { directionLabel, relationCaption } from "../export/labels.ts";
@@ -16,11 +21,14 @@ interface InspectorProps {
   node: FlowNodeDraft | null;
   edge: DiagramEdge | null;
   error: string | null;
+  collision?: { neighborIds: string[] } | null;
   onOperate: (operation: Operation) => void;
   onDelete: () => void;
   onDuplicate: () => void;
   onFocusNode?: (id: string) => void;
   onClose?: () => void;
+  onApplyCollision?: () => void;
+  onCancelCollision?: () => void;
 }
 
 export function Inspector({
@@ -28,28 +36,31 @@ export function Inspector({
   node,
   edge,
   error,
+  collision,
   onOperate,
   onDelete,
   onDuplicate,
   onFocusNode,
   onClose,
+  onApplyCollision,
+  onCancelCollision,
 }: InspectorProps) {
   if (!node && !edge) return null;
+  const kinds = NODES_FOR_KIND[document.kind];
+  const edgeTypes = EDGES_FOR_KIND[document.kind];
 
   if (edge) {
     return (
-      <Pane className="inspector" title="Inspector" onClose={onClose}>
+      <Pane className="inspector" title="Connection" onClose={onClose}>
         <dl>
           <dt>Relation</dt>
-          <dd>
-            {relationCaption(document, edge)}
-          </dd>
+          <dd>{relationCaption(document, edge)}</dd>
           <dt>Meaning</dt>
           <dd>
             <Select
               label="Relation type"
               value={edge.type}
-              options={Object.values(EDGE_TYPE).map((value) => ({ value, label: value }))}
+              options={edgeTypes.map((value) => ({ value, label: value }))}
               onChange={(value) =>
                 onOperate({
                   kind: OPERATION_KIND.SET_EDGE_TYPE,
@@ -92,6 +103,63 @@ export function Inspector({
               }
             />
           </dd>
+          {document.kind === DOCUMENT_KIND.SEQUENCE ? (
+            <>
+              <dt>Order</dt>
+              <dd>
+                <input
+                  aria-label="Message order"
+                  type="number"
+                  min={1}
+                  defaultValue={edge.order ?? 1}
+                  key={`${edge.id}:order:${edge.order ?? ""}`}
+                  onBlur={(event) => {
+                    const order = Number(event.target.value);
+                    if (!Number.isInteger(order) || order < 1) return;
+                    onOperate({ kind: OPERATION_KIND.SET_EDGE_ORDER, edgeId: edge.id, order });
+                  }}
+                />
+              </dd>
+            </>
+          ) : null}
+          {document.kind === DOCUMENT_KIND.WORKFLOW ? (
+            <>
+              <dt>Outcome</dt>
+              <dd>
+                <input
+                  aria-label="Outcome"
+                  defaultValue={edge.outcome ?? ""}
+                  key={`${edge.id}:outcome:${edge.outcome ?? ""}`}
+                  onBlur={(event) =>
+                    onOperate({
+                      kind: OPERATION_KIND.SET_EDGE_OUTCOME,
+                      edgeId: edge.id,
+                      outcome: event.target.value.trim(),
+                    })
+                  }
+                />
+              </dd>
+            </>
+          ) : null}
+          {document.kind === DOCUMENT_KIND.LIFECYCLE ? (
+            <>
+              <dt>Guard</dt>
+              <dd>
+                <input
+                  aria-label="Transition guard"
+                  defaultValue={edge.guard ?? ""}
+                  key={`${edge.id}:guard:${edge.guard ?? ""}`}
+                  onBlur={(event) =>
+                    onOperate({
+                      kind: OPERATION_KIND.SET_EDGE_GUARD,
+                      edgeId: edge.id,
+                      guard: event.target.value.trim(),
+                    })
+                  }
+                />
+              </dd>
+            </>
+          ) : null}
         </dl>
         {error ? <p className="edit-error">{error}</p> : null}
         <div className="inspector-actions">
@@ -110,9 +178,9 @@ export function Inspector({
   );
 
   return (
-    <Pane className="inspector" title="Inspector">
+    <Pane className="inspector" title="Component" onClose={onClose}>
       <dl>
-        <dt>Component</dt>
+        <dt>Name</dt>
         <dd>
           <input
             aria-label={node.type === "group" ? "Group label" : "Node label"}
@@ -128,8 +196,25 @@ export function Inspector({
             }}
           />
         </dd>
-        <dt>Kind</dt>
-        <dd>{node.data.kind ?? "group"}</dd>
+        <dt>Type</dt>
+        <dd>
+          {source ? (
+            <Select
+              label="Component type"
+              value={source.kind}
+              options={kinds.map((value) => ({ value, label: value }))}
+              onChange={(value) =>
+                onOperate({
+                  kind: OPERATION_KIND.SET_NODE_KIND,
+                  nodeId: source.id,
+                  nodeKind: value as NodeKind,
+                })
+              }
+            />
+          ) : (
+            (node.data.kind ?? "group")
+          )}
+        </dd>
         {source ? (
           <>
             <dt>Keep position</dt>
@@ -147,27 +232,54 @@ export function Inspector({
                     })
                   }
                 />
-                Pin this node during arrange
+                Keep position on arrange
               </label>
             </dd>
-            <dt>Group</dt>
-            <dd>
-              <Select
-                label="Node group"
-                value={source.groupId ?? ""}
-                options={[
-                  { value: "", label: "No group" },
-                  ...document.groups.map((group) => ({ value: group.id, label: group.label })),
-                ]}
-                onChange={(value) =>
-                  onOperate({
-                    kind: OPERATION_KIND.SET_NODE_GROUP,
-                    nodeId: source.id,
-                    groupId: value || null,
-                  })
-                }
-              />
-            </dd>
+            {document.kind !== DOCUMENT_KIND.SEQUENCE ? (
+              <>
+                <dt>Group</dt>
+                <dd>
+                  <Select
+                    label="Node group"
+                    value={source.groupId ?? ""}
+                    options={[
+                      { value: "", label: "No group" },
+                      ...document.groups.map((group) => ({ value: group.id, label: group.label })),
+                    ]}
+                    onChange={(value) =>
+                      onOperate({
+                        kind: OPERATION_KIND.SET_NODE_GROUP,
+                        nodeId: source.id,
+                        groupId: value || null,
+                      })
+                    }
+                  />
+                </dd>
+              </>
+            ) : null}
+            {document.kind === DOCUMENT_KIND.LIFECYCLE ? (
+              <>
+                <dt>Marker</dt>
+                <dd>
+                  <Select
+                    label="State marker"
+                    value={source.marker ?? ""}
+                    options={[
+                      { value: "", label: "None" },
+                      { value: NODE_MARKER.INITIAL, label: "Initial" },
+                      { value: NODE_MARKER.FINAL, label: "Final" },
+                    ]}
+                    onChange={(value) =>
+                      onOperate({
+                        kind: OPERATION_KIND.SET_NODE_MARKER,
+                        nodeId: source.id,
+                        marker: (value || null) as NodeMarker | null,
+                      })
+                    }
+                  />
+                </dd>
+              </>
+            ) : null}
           </>
         ) : null}
         {source?.description ? (
@@ -176,26 +288,28 @@ export function Inspector({
             <dd>{source.description}</dd>
           </>
         ) : null}
-        <dt>Relations</dt>
+        <dt>Connections</dt>
         <dd>
           {relations.length === 0 ? (
             <p className="relation-empty">No relations yet.</p>
           ) : (
             <ul className="relation-list">
               {relations.map((item) => {
-                const sourceLabel = document.nodes.find((entry) => entry.id === item.source.nodeId)?.label ?? item.source.nodeId;
-                const targetLabel = document.nodes.find((entry) => entry.id === item.target.nodeId)?.label ?? item.target.nodeId;
-                const focusId = item.source.nodeId === node.id ? item.target.nodeId : item.source.nodeId;
+                const incoming = item.target.nodeId === node.id;
+                const otherId = incoming ? item.source.nodeId : item.target.nodeId;
+                const otherLabel =
+                  document.nodes.find((entry) => entry.id === otherId)?.label ?? otherId;
                 return (
                   <li key={item.id}>
                     <button
                       type="button"
                       className="relation-row"
-                      onClick={() => onFocusNode?.(focusId)}
+                      onClick={() => onFocusNode?.(otherId)}
                     >
-                      <span>{sourceLabel}</span>
-                      <span aria-hidden="true">→</span>
-                      <span>{targetLabel}</span>
+                      <span>{incoming ? "←" : "→"} {otherLabel}</span>
+                      <small>
+                        {relationCaption(document, item)} · {incoming ? "Incoming" : "Outgoing"}
+                      </small>
                     </button>
                   </li>
                 );
@@ -204,6 +318,22 @@ export function Inspector({
           )}
         </dd>
       </dl>
+      {collision ? (
+        <div className="collision-banner" role="status">
+          <p>
+            This name overlaps {collision.neighborIds.join(", ")}. Apply a local shift, or cancel to
+            keep the new name where it is.
+          </p>
+          <div className="inspector-actions">
+            <button type="button" className="text-btn" onClick={onCancelCollision}>
+              Cancel
+            </button>
+            <button type="button" className="text-btn primary" onClick={onApplyCollision}>
+              Apply
+            </button>
+          </div>
+        </div>
+      ) : null}
       {error ? <p className="edit-error">{error}</p> : null}
       <div className="inspector-actions">
         {source ? (

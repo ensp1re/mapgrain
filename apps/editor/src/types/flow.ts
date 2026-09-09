@@ -9,6 +9,7 @@ export interface FlowNodeDraft {
   height: number;
   data: {
     kind?: string;
+    kindLabel?: string;
     label: string;
     lines: string[];
     description?: string;
@@ -26,10 +27,12 @@ export interface FlowEdgeDraft {
   direction: EdgeDirection;
   caption: string;
   labelAnchor: { x: number; y: number };
+  preserveGeometry: boolean;
 }
 
 export interface ComponentNodeData extends Record<string, unknown> {
   kind: string;
+  kindLabel: string;
   label: string;
   lines: string[];
   ports: Array<{ id: string; side: PortSide }>;
@@ -54,4 +57,5 @@ export interface RelationEdgeData extends Record<string, unknown> {
   points: Array<{ x: number; y: number }>;
   caption: string;
   labelAnchor: { x: number; y: number };
+  preserveGeometry: boolean;
 }

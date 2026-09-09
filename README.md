@@ -1,6 +1,6 @@
 # Mapgrain
 
-A local workspace for architecture and workflow diagrams you can edit by hand, generate through an agent, and send as offline HTML.
+A local workspace for architecture, workflow, sequence, data-flow, and lifecycle diagrams you can edit by hand, generate through an agent, and send as offline HTML.
 
 ![Invoice capture lane in the Mapgrain editor, dark theme](docs/media/hero-dark.png)
 
@@ -65,7 +65,7 @@ pnpm install
 pnpm verify
 ```
 
-Development CLI: `pnpm mapgrain`. Public package: `mapgrain@0.1.0`. Internals are bundled.
+Development CLI: `pnpm mapgrain` (source `0.2.0`). Last published package: `mapgrain@0.1.0`, which does not validate sequence, data-flow, or lifecycle fixtures from this checkout. Internals are bundled. Do not use `npx mapgrain@latest`.
 
 ## License
 

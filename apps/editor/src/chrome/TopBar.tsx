@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SAVE_STATE } from "../constants/persist.ts";
 import type { SaveState } from "../types/persist.ts";
+import { Overlay } from "../ui/Overlay.tsx";
 
 interface TopBarProps {
   title: string;
@@ -21,6 +22,7 @@ interface TopBarProps {
   onExport: () => void;
   onCommand: () => void;
   onToggleOutline: () => void;
+  onToggleDetails?: () => void;
 }
 
 export function TopBar({
@@ -42,11 +44,37 @@ export function TopBar({
   onExport,
   onCommand,
   onToggleOutline,
+  onToggleDetails,
 }: TopBarProps) {
   const [draft, setDraft] = useState(title);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const barRef = useRef<HTMLElement>(null);
+  const measureRef = useRef<HTMLDivElement>(null);
+  const moreRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     setDraft(title);
   }, [title]);
+
+  useEffect(() => {
+    const bar = barRef.current;
+    const measure = measureRef.current;
+    if (!bar || !measure) return;
+    const update = () => {
+      const identity = [...bar.querySelectorAll<HTMLElement>("[data-identity]")].reduce(
+        (sum, node) => sum + node.getBoundingClientRect().width,
+        0,
+      );
+      const available = bar.clientWidth - identity - 120;
+      setCollapsed(measure.scrollWidth > available);
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(bar);
+    observer.observe(measure);
+    return () => observer.disconnect();
+  }, [title, saveState, saveError]);
 
   const commitTitle = () => {
     const next = draft.trim();
@@ -69,10 +97,24 @@ export function TopBar({
       </header>
     );
   }
+
+  const overflowItems = [
+    { label: "Undo", onClick: onUndo, disabled: !canUndo },
+    { label: "Redo", onClick: onRedo, disabled: !canRedo },
+    { label: "New", onClick: onNew },
+    { label: "Present", onClick: onPresent },
+    { label: "Outline", onClick: onToggleOutline },
+    { label: "Details", onClick: onToggleDetails ?? onToggleOutline },
+    { label: "Commands", onClick: onCommand },
+    { label: "Chat", onClick: undefined, disabled: true, ariaLabel: "Chat is unavailable" },
+  ];
+
   return (
-    <header className="topbar">
-      <div className="brand">Mapgrain</div>
-      <label className="title-field">
+    <header className="topbar" ref={barRef}>
+      <div className="brand" data-identity="">
+        Mapgrain
+      </div>
+      <label className="title-field" data-identity="">
         <span className="visually-hidden">Document title</span>
         <input
           aria-label="Document title"
@@ -92,16 +134,16 @@ export function TopBar({
           }}
         />
       </label>
-      <span className="save-state" aria-live="polite">
+      <span className="save-state" aria-live="polite" data-identity="">
         {saveState}
       </span>
       {saveError ? (
-        <span className="save-error" role="status">
+        <span className="save-error" role="status" data-identity="">
           {saveError}
         </span>
       ) : null}
       {saveState === SAVE_STATE.RECOVERY || saveState === SAVE_STATE.TEMPORARY ? (
-        <>
+        <span data-identity="">
           <button type="button" className="text-btn" onClick={onBackup}>
             Download backup
           </button>
@@ -115,7 +157,7 @@ export function TopBar({
               Reload saved
             </button>
           ) : null}
-        </>
+        </span>
       ) : null}
       <div className="spacer" />
       <div className="topbar-actions">
@@ -125,50 +167,78 @@ export function TopBar({
         <button type="button" className="text-btn primary" onClick={onExport}>
           Export
         </button>
-        <button type="button" className="text-btn topbar-wide" onClick={onUndo} disabled={!canUndo}>
+        <div className={collapsed ? "topbar-secondary is-collapsed" : "topbar-secondary"}>
+          <button type="button" className="text-btn topbar-wide" onClick={onUndo} disabled={!canUndo}>
+            Undo
+          </button>
+          <button type="button" className="text-btn topbar-wide" onClick={onRedo} disabled={!canRedo}>
+            Redo
+          </button>
+          <button type="button" className="text-btn topbar-wide" onClick={onNew}>
+            New
+          </button>
+          <button type="button" className="text-btn topbar-wide" onClick={onPresent}>
+            Present
+          </button>
+          <button type="button" className="text-btn topbar-wide" onClick={onToggleOutline}>
+            Outline
+          </button>
+          <button type="button" className="text-btn topbar-wide" onClick={onCommand}>
+            Commands
+          </button>
+        </div>
+        <button
+          ref={moreRef}
+          type="button"
+          className={collapsed ? "text-btn topbar-more is-needed" : "text-btn topbar-more"}
+          aria-expanded={moreOpen}
+          aria-haspopup="menu"
+          onClick={() => setMoreOpen((value) => !value)}
+        >
+          More
+        </button>
+        <Overlay
+          open={moreOpen}
+          anchorRef={moreRef}
+          onClose={() => setMoreOpen(false)}
+          label="More actions"
+        >
+          {overflowItems.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              className="text-btn"
+              disabled={item.disabled}
+              aria-label={item.ariaLabel}
+              onClick={() => {
+                item.onClick?.();
+                setMoreOpen(false);
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </Overlay>
+      </div>
+      <div className="topbar-measure" ref={measureRef} aria-hidden="true">
+        <button type="button" className="text-btn">
           Undo
         </button>
-        <button type="button" className="text-btn topbar-wide" onClick={onRedo} disabled={!canRedo}>
+        <button type="button" className="text-btn">
           Redo
         </button>
-        <button type="button" className="text-btn topbar-wide" onClick={onNew}>
+        <button type="button" className="text-btn">
           New
         </button>
-        <button type="button" className="text-btn topbar-wide" onClick={onPresent}>
+        <button type="button" className="text-btn">
           Present
         </button>
-        <button type="button" className="text-btn topbar-wide" onClick={onToggleOutline}>
+        <button type="button" className="text-btn">
           Outline
         </button>
-        <button type="button" className="text-btn topbar-wide" onClick={onCommand}>
+        <button type="button" className="text-btn">
           Commands
         </button>
-        <details className="topbar-more">
-          <summary className="text-btn">More</summary>
-          <div className="topbar-more-menu">
-            <button type="button" className="text-btn" onClick={onUndo} disabled={!canUndo}>
-              Undo
-            </button>
-            <button type="button" className="text-btn" onClick={onRedo} disabled={!canRedo}>
-              Redo
-            </button>
-            <button type="button" className="text-btn" onClick={onNew}>
-              New
-            </button>
-            <button type="button" className="text-btn" onClick={onPresent}>
-              Present
-            </button>
-            <button type="button" className="text-btn" onClick={onToggleOutline}>
-              Outline
-            </button>
-            <button type="button" className="text-btn" onClick={onCommand}>
-              Commands
-            </button>
-            <button type="button" className="text-btn" disabled aria-label="Chat is unavailable">
-              Chat
-            </button>
-          </div>
-        </details>
       </div>
     </header>
   );

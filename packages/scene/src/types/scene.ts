@@ -21,15 +21,32 @@ export interface ScenePort {
   y: number;
 }
 
+export interface ScenePresentation {
+  fontFamily: string;
+  titleSize: number;
+  titleLineHeight: number;
+  titleWeight: number;
+  kindSize: number;
+  kindLineHeight: number;
+  kindTrackingEm: number;
+  iconSize: number;
+  iconGap: number;
+  paddingX: number;
+  paddingY: number;
+  kindTitleGap: number;
+}
+
 export interface SceneNode {
   id: string;
   kind: NodeKind;
+  kindLabel: MeasuredText;
   label: MeasuredText;
   rect: Rect;
   ports: ScenePort[];
   groupId: string | null;
   marker?: NodeMarker;
   role?: string;
+  iconSize: number;
 }
 
 export interface SceneLifeline {
@@ -66,6 +83,7 @@ export interface Scene {
   edges: SceneEdge[];
   groups: SceneGroup[];
   lifelines: SceneLifeline[];
+  presentation: ScenePresentation;
 }
 
 export type SceneResult =

@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 test("the public feature table distinguishes shipped, partial, planned, and deferred", async () => {
   const text = await readFile(fileURLToPath(new URL("../../../docs/FEATURES.md", import.meta.url)), "utf8");
   assert.match(text, /\| Feature \| Status \|/);
-  assert.match(text, /Sequence diagrams \| shipped/);
+  assert.match(text, /Sequence diagrams \| partial/);
   assert.match(text, /Data-flow diagrams \| shipped/);
   assert.match(text, /Lifecycle diagrams \| shipped/);
   assert.match(text, /Geometry diagnostics \| shipped/);
