@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F056",
+    "behavior": "Lifecycle states show initial disk and arrow, final double border, and start/wait/fail/done fills on the canvas instead of a STATE chip.",
+    "acceptance": [
+      "SVG for the session lifecycle fixture includes data-marker initial and final, a polygon on the initial mark, and no STATE chip text.",
+      "Lifecycle state nodes omit the kind row in scene size and in the editor card.",
+      "Editor cards expose data-state-tone and CSS fills for start, active, wait, fail, and done."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788993482386-151d04",
+      "fingerprintBefore": "29e4c397f779d33dc4eb694e698f654e8c43c2734784594960fd5b1ed9fd46ae",
+      "fingerprintAfter": "29e4c397f779d33dc4eb694e698f654e8c43c2734784594960fd5b1ed9fd46ae",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T22:38:24.646Z"
+    },
+    "delivery": {
+      "implementationRevision": "6fcc158c4ea899dc71988044e214b280fdc15cef",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/77",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "6fcc158c4ea899dc71988044e214b280fdc15cef",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34413464607"
+        }
+      ],
+      "observedAt": "2026-09-09T22:43:27Z",
+      "closeoutRevision": "6fcc158c4ea899dc71988044e214b280fdc15cef"
+    }
+  },
+  "archivedAt": "2026-09-09T22:43:40.312Z"
+}
