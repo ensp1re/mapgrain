@@ -30,7 +30,7 @@ export function ViewportBar({ canFocus, onFitAll, onFocus }: ViewportBarProps) {
       >
         +
       </button>
-      <button type="button" className="text-btn" onClick={onFitAll}>
+      <button type="button" className="text-btn fit-label" onClick={onFitAll}>
         Fit all
       </button>
       <button type="button" className="text-btn" onClick={onFocus} disabled={!canFocus}>

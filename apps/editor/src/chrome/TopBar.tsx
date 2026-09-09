@@ -171,37 +171,38 @@ export function TopBar({
           Export
         </button>
         <div className={collapsed ? "topbar-secondary is-collapsed" : "topbar-secondary"}>
-          <button type="button" className="text-btn topbar-wide" onClick={onUndo} disabled={!canUndo}>
+          <button type="button" className="text-btn ghost topbar-wide" onClick={onUndo} disabled={!canUndo}>
             Undo
           </button>
-          <button type="button" className="text-btn topbar-wide" onClick={onRedo} disabled={!canRedo}>
+          <button type="button" className="text-btn ghost topbar-wide" onClick={onRedo} disabled={!canRedo}>
             Redo
           </button>
-          <button type="button" className="text-btn topbar-wide" onClick={onNew}>
+          <button type="button" className="text-btn ghost topbar-wide" onClick={onNew}>
             New
           </button>
-          <button type="button" className="text-btn topbar-wide" onClick={onPresent}>
+          <button type="button" className="text-btn ghost topbar-wide" onClick={onPresent}>
             Present
           </button>
-          <button type="button" className="text-btn topbar-wide" onClick={onToggleOutline}>
+          <button type="button" className="text-btn ghost topbar-wide" onClick={onToggleOutline}>
             Outline
           </button>
-          <button type="button" className="text-btn topbar-wide" onClick={onCommand}>
+          <button type="button" className="text-btn ghost topbar-wide" onClick={onCommand}>
             Commands
           </button>
-          <button type="button" className="text-btn topbar-wide" onClick={onHelp}>
+          <button type="button" className="text-btn ghost topbar-wide" onClick={onHelp}>
             Help
           </button>
         </div>
         <button
           ref={moreRef}
           type="button"
-          className={collapsed ? "text-btn topbar-more is-needed" : "text-btn topbar-more"}
+          className={collapsed ? "text-btn ghost topbar-more is-needed" : "text-btn ghost topbar-more"}
+          aria-label="More"
           aria-expanded={moreOpen}
           aria-haspopup="menu"
           onClick={() => setMoreOpen((value) => !value)}
         >
-          More
+          ···
         </button>
         <Overlay
           open={moreOpen}

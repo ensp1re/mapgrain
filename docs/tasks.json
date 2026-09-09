@@ -1,5 +1,58 @@
 {
   "schemaVersion": 1,
-  "nextId": 51,
-  "tasks": []
+  "nextId": 52,
+  "tasks": [
+    {
+      "id": "F051",
+      "behavior": "Editor chrome follows the Codex HTML composition: 52px header, 204/264 panes, surface buttons, and canvas tools, without dropping Help, Focus, or Commands.",
+      "acceptance": [
+        "Header is 52px with 16px padding; Arrange is a surface control; Export is primary; More is a labelled ··· control.",
+        "Outline is 204px with a component count and Search components plus a shortcut hint; inspector is 264px.",
+        "Canvas uses 20px dots, an Add component control, Overview status, and one viewport toolbar with Fit all and Focus.",
+        "Phone composition hides the Fit all label, shows Outline/Details, and keeps More/overlays reachable."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788984471889-0b514f",
+        "fingerprintBefore": "dc8cb636482cb9dee7ece622fa56292090b1ddbc9571041197425e98eee3cedd",
+        "fingerprintAfter": "dc8cb636482cb9dee7ece622fa56292090b1ddbc9571041197425e98eee3cedd",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-09T20:08:21.542Z"
+      },
+      "delivery": null
+    }
+  ]
 }

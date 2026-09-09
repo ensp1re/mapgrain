@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F051
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f050 @ 81ef4f50d79d12566ad5b2578cde3b7a07d92e9c (dirty)
-- Updated: 2026-09-09T19:56:45.000Z
+- Git: feat/codex-chrome @ dc65944bf4c94f888bee6469b23ee092c262a49b (dirty)
+- Updated: 2026-09-09T20:06:48.174Z
 
 ### Next action
 
-No live product tasks. Next id F051.
+Implement F051 Codex HTML chrome composition, verify, draft PR against main.
 
 ### Decisions
 
@@ -34,8 +34,7 @@ No live product tasks. Next id F051.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/64
-- https://github.com/ensp1re/mapgrain/actions/runs/34397872991
+- none
 
 ## Resume
 
