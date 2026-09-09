@@ -1,17 +1,14 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F056",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f055",
-    "revision": "4a80ba9a767f6f3b602a1960018c2c99174a87a7",
+    "branch": "feat/lifecycle-canvas-marks",
+    "revision": "1b02de68ebd32c23867fd51b48ef64f148c903a6",
     "dirty": true
   },
-  "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/75",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34412127352"
-  ],
+  "evidenceRefs": [],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -28,6 +25,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Queue F056: lifecycle canvas marks (initial disk, final double border, start/wait/fail fills).",
-  "updatedAt": "2026-09-09T22:27:59.275Z"
+  "nextAction": "Verify F056, open a draft PR for lifecycle canvas marks.",
+  "updatedAt": "2026-09-09T22:38:02.309Z"
 }

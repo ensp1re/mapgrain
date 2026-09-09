@@ -30,6 +30,25 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.equal(edge?.preserveGeometry, false);
 });
 
+test("lifecycle flow exposes markers and tones and hides STATE as a chip", async () => {
+  const raw = JSON.parse(
+    await readFile(
+      fileURLToPath(new URL("../../../tests/fixtures/documents/lifecycle-session.json", import.meta.url)),
+      "utf8",
+    ),
+  ) as unknown;
+  const scene = buildScene(raw);
+  assert.equal(scene.ok, true);
+  if (!scene.ok) return;
+  const flow = sceneToFlow(scene.scene);
+  const idle = flow.nodes.find((node) => node.id === "idle");
+  const closed = flow.nodes.find((node) => node.id === "closed");
+  assert.equal(idle?.data.marker, "initial");
+  assert.equal(idle?.data.stateTone, "start");
+  assert.equal(closed?.data.marker, "final");
+  assert.equal(closed?.data.stateTone, "done");
+});
+
 test("west source ports stay sources so those edges can paint", async () => {
   const raw = {
     schemaVersion: 1,
@@ -119,4 +138,7 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /\.node-kind \{[^}]*overflow: visible/);
   assert.doesNotMatch(css, /\.node-kind \{[^}]*text-overflow: ellipsis/);
   assert.match(css, /\.node-card-body/);
+  assert.match(css, /\.state-initial/);
+  assert.match(css, /data-state-tone="start"/);
+  assert.match(css, /--state-start:/);
 });

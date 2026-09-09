@@ -12,6 +12,11 @@
   --port: #52525b;
   --focus: #9aa0ff;
   --danger: #f87171;
+  --state-start: #243d38;
+  --state-active: #27352c;
+  --state-wait: #3a3426;
+  --state-fail: #3c272b;
+  --state-done: #2c2a3d;
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
 }
 
@@ -29,6 +34,11 @@
   --port: #a1a1aa;
   --focus: #4f46e5;
   --danger: #b91c1c;
+  --state-start: #dceae6;
+  --state-active: #e3eee4;
+  --state-wait: #f3ead6;
+  --state-fail: #f3e0e2;
+  --state-done: #e6e4f2;
   --shadow: 0 10px 28px rgba(28, 25, 23, 0.12);
 }
 
@@ -627,6 +637,7 @@ input {
 }
 
 .node-card {
+  position: relative;
   width: 100%;
   height: 100%;
   border: 0;
@@ -647,8 +658,56 @@ input {
 }
 
 .node-card.is-selected {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  box-shadow: 0 0 0 3px var(--accent-soft), inset 0 0 0 1px var(--accent);
+}
+
+.node-card[data-state-tone="start"] { background: var(--state-start); }
+.node-card[data-state-tone="active"] { background: var(--state-active); }
+.node-card[data-state-tone="wait"] { background: var(--state-wait); }
+.node-card[data-state-tone="fail"] { background: var(--state-fail); }
+.node-card[data-state-tone="done"] { background: var(--state-done); }
+
+.node-card.is-final {
+  position: relative;
+}
+
+.node-card.is-final::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--node-radius) - 2px);
+  pointer-events: none;
+}
+
+.node-card.is-state .node-card-body {
+  justify-content: center;
+}
+
+.state-initial {
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.state-initial::after {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 1px;
+  border-width: 4px 0 4px 7px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--border);
+}
+
+.react-flow__node {
+  overflow: visible;
 }
 
 .node-head {

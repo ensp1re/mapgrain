@@ -1,4 +1,5 @@
-import type { EdgeDirection, EdgeType, PortSide } from "@mapgrain/document";
+import type { EdgeDirection, EdgeType, NodeMarker, PortSide } from "@mapgrain/document";
+import type { StateTone } from "@mapgrain/scene";
 
 export interface FlowNodeDraft {
   id: string;
@@ -14,6 +15,8 @@ export interface FlowNodeDraft {
     lines: string[];
     description?: string;
     ports: Array<{ id: string; side: PortSide; asSource: boolean; asTarget: boolean }>;
+    marker?: NodeMarker;
+    stateTone?: StateTone;
   };
 }
 
@@ -36,6 +39,8 @@ export interface ComponentNodeData extends Record<string, unknown> {
   label: string;
   lines: string[];
   ports: Array<{ id: string; side: PortSide; asSource: boolean; asTarget: boolean }>;
+  marker?: NodeMarker;
+  stateTone?: StateTone;
   editing: boolean;
   onStartEdit: () => void;
   onCommitLabel: (label: string) => void;

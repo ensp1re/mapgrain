@@ -1,14 +1,15 @@
-import { EDGE_DIRECTION, NODE_MARKER, type Theme } from "@mapgrain/document";
+import { EDGE_DIRECTION, NODE_KIND, NODE_MARKER, type Theme } from "@mapgrain/document";
 import {
   ICON_VIEWBOX,
   defaultFont,
   iconShapesFor,
   roundedPolylinePath,
+  stateTone,
   type Point,
   type Scene,
 } from "@mapgrain/scene";
 import { ARROW_SIZE, GROUP_RADIUS, NODE_RADIUS, PORT_RADIUS, VIEW_PAD } from "../constants/export.ts";
-import { COLOR_MODE, paintsFor, type ColorMode } from "../constants/paint.ts";
+import { COLOR_MODE, fillForStateTone, paintsFor, type ColorMode } from "../constants/paint.ts";
 import { EXPORT_FONT_FAMILY, interFontFaceCss } from "../font.ts";
 import { escapeXml, n } from "./escape.ts";
 
@@ -114,14 +115,17 @@ export function renderSvg(
       const padY = presentation.paddingY;
       const originX = node.rect.x + ox + padX;
       const originY = node.rect.y + oy + padY;
+      const isState = node.kind === NODE_KIND.STATE;
       const kindRow = Math.max(node.iconSize, node.kindLabel.height);
       const iconY = originY + (kindRow - node.iconSize) / 2;
       const kindText = node.kindLabel.lines[0]?.text ?? node.kind.toUpperCase();
       const kindX = originX + node.iconSize + presentation.iconGap;
       const kindY = originY + (kindRow - node.kindLabel.height) / 2;
-      const titleY = originY + kindRow + presentation.kindTitleGap;
-      const icon = iconGroup(node.kind, originX, iconY, node.iconSize, muted);
-      const kind = `<text x="${n(kindX)}" y="${n(kindY)}" dominant-baseline="hanging" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${presentation.kindSize}" letter-spacing="${n(presentation.kindSize * presentation.kindTrackingEm)}">${escapeXml(kindText)}</text>`;
+      const titleY = isState ? originY : originY + kindRow + presentation.kindTitleGap;
+      const icon = isState ? "" : iconGroup(node.kind, originX, iconY, node.iconSize, muted);
+      const kind = isState
+        ? ""
+        : `<text x="${n(kindX)}" y="${n(kindY)}" dominant-baseline="hanging" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${presentation.kindSize}" letter-spacing="${n(presentation.kindSize * presentation.kindTrackingEm)}">${escapeXml(kindText)}</text>`;
       const lines = node.label.lines
         .map(
           (line, index) =>
@@ -134,18 +138,26 @@ export function renderSvg(
             `<circle data-port="${escapeXml(item.id)}" cx="${n(item.x + ox)}" cy="${n(item.y + oy)}" r="${PORT_RADIUS}" fill="${port}" stroke="none"/>`,
         )
         .join("\n  ");
+      const midY = node.rect.y + oy + node.rect.height / 2;
+      const diskX = node.rect.x + ox - 10;
       const initial =
         node.marker === NODE_MARKER.INITIAL
-          ? `<circle data-marker="initial" cx="${n(node.rect.x + ox - 10)}" cy="${n(node.rect.y + oy + node.rect.height / 2)}" r="5" fill="${border}" stroke="none"/>`
+          ? `<g data-marker="initial"><circle cx="${n(diskX)}" cy="${n(midY)}" r="5" fill="${border}" stroke="none"/><polygon fill="${border}" stroke="none" points="${n(diskX + 5)},${n(midY - 4)} ${n(diskX + 5)},${n(midY + 4)} ${n(diskX + 12)},${n(midY)}"/></g>`
           : "";
       const final =
         node.marker === NODE_MARKER.FINAL
-          ? `<rect x="${n(node.rect.x + ox + 3)}" y="${n(node.rect.y + oy + 3)}" width="${n(node.rect.width - 6)}" height="${n(node.rect.height - 6)}" rx="${NODE_RADIUS - 2}" fill="none" stroke="${border}" stroke-width="1"/>`
+          ? `<rect data-marker="final" x="${n(node.rect.x + ox + 3)}" y="${n(node.rect.y + oy + 3)}" width="${n(node.rect.width - 6)}" height="${n(node.rect.height - 6)}" rx="${NODE_RADIUS - 2}" fill="none" stroke="${border}" stroke-width="1"/>`
           : "";
+      const tone = isState
+        ? stateTone(node.label.lines.map((line) => line.text).join(" "), node.marker)
+        : null;
+      const fill = tone ? fillForStateTone(paints, tone) : surface;
+      const toneAttr = tone ? ` data-state-tone="${escapeXml(tone)}"` : "";
+      const markerAttr = node.marker ? ` data-marker="${escapeXml(node.marker)}"` : "";
       const roleAttr = node.role ? ` data-role="${escapeXml(node.role)}"` : "";
-      const accessible = `${kindText} ${node.label.lines.map((line) => line.text).join(" ")}`.trim();
-      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${roleAttr} tabindex="0" role="img" aria-label="${escapeXml(accessible || node.id)}">
-  <rect x="${n(node.rect.x + ox)}" y="${n(node.rect.y + oy)}" width="${n(node.rect.width)}" height="${n(node.rect.height)}" rx="${NODE_RADIUS}" fill="${surface}" stroke="${border}" stroke-width="1"/>
+      const accessible = `${isState ? "" : `${kindText} `}${node.label.lines.map((line) => line.text).join(" ")}`.trim();
+      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${toneAttr}${markerAttr}${roleAttr} tabindex="0" role="img" aria-label="${escapeXml(accessible || node.id)}">
+  <rect x="${n(node.rect.x + ox)}" y="${n(node.rect.y + oy)}" width="${n(node.rect.width)}" height="${n(node.rect.height)}" rx="${NODE_RADIUS}" fill="${fill}" stroke="${border}" stroke-width="1"/>
   ${final}
   ${initial}
   ${icon}
