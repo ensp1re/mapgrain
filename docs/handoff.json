@@ -4,16 +4,17 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/v4-webm-story",
-    "revision": "cae7900873c50b088c58f8f3e4dcd2afffc696f7",
+    "branch": "chore/stamp-f046",
+    "revision": "a299b35315f267abe6275dd3326b3bdb2293894c",
     "dirty": true
   },
   "evidenceRefs": [
-    "docs/runs/run-1788974527775-b9efdc.json"
+    "https://github.com/ensp1re/mapgrain/pull/55",
+    "https://github.com/ensp1re/mapgrain/actions/runs/34383684723"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.1.0 (architecture/workflow). Source CLI is 0.2.0 and is not on npm yet.",
-    "JPEG/WebP/clipboard are editor raster paths. CLI does not encode JPEG/WebP.",
+    "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
     "A working-tree snapshot hash is not Git verification. verified requires a 40-character commit SHA whose blob matches snapshot.",
     "Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.",
     "Do not claim sequence fragments, live agent prompt runs, Mermaid/draw.io import, hosted sharing, or a five-user study."
@@ -24,6 +25,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "F046 is locally verified. Push a draft PR against main.",
-  "updatedAt": "2026-09-09T17:22:46.490Z"
+  "nextAction": "No live product tasks. Next id F047.",
+  "updatedAt": "2026-09-09T17:36:00.000Z"
 }
