@@ -35,7 +35,7 @@ npx mapgrain@0.1.0 doctor
 
 From this checkout, `pnpm mapgrain` is the development command (source CLI `0.2.0`). `npx mapgrain@0.1.0` is the last published package and does not validate sequence, data-flow, or lifecycle fixtures from this checkout. Internals are bundled; do not import `@mapgrain/*` from an application. Do not use an unversioned latest tag.
 
-`diagnose` reports geometry warnings, working-tree snapshot matches, and optional Git verification. `verified` is true only when `evidence.revision` is a 40-character commit SHA and that commit's blob matches `evidence.snapshot`. A matching working-tree hash is `snapshotMatches`, not Git evidence. `diagnose --strict` exits non-zero on overlap or clipping. `compare` reports added, removed, changed, moved, and rerouted facts, and `compare a.json b.json -o review.html` writes a Before/Delta/After review. `watch` keeps last-good output while a file is invalid. JPEG/WebP and clipboard copy are editor exports; the CLI raster format is PNG.
+`diagnose` reports geometry warnings, working-tree snapshot matches, and optional Git verification. `verified` is true only when `evidence.revision` is a 40-character commit SHA and that commit's blob matches `evidence.snapshot`. A matching working-tree hash is `snapshotMatches`, not Git evidence. `diagnose --strict` exits non-zero on overlap or clipping. `compare` reports added, removed, changed, moved, and rerouted facts, and `compare a.json b.json -o review.html` writes a Before/Delta/After review. `watch` keeps last-good output while a file is invalid. JPEG/WebP, clipboard copy, and story WebM are editor exports. Story WebM is 1280×720, cancellable, and recorded in the browser. The CLI raster format is PNG; CLI `--format video` is FFmpeg MP4.
 
 ## Skill
 

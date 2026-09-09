@@ -1,5 +1,58 @@
 {
   "schemaVersion": 1,
-  "nextId": 46,
-  "tasks": []
+  "nextId": 47,
+  "tasks": [
+    {
+      "id": "F046",
+      "behavior": "Editor story WebM capture via MediaRecorder, distinct from CLI FFmpeg MP4. Documented size, cancellation, and offline behavior.",
+      "acceptance": [
+        "Export dialog can record a story as WebM in the production editor using MediaRecorder.",
+        "Export fails with a recovery message when the document has no story steps, and Cancel stops an in-progress recording.",
+        "CLI video remains FFmpeg MP4; FEATURES/CAPABILITY/getting-started state WebM as editor-only.",
+        "Documented capture size is 1280x720 with a fixed seconds-per-step duration."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788974527775-b9efdc",
+        "fingerprintBefore": "daf20f5fdd14a2f9c9230773d4bb9170c6e26b69947d0e7d8a80a2b70eb38c08",
+        "fingerprintAfter": "daf20f5fdd14a2f9c9230773d4bb9170c6e26b69947d0e7d8a80a2b70eb38c08",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-09T17:22:38.302Z"
+      },
+      "delivery": null
+    }
+  ]
 }

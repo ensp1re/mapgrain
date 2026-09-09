@@ -6,6 +6,7 @@ export const EXPORT_CHOICE = {
   JPEG: "jpeg",
   WEBP: "webp",
   CLIPBOARD: "clipboard",
+  STORY_WEBM: "story-webm",
   HTML: EXPORT_FORMAT.HTML,
   JSON: EXPORT_FORMAT.JSON,
 } as const;

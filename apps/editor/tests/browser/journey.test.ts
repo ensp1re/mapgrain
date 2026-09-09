@@ -114,6 +114,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   assert.equal(await page.getByRole("textbox", { name: "Node label" }).inputValue(), "API");
 
   await page.getByRole("button", { name: "Export" }).click();
+  await page.getByRole("button", { name: "Story WebM" }).waitFor();
   const formats = [
     { name: "JSON", file: "diagram.json" },
     { name: "SVG", file: "diagram.svg" },
