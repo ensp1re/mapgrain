@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 import { mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -7,6 +8,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { EXIT_CODE, MAX_INPUT_BYTES } from "../src/constants/cli.ts";
 import { runCli } from "../src/run.ts";
+import type { CliIo } from "../src/types/cli.ts";
 
 const fixture = fileURLToPath(
   new URL("../../../tests/fixtures/documents/nested-groups.json", import.meta.url),
@@ -20,7 +22,11 @@ const pkg = fileURLToPath(new URL("../package.json", import.meta.url));
 function memoryIo(files: Record<string, string> = {}) {
   const stdoutChunks: Array<string | Uint8Array> = [];
   const stderrChunks: Array<string | Uint8Array> = [];
-  return {
+  const io: CliIo & {
+    stdoutChunks: Array<string | Uint8Array>;
+    stderrChunks: Array<string | Uint8Array>;
+    files: Record<string, string>;
+  } = {
     stdout: {
       write(chunk: string | Uint8Array) {
         stdoutChunks.push(chunk);
@@ -57,6 +63,7 @@ function memoryIo(files: Record<string, string> = {}) {
     stderrChunks,
     files,
   };
+  return io;
 }
 
 function text(chunks: Array<string | Uint8Array>): string {
@@ -193,6 +200,123 @@ test("diagnose --strict fails when nodes overlap", async () => {
   const payload = JSON.parse(text(strictIo.stdoutChunks)) as { ok: boolean; blocking: string[] };
   assert.equal(payload.ok, false);
   assert.ok(payload.blocking.includes("overlap"));
+});
+
+test("diagnose does not treat a snapshot hash match as git verification", async () => {
+  const body = "export function capture() {}\n";
+  const digest = createHash("sha256").update(new TextEncoder().encode(body)).digest("hex");
+  const source = {
+    schemaVersion: 1,
+    id: "doc-evidence",
+    revision: 1,
+    kind: "architecture",
+    title: "Evidence",
+    theme: "dark",
+    layoutHints: { direction: "right", pinnedNodeIds: [] },
+    groups: [],
+    views: [{ id: "overview", kind: "overview", name: "All" }],
+    nodes: [{ id: "a", kind: "service", label: "Alpha", groupId: null, ports: [] }],
+    edges: [],
+    evidence: [
+      {
+        id: "ev-a",
+        targetKind: "node",
+        targetId: "a",
+        state: "observed",
+        path: "src/a.ts",
+        snapshot: digest,
+        revision: "main",
+      },
+    ],
+  };
+  const io = memoryIo({ "evidence.json": JSON.stringify(source), "src/a.ts": body });
+  io.gitShow = async () => body;
+  const code = await runCli(["diagnose", "evidence.json"], io);
+  assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
+  const payload = JSON.parse(text(io.stdoutChunks)) as {
+    evidence: Array<{ snapshotMatches: boolean; verified: boolean; gitObjectMatches: boolean | null }>;
+  };
+  assert.equal(payload.evidence[0]?.snapshotMatches, true);
+  assert.equal(payload.evidence[0]?.gitObjectMatches, null);
+  assert.equal(payload.evidence[0]?.verified, false);
+});
+
+test("diagnose verifies only a pinned git revision whose blob matches", async () => {
+  const body = "export function capture() {}\n";
+  const digest = createHash("sha256").update(new TextEncoder().encode(body)).digest("hex");
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  const source = {
+    schemaVersion: 1,
+    id: "doc-evidence",
+    revision: 1,
+    kind: "architecture",
+    title: "Evidence",
+    theme: "dark",
+    layoutHints: { direction: "right", pinnedNodeIds: [] },
+    groups: [],
+    views: [{ id: "overview", kind: "overview", name: "All" }],
+    nodes: [{ id: "a", kind: "service", label: "Alpha", groupId: null, ports: [] }],
+    edges: [],
+    evidence: [
+      {
+        id: "ev-a",
+        targetKind: "node",
+        targetId: "a",
+        state: "observed",
+        path: "src/a.ts",
+        snapshot: digest,
+        revision: sha,
+      },
+    ],
+  };
+  const io = memoryIo({ "evidence.json": JSON.stringify(source), "src/a.ts": body });
+  io.gitShow = async (revision, path) => (revision === sha && path === "src/a.ts" ? body : null);
+  const code = await runCli(["diagnose", "evidence.json"], io);
+  assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
+  const payload = JSON.parse(text(io.stdoutChunks)) as {
+    evidence: Array<{ snapshotMatches: boolean; verified: boolean; gitObjectMatches: boolean | null; revision: string }>;
+  };
+  assert.equal(payload.evidence[0]?.snapshotMatches, true);
+  assert.equal(payload.evidence[0]?.gitObjectMatches, true);
+  assert.equal(payload.evidence[0]?.verified, true);
+  assert.equal(payload.evidence[0]?.revision, sha);
+});
+
+test("diagnose keeps verified false when a pinned blob is missing", async () => {
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  const source = {
+    schemaVersion: 1,
+    id: "doc-evidence",
+    revision: 1,
+    kind: "architecture",
+    title: "Evidence",
+    theme: "dark",
+    layoutHints: { direction: "right", pinnedNodeIds: [] },
+    groups: [],
+    views: [{ id: "overview", kind: "overview", name: "All" }],
+    nodes: [{ id: "a", kind: "service", label: "Alpha", groupId: null, ports: [] }],
+    edges: [],
+    evidence: [
+      {
+        id: "ev-a",
+        targetKind: "node",
+        targetId: "a",
+        state: "observed",
+        path: "src/a.ts",
+        snapshot: "abc",
+        revision: sha,
+      },
+    ],
+  };
+  const io = memoryIo({ "evidence.json": JSON.stringify(source) });
+  io.gitShow = async () => null;
+  const code = await runCli(["diagnose", "evidence.json"], io);
+  assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
+  const payload = JSON.parse(text(io.stdoutChunks)) as {
+    evidence: Array<{ verified: boolean; gitObjectMatches: boolean | null }>;
+  };
+  assert.equal(payload.evidence[0]?.gitObjectMatches, false);
+  assert.equal(payload.evidence[0]?.verified, false);
 });
 
 test("compare reports a removed node between two documents", async () => {

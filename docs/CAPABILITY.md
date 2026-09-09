@@ -17,7 +17,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | CLI validate/layout/view/export/doctor/studio | partial | yes | npm `mapgrain@0.1.0` is last published; source CLI is `0.2.0` and is not on npm yet |
 | Agent skill install + live tasks across agents | partial | partial | Install paths tested; live agent tasks untested; skill must not send sequence fixtures to `npx mapgrain@0.1.0` |
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
-| Geometry diagnostics, snapshot compare, watch/reload | partial | yes | diagnose --strict fails on overlap/clipping; compare includes moved/rerouted IDs and optional HTML review |
+| Geometry diagnostics, snapshot compare, watch/reload | partial | yes | diagnose --strict fails on overlap/clipping; compare includes moved/rerouted IDs and optional HTML review; Git verified is a pinned commit blob, not a working-tree hash |
 | JPEG/WebP/clipboard export | partial | yes | Editor-only raster formats and clipboard PNG; CLI does not encode JPEG/WebP |
 | Visual presets, share-card, video, localization | implemented | yes | Presets change scene metrics; card PNG; story mp4; en/uk viewer chrome |
 | Five-user study / physical-device smoke | deferred | no | Dropped from the task queue; no fabricated user-study evidence |

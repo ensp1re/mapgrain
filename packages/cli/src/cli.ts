@@ -1,4 +1,5 @@
 import { access, readFile, rename, unlink, writeFile } from "node:fs/promises";
+import { readGitBlob } from "./git.ts";
 import { runCli } from "./run.ts";
 
 async function readStdin(): Promise<string> {
@@ -25,6 +26,7 @@ void runCli(process.argv.slice(2), {
       return false;
     }
   },
+  gitShow: async (revision, path) => readGitBlob(revision, path),
 }).then((code) => {
   process.exitCode = code;
 });

@@ -90,6 +90,8 @@ export const EVIDENCE_TARGET_KIND = {
   GROUP: "group",
 } as const;
 
+export const PINNED_GIT_REVISION = /^[0-9a-f]{40}$/i;
+
 export function valuesOf<const T extends Record<string, string>>(
   record: T,
 ): Array<T[keyof T]> {
