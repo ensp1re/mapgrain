@@ -18,7 +18,7 @@ export { iconMarkup, iconShapesFor, ICON_VIEWBOX } from "./icons.ts";
 export { iconSizeFor, kindDisplayText, kindFontFor } from "./kind.ts";
 export { presentationCssVars, presentationFromOptions } from "./presentation.ts";
 export { buildScene } from "./build.ts";
-export { isSequenceDocument, sequencePositions } from "./sequence.ts";
+export { isSequenceDocument, sequenceMessageY, sequencePositions } from "./sequence.ts";
 export { defaultSceneOptions } from "./options.ts";
 export { presetOverrides } from "./presets.ts";
 export { facingSide, placePortsOnRect, portOffset } from "./ports.ts";
@@ -46,6 +46,8 @@ export type {
   MeasuredText,
   Scene,
   SceneEdge,
+  SceneFragment,
+  SceneFragmentOperand,
   SceneGroup,
   SceneLifeline,
   SceneNode,

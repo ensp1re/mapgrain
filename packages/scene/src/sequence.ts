@@ -2,6 +2,12 @@ import { DOCUMENT_KIND, type DiagramDocument } from "@mapgrain/document";
 import type { Point, Size } from "./types/geometry.ts";
 
 const GAP = 48;
+export const SEQUENCE_MESSAGE_GAP = 40;
+export const SEQUENCE_HEADER_GAP = 28;
+
+export function sequenceMessageY(order: number, headerBottom: number): number {
+  return headerBottom + SEQUENCE_HEADER_GAP + (order - 1) * SEQUENCE_MESSAGE_GAP;
+}
 
 export function isSequenceDocument(document: DiagramDocument): boolean {
   return document.kind === DOCUMENT_KIND.SEQUENCE;

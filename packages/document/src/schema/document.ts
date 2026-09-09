@@ -12,6 +12,7 @@ import {
   PORT_SIDE,
   PRESET,
   SCHEMA_VERSION,
+  SEQUENCE_FRAGMENT_KIND,
   THEME,
   VIEW_KIND,
   valuesOf,
@@ -163,6 +164,24 @@ export const StorySchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const SequenceFragmentOperandSchema = Type.Object(
+  {
+    label: Type.String({ minLength: 1, maxLength: 200 }),
+    startOrder: Type.Integer({ minimum: 1 }),
+    endOrder: Type.Integer({ minimum: 1 }),
+  },
+  { additionalProperties: false },
+);
+
+export const SequenceFragmentSchema = Type.Object(
+  {
+    id: Id,
+    kind: stringUnion(valuesOf(SEQUENCE_FRAGMENT_KIND)),
+    operands: Type.Array(SequenceFragmentOperandSchema, { minItems: 1 }),
+  },
+  { additionalProperties: false },
+);
+
 export const DiagramDocumentSchema = Type.Object(
   {
     schemaVersion: Type.Literal(SCHEMA_VERSION),
@@ -180,6 +199,7 @@ export const DiagramDocumentSchema = Type.Object(
     preset: Type.Optional(stringUnion(valuesOf(PRESET))),
     evidence: Type.Optional(Type.Array(EvidenceSchema)),
     stories: Type.Optional(Type.Array(StorySchema)),
+    fragments: Type.Optional(Type.Array(SequenceFragmentSchema)),
   },
   {
     additionalProperties: false,

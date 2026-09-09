@@ -387,7 +387,7 @@ function Specimen() {
     [documentModel, displayPositions],
   );
   const flow = useMemo(() => {
-    if (!scene?.ok) return { nodes: [] as FlowNodeDraft[], edges: [], lifelines: [] };
+    if (!scene?.ok) return { nodes: [] as FlowNodeDraft[], edges: [], lifelines: [], fragments: [] };
     return sceneToFlow(scene.scene);
   }, [scene]);
 
@@ -1190,7 +1190,7 @@ function Specimen() {
             proOptions={{ hideAttribution: true }}
           >
             <Background gap={16} size={1} />
-            <LifelineLayer lifelines={flow.lifelines} />
+            <LifelineLayer lifelines={flow.lifelines} fragments={flow.fragments} />
             {presenting ? null : (
               <ViewportBar
                 canFocus={selection.nodeIds.length > 0}

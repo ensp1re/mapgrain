@@ -5,7 +5,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Capability | Status | Tested | Notes |
 | --- | --- | --- | --- |
 | Architecture diagrams (typed nodes, directed edges, nested groups, stable IDs) | implemented | yes | Fixtures cover nested groups, parallel edges, cycles, long labels |
-| Workflow / sequence / data-flow / lifecycle modes | partial | yes | Editor/CLI in this checkout; npm `mapgrain@0.1.0` does not validate sequence/data-flow/lifecycle |
+| Workflow / sequence / data-flow / lifecycle modes | partial | yes | Editor/CLI in this checkout include sequence alt/opt fragments; npm `mapgrain@0.1.0` does not validate sequence/data-flow/lifecycle |
 | Blank / open / three examples / agent setup on start | implemented | partial | Start surface exists; agent setup is copy, not a picker with troubleshooting |
 | Direct edit, connect, arrange preview, undo, export | implemented | yes | F039: production blank→edit→export→reimport journey; selection p95 through next paint |
 | Save status, last-active reopen, Studio conflict recovery | implemented | yes | F033: last-active id, last-opened vs edited times, Saved after durable write, structured Studio errors |

@@ -14,7 +14,12 @@ import { placeEdgeLabel } from "./routes.ts";
 import { defaultSceneOptions } from "./options.ts";
 import { presentationFromOptions } from "./presentation.ts";
 import { presetOverrides } from "./presets.ts";
-import { isSequenceDocument, sequencePositions } from "./sequence.ts";
+import {
+  isSequenceDocument,
+  SEQUENCE_MESSAGE_GAP,
+  sequenceMessageY,
+  sequencePositions,
+} from "./sequence.ts";
 import {
   facingSide,
   placePortsOnRect,
@@ -27,14 +32,12 @@ import type {
   Scene,
   SceneEdge,
   SceneGroup,
+  SceneFragment,
   SceneLifeline,
   SceneNode,
   ScenePort,
   SceneResult,
 } from "./types/scene.ts";
-
-const SEQUENCE_MESSAGE_GAP = 40;
-const SEQUENCE_HEADER_GAP = 28;
 
 function sequenceMessagePoints(
   source: SceneNode,
@@ -42,7 +45,7 @@ function sequenceMessagePoints(
   order: number,
   headerBottom: number,
 ): Point[] {
-  const y = headerBottom + SEQUENCE_HEADER_GAP + (order - 1) * SEQUENCE_MESSAGE_GAP;
+  const y = sequenceMessageY(order, headerBottom);
   const fromX = source.rect.x + source.rect.width / 2;
   const toX = target.rect.x + target.rect.width / 2;
   if (source.id === target.id) {
@@ -57,6 +60,42 @@ function sequenceMessagePoints(
     { x: fromX, y },
     { x: toX, y },
   ];
+}
+
+const FRAGMENT_HEADER = 18;
+const FRAGMENT_PAD_X = 16;
+
+function buildFragments(
+  document: DiagramDocument,
+  nodes: SceneNode[],
+  headerBottom: number,
+): SceneFragment[] {
+  if (document.kind !== DOCUMENT_KIND.SEQUENCE || nodes.length === 0) return [];
+  const minX = Math.min(...nodes.map((node) => node.rect.x)) - FRAGMENT_PAD_X;
+  const maxX = Math.max(...nodes.map((node) => node.rect.x + node.rect.width)) + FRAGMENT_PAD_X;
+  const padY = SEQUENCE_MESSAGE_GAP / 2;
+  return (document.fragments ?? []).map((fragment) => {
+    const operands = fragment.operands.map((operand) => {
+      const top = sequenceMessageY(operand.startOrder, headerBottom) - padY;
+      const bottom = sequenceMessageY(operand.endOrder, headerBottom) + padY;
+      return { label: operand.label, y: top, height: Math.max(SEQUENCE_MESSAGE_GAP, bottom - top) };
+    });
+    const y = Math.min(...operands.map((operand) => operand.y));
+    const bottom = Math.max(...operands.map((operand) => operand.y + operand.height));
+    const first = fragment.operands[0]?.label ?? "";
+    return {
+      id: fragment.id,
+      kind: fragment.kind,
+      title: `${fragment.kind} ${first}`.trim(),
+      rect: {
+        x: minX,
+        y: y - FRAGMENT_HEADER,
+        width: maxX - minX,
+        height: bottom - y + FRAGMENT_HEADER,
+      },
+      operands,
+    };
+  });
 }
 
 function nodeSize(
@@ -333,6 +372,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     0,
     ...edges.flatMap((edge) => edge.points.map((point) => point.y)),
   );
+  const headerBottom = Math.max(0, ...nodes.map((item) => item.rect.y + item.rect.height));
   const lifelines: SceneLifeline[] =
     document.kind === DOCUMENT_KIND.SEQUENCE
       ? nodes.map((node) => ({
@@ -342,9 +382,11 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
           y2: Math.max(node.rect.y + node.rect.height + 48, messageBottom + 24),
         }))
       : [];
+  const fragments = buildFragments(document, nodes, headerBottom);
   const bounds = unionRects([
     ...nodes.map((node) => node.rect),
     ...groups.map((group) => group.rect),
+    ...fragments.map((fragment) => fragment.rect),
     ...edges.flatMap((edge) => [
       ...edge.points.map((point) => ({ x: point.x, y: point.y, width: 0, height: 0 })),
       edge.labelBox,
@@ -360,6 +402,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     edges,
     groups,
     lifelines,
+    fragments,
     presentation,
   };
   return { ok: true, scene };

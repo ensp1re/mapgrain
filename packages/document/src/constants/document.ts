@@ -92,6 +92,11 @@ export const EVIDENCE_TARGET_KIND = {
 
 export const PINNED_GIT_REVISION = /^[0-9a-f]{40}$/i;
 
+export const SEQUENCE_FRAGMENT_KIND = {
+  ALT: "alt",
+  OPT: "opt",
+} as const;
+
 export function valuesOf<const T extends Record<string, string>>(
   record: T,
 ): Array<T[keyof T]> {

@@ -17,6 +17,72 @@ test("sequence fixture with stories, roles, and a self-message validates", async
   assert.ok(result.document.edges.some((edge) => edge.source.nodeId === edge.target.nodeId));
 });
 
+test("sequence fixture models alt and opt fragments over message orders", async () => {
+  const raw = JSON.parse(await readFile(`${fixtures}/sequence-checkout.json`, "utf8")) as unknown;
+  const result = validateDocument(raw);
+  assert.equal(result.ok, true, JSON.stringify(result));
+  if (!result.ok) return;
+  assert.equal(result.document.fragments?.length, 2);
+  assert.equal(result.document.fragments?.[0]?.kind, "alt");
+  assert.equal(result.document.fragments?.[1]?.kind, "opt");
+});
+
+test("opt fragments need one operand and alt fragments need two", () => {
+  const raw = JSON.parse(
+    JSON.stringify({
+      schemaVersion: 1,
+      id: "doc-seq",
+      revision: 1,
+      kind: "sequence",
+      title: "Seq",
+      theme: "dark",
+      layoutHints: { direction: "down", pinnedNodeIds: [] },
+      groups: [],
+      views: [{ id: "overview", kind: "overview", name: "All" }],
+      nodes: [
+        { id: "a", kind: "participant", label: "A", groupId: null, ports: [] },
+        { id: "b", kind: "participant", label: "B", groupId: null, ports: [] },
+      ],
+      edges: [
+        {
+          id: "m1",
+          source: { nodeId: "a" },
+          target: { nodeId: "b" },
+          type: "message",
+          direction: "forward",
+          order: 1,
+        },
+        {
+          id: "m2",
+          source: { nodeId: "b" },
+          target: { nodeId: "a" },
+          type: "reply",
+          direction: "forward",
+          order: 2,
+        },
+      ],
+      fragments: [
+        { id: "frag-opt", kind: "opt", operands: [{ label: "[x]", startOrder: 1, endOrder: 1 }] },
+      ],
+    }),
+  ) as unknown;
+  assert.equal(validateDocument(raw).ok, true);
+  const tooFew = structuredClone(raw) as { fragments: Array<{ kind: string; operands: unknown[] }> };
+  tooFew.fragments[0]!.kind = "alt";
+  assert.equal(validateDocument(tooFew).ok, false);
+});
+
+test("architecture documents reject sequence fragments", async () => {
+  const raw = JSON.parse(await readFile(`${fixtures}/nested-groups.json`, "utf8")) as {
+    fragments?: unknown;
+  };
+  raw.fragments = [
+    { id: "frag-opt", kind: "opt", operands: [{ label: "[x]", startOrder: 1, endOrder: 1 }] },
+  ];
+  const result = validateDocument(raw);
+  assert.equal(result.ok, false);
+});
+
 test("a story step with a missing node is rejected", async () => {
   const raw = JSON.parse(await readFile(`${fixtures}/sequence-checkout.json`, "utf8")) as {
     stories: Array<{ steps: Array<{ nodeId?: string }> }>;

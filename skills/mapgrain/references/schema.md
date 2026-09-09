@@ -11,3 +11,5 @@ Edge `type`: `calls`, `reads`, `writes`, `publishes`, `subscribes`, `depends-on`
 Edge `direction`: `forward`, `both`, `none`.
 
 Optional `layout.positions` is keyed by node id. Optional `evidence[]` uses `targetKind` `node` | `edge` | `group` and `state` `observed` | `asserted` | `inferred`. Optional `path`, `location`, `snapshot` (sha256), and `revision` (40-character Git commit SHA) record a source pin. A snapshot match is not Git verification.
+
+Sequence documents may include `fragments[]` with `kind` `alt` | `opt` and `operands` of `{ label, startOrder, endOrder }`. `opt` has one operand; `alt` has two or more non-overlapping operands. Orders must exist on messages. Use the checkout CLI (`pnpm mapgrain` or packed `0.2.0`); npm `0.1.0` rejects these fixtures.

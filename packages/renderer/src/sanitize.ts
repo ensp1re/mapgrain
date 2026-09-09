@@ -38,12 +38,24 @@ export function subsetDocument(document: DiagramDocument, nodeIds: string[]): Di
     if (item.targetKind === "edge") return edges.some((edge) => edge.id === item.targetId);
     return include.has(item.targetId);
   });
+  const orders = new Set(
+    edges.map((edge) => edge.order).filter((order): order is number => order !== undefined),
+  );
+  const fragments = document.fragments?.filter((fragment) =>
+    fragment.operands.every((operand) => {
+      for (let order = operand.startOrder; order <= operand.endOrder; order += 1) {
+        if (!orders.has(order)) return false;
+      }
+      return true;
+    }),
+  );
   return {
     ...document,
     nodes,
     edges,
     groups,
     views,
+    ...(fragments !== undefined ? { fragments } : {}),
     ...(evidence ? { evidence } : {}),
     layoutHints: {
       ...document.layoutHints,

@@ -11,6 +11,7 @@ import type {
   NODE_MARKER,
   PORT_SIDE,
   PRESET,
+  SEQUENCE_FRAGMENT_KIND,
   THEME,
   VIEW_KIND,
 } from "../constants/document.ts";
@@ -24,6 +25,8 @@ import type {
   LayoutSectionSchema,
   NodeSchema,
   PortSchema,
+  SequenceFragmentOperandSchema,
+  SequenceFragmentSchema,
   StorySchema,
   StoryStepSchema,
   ViewSchema,
@@ -42,6 +45,8 @@ export type Preset = (typeof PRESET)[keyof typeof PRESET];
 export type EvidenceState = (typeof EVIDENCE_STATE)[keyof typeof EVIDENCE_STATE];
 export type EvidenceTargetKind =
   (typeof EVIDENCE_TARGET_KIND)[keyof typeof EVIDENCE_TARGET_KIND];
+export type SequenceFragmentKind =
+  (typeof SEQUENCE_FRAGMENT_KIND)[keyof typeof SEQUENCE_FRAGMENT_KIND];
 
 export type DiagramPort = Static<typeof PortSchema>;
 export type DiagramNode = Static<typeof NodeSchema>;
@@ -55,4 +60,6 @@ export type LayoutSectionVersion = typeof LAYOUT_SECTION_VERSION;
 export type DiagramEvidence = Static<typeof EvidenceSchema>;
 export type DiagramStory = Static<typeof StorySchema>;
 export type DiagramStoryStep = Static<typeof StoryStepSchema>;
+export type DiagramSequenceFragmentOperand = Static<typeof SequenceFragmentOperandSchema>;
+export type DiagramSequenceFragment = Static<typeof SequenceFragmentSchema>;
 export type DiagramDocument = Static<typeof DiagramDocumentSchema>;

@@ -743,6 +743,66 @@
           }
         }
       }
+    },
+    "fragments": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "operands"
+        ],
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "const": "alt",
+                "type": "string"
+              },
+              {
+                "const": "opt",
+                "type": "string"
+              }
+            ]
+          },
+          "operands": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "label",
+                "startOrder",
+                "endOrder"
+              ],
+              "properties": {
+                "label": {
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                "startOrder": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "endOrder": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

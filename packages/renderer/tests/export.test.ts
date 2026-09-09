@@ -260,6 +260,17 @@ test("share-card export is a PNG of a named view", async () => {
   assert.ok(result.bytes.length > 100);
 });
 
+test("sequence SVG draws alt and opt fragments", async () => {
+  const raw = await load("sequence-checkout.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.match(svg, /data-kind="fragment"/);
+  assert.match(svg, /data-fragment-kind="alt"/);
+  assert.match(svg, /data-fragment-kind="opt"/);
+});
+
 test("sequence, data-flow, lifecycle, and decision fixtures export JSON, SVG, PNG, and HTML", async () => {
   const cases = [
     { name: "sequence-checkout.json", needle: /Checkout API[\s\S]*submit|submit[\s\S]*Checkout API/ },
