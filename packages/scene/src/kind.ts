@@ -1,3 +1,4 @@
+import { NODE_KIND, type NodeKind } from "@mapgrain/document";
 import {
   ICON_SIZE,
   KIND_FONT_SIZE,
@@ -6,8 +7,36 @@ import {
 } from "./constants/metrics.ts";
 import type { FontSpec } from "./types/options.ts";
 
+export const KIND_ORDER: readonly NodeKind[] = [
+  NODE_KIND.ACTOR,
+  NODE_KIND.SYSTEM,
+  NODE_KIND.GATEWAY,
+  NODE_KIND.SERVICE,
+  NODE_KIND.JOB,
+  NODE_KIND.DATASTORE,
+  NODE_KIND.QUEUE,
+  NODE_KIND.EXTERNAL,
+  NODE_KIND.DECISION,
+  NODE_KIND.PROCESS,
+  NODE_KIND.ENTITY,
+  NODE_KIND.PARTICIPANT,
+  NODE_KIND.STATE,
+];
+
 export function kindDisplayText(kind: string): string {
   return kind.replaceAll("-", " ").toUpperCase();
+}
+
+export function kindLegendLabel(kind: string): string {
+  return kind
+    .split("-")
+    .map((part) => part.slice(0, 1).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+export function presentKinds(kinds: readonly string[]): NodeKind[] {
+  const seen = new Set(kinds);
+  return KIND_ORDER.filter((kind) => seen.has(kind));
 }
 
 export function kindFontFor(font: FontSpec): FontSpec {

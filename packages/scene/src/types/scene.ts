@@ -1,4 +1,5 @@
 import type {
+  DocumentKind,
   EdgeDirection,
   NodeKind,
   NodeMarker,
@@ -98,6 +99,7 @@ export interface SceneFragment {
 
 export interface Scene {
   documentId: string;
+  documentKind: DocumentKind;
   revision: number;
   bounds: Rect;
   nodes: SceneNode[];

@@ -64,6 +64,7 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
     fileURLToPath(new URL("../src/diagram/ComponentNode.tsx", import.meta.url)),
     "utf8",
   );
+  const app = await readFile(fileURLToPath(new URL("../src/App.tsx", import.meta.url)), "utf8");
   assert.match(outline, /from "\.\.\/ui\/Pane\.tsx"/);
   assert.match(outline, /placeholder="Search components"/);
   assert.match(outline, /meta=\{count\}/);
@@ -77,6 +78,7 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
   assert.doesNotMatch(library, /Add service/);
   assert.match(node, /from "\.\/NodeCard\.tsx"/);
   assert.match(node, /from "\.\/KindLabel\.tsx"/);
+  assert.match(app, /KindLegend/);
   assert.match(node, /asSource/);
   assert.doesNotMatch(node, /port\.side === PORT_SIDE\.WEST \|\| port\.side === PORT_SIDE\.NORTH \? "target"/);
   assert.match(outline, /kindShort/);

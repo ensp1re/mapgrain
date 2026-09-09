@@ -1,4 +1,4 @@
-import { NODE_KIND, PORT_SIDE, type PortSide } from "@mapgrain/document";
+import { DOCUMENT_KIND, NODE_KIND, PORT_SIDE, type PortSide } from "@mapgrain/document";
 import { stateTone, type Scene, type SceneGroup, type SceneNode } from "@mapgrain/scene";
 import type { FlowEdgeDraft, FlowNodeDraft } from "../types/flow.ts";
 
@@ -75,6 +75,10 @@ export function sceneToFlow(scene: Scene): {
       stateTone:
         node.kind === NODE_KIND.STATE
           ? stateTone(node.label.lines.map((line) => line.text).join(" "), node.marker)
+          : undefined,
+      kindFill:
+        scene.documentKind === DOCUMENT_KIND.ARCHITECTURE && node.kind !== NODE_KIND.STATE
+          ? node.kind
           : undefined,
       ports: node.ports.map((port) => {
         const role = roles.get(portKey(node.id, port.id));

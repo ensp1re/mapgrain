@@ -1,4 +1,5 @@
 import { THEME, type Theme } from "@mapgrain/document";
+import { kindFillCssVars } from "./kindFill.ts";
 
 export interface ThemeTokens {
   background: string;
@@ -95,8 +96,8 @@ export function tokenCssVars(tokens: ThemeTokens, prefix = "--mg-"): string {
 }
 
 export function viewerChromeCss(): string {
-  const dark = tokenCssVars(DARK_TOKENS);
-  const light = tokenCssVars(LIGHT_TOKENS);
+  const dark = `${tokenCssVars(DARK_TOKENS)}; ${kindFillCssVars(THEME.DARK)}`;
+  const light = `${tokenCssVars(LIGHT_TOKENS)}; ${kindFillCssVars(THEME.LIGHT)}`;
   return `
     :root { color-scheme: dark; --bg: ${DARK_TOKENS.background}; --fg: ${DARK_TOKENS.text}; --muted: ${DARK_TOKENS.muted}; --accent: ${DARK_TOKENS.accent}; ${dark}; }
     html[data-theme="light"] { color-scheme: light; --bg: ${LIGHT_TOKENS.background}; --fg: ${LIGHT_TOKENS.text}; --muted: ${LIGHT_TOKENS.muted}; --accent: ${LIGHT_TOKENS.accent}; ${light}; }

@@ -5,6 +5,7 @@ interface NodeCardProps {
   className?: string;
   dataMarker?: string;
   dataStateTone?: string;
+  dataKindFill?: string;
   children: ReactNode;
   onDoubleClick?: () => void;
   onKeyDown?: (event: KeyboardEvent<HTMLDivElement>) => void;
@@ -15,6 +16,7 @@ export function NodeCard({
   className,
   dataMarker,
   dataStateTone,
+  dataKindFill,
   children,
   onDoubleClick,
   onKeyDown,
@@ -26,6 +28,7 @@ export function NodeCard({
         .join(" ")}
       data-marker={dataMarker}
       data-state-tone={dataStateTone}
+      data-kind-fill={dataKindFill}
       tabIndex={0}
       onDoubleClick={onDoubleClick}
       onKeyDown={onKeyDown}

@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F057
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f056 @ 6fcc158c4ea899dc71988044e214b280fdc15cef (dirty)
-- Updated: 2026-09-09T22:43:58.603Z
+- Git: feat/architecture-kind-legend @ dd39bfde49809ffb8561316ddd1243265de92d31 (dirty)
+- Updated: 2026-09-09T23:15:57.375Z
 
 ### Next action
 
-Queue F057: architecture kind color, glyph, and in-canvas legend.
+Verify F057, open a draft PR for architecture kind fills and legend.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Queue F057: architecture kind color, glyph, and in-canvas legend.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/77
-- https://github.com/ensp1re/mapgrain/actions/runs/34413464607
+- docs/runs/run-1788994492481-086400.json
 
 ## Resume
 
