@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F050
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/npm-0.2.0-pins @ 10fb16389d3ce887e2c7887c2067c7038d849f52 (dirty)
-- Updated: 2026-09-09T19:51:31.400Z
+- Git: chore/stamp-f050 @ 81ef4f50d79d12566ad5b2578cde3b7a07d92e9c (dirty)
+- Updated: 2026-09-09T19:56:45.000Z
 
 ### Next action
 
-Implement F050 pin retarget, verify, draft PR against main.
+No live product tasks. Next id F051.
 
 ### Decisions
 
@@ -34,7 +34,8 @@ Implement F050 pin retarget, verify, draft PR against main.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/64
+- https://github.com/ensp1re/mapgrain/actions/runs/34397872991
 
 ## Resume
 
