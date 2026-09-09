@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F047",
+    "behavior": "Sequence alt/opt fragments: schema, validation, scene boxes, SVG/editor overlay, and an original fixture.",
+    "acceptance": [
+      "Sequence documents can author alt and opt fragments covering message order ranges; other kinds reject fragments.",
+      "opt requires one operand and alt requires at least two non-overlapping operands whose orders exist.",
+      "Scene, SVG/PNG/HTML, and the editor overlay draw fragment boxes and operand labels without remapping messages.",
+      "FEATURES/skill/README state that alt/opt fragments are modeled in this checkout; npm 0.1.0 still does not validate them."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788976728765-ddaf6b",
+      "fingerprintBefore": "e84e23f321d7553ae351771111620aa00e24b1416d609e01994463b595adb7d6",
+      "fingerprintAfter": "e84e23f321d7553ae351771111620aa00e24b1416d609e01994463b595adb7d6",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T17:59:18.591Z"
+    },
+    "delivery": {
+      "implementationRevision": "d76f29ac21225956d0bd30c900871315790a3475",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/58",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "d76f29ac21225956d0bd30c900871315790a3475",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34387401752"
+        }
+      ],
+      "observedAt": "2026-09-09T18:12:09Z",
+      "closeoutRevision": "d76f29ac21225956d0bd30c900871315790a3475"
+    }
+  },
+  "archivedAt": "2026-09-09T18:12:24.982Z"
+}

@@ -2,19 +2,15 @@
 
 Mapgrain is a local editor, CLI (`npx mapgrain@0.1.0`), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
 
-**Status:** F047 active. Next task id after this slice: `F048`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
+**Status:** shipped through F047. No live slices. Next task id: `F048`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
 
-## Live slice
-
-**F047 — sequence fragments.** Model `alt` and `opt` fragments over message orders. Draw them in scene, SVG, and the editor overlay. npm `0.1.0` still does not validate current sequence fixtures.
-
-## Open gaps (not this slice)
+## Open gaps (not queued)
 
 - Publishing `mapgrain@0.2.0` (npm `0.1.0` remains the last published package)
 - Live agent prompt runs
 - Mermaid/draw.io import and hosted sharing
 - Five-user study / physical-device smoke
-- README/social media recapture from the F043–F046 production commits
+- README/social media recapture from the F043–F047 production commits
 
 Do not claim those as shipped.
 
