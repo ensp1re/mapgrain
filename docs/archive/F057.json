@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F057",
+    "behavior": "Architecture diagrams tint nodes by kind and show an in-canvas legend of the kinds present.",
+    "acceptance": [
+      "SVG for nested-groups includes data-kind-fill on architecture nodes and a data-kind=legend group.",
+      "Lifecycle SVG has neither a kind legend nor data-kind-fill.",
+      "Editor architecture cards expose data-kind-fill and a Component kinds legend."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788995757463-f103d3",
+      "fingerprintBefore": "69faac5618db99a2559d2e03ee3cdd8d32e51b672cce2367a6bf57ed5ed2754e",
+      "fingerprintAfter": "69faac5618db99a2559d2e03ee3cdd8d32e51b672cce2367a6bf57ed5ed2754e",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T23:16:21.584Z"
+    },
+    "delivery": {
+      "implementationRevision": "a93016dd9589ea070c641edcb49b404023f7d2fc",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/79",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "a93016dd9589ea070c641edcb49b404023f7d2fc",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34416469159"
+        }
+      ],
+      "observedAt": "2026-09-09T23:22:32Z",
+      "closeoutRevision": "a93016dd9589ea070c641edcb49b404023f7d2fc"
+    }
+  },
+  "archivedAt": "2026-09-09T23:22:55.667Z"
+}

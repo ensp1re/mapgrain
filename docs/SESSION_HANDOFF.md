@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F057
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/architecture-kind-legend @ dd39bfde49809ffb8561316ddd1243265de92d31 (dirty)
-- Updated: 2026-09-09T23:15:57.375Z
+- Git: chore/stamp-f057 @ a93016dd9589ea070c641edcb49b404023f7d2fc (dirty)
+- Updated: 2026-09-09T23:23:14.455Z
 
 ### Next action
 
-Verify F057, open a draft PR for architecture kind fills and legend.
+Queue F058: workflow swimlanes. Do not start until asked.
 
 ### Decisions
 
@@ -36,7 +36,8 @@ Verify F057, open a draft PR for architecture kind fills and legend.
 
 ### Evidence
 
-- docs/runs/run-1788994492481-086400.json
+- https://github.com/ensp1re/mapgrain/pull/79
+- https://github.com/ensp1re/mapgrain/actions/runs/34416469159
 
 ## Resume
 
