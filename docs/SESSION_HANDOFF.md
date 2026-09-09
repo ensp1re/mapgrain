@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F056
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f055 @ 4a80ba9a767f6f3b602a1960018c2c99174a87a7 (dirty)
-- Updated: 2026-09-09T22:27:59.275Z
+- Git: feat/lifecycle-canvas-marks @ 1b02de68ebd32c23867fd51b48ef64f148c903a6 (dirty)
+- Updated: 2026-09-09T22:38:02.309Z
 
 ### Next action
 
-Queue F056: lifecycle canvas marks (initial disk, final double border, start/wait/fail fills).
+Verify F056, open a draft PR for lifecycle canvas marks.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Queue F056: lifecycle canvas marks (initial disk, final double border, start/wai
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/75
-- https://github.com/ensp1re/mapgrain/actions/runs/34412127352
+- none
 
 ## Resume
 

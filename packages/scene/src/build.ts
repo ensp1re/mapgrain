@@ -2,6 +2,7 @@ import {
   DOCUMENT_KIND,
   EDGE_DIRECTION,
   LAYOUT_DIRECTION,
+  NODE_KIND,
   validateDocument,
   type DiagramDocument,
   type PortSide,
@@ -103,7 +104,14 @@ function nodeSize(
   kind: { width: number; height: number },
   iconSize: number,
   options: SceneOptions,
+  hideKindRow: boolean,
 ): { width: number; height: number } {
+  if (hideKindRow) {
+    return {
+      width: Math.max(options.minNodeWidth, label.width + options.padding.x * 2),
+      height: Math.max(options.minNodeHeight, label.height + options.padding.y * 2),
+    };
+  }
   const kindRow = Math.max(iconSize, kind.height);
   const headerWidth = iconSize + ICON_GAP + kind.width;
   const contentWidth = Math.max(label.width, headerWidth);
@@ -274,7 +282,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     );
     labels.set(node.id, label);
     kinds.set(node.id, kind);
-    sizes.set(node.id, nodeSize(label, kind, iconSize, options));
+    sizes.set(node.id, nodeSize(label, kind, iconSize, options, node.kind === NODE_KIND.STATE));
   }
 
   const positions = isSequenceDocument(document)

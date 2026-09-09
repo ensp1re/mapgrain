@@ -1,4 +1,5 @@
 import { THEME, type Theme } from "@mapgrain/document";
+import { STATE_TONE, type StateTone } from "@mapgrain/scene";
 import { DARK_TOKENS, LIGHT_TOKENS, type ThemeTokens } from "./tokens.ts";
 
 export const COLOR_MODE = {
@@ -26,5 +27,18 @@ export function paintsFor(theme: Theme, mode: ColorMode): ThemeTokens {
     port: `var(--mg-port, ${tokens.port})`,
     focus: `var(--mg-focus, ${tokens.focus})`,
     danger: `var(--mg-danger, ${tokens.danger})`,
+    stateStart: `var(--mg-state-start, ${tokens.stateStart})`,
+    stateActive: `var(--mg-state-active, ${tokens.stateActive})`,
+    stateWait: `var(--mg-state-wait, ${tokens.stateWait})`,
+    stateFail: `var(--mg-state-fail, ${tokens.stateFail})`,
+    stateDone: `var(--mg-state-done, ${tokens.stateDone})`,
   };
+}
+
+export function fillForStateTone(tokens: ThemeTokens, tone: StateTone): string {
+  if (tone === STATE_TONE.START) return tokens.stateStart;
+  if (tone === STATE_TONE.WAIT) return tokens.stateWait;
+  if (tone === STATE_TONE.FAIL) return tokens.stateFail;
+  if (tone === STATE_TONE.DONE) return tokens.stateDone;
+  return tokens.stateActive;
 }

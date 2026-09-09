@@ -15,6 +15,11 @@ export interface ThemeTokens {
   port: string;
   focus: string;
   danger: string;
+  stateStart: string;
+  stateActive: string;
+  stateWait: string;
+  stateFail: string;
+  stateDone: string;
 }
 
 export const DARK_TOKENS: ThemeTokens = {
@@ -32,6 +37,11 @@ export const DARK_TOKENS: ThemeTokens = {
   port: "#52525b",
   focus: "#9aa0ff",
   danger: "#f87171",
+  stateStart: "#243d38",
+  stateActive: "#27352c",
+  stateWait: "#3a3426",
+  stateFail: "#3c272b",
+  stateDone: "#2c2a3d",
 };
 
 export const LIGHT_TOKENS: ThemeTokens = {
@@ -49,6 +59,11 @@ export const LIGHT_TOKENS: ThemeTokens = {
   port: "#a1a1aa",
   focus: "#4f46e5",
   danger: "#b91c1c",
+  stateStart: "#dceae6",
+  stateActive: "#e3eee4",
+  stateWait: "#f3ead6",
+  stateFail: "#f3e0e2",
+  stateDone: "#e6e4f2",
 };
 
 export function tokensFor(theme: Theme): ThemeTokens {
@@ -71,6 +86,11 @@ export function tokenCssVars(tokens: ThemeTokens, prefix = "--mg-"): string {
     `${prefix}port: ${tokens.port}`,
     `${prefix}focus: ${tokens.focus}`,
     `${prefix}danger: ${tokens.danger}`,
+    `${prefix}state-start: ${tokens.stateStart}`,
+    `${prefix}state-active: ${tokens.stateActive}`,
+    `${prefix}state-wait: ${tokens.stateWait}`,
+    `${prefix}state-fail: ${tokens.stateFail}`,
+    `${prefix}state-done: ${tokens.stateDone}`,
   ].join("; ");
 }
 

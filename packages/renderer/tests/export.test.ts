@@ -250,6 +250,21 @@ test("share-card export is a PNG of a named view", async () => {
   assert.ok(result.bytes.length > 100);
 });
 
+test("lifecycle SVG draws initial disk and arrow, final ring, and omits STATE chips", async () => {
+  const raw = await load("lifecycle-session.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.match(svg, /data-marker="initial"/);
+  assert.match(svg, /data-marker="final"/);
+  assert.match(svg, /data-state-tone="start"/);
+  assert.match(svg, /data-state-tone="active"/);
+  assert.match(svg, /data-state-tone="done"/);
+  assert.match(svg, /<polygon /);
+  assert.doesNotMatch(svg, />STATE</);
+});
+
 test("sequence SVG draws alt and opt fragments", async () => {
   const raw = await load("sequence-checkout.json");
   const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });

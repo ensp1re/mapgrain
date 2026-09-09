@@ -1,5 +1,5 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
-import { PORT_SIDE } from "@mapgrain/document";
+import { NODE_KIND, NODE_MARKER, PORT_SIDE } from "@mapgrain/document";
 import { useEffect, useState } from "react";
 import type { ComponentNodeData } from "../types/flow.ts";
 import { KindLabel } from "./KindLabel.tsx";
@@ -24,6 +24,15 @@ export function ComponentNode({ data, selected }: NodeProps) {
   return (
     <NodeCard
       selected={selected}
+      className={[
+        node.kind === NODE_KIND.STATE ? "is-state" : "",
+        node.marker === NODE_MARKER.INITIAL ? "is-initial" : "",
+        node.marker === NODE_MARKER.FINAL ? "is-final" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      dataMarker={node.marker}
+      dataStateTone={node.stateTone}
       onDoubleClick={() => {
         if (!node.editing) node.onStartEdit();
       }}
@@ -56,8 +65,13 @@ export function ComponentNode({ data, selected }: NodeProps) {
         }
         return handles;
       })}
+      {node.marker === NODE_MARKER.INITIAL ? (
+        <span className="state-initial" aria-hidden="true" />
+      ) : null}
       <div className="node-card-body">
-      <KindLabel kind={node.kind} label={node.kindLabel} />
+      {node.kind === NODE_KIND.STATE ? null : (
+        <KindLabel kind={node.kind} label={node.kindLabel} />
+      )}
       {node.editing ? (
         <input
           className="label-input"
