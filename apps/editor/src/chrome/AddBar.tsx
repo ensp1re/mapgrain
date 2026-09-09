@@ -49,8 +49,9 @@ export function AddBar({ kinds, onAddNode, onAddGroup, onConnect, canConnect }: 
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           aria-haspopup="listbox"
+          aria-label="Add"
         >
-          Add
+          Add component
         </Button>
         {open ? (
           <div ref={popRef} className="add-menu-pop" role="listbox" aria-label="Add component">

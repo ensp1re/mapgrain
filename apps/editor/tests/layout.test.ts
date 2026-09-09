@@ -13,9 +13,9 @@ test("layout spec names the 390/768/1024/1280/1440 breakpoints", () => {
     DESKTOP: 1280,
     WIDE: 1440,
   });
-  assert.equal(PANE_WIDTH.OUTLINE, 240);
-  assert.equal(PANE_WIDTH.INSPECTOR, 296);
-  assert.equal(PANE_WIDTH.INSPECTOR_WIDE, 300);
+  assert.equal(PANE_WIDTH.OUTLINE, 204);
+  assert.equal(PANE_WIDTH.INSPECTOR, 264);
+  assert.equal(PANE_WIDTH.INSPECTOR_WIDE, 264);
 });
 
 test("shell layout is split at 1280, one panel at 768, overlay below", () => {
@@ -34,11 +34,13 @@ test("chrome CSS implements the layout spec at each breakpoint", async () => {
   assert.match(css, /max-width: 1023px/);
   assert.match(css, /max-width: 1279px/);
   assert.match(css, /min-width: 1440px/);
-  assert.match(css, /--outline-w: 240px/);
-  assert.match(css, /--inspector-w: 296px/);
-  assert.match(css, /--inspector-w: 300px/);
-  assert.match(css, /--outline-w: 220px/);
-  assert.match(css, /--inspector-w: 280px/);
+  assert.match(css, /--outline-w: 204px/);
+  assert.match(css, /--inspector-w: 264px/);
+  assert.match(css, /--outline-w: 160px/);
+  assert.match(css, /--topbar-h: 52px/);
+  assert.match(css, /\.text-btn\.ghost/);
+  assert.match(css, /\.canvas-status/);
+  assert.match(css, /\.outline-search/);
   assert.match(css, /grid-template-rows: 1fr/);
   assert.match(css, /\.add-bar/);
   assert.match(css, /\.add-menu-pop/);
@@ -63,10 +65,14 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
     "utf8",
   );
   assert.match(outline, /from "\.\.\/ui\/Pane\.tsx"/);
+  assert.match(outline, /placeholder="Search components"/);
+  assert.match(outline, /meta=\{count\}/);
   assert.match(inspector, /from "\.\.\/ui\/Pane\.tsx"/);
   assert.match(exported, /from "\.\.\/ui\/Pane\.tsx"/);
   assert.match(library, /from "\.\.\/ui\/Button\.tsx"/);
   assert.match(library, /aria-label="Library"/);
+  assert.match(library, /aria-label="Add"/);
+  assert.match(library, /Add component/);
   assert.match(library, /Search kinds/);
   assert.doesNotMatch(library, /Add service/);
   assert.match(node, /from "\.\/NodeCard\.tsx"/);

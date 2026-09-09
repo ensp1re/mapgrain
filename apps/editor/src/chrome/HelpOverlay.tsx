@@ -29,7 +29,7 @@ export function HelpOverlay({ open, onClose }: HelpOverlayProps) {
           </div>
           <button
             type="button"
-            className="text-btn pane-close"
+            className="text-btn ghost pane-close"
             onClick={onClose}
             aria-label="Close Keyboard shortcuts"
           >

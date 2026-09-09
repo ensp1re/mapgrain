@@ -39,9 +39,9 @@
   --space-4: 16px;
   --space-5: 24px;
   --space-6: 32px;
-  --topbar-h: 48px;
-  --outline-w: 240px;
-  --inspector-w: 296px;
+  --topbar-h: 52px;
+  --outline-w: 204px;
+  --inspector-w: 264px;
   --panel-pad: 16px;
   --node-radius: 8px;
   --node-pad-x: 16px;
@@ -60,7 +60,7 @@ body,
 body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -85,7 +85,7 @@ input {
   gap: 8px;
   min-width: 0;
   overflow: visible;
-  padding: 0 12px;
+  padding: 0 16px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-raised);
 }
@@ -149,9 +149,9 @@ input {
 }
 
 .brand {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
 }
 
 .doc-title,
@@ -245,11 +245,11 @@ input {
 
 .icon-btn,
 .text-btn {
-  height: 32px;
-  border: 1px solid transparent;
-  background: transparent;
+  min-height: 32px;
+  border: 1px solid var(--border);
+  background: var(--surface);
   border-radius: 8px;
-  padding: 0 10px;
+  padding: 7px 12px;
   cursor: pointer;
 }
 
@@ -258,8 +258,14 @@ input {
   background: var(--surface-hover);
 }
 
+.text-btn.ghost {
+  background: transparent;
+  border-color: transparent;
+}
+
 .text-btn.primary {
   background: var(--accent);
+  border-color: var(--accent);
   color: #f8f8ff;
 }
 
@@ -315,11 +321,21 @@ input {
 }
 
 .pane-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex: 1;
   padding: var(--panel-pad) var(--panel-pad) var(--space-2);
   color: var(--text);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
+}
+
+.pane-meta {
+  color: var(--muted);
+  font-weight: 400;
 }
 
 .pane-close {
@@ -359,7 +375,7 @@ input {
 .viewport-bar {
   display: flex !important;
   align-items: center;
-  margin: 0 0 12px 12px !important;
+  margin: 0 0 16px 16px !important;
   padding: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -426,6 +442,16 @@ input {
   stroke: transparent;
   stroke-width: 16;
   pointer-events: stroke;
+}
+
+.canvas-status {
+  position: absolute;
+  top: 25px;
+  right: 16px;
+  z-index: 4;
+  font-size: 12px;
+  color: var(--muted);
+  pointer-events: none;
 }
 
 .selection-bar {
@@ -936,8 +962,8 @@ input {
 .add-bar {
   position: absolute;
   z-index: 6;
-  left: var(--space-3);
-  top: var(--space-3);
+  left: 16px;
+  top: 16px;
   max-width: calc(100% - 24px);
 }
 
@@ -998,14 +1024,31 @@ input {
   margin: 8px 0;
 }
 
-.outline input {
-  width: calc(100% - 32px);
-  margin: 0 var(--panel-pad) var(--space-2);
-  padding: var(--space-2);
+.outline-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 var(--panel-pad) 16px;
+  padding: 8px 10px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--bg);
+}
+
+.outline-search input {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--text);
+}
+
+.outline-search kbd {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
 }
 
 .outline-item {
@@ -1164,15 +1207,15 @@ input {
 
 @media (min-width: 1440px) {
   :root {
-    --outline-w: 240px;
-    --inspector-w: 300px;
+    --outline-w: 204px;
+    --inspector-w: 264px;
   }
 }
 
 @media (max-width: 1279px) {
   :root {
-    --outline-w: 220px;
-    --inspector-w: 280px;
+    --outline-w: 160px;
+    --inspector-w: 264px;
   }
 
   .workspace.is-single {
@@ -1246,6 +1289,14 @@ input {
     left: 16px;
   }
 
+  .canvas-status {
+    display: none;
+  }
+
+  .phone-controls .text-btn {
+    padding: 8px;
+  }
+
   .example-cards {
     grid-template-columns: 1fr;
   }
@@ -1258,7 +1309,11 @@ input {
 
 @media (max-width: 390px) {
   .topbar {
-    overflow: hidden;
+    padding: 0 12px;
+  }
+
+  .brand {
+    font-size: 12px;
   }
 
   .title-field input {
@@ -1274,6 +1329,10 @@ input {
 
   .topbar-wide,
   .topbar-secondary {
+    display: none;
+  }
+
+  .viewport-bar .fit-label {
     display: none;
   }
 

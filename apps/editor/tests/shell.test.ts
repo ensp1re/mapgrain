@@ -96,4 +96,6 @@ test("chat is disabled until generation is usable", async () => {
   assert.match(topbar, /disabled/);
   assert.match(topbar, /onHelp/);
   assert.match(topbar, />\s*Help\s*</);
+  assert.match(topbar, /aria-label="More"/);
+  assert.match(topbar, /text-btn ghost/);
 });

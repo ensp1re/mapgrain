@@ -14,6 +14,7 @@ import {
 } from "@xyflow/react";
 import {
   DOCUMENT_KIND,
+  VIEW_KIND,
   EDGE_DIRECTION,
   EDGE_TYPE,
   EDGES_FOR_KIND,
@@ -1211,7 +1212,7 @@ function Specimen() {
             maxZoom={USER_MAX_ZOOM}
             proOptions={{ hideAttribution: true }}
           >
-            <Background gap={16} size={1} />
+            <Background gap={20} size={1} />
             <LifelineLayer lifelines={flow.lifelines} fragments={flow.fragments} />
             {presenting ? null : (
               <ViewportBar
@@ -1221,6 +1222,13 @@ function Specimen() {
               />
             )}
           </ReactFlow>
+          {presenting ? null : (
+            <div className="canvas-status">
+              {documentModel.views.find((view) => view.kind === VIEW_KIND.OVERVIEW)?.name ??
+                documentModel.views[0]?.name ??
+                "Overview"}
+            </div>
+          )}
           {selectedNode ? (
             <div className="selection-bar">
               {selectedNode.data.label} selected · Enter to edit

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { KindIcon } from "../diagram/KindIcon.tsx";
+import { shortcutLabel } from "../keyboard/shortcutLabel.ts";
 import { matchesQuery } from "../outline/search.ts";
 import { outlineTree } from "../outline/tree.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
@@ -15,6 +16,7 @@ interface OutlineProps {
 export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) {
   const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const count = nodes.filter((node) => node.type !== "group").length;
   const rows = useMemo(() => {
     const tree = outlineTree(nodes);
     const visibleParents = new Set<string>();
@@ -27,13 +29,17 @@ export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) 
   }, [collapsed, nodes, query]);
 
   return (
-    <Pane as="nav" className="outline" title="Outline" ariaLabel="Components" onClose={onClose}>
-      <input
-        aria-label="Search components"
-        placeholder="Search label or kind"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-      />
+    <Pane as="nav" className="outline" title="Outline" meta={count} ariaLabel="Components" onClose={onClose}>
+      <label className="outline-search">
+        <span className="visually-hidden">Search components</span>
+        <input
+          aria-label="Search components"
+          placeholder="Search components"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+        <kbd>{shortcutLabel("⌘K")}</kbd>
+      </label>
       {rows.map((entry) => (
         <div key={entry.node.id} className="outline-item" style={{ paddingLeft: 8 + entry.depth * 12 }}>
           {entry.node.type === "group" ? (

@@ -96,7 +96,12 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
       await page.getByRole("button", { name: "Help" }).waitFor();
       await page.keyboard.press("Escape");
     }
-    await page.getByRole("button", { name: "Fit all" }).waitFor();
+    if (viewport.width <= 390) {
+      await page.getByRole("group", { name: "Viewport" }).waitFor();
+      assert.equal(await page.getByRole("button", { name: "Fit all" }).isVisible(), false);
+    } else {
+      await page.getByRole("button", { name: "Fit all" }).waitFor();
+    }
     await context.close();
   }
 });
