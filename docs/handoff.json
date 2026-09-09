@@ -1,14 +1,17 @@
 {
   "schemaVersion": 1,
-  "taskId": "F049",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/shortcut-help",
-    "revision": "c2792719d027ac9611ae863b2ecbe6887ce289d2",
+    "branch": "chore/stamp-f049",
+    "revision": "d2205d27462cb55a114398fcae6d81772ee5bad6",
     "dirty": true
   },
-  "evidenceRefs": [],
+  "evidenceRefs": [
+    "https://github.com/ensp1re/mapgrain/pull/62",
+    "https://github.com/ensp1re/mapgrain/actions/runs/34396175957"
+  ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.1.0 (architecture/workflow). Matching five-mode CLI is packed mapgrain-0.2.0.tgz. Source CLI is 0.2.0 and is not on npm yet.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -23,6 +26,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Implement F049 Help overlay, verify, draft PR against main.",
-  "updatedAt": "2026-09-09T19:32:24.103Z"
+  "nextAction": "Publish mapgrain@0.2.0, then retarget docs/skill pins from 0.1.0.",
+  "updatedAt": "2026-09-09T19:40:06.311Z"
 }

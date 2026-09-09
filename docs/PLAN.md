@@ -2,11 +2,11 @@
 
 Mapgrain is a local editor, CLI (`npx mapgrain@0.1.0` for architecture/workflow; packed `0.2.0` tarball for all five modes), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
 
-**Status:** F049 active. Visible Help overlay from COMMANDS. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
+**Status:** shipped through F049. No live slices. Next task id: `F050`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
 
 ## Open gaps (not queued)
 
-- Publishing `mapgrain@0.2.0` to npm after this Help overlay lands
+- Publishing `mapgrain@0.2.0` to npm (granted; CLI source is already 0.2.0)
 - Live agent prompt runs
 - Mermaid/draw.io import and hosted sharing
 - README/social media recapture from the F043–F048 production commits
