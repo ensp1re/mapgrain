@@ -2,7 +2,7 @@
 
 Mapgrain is a local editor, CLI (`npx mapgrain@0.2.0`), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
 
-**Status:** F050 active. Retarget public pins to npm `mapgrain@0.2.0`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
+**Status:** shipped through F050. No live slices. Next task id: `F051`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
 
 ## Open gaps (not queued)
 

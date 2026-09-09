@@ -1,52 +1,5 @@
 {
   "schemaVersion": 1,
   "nextId": 51,
-  "tasks": [
-    {
-      "id": "F050",
-      "behavior": "Retarget public CLI pins to npm mapgrain@0.2.0 after publish; keep 0.1.0 as historical architecture/workflow.",
-      "acceptance": [
-        "README, getting-started, skill, agents matrix, FEATURES, and CAPABILITY pin npx mapgrain@0.2.0 for all five modes and do not pin @latest.",
-        "npx mapgrain@0.1.0 remains documented as the historical architecture/workflow package and is still tested in an empty directory.",
-        "Sequence, data-flow, and lifecycle fixtures are not sent to mapgrain@0.1.0."
-      ],
-      "dependsOn": [],
-      "state": "verified",
-      "spec": "docs/PROJECT.md",
-      "plan": "docs/PLAN.md",
-      "verification": [
-        "unit",
-        "lint",
-        "typecheck",
-        "build"
-      ],
-      "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1788983504598-16a928",
-        "fingerprintBefore": "0fa85cbb922391b3820862d4357484a5a673a618f18b8ccb6239f015bf5fb9d6",
-        "fingerprintAfter": "0fa85cbb922391b3820862d4357484a5a673a618f18b8ccb6239f015bf5fb9d6",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          },
-          {
-            "id": "build",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-09T19:52:05.690Z"
-      },
-      "delivery": null
-    }
-  ]
+  "tasks": []
 }
