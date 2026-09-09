@@ -6,19 +6,19 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: feat/v4-git-evidence @ 1a217a5bd27e51674d3985502facf70bda3e8e77 (dirty)
-- Updated: 2026-09-09T16:52:51.366Z
+- Git: chore/stamp-f045 @ cebccd12e35f467ba11b76eaca307c2188cac9db (dirty)
+- Updated: 2026-09-09T17:07:00.000Z
 
 ### Next action
 
-F045 is locally verified. Push a draft PR against main.
+No live product tasks. Next id F046.
 
 ### Decisions
 
 - Published npm CLI is npx mapgrain@0.1.0 (architecture/workflow). Source CLI is 0.2.0 and is not on npm yet.
 - JPEG/WebP/clipboard are editor raster paths. CLI does not encode JPEG/WebP.
-- Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
 - A working-tree snapshot hash is not Git verification. verified requires a 40-character commit SHA whose blob matches snapshot.
+- Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
 - Do not claim sequence fragments, live agent prompt runs, Mermaid/draw.io import, hosted sharing, or a five-user study.
 
 ### Rejected approaches
@@ -33,7 +33,8 @@ F045 is locally verified. Push a draft PR against main.
 
 ### Evidence
 
-- docs/runs/run-1788972740440-921c2c.json
+- https://github.com/ensp1re/mapgrain/pull/53
+- https://github.com/ensp1re/mapgrain/actions/runs/34380670986
 
 ## Resume
 
