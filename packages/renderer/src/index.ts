@@ -6,7 +6,7 @@ export {
   MAX_SCALE,
 } from "./constants/export.ts";
 export { COLOR_MODE } from "./constants/paint.ts";
-export { DARK_TOKENS, LIGHT_TOKENS, tokensFor } from "./constants/tokens.ts";
+export { DARK_TOKENS, LIGHT_TOKENS, tokenCssVars, tokensFor, viewerChromeCss } from "./constants/tokens.ts";
 export { exportDiagram } from "./export.ts";
 export { EXPORT_FONT_FAMILY } from "./font.ts";
 export { rasterLimits } from "./limits.ts";

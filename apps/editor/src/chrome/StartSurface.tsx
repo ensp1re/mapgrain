@@ -1,4 +1,6 @@
+import type { DocumentKind } from "@mapgrain/document";
 import { EXAMPLES } from "../create/examples.ts";
+import { MODE_CHOICES } from "../create/modes.ts";
 
 interface RecentItem {
   id: string;
@@ -10,7 +12,7 @@ interface RecentItem {
 interface StartSurfaceProps {
   importError: string | null;
   recents: RecentItem[];
-  onNewBlank: () => void;
+  onNewBlank: (kind?: DocumentKind) => void;
   onOpenExample: (id: string) => void;
   onOpenRecent: (id: string) => void;
   onImportFile: (file: File) => void;
@@ -31,7 +33,7 @@ export function StartSurface({
         <p>Create a diagram by hand, open a file, or start from an example.</p>
       </header>
       <div className="start-actions">
-        <button type="button" className="text-btn primary" onClick={onNewBlank}>
+        <button type="button" className="text-btn primary" onClick={() => onNewBlank()}>
           New blank diagram
         </button>
         <label className="text-btn">
@@ -49,6 +51,23 @@ export function StartSurface({
           />
         </label>
       </div>
+      <section className="mode-grid" aria-label="Choose a diagram mode">
+        <h2>Choose a mode</h2>
+        <div className="example-cards">
+          {MODE_CHOICES.map((mode) => (
+            <button
+              key={mode.kind}
+              type="button"
+              className="example-card"
+              onClick={() => onNewBlank(mode.kind)}
+            >
+              <span className="example-kind">{mode.title}</span>
+              <strong>New {mode.title.toLowerCase()}</strong>
+              <span>{mode.purpose}</span>
+            </button>
+          ))}
+        </div>
+      </section>
       <section className="agent-path" aria-label="Use with your agent">
         <h2>Use with your agent</h2>
         <p>

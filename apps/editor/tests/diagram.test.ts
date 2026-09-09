@@ -30,11 +30,22 @@ test("focus trap cycles from last to first and first to last", () => {
 test("editor canvas shows zoom percentage and uses a readable fit", async () => {
   const app = await readFile(fileURLToPath(new URL("../src/App.tsx", import.meta.url)), "utf8");
   const css = await readFile(fileURLToPath(new URL("../src/styles/app.css", import.meta.url)), "utf8");
-  assert.match(app, /readableFitOptions/);
-  assert.match(app, /ZoomReadout/);
+  assert.match(app, /fitAllOptions/);
+  assert.match(app, /ViewportBar/);
   assert.match(css, /\.zoom-readout/);
+  assert.match(css, /\.viewport-bar/);
   assert.match(css, /font-size: 14px/);
-  assert.match(css, /\.node-title \{[\s\S]*font-size: 14px/);
+  assert.match(css, /\.node-title \{[\s\S]*--node-title-size, 14px/);
+});
+
+test("more menu and select lists portal outside clipped ancestors", async () => {
+  const overlay = await readFile(fileURLToPath(new URL("../src/ui/Overlay.tsx", import.meta.url)), "utf8");
+  const topBar = await readFile(fileURLToPath(new URL("../src/chrome/TopBar.tsx", import.meta.url)), "utf8");
+  const select = await readFile(fileURLToPath(new URL("../src/ui/Select.tsx", import.meta.url)), "utf8");
+  assert.match(overlay, /createPortal/);
+  assert.match(overlay, /document\.body/);
+  assert.match(topBar, /<Overlay/);
+  assert.match(select, /<Overlay/);
 });
 
 test("command, export, connect, and add surfaces trap focus", async () => {

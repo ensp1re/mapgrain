@@ -141,7 +141,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   assert.match(html, /Read-only view/);
   assert.match(html, /API/);
 
-  await page.getByRole("button", { name: "Close" }).click();
+  await page.getByRole("button", { name: "Close", exact: true }).click();
   await page.getByRole("button", { name: "New", exact: true }).click();
   await page.locator('input[type="file"][aria-label="Open file"]').setInputFiles(saved.JSON);
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });

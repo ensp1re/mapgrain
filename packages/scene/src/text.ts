@@ -31,13 +31,18 @@ function unitWidth(code: number): number {
   return LATIN_WIDTH;
 }
 
+export function trackedWidth(text: string, font: FontSpec, baseWidth: number): number {
+  const extra = Math.max(0, text.length - 1) * font.size * (font.letterSpacingEm ?? 0);
+  return baseWidth + extra;
+}
+
 export const fontTextMeasurer: TextMeasurer = {
   measure(text, font) {
     let width = 0;
     for (const char of text) {
       width += font.size * unitWidth(char.codePointAt(0) ?? 0);
     }
-    return { width, height: font.lineHeight };
+    return { width: trackedWidth(text, font, width), height: font.lineHeight };
   },
 };
 
@@ -45,7 +50,7 @@ export function cachedTextMeasurer(inner: TextMeasurer): TextMeasurer {
   const cache = new Map<string, { width: number; height: number }>();
   return {
     measure(text, font) {
-      const key = `${font.family}\0${font.size}\0${font.weight}\0${text}`;
+      const key = `${font.family}\0${font.size}\0${font.weight}\0${font.letterSpacingEm ?? 0}\0${text}`;
       const hit = cache.get(key);
       if (hit) return hit;
       const value = inner.measure(text, font);

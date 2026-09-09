@@ -1,4 +1,5 @@
 export const PUBLISHED_CLI = "mapgrain@0.1.0";
+export const SOURCE_CLI_VERSION = "0.2.0";
 export const SKILLS_CLI_VERSION = "1.5.25";
 export const SKILL_SOURCE = "ensp1re/mapgrain";
 export const SKILL_NAME = "mapgrain";

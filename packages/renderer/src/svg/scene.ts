@@ -1,8 +1,8 @@
 import { EDGE_DIRECTION, NODE_MARKER, type Theme } from "@mapgrain/document";
 import {
-  KIND_FONT_SIZE,
-  KIND_LINE_HEIGHT,
+  ICON_VIEWBOX,
   defaultFont,
+  iconShapesFor,
   roundedPolylinePath,
   type Point,
   type Scene,
@@ -11,6 +11,22 @@ import { ARROW_SIZE, GROUP_RADIUS, NODE_RADIUS, PORT_RADIUS, VIEW_PAD } from "..
 import { COLOR_MODE, paintsFor, type ColorMode } from "../constants/paint.ts";
 import { EXPORT_FONT_FAMILY, interFontFaceCss } from "../font.ts";
 import { escapeXml, n } from "./escape.ts";
+
+function iconGroup(kind: string, x: number, y: number, size: number, stroke: string): string {
+  const scale = size / ICON_VIEWBOX;
+  const inner = iconShapesFor(kind)
+    .map((shape) => {
+      if (shape.tag === "path") return `<path d="${shape.d}"/>`;
+      if (shape.tag === "circle") return `<circle cx="${shape.cx}" cy="${shape.cy}" r="${shape.r}"/>`;
+      if (shape.tag === "ellipse") {
+        return `<ellipse cx="${shape.cx}" cy="${shape.cy}" rx="${shape.rx}" ry="${shape.ry}"/>`;
+      }
+      const rx = shape.rx === undefined ? "" : ` rx="${shape.rx}"`;
+      return `<rect x="${shape.x}" y="${shape.y}" width="${shape.width}" height="${shape.height}"${rx}/>`;
+    })
+    .join("");
+  return `<g data-icon="${escapeXml(kind)}" transform="translate(${n(x)} ${n(y)}) scale(${n(scale)})" fill="none" stroke="${stroke}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${inner}</g>`;
+}
 
 function arrow(from: Point, to: Point, fill: string): string {
   const angle = Math.atan2(to.y - from.y, to.x - from.x);
@@ -74,16 +90,25 @@ export function renderSvg(
     })
     .join("\n");
 
+  const presentation = scene.presentation;
   const nodes = scene.nodes
     .map((node) => {
-      const textX = node.rect.x + ox + node.rect.width / 2;
-      const blockHeight = KIND_LINE_HEIGHT + node.label.height;
-      const textY = node.rect.y + oy + (node.rect.height - blockHeight) / 2;
-      const kind = `<text x="${n(textX)}" y="${n(textY)}" text-anchor="middle" dominant-baseline="hanging" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${KIND_FONT_SIZE}">${escapeXml(node.kind)}</text>`;
+      const padX = presentation.paddingX;
+      const padY = presentation.paddingY;
+      const originX = node.rect.x + ox + padX;
+      const originY = node.rect.y + oy + padY;
+      const kindRow = Math.max(node.iconSize, node.kindLabel.height);
+      const iconY = originY + (kindRow - node.iconSize) / 2;
+      const kindText = node.kindLabel.lines[0]?.text ?? node.kind.toUpperCase();
+      const kindX = originX + node.iconSize + presentation.iconGap;
+      const kindY = originY + (kindRow - node.kindLabel.height) / 2;
+      const titleY = originY + kindRow + presentation.kindTitleGap;
+      const icon = iconGroup(node.kind, originX, iconY, node.iconSize, muted);
+      const kind = `<text x="${n(kindX)}" y="${n(kindY)}" dominant-baseline="hanging" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${presentation.kindSize}" letter-spacing="${n(presentation.kindSize * presentation.kindTrackingEm)}">${escapeXml(kindText)}</text>`;
       const lines = node.label.lines
         .map(
           (line, index) =>
-            `<text x="${n(textX)}" y="${n(textY + KIND_LINE_HEIGHT + index * line.height)}" text-anchor="middle" dominant-baseline="hanging" fill="${text}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${font.size}">${escapeXml(line.text)}</text>`,
+            `<text x="${n(originX)}" y="${n(titleY + index * line.height)}" dominant-baseline="hanging" fill="${text}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${presentation.titleWeight}" font-size="${presentation.titleSize}">${escapeXml(line.text)}</text>`,
         )
         .join("\n  ");
       const ports = node.ports
@@ -101,10 +126,12 @@ export function renderSvg(
           ? `<rect x="${n(node.rect.x + ox + 3)}" y="${n(node.rect.y + oy + 3)}" width="${n(node.rect.width - 6)}" height="${n(node.rect.height - 6)}" rx="${NODE_RADIUS - 2}" fill="none" stroke="${border}" stroke-width="1"/>`
           : "";
       const roleAttr = node.role ? ` data-role="${escapeXml(node.role)}"` : "";
-      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${roleAttr} tabindex="0" role="img" aria-label="${escapeXml(node.label.lines.map((line) => line.text).join(" ") || node.id)}">
+      const accessible = `${kindText} ${node.label.lines.map((line) => line.text).join(" ")}`.trim();
+      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${roleAttr} tabindex="0" role="img" aria-label="${escapeXml(accessible || node.id)}">
   <rect x="${n(node.rect.x + ox)}" y="${n(node.rect.y + oy)}" width="${n(node.rect.width)}" height="${n(node.rect.height)}" rx="${NODE_RADIUS}" fill="${surface}" stroke="${border}" stroke-width="1"/>
   ${final}
   ${initial}
+  ${icon}
   ${kind}
   ${lines}
   ${ports}

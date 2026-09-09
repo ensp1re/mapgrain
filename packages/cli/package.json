@@ -1,7 +1,7 @@
 {
   "name": "mapgrain",
-  "version": "0.1.0",
-  "description": "Local-first CLI for architecture and workflow diagrams.",
+  "version": "0.2.0",
+  "description": "Local-first CLI for architecture, workflow, sequence, data-flow, and lifecycle diagrams.",
   "license": "MIT",
   "type": "module",
   "bin": {

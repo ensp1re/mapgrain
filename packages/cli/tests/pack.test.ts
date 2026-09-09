@@ -54,9 +54,14 @@ test(
       assert.equal(help.code, EXIT_CODE.OK);
       assert.match(help.stdout, /studio/);
       const version = await run(bin, ["--version"], installDir);
-      assert.match(version.stdout, /0\.1\.0/);
+      assert.match(version.stdout, /0\.2\.0/);
+      const sequence = fileURLToPath(
+        new URL("../../../tests/fixtures/documents/sequence-checkout.json", import.meta.url),
+      );
       const validate = await run(bin, ["validate", fixture], installDir);
       assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
+      const validateSequence = await run(bin, ["validate", sequence], installDir);
+      assert.equal(validateSequence.code, EXIT_CODE.OK, validateSequence.stderr);
       const svg = join(installDir, "diagram.svg");
       const png = join(installDir, "diagram.png");
       const html = join(installDir, "diagram.html");

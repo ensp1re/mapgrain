@@ -6,6 +6,8 @@ import type {
   EdgeDirection,
   EdgeType,
   LayoutPoint,
+  NodeKind,
+  NodeMarker,
   Theme,
 } from "./document.ts";
 import type { ValidationIssue } from "./validation.ts";
@@ -19,6 +21,11 @@ export type Operation =
   | { kind: typeof OPERATION_KIND.SET_EDGE_LABEL; edgeId: string; label: string }
   | { kind: typeof OPERATION_KIND.SET_EDGE_TYPE; edgeId: string; type: EdgeType }
   | { kind: typeof OPERATION_KIND.SET_EDGE_DIRECTION; edgeId: string; direction: EdgeDirection }
+  | { kind: typeof OPERATION_KIND.SET_EDGE_ORDER; edgeId: string; order: number | null }
+  | { kind: typeof OPERATION_KIND.SET_EDGE_GUARD; edgeId: string; guard: string }
+  | { kind: typeof OPERATION_KIND.SET_EDGE_OUTCOME; edgeId: string; outcome: string }
+  | { kind: typeof OPERATION_KIND.SET_NODE_KIND; nodeId: string; nodeKind: NodeKind }
+  | { kind: typeof OPERATION_KIND.SET_NODE_MARKER; nodeId: string; marker: NodeMarker | null }
   | {
       kind: typeof OPERATION_KIND.ADD_NODE;
       node: DiagramNode;

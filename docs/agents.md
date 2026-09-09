@@ -2,7 +2,7 @@
 
 Source of installer IDs and paths: `npx skills@1.5.25` (2026-09-08). Do not invent agent IDs. Further targets exist in that CLI; this table covers the usable-release priority set. Installation success is not a live task pass.
 
-Host for this matrix: macOS, Node 24+. CLI prerequisite for every row: Node `>=24 <27` and `npx mapgrain@0.1.0`.
+Host for this matrix: macOS, Node 24+. CLI prerequisite for architecture/workflow: Node `>=24 <27` and `npx mapgrain@0.1.0`. Sequence, data-flow, and lifecycle require the source CLI `0.2.0` (checkout or packed tarball) until that version is published.
 
 Project install (default):
 
@@ -25,6 +25,6 @@ Cursor, Codex, OpenCode, GitHub Copilot, and Gemini CLI share the project path `
 | Gemini CLI | `gemini-cli` | `.agents/skills/mapgrain` | `~/.gemini/skills/mapgrain` | pass (shared project path) | untested | 2026-09-08 | `gemini` CLI not installed here |
 | Windsurf | `windsurf` | `.windsurf/skills/mapgrain` | `~/.codeium/windsurf/skills/mapgrain` | pass | untested | 2026-09-08 | `windsurf` CLI not installed here |
 
-Live-task rows stay untested until a clean-directory agent run records: text→8–12-node architecture, repository-grounded diagram, ID/position-preserving edit, invalid-input repair, and readable export. CLI-only equivalents of those steps pass via `npx mapgrain@0.1.0` in an empty directory.
+Live-task rows stay untested until a clean-directory agent run records: text→8–12-node architecture, repository-grounded diagram, ID/position-preserving edit, invalid-input repair, and readable export. CLI-only architecture equivalents pass via `npx mapgrain@0.1.0` in an empty directory. Sequence fixtures must use the source CLI.
 
 Two writers: assign one writer per file, or require a re-read after a `revision` conflict. Mapgrain does not ship a coordinator. Concurrent CLI writers on one file conflict or no-clobber; they do not merge.

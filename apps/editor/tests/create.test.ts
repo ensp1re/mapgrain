@@ -74,6 +74,8 @@ test("a blank diagram validates and can become Browser, API, Database with a gro
 test("start surface offers blank, file, examples, and agent path", async () => {
   const source = await readFile(new URL("../src/chrome/StartSurface.tsx", import.meta.url), "utf8");
   assert.match(source, /New blank diagram/);
+  assert.match(source, /Choose a mode/);
+  assert.match(source, /MODE_CHOICES/);
   assert.match(source, /Open file/);
   assert.match(source, /Use with your agent/);
   assert.match(source, /Recent diagrams/);
@@ -82,6 +84,15 @@ test("start surface offers blank, file, examples, and agent path", async () => {
   assert.match(source, /npx mapgrain@0\.1\.0 validate/);
   assert.doesNotMatch(source, /pnpm mapgrain validate/);
   assert.doesNotMatch(source, /Describe a diagram/);
+});
+
+test("mode chooser names every diagram kind", async () => {
+  const source = await readFile(new URL("../src/create/modes.ts", import.meta.url), "utf8");
+  assert.match(source, /Architecture/);
+  assert.match(source, /Workflow/);
+  assert.match(source, /Sequence/);
+  assert.match(source, /Data flow/);
+  assert.match(source, /Lifecycle/);
 });
 
 test("examples are original fixtures labelled as examples, not generated output", () => {

@@ -25,7 +25,7 @@ export function Pane({
         <div className="pane-label">{title}</div>
         {onClose ? (
           <button type="button" className="text-btn pane-close" onClick={onClose} aria-label={`Close ${title}`}>
-            Close
+            ×
           </button>
         ) : null}
       </div>

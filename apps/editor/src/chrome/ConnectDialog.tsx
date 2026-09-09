@@ -1,4 +1,10 @@
-import { EDGE_DIRECTION, EDGE_TYPE, type EdgeDirection, type EdgeType } from "@mapgrain/document";
+import {
+  EDGE_DIRECTION,
+  defaultEdgeType,
+  type DocumentKind,
+  type EdgeDirection,
+  type EdgeType,
+} from "@mapgrain/document";
 import { useRef, useState } from "react";
 import { directionLabel } from "../export/labels.ts";
 import type { ConnectionDraft, PendingConnection } from "../types/editor.ts";
@@ -7,12 +13,20 @@ import { useFocusTrap } from "./focusTrap.ts";
 
 interface ConnectDialogProps {
   pending: PendingConnection;
+  documentKind: DocumentKind;
+  edgeTypes: readonly EdgeType[];
   onConfirm: (draft: ConnectionDraft) => void;
   onCancel: () => void;
 }
 
-export function ConnectDialog({ pending, onConfirm, onCancel }: ConnectDialogProps) {
-  const [type, setType] = useState<EdgeType>(EDGE_TYPE.CALLS);
+export function ConnectDialog({
+  pending,
+  documentKind,
+  edgeTypes,
+  onConfirm,
+  onCancel,
+}: ConnectDialogProps) {
+  const [type, setType] = useState<EdgeType>(defaultEdgeType(documentKind));
   const [direction, setDirection] = useState<EdgeDirection>(EDGE_DIRECTION.FORWARD);
   const [label, setLabel] = useState("");
   const dialogRef = useRef<HTMLFormElement>(null);
@@ -39,7 +53,7 @@ export function ConnectDialog({ pending, onConfirm, onCancel }: ConnectDialogPro
         <Select
           label="Relation type"
           value={type}
-          options={Object.values(EDGE_TYPE).map((value) => ({ value, label: value }))}
+          options={edgeTypes.map((value) => ({ value, label: value }))}
           onChange={(value) => setType(value as EdgeType)}
         />
       </label>

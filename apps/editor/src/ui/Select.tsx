@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
+import { Overlay } from "./Overlay.tsx";
 
 export interface SelectOption {
   value: string;
@@ -14,22 +15,13 @@ interface SelectProps {
 
 export function Select({ label, value, options, onChange }: SelectProps) {
   const [open, setOpen] = useState(false);
-  const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
   const listId = useId();
   const current = options.find((option) => option.value === value)?.label ?? value;
   const selectedIndex = Math.max(
     0,
     options.findIndex((option) => option.value === value),
   );
-
-  useEffect(() => {
-    if (!open) return;
-    const close = (event: MouseEvent) => {
-      if (root.current && !root.current.contains(event.target as Node)) setOpen(false);
-    };
-    window.addEventListener("mousedown", close);
-    return () => window.removeEventListener("mousedown", close);
-  }, [open]);
 
   const move = (delta: number) => {
     if (options.length === 0) return;
@@ -39,8 +31,9 @@ export function Select({ label, value, options, onChange }: SelectProps) {
   };
 
   return (
-    <div className="ui-select" ref={root}>
+    <div className="ui-select">
       <button
+        ref={trigger}
         type="button"
         className="ui-select-trigger"
         aria-label={label}
@@ -88,8 +81,15 @@ export function Select({ label, value, options, onChange }: SelectProps) {
       >
         {current}
       </button>
-      {open ? (
-        <ul className="ui-select-list" id={listId} role="listbox">
+      <Overlay
+        open={open}
+        anchorRef={trigger}
+        onClose={() => setOpen(false)}
+        align="start"
+        role="listbox"
+        label={label}
+      >
+        <ul className="ui-select-list is-overlay" id={listId} role="presentation">
           {options.map((option) => (
             <li key={option.value} role="none">
               <button
@@ -107,7 +107,7 @@ export function Select({ label, value, options, onChange }: SelectProps) {
             </li>
           ))}
         </ul>
-      ) : null}
+      </Overlay>
     </div>
   );
 }

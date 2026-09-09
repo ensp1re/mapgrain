@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import {
   EDGE_DIRECTION,
   EDGE_TYPE,
+  NODE_KIND,
   OPERATION_KIND,
   applyOperation,
   applyOperationAt,
@@ -78,6 +79,22 @@ test("rejected edits leave the last valid document in place", async () => {
   assert.equal(result.document, document);
   assert.equal(result.document.nodes.find((node) => node.id === "gateway")?.label, "Workspace API");
   assert.equal(result.document.revision, document.revision);
+});
+
+test("set_node_kind inverse restores the previous kind", async () => {
+  const document = await load();
+  const result = applyOperation(document, {
+    kind: OPERATION_KIND.SET_NODE_KIND,
+    nodeId: "gateway",
+    nodeKind: NODE_KIND.SERVICE,
+  });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.document.nodes.find((node) => node.id === "gateway")?.kind, NODE_KIND.SERVICE);
+  const undone = applyOperation(result.document, result.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(undone.document.nodes.find((node) => node.id === "gateway")?.kind, NODE_KIND.GATEWAY);
 });
 
 test("add_edge records direction and meaning; inverse deletes it", async () => {

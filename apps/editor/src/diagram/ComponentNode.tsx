@@ -43,7 +43,7 @@ export function ComponentNode({ data, selected }: NodeProps) {
           position={POSITION[handlePosition(port.side)]}
         />
       ))}
-      <KindLabel kind={node.kind} />
+      <KindLabel kind={node.kind} label={node.kindLabel} />
       {node.editing ? (
         <input
           className="label-input"
