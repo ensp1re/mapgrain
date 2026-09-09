@@ -1,14 +1,17 @@
 {
   "schemaVersion": 1,
-  "taskId": "F053",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/npm-0.2.1-pins",
-    "revision": "e41437c067a3144f3541e76772b2f550a66efefa",
+    "branch": "chore/stamp-f053",
+    "revision": "f81d43266e21cf71e286e938fc5decdca758c2ab",
     "dirty": true
   },
-  "evidenceRefs": [],
+  "evidenceRefs": [
+    "https://github.com/ensp1re/mapgrain/pull/70",
+    "https://github.com/ensp1re/mapgrain/actions/runs/34403116822"
+  ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -25,6 +28,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Verify F053, open a draft PR, land on main, then archive.",
-  "updatedAt": "2026-09-09T20:39:52.370Z"
+  "nextAction": "Open gaps remain. Do not claim live agent runs, Mermaid/draw.io, or hosted sharing.",
+  "updatedAt": "2026-09-09T20:50:05.086Z"
 }
