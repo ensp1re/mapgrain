@@ -4,21 +4,21 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F053
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f052 @ b7914924a23e67ee6b49577896adf12a2a472524 (dirty)
-- Updated: 2026-09-09T20:32:00.000Z
+- Git: feat/npm-0.2.1-pins @ e41437c067a3144f3541e76772b2f550a66efefa (dirty)
+- Updated: 2026-09-09T20:39:52.370Z
 
 ### Next action
 
-When npm shows mapgrain@0.2.1, retarget public pins (F053).
+Verify F053, open a draft PR, land on main, then archive.
 
 ### Decisions
 
-- Published npm CLI is npx mapgrain@0.2.0 until 0.2.1 is live on the registry. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only.
+- Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.
 - JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.
 - A working-tree snapshot hash is not Git verification. verified requires a 40-character commit SHA whose blob matches snapshot.
-- Sequence alt/opt fragments are in npm mapgrain@0.2.0. npm 0.1.0 still rejects them.
+- Sequence alt/opt fragments are in npm mapgrain@0.2.1 and 0.2.0. npm 0.1.0 still rejects them.
 - Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
 - Do not claim live agent prompt runs, Mermaid/draw.io import, or hosted sharing.
 - The Codex HTML is a review prototype. Editor chrome follows its composition; Help, Focus, and Commands stay.
@@ -36,8 +36,7 @@ When npm shows mapgrain@0.2.1, retarget public pins (F053).
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/68
-- https://github.com/ensp1re/mapgrain/actions/runs/34401356257
+- none
 
 ## Resume
 

@@ -57,7 +57,7 @@ test("README links production media, the feature table, and getting-started", as
     "docs/FEATURES.md",
     "docs/getting-started.md",
     "docs/agents.md",
-    "npx mapgrain@0.2.0",
+    "npx mapgrain@0.2.1",
   ]) {
     assert.match(readme, new RegExp(needle.replaceAll(".", "\\.")));
   }
