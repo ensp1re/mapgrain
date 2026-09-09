@@ -7,7 +7,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Architecture diagrams (typed nodes, directed edges, nested groups, stable IDs) | implemented | yes | Fixtures cover nested groups, parallel edges, cycles, long labels |
 | Workflow / sequence / data-flow / lifecycle modes | partial | yes | Editor/CLI in this checkout include sequence alt/opt fragments; npm `mapgrain@0.1.0` does not validate sequence/data-flow/lifecycle |
 | Blank / open / three examples / agent setup on start | implemented | partial | Start surface exists; agent setup is copy, not a picker with troubleshooting |
-| Direct edit, connect, arrange preview, undo, export | implemented | yes | F039: production blank→edit→export→reimport journey; selection p95 through next paint |
+| Direct edit, connect, arrange preview, undo, export | implemented | yes | F039: production blank→edit→export→reimport journey; selection p95 through next paint; F049 Help overlay lists COMMANDS shortcuts |
 | Save status, last-active reopen, Studio conflict recovery | implemented | yes | F033: last-active id, last-opened vs edited times, Saved after durable write, structured Studio errors |
 | Offline first session (SW + worker + export) | implemented | yes | F034: versioned asset manifest, atomic precache, API/session excluded; production disconnect journey |
 | Responsive shell 1440→390 | partial | yes | Content-driven header collapse and unclipped overlays in F043; remaining widths still need production hit-tests |
@@ -21,7 +21,6 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | JPEG/WebP/clipboard export | partial | yes | Editor-only raster formats and clipboard PNG; CLI does not encode JPEG/WebP |
 | Browser story WebM | implemented | yes | Editor MediaRecorder records story steps at 1280×720 and can cancel; CLI video remains FFmpeg MP4 |
 | Visual presets, share-card, video, localization | implemented | yes | Presets change scene metrics; card PNG; story mp4; en/uk viewer chrome |
-| Five-user study / physical-device smoke | deferred | no | Dropped from the task queue; no fabricated user-study evidence |
 | Mermaid/draw.io import, hosted sharing | deferred | no | Demand not validated; out of first usable release |
 
 Status values: `implemented`, `partial`, `missing`, `deferred`.

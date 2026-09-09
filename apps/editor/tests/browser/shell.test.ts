@@ -93,6 +93,7 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
       await undo.waitFor();
       const undoBox = await undo.boundingBox();
       assert.ok(undoBox && undoBox.height > 8, `${viewport.width} More menu clipped`);
+      await page.getByRole("button", { name: "Help" }).waitFor();
       await page.keyboard.press("Escape");
     }
     await page.getByRole("button", { name: "Fit all" }).waitFor();

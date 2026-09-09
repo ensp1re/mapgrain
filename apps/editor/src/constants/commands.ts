@@ -22,6 +22,7 @@ export const COMMAND_ID = {
   IMPORT: "import",
   CONNECT: "connect",
   EXPORT: "export",
+  HELP: "help",
 } as const;
 
 export type CommandId = (typeof COMMAND_ID)[keyof typeof COMMAND_ID];
@@ -64,4 +65,33 @@ export const COMMANDS: CommandSpec[] = [
   { id: COMMAND_ID.TOGGLE_THEME, label: "Toggle theme", shortcut: "T", scope: ACTION_SCOPE.GLOBAL },
   { id: COMMAND_ID.FIT_ALL, label: "Fit all", shortcut: "F", scope: ACTION_SCOPE.CANVAS },
   { id: COMMAND_ID.FOCUS, label: "Focus", shortcut: "⇧F", scope: ACTION_SCOPE.CANVAS },
+  { id: COMMAND_ID.HELP, label: "Keyboard shortcuts", shortcut: "?", scope: ACTION_SCOPE.GLOBAL },
 ];
+
+export const COMMAND_SCOPE_LABEL: Record<ActionScope, string> = {
+  [ACTION_SCOPE.GLOBAL]: "Editor",
+  [ACTION_SCOPE.CANVAS]: "Canvas",
+  [ACTION_SCOPE.NODE]: "Selection",
+  [ACTION_SCOPE.EDGE]: "Connection",
+};
+
+const SCOPE_ORDER: ActionScope[] = [
+  ACTION_SCOPE.GLOBAL,
+  ACTION_SCOPE.CANVAS,
+  ACTION_SCOPE.NODE,
+  ACTION_SCOPE.EDGE,
+];
+
+export function shortcutCommands(commands: CommandSpec[] = COMMANDS): CommandSpec[] {
+  return commands.filter((item) => item.shortcut.length > 0);
+}
+
+export function commandsByScope(
+  commands: CommandSpec[] = shortcutCommands(),
+): Array<{ scope: ActionScope; label: string; items: CommandSpec[] }> {
+  return SCOPE_ORDER.flatMap((scope) => {
+    const items = commands.filter((item) => item.scope === scope);
+    if (items.length === 0) return [];
+    return [{ scope, label: COMMAND_SCOPE_LABEL[scope], items }];
+  });
+}

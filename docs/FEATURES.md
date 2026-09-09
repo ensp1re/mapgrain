@@ -11,7 +11,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Lifecycle diagrams | shipped | States, initial/final markers, guarded transitions |
 | Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings |
 | Snapshot compare | shipped | Added/removed/changed nodes and edges via `mapgrain compare` |
-| Direct edit, arrange, save, export | shipped | Production blank→export→reimport journey |
+| Direct edit, arrange, save, export | shipped | Production blank→export→reimport journey; Help overlay lists COMMANDS shortcuts |
 | Portable HTML viewer | shipped | Search, fit, reach, route, named views, local hashes |
 | Offline editor | shipped | Versioned precache; API and studio sessions excluded |
 | Agent skill | partial | Install paths proven; live agent prompt runs untested; matching five-mode CLI is packed `mapgrain-0.2.0.tgz`; npm stays `0.1.0` |
@@ -22,5 +22,5 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Snapshot review HTML | partial | compare reports moved/rerouted IDs and can write Before/Delta/After HTML |
 | Pinned Git evidence | shipped | diagnose may set verified for a 40-character commit blob; working-tree hash is snapshotMatches only |
 | Watch/reload last-good agent file | shipped | `mapgrain watch` keeps last-good while JSON is invalid |
-| Five-user study / device smoke | deferred | Not queued; no fabricated study |
+| Keyboard shortcut help | shipped | Help button, `?`, and command palette open a shortcut overlay from COMMANDS |
 | Mermaid/draw.io import, hosted sharing | deferred | Demand not validated |

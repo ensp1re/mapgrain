@@ -15,3 +15,15 @@ export function shouldOpenCommandMenu(event: {
   if (!chord || event.key.toLowerCase() !== "k") return false;
   return !isEditableTarget(event.target);
 }
+
+export function shouldOpenHelp(event: {
+  metaKey: boolean;
+  ctrlKey: boolean;
+  altKey?: boolean;
+  key: string;
+  target: EventTarget | null;
+}): boolean {
+  if (isEditableTarget(event.target)) return false;
+  if (event.metaKey || event.ctrlKey || event.altKey) return false;
+  return event.key === "?" || event.key === "F1";
+}

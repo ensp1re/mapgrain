@@ -83,4 +83,18 @@ test("showcase example keeps readable labels after default fit and shows zoom", 
   await command.waitFor();
   await page.keyboard.press("Escape");
   await command.waitFor({ state: "hidden" });
+
+  await page.getByRole("button", { name: "Help" }).click();
+  const help = page.getByRole("dialog", { name: "Keyboard shortcuts" });
+  await help.waitFor();
+  const helpText = (await help.innerText()) ?? "";
+  assert.match(helpText, /Command menu/);
+  assert.match(helpText, /Undo/);
+  assert.match(helpText, /Keyboard shortcuts/);
+  await page.getByRole("button", { name: "Close Keyboard shortcuts" }).click();
+  await help.waitFor({ state: "hidden" });
+  await page.keyboard.press("?");
+  await help.waitFor();
+  await page.keyboard.press("Escape");
+  await help.waitFor({ state: "hidden" });
 });

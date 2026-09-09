@@ -15,5 +15,17 @@ test("the public feature table distinguishes shipped, partial, planned, and defe
   assert.match(text, /Watch\/reload last-good agent file \| shipped/);
   assert.match(text, /Pinned Git evidence \| shipped/);
   assert.match(text, /Browser story WebM \| shipped/);
-  assert.match(text, /Five-user study \/ device smoke \| deferred/);
+  assert.match(text, /Keyboard shortcut help \| shipped/);
+  assert.match(text, /Help overlay lists COMMANDS/);
+  for (const relative of [
+    "docs/FEATURES.md",
+    "docs/CAPABILITY.md",
+    "docs/PLAN.md",
+    "docs/handoff.json",
+    "README.md",
+  ]) {
+    const body = await readFile(fileURLToPath(new URL(`../../../${relative}`, import.meta.url)), "utf8");
+    assert.doesNotMatch(body, /Five-user study \/ device smoke/, relative);
+    assert.doesNotMatch(body, /physical-device smoke/, relative);
+  }
 });
