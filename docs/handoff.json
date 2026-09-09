@@ -1,17 +1,14 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F054",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f053",
-    "revision": "f81d43266e21cf71e286e938fc5decdca758c2ab",
+    "branch": "feat/png-node-labels",
+    "revision": "78eef36ee86841c51d57d04009e00cc9a9efde01",
     "dirty": true
   },
-  "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/70",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34403116822"
-  ],
+  "evidenceRefs": [],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -28,6 +25,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Open gaps remain. Do not claim live agent runs, Mermaid/draw.io, or hosted sharing.",
-  "updatedAt": "2026-09-09T20:50:05.086Z"
+  "nextAction": "Verify F054, open a draft PR for labeled PNG export.",
+  "updatedAt": "2026-09-09T21:57:23.772Z"
 }

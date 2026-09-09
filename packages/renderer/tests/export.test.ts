@@ -14,6 +14,7 @@ import {
   exportDiagram,
   parseHexRgb,
   pixelAt,
+  rasterHasPaint,
   rasterizeSvg,
 } from "../src/index.ts";
 
@@ -173,21 +174,10 @@ test("PNG raster uses resolved theme paints, not CSS variables", async () => {
     true,
     `corner ${corner.slice(0, 3).join(",")}`,
   );
-  let foundPaint = false;
   const surface = parseHexRgb(DARK_TOKENS.surface);
   const label = parseHexRgb(DARK_TOKENS.text);
-  for (let i = 0; i < raster.pixels.length; i += 4) {
-    const sample: [number, number, number] = [
-      raster.pixels[i] ?? 0,
-      raster.pixels[i + 1] ?? 0,
-      raster.pixels[i + 2] ?? 0,
-    ];
-    if (colorNear(sample, surface, 24) || colorNear(sample, label, 24)) {
-      foundPaint = true;
-      break;
-    }
-  }
-  assert.equal(foundPaint, true);
+  assert.equal(rasterHasPaint(raster.pixels, surface, 24), true, "PNG missing node surface paint");
+  assert.equal(rasterHasPaint(raster.pixels, label, 24), true, "PNG missing node label paint");
 });
 
 test("PNG is a raster of the SVG and oversized jobs fail with a smaller scale", async () => {
