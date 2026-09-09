@@ -19,6 +19,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Visual presets, share-card, video, localization | shipped | compact/comfortable/presentation; card PNG; story mp4; en/uk chrome |
 | JPEG, WebP, clipboard image | partial | Editor JPEG/WebP download and PNG clipboard copy; CLI stays PNG/SVG/HTML/JSON |
 | Snapshot review HTML | partial | compare reports moved/rerouted IDs and can write Before/Delta/After HTML |
+| Pinned Git evidence | shipped | diagnose may set verified for a 40-character commit blob; working-tree hash is snapshotMatches only |
 | Watch/reload last-good agent file | shipped | `mapgrain watch` keeps last-good while JSON is invalid |
 | Five-user study / device smoke | deferred | Not queued; no fabricated study |
 | Mermaid/draw.io import, hosted sharing | deferred | Demand not validated |

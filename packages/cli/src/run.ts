@@ -1,6 +1,12 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
-import { compareDocuments, snapshotMatches, validateDocument } from "@mapgrain/document";
+import {
+  compareDocuments,
+  gitVerified,
+  isPinnedGitRevision,
+  snapshotMatches,
+  validateDocument,
+} from "@mapgrain/document";
 import { EXPORT_FORMAT, exportDiagram } from "@mapgrain/renderer";
 import { BLOCKING_GEOMETRY, buildScene, diagnoseGeometry } from "@mapgrain/scene";
 import { compareReviewHtml } from "./compareHtml.ts";
@@ -112,12 +118,33 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
           digest = null;
         }
       }
+      let gitObjectDigest: string | null = null;
+      let gitObjectMatches: boolean | null = null;
+      if (isPinnedGitRevision(item.revision) && io.gitShow) {
+        try {
+          const blob = await io.gitShow(item.revision, item.path);
+          if (blob == null) {
+            gitObjectMatches = false;
+          } else {
+            gitObjectDigest = createHash("sha256").update(new TextEncoder().encode(blob)).digest("hex");
+            gitObjectMatches = snapshotMatches(item.snapshot, gitObjectDigest);
+          }
+        } catch {
+          gitObjectMatches = false;
+        }
+      }
       evidence.push({
         id: item.id,
         path: item.path,
         exists,
         snapshotMatches: snapshotMatches(item.snapshot, digest),
-        verified: false,
+        revision: item.revision ?? null,
+        gitObjectMatches,
+        verified: gitVerified({
+          revision: item.revision,
+          snapshot: item.snapshot,
+          gitObjectDigest,
+        }),
       });
     }
     const gated = parsed.strict && blocking.length > 0;

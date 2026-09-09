@@ -5,6 +5,7 @@ export {
   EDGE_TYPE,
   EVIDENCE_STATE,
   EVIDENCE_TARGET_KIND,
+  PINNED_GIT_REVISION,
   LAYOUT_DIRECTION,
   LAYOUT_SECTION_VERSION,
   NODE_KIND,
@@ -15,7 +16,7 @@ export {
   THEME,
   VIEW_KIND,
 } from "./constants/document.ts";
-export { snapshotMatches } from "./evidence.ts";
+export { gitVerified, isPinnedGitRevision, snapshotMatches } from "./evidence.ts";
 export { defaultEdgeType, EDGES_FOR_KIND, NODES_FOR_KIND } from "./constants/modes.ts";
 export { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
 export { OPERATION_KIND } from "./constants/operations.ts";

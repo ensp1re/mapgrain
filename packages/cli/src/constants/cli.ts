@@ -63,7 +63,7 @@ Commands:
   view       Write a read-only HTML viewer
   layout     Resolve node positions with ELK and write JSON
   doctor     Check runtime, assets, renderer, worker, and output access
-  diagnose   Report geometry warnings for a laid-out document
+  diagnose   Report geometry warnings and evidence snapshot/git checks
   compare    Show added/removed/changed/moved/rerouted facts between two files
   watch      Reload a file; keep last-good output while it is invalid
   studio     Serve the editor on loopback for one file

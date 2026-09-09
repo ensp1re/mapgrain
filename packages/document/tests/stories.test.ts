@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { PRESET, snapshotMatches, validateDocument } from "../src/index.ts";
+import { gitVerified, isPinnedGitRevision, PRESET, snapshotMatches, validateDocument } from "../src/index.ts";
 
 const fixtures = fileURLToPath(new URL("../../../tests/fixtures/documents", import.meta.url));
 
@@ -30,4 +30,15 @@ test("snapshotMatches does not claim verification from a note", () => {
   assert.equal(snapshotMatches(undefined, "abc"), null);
   assert.equal(snapshotMatches("abc", "abc"), true);
   assert.equal(snapshotMatches("abc", "def"), false);
+});
+
+test("gitVerified requires a pinned commit SHA and a matching blob digest", () => {
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  assert.equal(isPinnedGitRevision("main"), false);
+  assert.equal(isPinnedGitRevision(sha), true);
+  assert.equal(gitVerified({ revision: undefined, snapshot: "abc", gitObjectDigest: "abc" }), false);
+  assert.equal(gitVerified({ revision: "main", snapshot: "abc", gitObjectDigest: "abc" }), false);
+  assert.equal(gitVerified({ revision: sha, snapshot: "abc", gitObjectDigest: "abc" }), true);
+  assert.equal(gitVerified({ revision: sha, snapshot: "abc", gitObjectDigest: "def" }), false);
+  assert.equal(gitVerified({ revision: sha, snapshot: "abc", gitObjectDigest: null }), false);
 });

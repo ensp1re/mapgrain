@@ -1,5 +1,53 @@
 {
   "schemaVersion": 1,
-  "nextId": 45,
-  "tasks": []
+  "nextId": 46,
+  "tasks": [
+    {
+      "id": "F045",
+      "behavior": "Optional pinned-revision Git verification for document evidence. A working-tree snapshot hash is not Git evidence.",
+      "acceptance": [
+        "diagnose reports snapshotMatches for working-tree hashes and never sets verified true from a hash match alone.",
+        "diagnose sets verified true only when evidence.revision is a 40-character Git commit SHA and the blob at revision:path matches evidence.snapshot.",
+        "A missing Git repo, branch name, or missing blob keeps verified false.",
+        "FEATURES, CAPABILITY, getting-started, and the skill state that a snapshot match is not Git verification."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788972740440-921c2c",
+        "fingerprintBefore": "a92becf124674b25bd6b01136153baedd3d5cfd9f488cc4bbe0e938ab3521bd3",
+        "fingerprintAfter": "a92becf124674b25bd6b01136153baedd3d5cfd9f488cc4bbe0e938ab3521bd3",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-09T16:52:42.492Z"
+      },
+      "delivery": null
+    }
+  ]
 }

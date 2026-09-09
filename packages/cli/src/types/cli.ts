@@ -14,6 +14,7 @@ export interface CliIo {
   unlink?(path: string): Promise<void>;
   stdin?: () => Promise<string>;
   exists?: (path: string) => Promise<boolean>;
+  gitShow?: (revision: string, path: string) => Promise<string | null>;
 }
 
 export interface DiagnosticIssue {

@@ -97,7 +97,7 @@ One writer per artifact. If two agents may touch the same file, use `revision` /
 
 Read files. Do not execute the repository, install its dependencies, or run its tests merely to discover architecture.
 
-Evidence `state`: `observed` (you read the file), `asserted` (a human stated it), `inferred` (you guessed). Put `path:rel/file.ts:line` in `evidence[].note`. Redact credentials.
+Evidence `state`: `observed` (you read the file), `asserted` (a human stated it), `inferred` (you guessed). Put the source file in `evidence[].path`, optional line in `evidence[].location`, and optional sha256 of the file bytes in `evidence[].snapshot`. Optional `evidence.revision` is a 40-character Git commit SHA. `diagnose` may set `verified` only when that commit's blob matches `snapshot`. A working-tree hash match is `snapshotMatches`, not Git verification. Do not set `revision` to a branch name. Redact credentials.
 
 ## Export
 
