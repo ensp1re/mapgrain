@@ -9,36 +9,17 @@ Emit semantic diagram JSON. Call the Mapgrain CLI for validation, layout, and ex
 
 ## Runtime (end users)
 
-Published npm CLI: `mapgrain@0.1.0`. Requires Node 24 or newer. That package validates architecture and workflow documents from its release. Do not run it against sequence, data-flow, or lifecycle fixtures from this skill.
+Published npm CLI: `mapgrain@0.2.0`. Requires Node 24 or newer. That package validates architecture, workflow, sequence, data-flow, and lifecycle documents from this skill. Do not pin an unversioned latest tag and do not overwrite `0.1.0`.
 
-This skill matches source CLI `0.2.0`. Until that version is on npm, use the checkout CLI or a packed tarball of this repository. Do not pin an unversioned latest tag and do not overwrite `0.1.0`.
-
-```sh
-npx mapgrain@0.1.0 validate diagram.json
-npx mapgrain@0.1.0 layout diagram.json
-npx mapgrain@0.1.0 view diagram.json -o diagram.html
-```
-
-If `mapgrain` is already on PATH from that install, use that binary for architecture/workflow files only.
-
-## Matching 0.2.0 tarball (all five modes)
-
-From a Mapgrain checkout, pack the CLI that matches this skill. Do not publish or overwrite `0.1.0`.
+`npx mapgrain@0.1.0` is the historical architecture/workflow package. Do not run sequence, data-flow, or lifecycle files through it.
 
 ```sh
-pnpm --filter mapgrain pack --pack-destination /tmp/mapgrain-dist
+npx mapgrain@0.2.0 validate diagram.json
+npx mapgrain@0.2.0 layout diagram.json
+npx mapgrain@0.2.0 view diagram.json -o diagram.html
 ```
 
-That writes `mapgrain-0.2.0.tgz`. In the user's project:
-
-```sh
-npm install --omit=dev /tmp/mapgrain-dist/mapgrain-0.2.0.tgz
-npx mapgrain validate diagram.json
-npx mapgrain layout diagram.json
-npx mapgrain view diagram.json -o diagram.html
-```
-
-Use this packed CLI for sequence, data-flow, and lifecycle. Do not run those files through `npx mapgrain@0.1.0`.
+If `mapgrain` is already on PATH from that install, use that binary.
 
 ## Repository development
 
@@ -90,15 +71,15 @@ Write JSON that matches [references/document.schema.json](references/document.sc
 
 - `id` values match `^[A-Za-z][A-Za-z0-9_-]*$`.
 - Omit `layout` on first create.
-- Run layout with the matching CLI so ELK writes positions. Architecture/workflow: `npx mapgrain@0.1.0 layout diagram.json`. Sequence, data-flow, or lifecycle: packed `mapgrain-0.2.0.tgz`. Do not pick x/y yourself.
+- Run layout with `npx mapgrain@0.2.0 layout diagram.json` so ELK writes positions. Do not pick x/y yourself.
 - `revision` starts at `1`.
 
 ## Workflow
 
 1. Write or edit JSON.
-2. `npx mapgrain@0.1.0 validate diagram.json`
-3. `npx mapgrain@0.1.0 layout diagram.json` (add `--rearrange` only when the user asked to re-layout).
-4. `npx mapgrain@0.1.0 view diagram.json -o diagram.html`
+2. `npx mapgrain@0.2.0 validate diagram.json`
+3. `npx mapgrain@0.2.0 layout diagram.json` (add `--rearrange` only when the user asked to re-layout).
+4. `npx mapgrain@0.2.0 view diagram.json -o diagram.html`
 5. On validate/layout failure, apply every diagnostic in one pass. At most three repair attempts. Keep the last valid file.
 
 ## Edit
@@ -121,9 +102,9 @@ Evidence `state`: `observed` (you read the file), `asserted` (a human stated it)
 ## Export
 
 ```sh
-npx mapgrain@0.1.0 view diagram.json -o diagram.html
-npx mapgrain@0.1.0 export diagram.json --format svg -o diagram.svg
-npx mapgrain@0.1.0 export diagram.json --format png -o diagram.png
+npx mapgrain@0.2.0 view diagram.json -o diagram.html
+npx mapgrain@0.2.0 export diagram.json --format svg -o diagram.svg
+npx mapgrain@0.2.0 export diagram.json --format png -o diagram.png
 ```
 
 Return the JSON path and the HTML path together.
