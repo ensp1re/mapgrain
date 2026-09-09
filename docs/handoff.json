@@ -4,13 +4,12 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f045",
-    "revision": "cebccd12e35f467ba11b76eaca307c2188cac9db",
+    "branch": "feat/v4-webm-story",
+    "revision": "cae7900873c50b088c58f8f3e4dcd2afffc696f7",
     "dirty": true
   },
   "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/53",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34380670986"
+    "docs/runs/run-1788974527775-b9efdc.json"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.1.0 (architecture/workflow). Source CLI is 0.2.0 and is not on npm yet.",
@@ -25,6 +24,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "No live product tasks. Next id F046.",
-  "updatedAt": "2026-09-09T17:07:00.000Z"
+  "nextAction": "F046 is locally verified. Push a draft PR against main.",
+  "updatedAt": "2026-09-09T17:22:46.490Z"
 }

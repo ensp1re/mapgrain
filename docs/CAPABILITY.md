@@ -19,6 +19,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
 | Geometry diagnostics, snapshot compare, watch/reload | partial | yes | diagnose --strict fails on overlap/clipping; compare includes moved/rerouted IDs and optional HTML review; Git verified is a pinned commit blob, not a working-tree hash |
 | JPEG/WebP/clipboard export | partial | yes | Editor-only raster formats and clipboard PNG; CLI does not encode JPEG/WebP |
+| Browser story WebM | implemented | yes | Editor MediaRecorder records story steps at 1280×720 and can cancel; CLI video remains FFmpeg MP4 |
 | Visual presets, share-card, video, localization | implemented | yes | Presets change scene metrics; card PNG; story mp4; en/uk viewer chrome |
 | Five-user study / physical-device smoke | deferred | no | Dropped from the task queue; no fabricated user-study evidence |
 | Mermaid/draw.io import, hosted sharing | deferred | no | Demand not validated; out of first usable release |

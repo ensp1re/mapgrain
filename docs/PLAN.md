@@ -2,11 +2,14 @@
 
 Mapgrain is a local editor, CLI (`npx mapgrain@0.1.0`), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
 
-**Status:** shipped through F045. No live slices. Next task id: `F046`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
+**Status:** F046 active. Next task id after this slice: `F047`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
 
-## Open gaps (not queued)
+## Live slice
 
-- Browser WebM / route-story capture (distinct from FFmpeg story MP4)
+**F046 — browser story WebM.** Editor records story steps with MediaRecorder. CLI video stays FFmpeg MP4. Capture is 1280×720, cancellable, and offline.
+
+## Open gaps (not this slice)
+
 - Publishing `mapgrain@0.2.0` (npm `0.1.0` remains the last published package)
 - Live agent prompt runs
 - Sequence fragments (alt/opt)

@@ -39,7 +39,10 @@ import { renderView } from "@mapgrain/viewer";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json" with { type: "json" };
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
 import { EXPORT_CHOICE } from "./constants/export.ts";
+import { STORY_WEBM } from "./constants/video.ts";
 import { copyPngToClipboard, RASTER_TYPE, rasterSvgToPng } from "./export/png.ts";
+import { storyExportFrames } from "./export/storyFrames.ts";
+import { encodeStoryWebm, STORY_WEBM_CANCELLED, STORY_WEBM_NO_STORY } from "./export/webm.ts";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { SHELL_LAYOUT } from "./constants/layout.ts";
 import { USER_MAX_ZOOM, USER_MIN_ZOOM, fitAllOptions, readableFitOptions } from "./constants/diagram.ts";
@@ -251,6 +254,8 @@ function Specimen() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
+  const [exportBusy, setExportBusy] = useState(false);
+  const exportAbort = useRef<AbortController | null>(null);
   const [collision, setCollision] = useState<{
     nodeId: string;
     neighborIds: string[];
@@ -736,8 +741,57 @@ function Specimen() {
 
   const exportFormat = useCallback(
     (format: (typeof EXPORT_CHOICE)[keyof typeof EXPORT_CHOICE], scale = 1) => {
-      if (!documentModel) return;
+      if (!documentModel || exportBusy) return;
       void (async () => {
+        if (format === EXPORT_CHOICE.STORY_WEBM) {
+          const frames = storyExportFrames(documentModel);
+          if (frames.length === 0) {
+            setExportError(STORY_WEBM_NO_STORY);
+            return;
+          }
+          const controller = new AbortController();
+          exportAbort.current = controller;
+          setExportBusy(true);
+          setExportError(null);
+          try {
+            const pngs: Uint8Array[] = [];
+            for (const frame of frames) {
+              if (controller.signal.aborted) break;
+              const vector = exportVector({
+                document: documentModel,
+                format: EXPORT_FORMAT.SVG,
+                theme,
+                nodeIds: frame.nodeIds,
+              });
+              if (!vector.ok) {
+                setExportError(vector.errors[0]?.message ?? "Export failed");
+                return;
+              }
+              const raster = await rasterSvgToPng(
+                new TextDecoder().decode(vector.bytes),
+                vector.width ?? 1,
+                vector.height ?? 1,
+                1,
+                RASTER_TYPE.PNG,
+              );
+              if (!raster.ok) {
+                setExportError(raster.message);
+                return;
+              }
+              pngs.push(raster.bytes);
+            }
+            const encoded = await encodeStoryWebm(pngs, { signal: controller.signal });
+            if (!encoded.ok) {
+              setExportError(encoded.message === STORY_WEBM_CANCELLED ? null : encoded.message);
+              return;
+            }
+            download(STORY_WEBM.filename, encoded.bytes, STORY_WEBM.mimeType);
+          } finally {
+            setExportBusy(false);
+            exportAbort.current = null;
+          }
+          return;
+        }
         if (
           format === EXPORT_CHOICE.PNG ||
           format === EXPORT_CHOICE.JPEG ||
@@ -805,7 +859,7 @@ function Specimen() {
         download(name, result.bytes, result.mediaType);
       })();
     },
-    [documentModel, theme],
+    [documentModel, theme, exportBusy],
   );
 
   const runCommand = useCallback(
@@ -1179,8 +1233,10 @@ function Specimen() {
             open={exportOpen}
             theme={theme}
             error={exportError}
+            busy={exportBusy}
             onTheme={setTheme}
             onExport={exportFormat}
+            onCancel={() => exportAbort.current?.abort()}
             onClose={() => setExportOpen(false)}
           />
           {presenting ? null : (

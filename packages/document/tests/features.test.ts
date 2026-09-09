@@ -13,5 +13,6 @@ test("the public feature table distinguishes shipped, partial, planned, and defe
   assert.match(text, /Stories and role lenses \| shipped/);
   assert.match(text, /Watch\/reload last-good agent file \| shipped/);
   assert.match(text, /Pinned Git evidence \| shipped/);
+  assert.match(text, /Browser story WebM \| shipped/);
   assert.match(text, /Five-user study \/ device smoke \| deferred/);
 });

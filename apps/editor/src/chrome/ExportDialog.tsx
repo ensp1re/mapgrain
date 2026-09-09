@@ -12,12 +12,23 @@ interface ExportDialogProps {
   open: boolean;
   theme: Theme;
   error: string | null;
+  busy?: boolean;
   onTheme: (theme: Theme) => void;
   onExport: (format: (typeof EXPORT_CHOICE)[keyof typeof EXPORT_CHOICE], scale: number) => void;
+  onCancel?: () => void;
   onClose: () => void;
 }
 
-export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }: ExportDialogProps) {
+export function ExportDialog({
+  open,
+  theme,
+  error,
+  busy = false,
+  onTheme,
+  onExport,
+  onCancel,
+  onClose,
+}: ExportDialogProps) {
   const [scale, setScale] = useState("2");
   const dialogRef = useRef<HTMLDivElement>(null);
   useFocusTrap(dialogRef, open, onClose);
@@ -52,11 +63,17 @@ export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }:
         <Button onClick={() => onExport(EXPORT_CHOICE.JPEG, Number(scale))}>JPEG</Button>
         <Button onClick={() => onExport(EXPORT_CHOICE.WEBP, Number(scale))}>WebP</Button>
         <Button onClick={() => onExport(EXPORT_CHOICE.CLIPBOARD, Number(scale))}>Copy image</Button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.STORY_WEBM, Number(scale))}>Story WebM</Button>
         <Button onClick={() => onExport(EXPORT_CHOICE.HTML, Number(scale))}>HTML</Button>
         <Button onClick={() => onExport(EXPORT_CHOICE.JSON, Number(scale))}>JSON</Button>
       </div>
+      {busy ? (
+        <p className="edit-error" role="status">
+          Recording story…
+        </p>
+      ) : null}
       {error ? <p className="edit-error">{error}</p> : null}
-      <Button onClick={onClose}>Close</Button>
+      {busy ? <Button onClick={onCancel}>Cancel</Button> : <Button onClick={onClose}>Close</Button>}
     </Pane>
     </div>
   );

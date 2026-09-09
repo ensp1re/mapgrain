@@ -18,6 +18,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Stories and role lenses | shipped | Viewer prev/next and role filter; source unchanged |
 | Visual presets, share-card, video, localization | shipped | compact/comfortable/presentation; card PNG; story mp4; en/uk chrome |
 | JPEG, WebP, clipboard image | partial | Editor JPEG/WebP download and PNG clipboard copy; CLI stays PNG/SVG/HTML/JSON |
+| Browser story WebM | shipped | Editor MediaRecorder story capture at 1280×720; CLI video stays FFmpeg MP4 |
 | Snapshot review HTML | partial | compare reports moved/rerouted IDs and can write Before/Delta/After HTML |
 | Pinned Git evidence | shipped | diagnose may set verified for a 40-character commit blob; working-tree hash is snapshotMatches only |
 | Watch/reload last-good agent file | shipped | `mapgrain watch` keeps last-good while JSON is invalid |
