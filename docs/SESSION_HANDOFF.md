@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F049
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f048 @ 7fbeefdb6fbc757490308f2949b7d7c9ba646222 (dirty)
-- Updated: 2026-09-09T19:12:00.000Z
+- Git: feat/shortcut-help @ c2792719d027ac9611ae863b2ecbe6887ce289d2 (dirty)
+- Updated: 2026-09-09T19:32:24.103Z
 
 ### Next action
 
-No live product tasks. Next id F049.
+Implement F049 Help overlay, verify, draft PR against main.
 
 ### Decisions
 
@@ -20,7 +20,7 @@ No live product tasks. Next id F049.
 - A working-tree snapshot hash is not Git verification. verified requires a 40-character commit SHA whose blob matches snapshot.
 - Sequence alt/opt fragments are modeled in this checkout. npm 0.1.0 does not validate them.
 - Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
-- Do not claim live agent prompt runs, Mermaid/draw.io import, hosted sharing, or a five-user study.
+- Do not claim live agent prompt runs, Mermaid/draw.io import, or hosted sharing.
 
 ### Rejected approaches
 
@@ -34,8 +34,7 @@ No live product tasks. Next id F049.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/60
-- https://github.com/ensp1re/mapgrain/actions/runs/34393411292
+- none
 
 ## Resume
 

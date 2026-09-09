@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { COMMANDS, type CommandId } from "../constants/commands.ts";
+import { shortcutLabel } from "../keyboard/shortcutLabel.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
 import { useFocusTrap } from "./focusTrap.ts";
 
@@ -93,8 +94,8 @@ export function CommandMenu({ open, nodes, onClose, onRun, onFocusNode }: Comman
               onClose();
             }}
           >
-            <span>{item.kind === "node" ? item.label : item.label}</span>
-            {item.shortcut ? <kbd>{item.shortcut}</kbd> : null}
+            <span>{item.label}</span>
+            {item.shortcut ? <kbd>{item.kind === "command" ? shortcutLabel(item.shortcut) : item.shortcut}</kbd> : null}
           </button>
         ))}
       </div>

@@ -21,6 +21,7 @@ interface TopBarProps {
   onPresent: () => void;
   onExport: () => void;
   onCommand: () => void;
+  onHelp: () => void;
   onToggleOutline: () => void;
   onToggleDetails?: () => void;
 }
@@ -43,6 +44,7 @@ export function TopBar({
   onPresent,
   onExport,
   onCommand,
+  onHelp,
   onToggleOutline,
   onToggleDetails,
 }: TopBarProps) {
@@ -106,6 +108,7 @@ export function TopBar({
     { label: "Outline", onClick: onToggleOutline },
     { label: "Details", onClick: onToggleDetails ?? onToggleOutline },
     { label: "Commands", onClick: onCommand },
+    { label: "Help", onClick: onHelp },
     { label: "Chat", onClick: undefined, disabled: true, ariaLabel: "Chat is unavailable" },
   ];
 
@@ -186,6 +189,9 @@ export function TopBar({
           <button type="button" className="text-btn topbar-wide" onClick={onCommand}>
             Commands
           </button>
+          <button type="button" className="text-btn topbar-wide" onClick={onHelp}>
+            Help
+          </button>
         </div>
         <button
           ref={moreRef}
@@ -238,6 +244,9 @@ export function TopBar({
         </button>
         <button type="button" className="text-btn">
           Commands
+        </button>
+        <button type="button" className="text-btn">
+          Help
         </button>
       </div>
     </header>

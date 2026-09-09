@@ -50,6 +50,7 @@ import { ViewportBar } from "./chrome/ViewportBar.tsx";
 import { shellLayoutForWidth, useViewportWidth } from "./chrome/viewport.ts";
 import { StartSurface } from "./chrome/StartSurface.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
+import { HelpOverlay } from "./chrome/HelpOverlay.tsx";
 import { ConnectDialog } from "./chrome/ConnectDialog.tsx";
 import { Inspector } from "./chrome/Inspector.tsx";
 import { Outline } from "./chrome/Outline.tsx";
@@ -88,7 +89,7 @@ import {
   isRedoEvent,
   isUndoEvent,
 } from "./keyboard/editShortcut.ts";
-import { shouldOpenCommandMenu } from "./keyboard/commandShortcut.ts";
+import { shouldOpenCommandMenu, shouldOpenHelp } from "./keyboard/commandShortcut.ts";
 import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
 import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
 import { EXAMPLES } from "./create/examples.ts";
@@ -240,6 +241,7 @@ function Specimen() {
   const [narrowPanel, setNarrowPanel] = useState<"outline" | "inspector" | "none">("none");
   const [presenting, setPresenting] = useState(false);
   const [commandsOpen, setCommandsOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; text: string } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [pending, setPending] = useState<PendingConnection | null>(null);
@@ -900,6 +902,10 @@ function Specimen() {
       if (id === COMMAND_ID.ARRANGE) void startArrange();
       if (id === COMMAND_ID.CONNECT) connectSelected();
       if (id === COMMAND_ID.NEW) flushThen(() => setSurface("start"));
+      if (id === COMMAND_ID.HELP) {
+        setCommandsOpen(false);
+        setHelpOpen(true);
+      }
     },
     [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, flushThen, getNodes, presenting, selection.nodeIds, shellLayout, startArrange, theme],
   );
@@ -907,6 +913,10 @@ function Specimen() {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        if (helpOpen) {
+          setHelpOpen(false);
+          return;
+        }
         if (commandsOpen) {
           setCommandsOpen(false);
           return;
@@ -930,7 +940,14 @@ function Specimen() {
       }
       if (shouldOpenCommandMenu(event)) {
         event.preventDefault();
+        setHelpOpen(false);
         setCommandsOpen(true);
+        return;
+      }
+      if (shouldOpenHelp(event)) {
+        event.preventDefault();
+        setCommandsOpen(false);
+        setHelpOpen((open) => !open);
         return;
       }
       if (isUndoEvent(event)) {
@@ -955,7 +972,7 @@ function Specimen() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [commandsOpen, editingId, exportOpen, narrowPanel, pending, runCommand]);
+  }, [commandsOpen, editingId, exportOpen, helpOpen, narrowPanel, pending, runCommand]);
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     const structural = changes.filter((change) => change.type !== "select");
@@ -1043,6 +1060,7 @@ function Specimen() {
             });
           }}
         />
+        <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
       </div>
     );
   }
@@ -1117,7 +1135,11 @@ function Specimen() {
         onArrange={() => runCommand(COMMAND_ID.ARRANGE)}
         onPresent={() => runCommand(COMMAND_ID.PRESENT)}
         onExport={() => setExportOpen(true)}
-        onCommand={() => setCommandsOpen(true)}
+        onCommand={() => {
+          setHelpOpen(false);
+          setCommandsOpen(true);
+        }}
+        onHelp={() => runCommand(COMMAND_ID.HELP)}
         onToggleOutline={() => runCommand(COMMAND_ID.TOGGLE_OUTLINE)}
         onToggleDetails={() => runCommand(COMMAND_ID.TOGGLE_INSPECTOR)}
       />
@@ -1302,6 +1324,7 @@ function Specimen() {
           }}
         />
       )}
+      <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
     </EditorErrorBoundary>
   );

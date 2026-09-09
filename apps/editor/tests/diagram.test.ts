@@ -49,7 +49,7 @@ test("more menu and select lists portal outside clipped ancestors", async () => 
 });
 
 test("command, export, connect, and add surfaces trap focus", async () => {
-  const files = ["CommandMenu.tsx", "ExportDialog.tsx", "ConnectDialog.tsx", "AddBar.tsx"];
+  const files = ["CommandMenu.tsx", "HelpOverlay.tsx", "ExportDialog.tsx", "ConnectDialog.tsx", "AddBar.tsx"];
   for (const name of files) {
     const source = await readFile(fileURLToPath(new URL(`../src/chrome/${name}`, import.meta.url)), "utf8");
     assert.match(source, /useFocusTrap/, name);

@@ -3,7 +3,9 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createHistory, pushHistory, redoHistory, undoHistory } from "../src/history/stack.ts";
-import { shouldOpenCommandMenu } from "../src/keyboard/commandShortcut.ts";
+import { COMMAND_ID, commandsByScope, shortcutCommands } from "../src/constants/commands.ts";
+import { shouldOpenCommandMenu, shouldOpenHelp } from "../src/keyboard/commandShortcut.ts";
+import { shortcutLabel } from "../src/keyboard/shortcutLabel.ts";
 
 test("Cmd/Ctrl+K opens the command menu except while typing in an input", () => {
   const input = { tagName: "INPUT", isContentEditable: false } as unknown as HTMLElement;
@@ -16,6 +18,39 @@ test("Cmd/Ctrl+K opens the command menu except while typing in an input", () => 
   );
   assert.equal(
     shouldOpenCommandMenu({ metaKey: true, ctrlKey: false, key: "p", target: null }),
+    false,
+  );
+});
+
+test("? and F1 open help except while typing in an input", () => {
+  const input = { tagName: "INPUT", isContentEditable: false } as unknown as HTMLElement;
+  assert.equal(shouldOpenHelp({ metaKey: false, ctrlKey: false, key: "?", target: null }), true);
+  assert.equal(shouldOpenHelp({ metaKey: false, ctrlKey: false, key: "F1", target: null }), true);
+  assert.equal(shouldOpenHelp({ metaKey: false, ctrlKey: false, key: "?", target: input }), false);
+  assert.equal(shouldOpenHelp({ metaKey: true, ctrlKey: false, key: "?", target: null }), false);
+  assert.equal(shouldOpenHelp({ metaKey: false, ctrlKey: false, key: "/", target: null }), false);
+});
+
+test("shortcut labels stay Apple glyphs on Mac and become Ctrl/Shift elsewhere", () => {
+  assert.equal(shortcutLabel("⌘K", true), "⌘K");
+  assert.equal(shortcutLabel("⇧⌘Z", true), "⇧⌘Z");
+  assert.equal(shortcutLabel("⌘K", false), "Ctrl+K");
+  assert.equal(shortcutLabel("⇧⌘Z", false), "Shift+Ctrl+Z");
+  assert.equal(shortcutLabel("⇧F", false), "Shift+F");
+});
+
+test("help overlay groups COMMANDS that have shortcuts", () => {
+  const help = shortcutCommands().find((item) => item.id === COMMAND_ID.HELP);
+  assert.ok(help);
+  assert.equal(help?.shortcut, "?");
+  const groups = commandsByScope();
+  assert.deepEqual(
+    groups.map((group) => group.label),
+    ["Editor", "Canvas", "Selection"],
+  );
+  assert.ok(groups.some((group) => group.items.some((item) => item.id === COMMAND_ID.UNDO)));
+  assert.equal(
+    shortcutCommands().some((item) => item.shortcut.length === 0),
     false,
   );
 });
@@ -44,6 +79,8 @@ test("shell CSS keeps chat as an overlay, not a third column", async () => {
   assert.match(css, /\.example-card/);
   assert.match(css, /position: absolute/);
   assert.match(css, /\.title-field input/);
+  assert.match(css, /\.help-overlay/);
+  assert.match(css, /\.help-row/);
 });
 
 test("select supports Home, End, and typeahead", async () => {
@@ -57,4 +94,6 @@ test("chat is disabled until generation is usable", async () => {
   const topbar = await readFile(fileURLToPath(new URL("../src/chrome/TopBar.tsx", import.meta.url)), "utf8");
   assert.match(topbar, /Chat is unavailable/);
   assert.match(topbar, /disabled/);
+  assert.match(topbar, /onHelp/);
+  assert.match(topbar, />\s*Help\s*</);
 });
