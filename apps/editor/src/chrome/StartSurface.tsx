@@ -76,8 +76,8 @@ export function StartSurface({
         </p>
         <pre className="agent-example">{`npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
 Create a Mapgrain architecture JSON with Browser, API, and Database nodes.
-npx mapgrain@0.1.0 validate diagram.json
-npx mapgrain@0.1.0 layout diagram.json`}</pre>
+npx mapgrain@0.2.0 validate diagram.json
+npx mapgrain@0.2.0 layout diagram.json`}</pre>
       </section>
       <section className="recent-list" aria-label="Recent diagrams">
         <h2>Recent diagrams</h2>

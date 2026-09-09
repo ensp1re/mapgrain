@@ -2,12 +2,7 @@
 
 Source of installer IDs and paths: `npx skills@1.5.25` (2026-09-08). Do not invent agent IDs. Further targets exist in that CLI; this table covers the usable-release priority set. Installation success is not a live task pass.
 
-Host for this matrix: macOS, Node 24+. CLI prerequisite for architecture/workflow: Node `>=24 <27` and `npx mapgrain@0.1.0`. Sequence, data-flow, and lifecycle require source CLI `0.2.0` until that version is published:
-
-```sh
-pnpm --filter mapgrain pack --pack-destination /tmp/mapgrain-dist
-npm install --omit=dev /tmp/mapgrain-dist/mapgrain-0.2.0.tgz
-```
+Host for this matrix: macOS, Node 24+. CLI prerequisite: Node `>=24 <27` and `npx mapgrain@0.2.0`. Historical `npx mapgrain@0.1.0` still validates architecture/workflow only.
 
 Project install (default):
 
@@ -30,6 +25,6 @@ Cursor, Codex, OpenCode, GitHub Copilot, and Gemini CLI share the project path `
 | Gemini CLI | `gemini-cli` | `.agents/skills/mapgrain` | `~/.gemini/skills/mapgrain` | pass (shared project path) | untested | 2026-09-08 | `gemini` CLI not installed here |
 | Windsurf | `windsurf` | `.windsurf/skills/mapgrain` | `~/.codeium/windsurf/skills/mapgrain` | pass | untested | 2026-09-08 | `windsurf` CLI not installed here |
 
-Live-task rows stay untested until a clean-directory agent run records: text→8–12-node architecture, repository-grounded diagram, ID/position-preserving edit, invalid-input repair, and readable export. CLI-only architecture equivalents pass via `npx mapgrain@0.1.0` in an empty directory. Sequence fixtures must use the source CLI.
+Live-task rows stay untested until a clean-directory agent run records: text→8–12-node architecture, repository-grounded diagram, ID/position-preserving edit, invalid-input repair, and readable export. CLI-only equivalents pass via `npx mapgrain@0.2.0` in an empty directory. Do not send sequence, data-flow, or lifecycle fixtures to `npx mapgrain@0.1.0`.
 
 Two writers: assign one writer per file, or require a re-read after a `revision` conflict. Mapgrain does not ship a coordinator. Concurrent CLI writers on one file conflict or no-clobber; they do not merge.

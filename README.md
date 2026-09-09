@@ -22,22 +22,11 @@ At 390px the canvas stays the main surface:
 
 ## CLI and skill
 
-Architecture and workflow on the last published package:
-
 ```sh
-npx mapgrain@0.1.0 validate diagram.json
-npx mapgrain@0.1.0 layout diagram.json
-npx mapgrain@0.1.0 view diagram.json -o view.html
+npx mapgrain@0.2.0 validate diagram.json
+npx mapgrain@0.2.0 layout diagram.json
+npx mapgrain@0.2.0 view diagram.json -o view.html
 npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
-```
-
-All five modes with a matching packed `0.2.0` tarball (not on npm yet):
-
-```sh
-pnpm --filter mapgrain pack --pack-destination /tmp/mapgrain-dist
-npm install --omit=dev /tmp/mapgrain-dist/mapgrain-0.2.0.tgz
-npx mapgrain validate tests/fixtures/documents/sequence-checkout.json
-npx mapgrain view tests/fixtures/documents/sequence-checkout.json -o sequence.html
 ```
 
 ![CLI validate and layout receipts](docs/media/cli-workflow.gif)
@@ -54,7 +43,7 @@ See [docs/FEATURES.md](docs/FEATURES.md) for shipped, partial, planned, and defe
 - CLI: validate, layout, view, export, diagnose, compare, watch, doctor, studio
 - Presets, share-card PNG, and story video from the first authored story
 
-Not shipped: hosted sharing, Mermaid/draw.io import, and live agent prompt runs. Sequence alt/opt fragments are modeled in this checkout; npm `mapgrain@0.1.0` does not validate them.
+Not shipped: hosted sharing, Mermaid/draw.io import, and live agent prompt runs. Historical `npx mapgrain@0.1.0` still rejects sequence, data-flow, and lifecycle fixtures.
 
 ## Examples
 
@@ -76,7 +65,7 @@ pnpm install
 pnpm verify
 ```
 
-Development CLI: `pnpm mapgrain` (source `0.2.0`). Last published package: `mapgrain@0.1.0`, which does not validate sequence, data-flow, or lifecycle fixtures from this checkout. The matching five-mode CLI is the packed `mapgrain-0.2.0.tgz` tarball. Internals are bundled. Do not use `npx mapgrain@latest`. Do not overwrite `0.1.0`.
+Development CLI: `pnpm mapgrain` (source `0.2.0`). Last published package: `mapgrain@0.2.0`. Historical architecture/workflow package: `mapgrain@0.1.0`. Internals are bundled. Do not use `npx mapgrain@latest`. Do not overwrite `0.1.0`.
 
 ## License
 
