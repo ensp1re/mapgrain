@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F052",
+    "behavior": "Bump the matching CLI to source 0.2.1 so the UI chrome pass can publish as a patch without overwriting 0.1.0 or 0.2.0.",
+    "acceptance": [
+      "packages/cli package.json and SOURCE_CLI_VERSION are 0.2.1; packed tarball --version prints 0.2.1.",
+      "Public npx pins stay mapgrain@0.2.0 until 0.2.1 is on npm; historical mapgrain@0.1.0 remains.",
+      "Docs do not pin @latest and do not overwrite 0.1.0 or 0.2.0."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788985366620-3e519b",
+      "fingerprintBefore": "fdcf6e90c8547735649b04e49e0af417305c3f08eed6c034734f0dbe2c54500e",
+      "fingerprintAfter": "fdcf6e90c8547735649b04e49e0af417305c3f08eed6c034734f0dbe2c54500e",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T20:23:08.121Z"
+    },
+    "delivery": {
+      "implementationRevision": "b7914924a23e67ee6b49577896adf12a2a472524",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/68",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "b7914924a23e67ee6b49577896adf12a2a472524",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34401356257"
+        }
+      ],
+      "observedAt": "2026-09-09T20:31:30Z",
+      "closeoutRevision": "b7914924a23e67ee6b49577896adf12a2a472524"
+    }
+  },
+  "archivedAt": "2026-09-09T20:32:13.473Z"
+}

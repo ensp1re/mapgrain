@@ -4,24 +4,25 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F052
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/cli-0.2.1 @ 2fcc3f4df88fa1716412cf70f4e82f3cd24f8bc0 (dirty)
-- Updated: 2026-09-09T20:22:09.602Z
+- Git: chore/stamp-f052 @ b7914924a23e67ee6b49577896adf12a2a472524 (dirty)
+- Updated: 2026-09-09T20:32:00.000Z
 
 ### Next action
 
-Implement F052 0.2.1 source bump, verify, draft PR against main.
+When npm shows mapgrain@0.2.1, retarget public pins (F053).
 
 ### Decisions
 
-- Published npm CLI is npx mapgrain@0.2.0 (all five modes). Historical npx mapgrain@0.1.0 remains architecture/workflow only.
+- Published npm CLI is npx mapgrain@0.2.0 until 0.2.1 is live on the registry. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only.
 - JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.
 - A working-tree snapshot hash is not Git verification. verified requires a 40-character commit SHA whose blob matches snapshot.
 - Sequence alt/opt fragments are in npm mapgrain@0.2.0. npm 0.1.0 still rejects them.
 - Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
 - Do not claim live agent prompt runs, Mermaid/draw.io import, or hosted sharing.
 - The Codex HTML is a review prototype. Editor chrome follows its composition; Help, Focus, and Commands stay.
+- Do not overwrite 0.1.0 or 0.2.0. Do not pin @latest.
 
 ### Rejected approaches
 
@@ -35,7 +36,8 @@ Implement F052 0.2.1 source bump, verify, draft PR against main.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/68
+- https://github.com/ensp1re/mapgrain/actions/runs/34401356257
 
 ## Resume
 
