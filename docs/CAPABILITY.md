@@ -14,7 +14,7 @@ Evidence baseline: `02d0145` (2026-09-08). This ledger tracks the master product
 | Readable default labels after fit | partial | yes | Fit all shows the whole graph; Focus keeps labels readable. Default open uses Fit all |
 | Portable HTML viewer: search, fit, theme, pan, zoom | implemented | yes | F037: fit, search-to-focus, theme, pan, zoom, keyboard, fullscreen; no remote assets |
 | Directed reach, route, named views, stories, lenses | implemented | yes | F037 reach/route/views; F042 stories and role lenses in exported HTML |
-| CLI validate/layout/view/export/doctor/studio | partial | yes | npm `mapgrain@0.1.0` is last published; source CLI is `0.2.0` and is not on npm yet |
+| CLI validate/layout/view/export/doctor/studio | partial | yes | npm `mapgrain@0.1.0` is last published; packed `mapgrain-0.2.0.tgz` validates all five modes outside the monorepo |
 | Agent skill install + live tasks across agents | partial | partial | Install paths tested; live agent tasks untested; skill must not send sequence fixtures to `npx mapgrain@0.1.0` |
 | Export fidelity (resolved paints, captions, Inter, doctor pixels) | implemented | yes | F032: CLI SVG/PNG use hex paints; viewer SVG stays themed; doctor samples PNG pixels |
 | Geometry diagnostics, snapshot compare, watch/reload | partial | yes | diagnose --strict fails on overlap/clipping; compare includes moved/rerouted IDs and optional HTML review; Git verified is a pinned commit blob, not a working-tree hash |

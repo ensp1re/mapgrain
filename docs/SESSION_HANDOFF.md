@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f047 @ d76f29ac21225956d0bd30c900871315790a3475 (dirty)
-- Updated: 2026-09-09T18:13:00.000Z
+- Git: feat/v4-matching-tarball @ 6a48bd4e2c91d95e6ffe65605296f08d4a8e07ce (dirty)
+- Updated: 2026-09-09T18:58:54.852Z
 
 ### Next action
 
-No live product tasks. Next id F048.
+F048 is locally verified. Push a draft PR against main.
 
 ### Decisions
 
@@ -34,8 +34,7 @@ No live product tasks. Next id F048.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/58
-- https://github.com/ensp1re/mapgrain/actions/runs/34387401752
+- docs/runs/run-1788980308007-d9869f.json
 
 ## Resume
 

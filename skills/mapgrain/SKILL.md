@@ -21,6 +21,25 @@ npx mapgrain@0.1.0 view diagram.json -o diagram.html
 
 If `mapgrain` is already on PATH from that install, use that binary for architecture/workflow files only.
 
+## Matching 0.2.0 tarball (all five modes)
+
+From a Mapgrain checkout, pack the CLI that matches this skill. Do not publish or overwrite `0.1.0`.
+
+```sh
+pnpm --filter mapgrain pack --pack-destination /tmp/mapgrain-dist
+```
+
+That writes `mapgrain-0.2.0.tgz`. In the user's project:
+
+```sh
+npm install --omit=dev /tmp/mapgrain-dist/mapgrain-0.2.0.tgz
+npx mapgrain validate diagram.json
+npx mapgrain layout diagram.json
+npx mapgrain view diagram.json -o diagram.html
+```
+
+Use this packed CLI for sequence, data-flow, and lifecycle. Do not run those files through `npx mapgrain@0.1.0`.
+
 ## Repository development
 
 From a Mapgrain checkout only. Do not use these after the skill is installed elsewhere.
@@ -71,7 +90,7 @@ Write JSON that matches [references/document.schema.json](references/document.sc
 
 - `id` values match `^[A-Za-z][A-Za-z0-9_-]*$`.
 - Omit `layout` on first create.
-- Run `npx mapgrain@0.1.0 layout diagram.json` so ELK writes positions. Do not pick x/y yourself.
+- Run layout with the matching CLI so ELK writes positions. Architecture/workflow: `npx mapgrain@0.1.0 layout diagram.json`. Sequence, data-flow, or lifecycle: packed `mapgrain-0.2.0.tgz`. Do not pick x/y yourself.
 - `revision` starts at `1`.
 
 ## Workflow

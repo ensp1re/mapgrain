@@ -4,13 +4,12 @@
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f047",
-    "revision": "d76f29ac21225956d0bd30c900871315790a3475",
+    "branch": "feat/v4-matching-tarball",
+    "revision": "6a48bd4e2c91d95e6ffe65605296f08d4a8e07ce",
     "dirty": true
   },
   "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/58",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34387401752"
+    "docs/runs/run-1788980308007-d9869f.json"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.1.0 (architecture/workflow). Source CLI is 0.2.0 and is not on npm yet.",
@@ -26,6 +25,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "No live product tasks. Next id F048.",
-  "updatedAt": "2026-09-09T18:13:00.000Z"
+  "nextAction": "F048 is locally verified. Push a draft PR against main.",
+  "updatedAt": "2026-09-09T18:58:54.852Z"
 }
