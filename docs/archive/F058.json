@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F058",
+    "behavior": "Workflow groups render as stacked swimlanes in the editor and SVG.",
+    "acceptance": [
+      "SVG for a workflow with groups includes data-kind=lane and those lane rects share a width.",
+      "Architecture nested-groups SVG keeps data-kind=group and has no data-kind=lane.",
+      "Editor workflow groups expose data-lane and .group-frame.is-lane."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788997884306-5459b0",
+      "fingerprintBefore": "b9aaaecc0c6b4021a21db9215ac5c41e981a2f316ff7cbd2d2bd6f2813be07f3",
+      "fingerprintAfter": "b9aaaecc0c6b4021a21db9215ac5c41e981a2f316ff7cbd2d2bd6f2813be07f3",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T23:51:47.079Z"
+    },
+    "delivery": {
+      "implementationRevision": "934d6465090292cab4bc81ff8b787195b58a429e",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/81",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "934d6465090292cab4bc81ff8b787195b58a429e",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34418999279"
+        }
+      ],
+      "observedAt": "2026-09-09T23:56:59Z",
+      "closeoutRevision": "934d6465090292cab4bc81ff8b787195b58a429e"
+    }
+  },
+  "archivedAt": "2026-09-09T23:57:10.353Z"
+}
