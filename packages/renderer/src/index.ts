@@ -10,7 +10,14 @@ export { DARK_TOKENS, LIGHT_TOKENS, tokenCssVars, tokensFor, viewerChromeCss } f
 export { exportDiagram } from "./export.ts";
 export { EXPORT_FONT_FAMILY } from "./font.ts";
 export { rasterLimits } from "./limits.ts";
-export { colorNear, parseHexRgb, pixelAt, rasterizeSvg, svgToPng } from "./png.ts";
+export {
+  colorNear,
+  parseHexRgb,
+  pixelAt,
+  rasterHasPaint,
+  rasterizeSvg,
+  svgToPng,
+} from "./png.ts";
 export { exportVector, prepareDocument, renderDocumentSvg } from "./vector.ts";
 export type {
   ExportErrorCode,

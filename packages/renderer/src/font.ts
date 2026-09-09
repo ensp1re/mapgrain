@@ -10,3 +10,7 @@ export function interFontFaceCss(): string {
 export function interFontFileUrl(): URL {
   return new URL("../fonts/inter-latin-500-normal.woff2", import.meta.url);
 }
+
+export function interRasterFontFileUrl(): URL {
+  return new URL("../fonts/inter-latin-500-normal.ttf", import.meta.url);
+}

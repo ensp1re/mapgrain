@@ -10,6 +10,7 @@ import {
   exportDiagram,
   parseHexRgb,
   pixelAt,
+  rasterHasPaint,
   rasterizeSvg,
 } from "@mapgrain/renderer";
 import { DOCTOR_CHECK, EXIT_CODE } from "./constants/cli.ts";
@@ -95,22 +96,13 @@ async function checkRenderer(): Promise<DoctorCheck> {
         message: `PNG background ${corner.slice(0, 3).join(",")} does not match ${DARK_TOKENS.background}`,
       };
     }
-    let painted = false;
     const surface = parseHexRgb(DARK_TOKENS.surface);
     const text = parseHexRgb(DARK_TOKENS.text);
-    for (let i = 0; i < raster.pixels.length; i += 16) {
-      const sample: [number, number, number] = [
-        raster.pixels[i] ?? 0,
-        raster.pixels[i + 1] ?? 0,
-        raster.pixels[i + 2] ?? 0,
-      ];
-      if (colorNear(sample, surface, 18) || colorNear(sample, text, 18)) {
-        painted = true;
-        break;
-      }
+    if (!rasterHasPaint(raster.pixels, surface, 18, 16)) {
+      return { id: DOCTOR_CHECK.RENDERER, ok: false, message: "PNG has no node surface paint" };
     }
-    if (!painted) {
-      return { id: DOCTOR_CHECK.RENDERER, ok: false, message: "PNG has no node surface or label paint" };
+    if (!rasterHasPaint(raster.pixels, text, 24, 4)) {
+      return { id: DOCTOR_CHECK.RENDERER, ok: false, message: "PNG is missing node label paint" };
     }
     return { id: DOCTOR_CHECK.RENDERER, ok: true, message: "SVG and PNG show labeled nodes with theme paints" };
   } catch (error) {

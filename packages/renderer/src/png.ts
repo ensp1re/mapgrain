@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
-import { EXPORT_FONT_FAMILY, interFontFileUrl } from "./font.ts";
+import { EXPORT_FONT_FAMILY, interRasterFontFileUrl } from "./font.ts";
 
 export { DEFAULT_SCALE } from "./constants/export.ts";
 export { rasterLimits } from "./limits.ts";
@@ -13,7 +13,7 @@ export interface RasterImage {
 }
 
 export function rasterizeSvg(svg: string, scale: number, background?: string): RasterImage {
-  const fontFile = fileURLToPath(interFontFileUrl());
+  const fontFile = fileURLToPath(interRasterFontFileUrl());
   const resvg = new Resvg(svg, {
     fitTo: { mode: "zoom", value: scale },
     background,
@@ -54,6 +54,23 @@ export function parseHexRgb(hex: string): [number, number, number] {
     Number.parseInt(raw.slice(2, 4), 16),
     Number.parseInt(raw.slice(4, 6), 16),
   ];
+}
+
+export function rasterHasPaint(
+  pixels: Uint8Array,
+  expected: readonly [number, number, number],
+  tolerance = 24,
+  step = 4,
+): boolean {
+  for (let i = 0; i < pixels.length; i += step) {
+    const sample: [number, number, number] = [
+      pixels[i] ?? 0,
+      pixels[i + 1] ?? 0,
+      pixels[i + 2] ?? 0,
+    ];
+    if (colorNear(sample, expected, tolerance)) return true;
+  }
+  return false;
 }
 
 export function colorNear(
