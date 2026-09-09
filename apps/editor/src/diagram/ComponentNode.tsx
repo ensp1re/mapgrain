@@ -35,14 +35,28 @@ export function ComponentNode({ data, selected }: NodeProps) {
         }
       }}
     >
-      {node.ports.map((port) => (
-        <Handle
-          key={port.id}
-          id={port.id}
-          type={port.side === PORT_SIDE.WEST || port.side === PORT_SIDE.NORTH ? "target" : "source"}
-          position={POSITION[handlePosition(port.side)]}
-        />
-      ))}
+      {node.ports.flatMap((port) => {
+        const position = POSITION[handlePosition(port.side)];
+        const unused = !port.asSource && !port.asTarget;
+        const asSource =
+          port.asSource ||
+          (unused && port.side !== PORT_SIDE.WEST && port.side !== PORT_SIDE.NORTH);
+        const asTarget =
+          port.asTarget || (unused && (port.side === PORT_SIDE.WEST || port.side === PORT_SIDE.NORTH));
+        const handles = [];
+        if (asSource) {
+          handles.push(
+            <Handle key={`${port.id}-source`} id={port.id} type="source" position={position} />,
+          );
+        }
+        if (asTarget) {
+          handles.push(
+            <Handle key={`${port.id}-target`} id={port.id} type="target" position={position} />,
+          );
+        }
+        return handles;
+      })}
+      <div className="node-card-body">
       <KindLabel kind={node.kind} label={node.kindLabel} />
       {node.editing ? (
         <input
@@ -66,6 +80,7 @@ export function ComponentNode({ data, selected }: NodeProps) {
           ))}
         </div>
       )}
+      </div>
     </NodeCard>
   );
 }

@@ -77,4 +77,7 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
   assert.doesNotMatch(library, /Add service/);
   assert.match(node, /from "\.\/NodeCard\.tsx"/);
   assert.match(node, /from "\.\/KindLabel\.tsx"/);
+  assert.match(node, /asSource/);
+  assert.doesNotMatch(node, /port\.side === PORT_SIDE\.WEST \|\| port\.side === PORT_SIDE\.NORTH \? "target"/);
+  assert.match(outline, /kindShort/);
 });

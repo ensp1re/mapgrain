@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F055
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f054 @ 1ec158038d3d4facf234004e4baa3aae45b0fc30 (dirty)
-- Updated: 2026-09-09T22:15:53.379Z
+- Git: feat/canvas-handles-cards @ 82c94a3414b8270f78c5602c636e3eac8a8e5e01 (dirty)
+- Updated: 2026-09-09T22:22:24.452Z
 
 ### Next action
 
-Queue F055: editor handles follow edge use; node cards grow with labels.
+Verify F055, open a draft PR for canvas handles and adaptive cards.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Queue F055: editor handles follow edge use; node cards grow with labels.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/73
-- https://github.com/ensp1re/mapgrain/actions/runs/34411003262
+- none
 
 ## Resume
 

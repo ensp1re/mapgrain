@@ -30,6 +30,55 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.equal(edge?.preserveGeometry, false);
 });
 
+test("west source ports stay sources so those edges can paint", async () => {
+  const raw = {
+    schemaVersion: 1,
+    id: "doc-west-source",
+    revision: 1,
+    kind: "architecture",
+    title: "West source",
+    theme: "dark",
+    layoutHints: { direction: "right", pinnedNodeIds: [] },
+    groups: [],
+    nodes: [
+      {
+        id: "ext",
+        kind: "external",
+        label: "Vendor",
+        groupId: null,
+        ports: [{ id: "out", side: "west" }],
+      },
+      {
+        id: "api",
+        kind: "service",
+        label: "API",
+        groupId: null,
+        ports: [{ id: "in", side: "west" }],
+      },
+    ],
+    edges: [
+      {
+        id: "e1",
+        source: { nodeId: "ext", portId: "out" },
+        target: { nodeId: "api", portId: "in" },
+        type: "calls",
+        direction: "forward",
+      },
+    ],
+    views: [{ id: "overview", kind: "overview", name: "All" }],
+  };
+  const scene = buildScene(raw);
+  assert.equal(scene.ok, true, JSON.stringify(scene));
+  if (!scene.ok) return;
+  const flow = sceneToFlow(scene.scene);
+  const ext = flow.nodes.find((node) => node.id === "ext");
+  const api = flow.nodes.find((node) => node.id === "api");
+  assert.equal(ext?.data.ports[0]?.asSource, true);
+  assert.equal(ext?.data.ports[0]?.asTarget, false);
+  assert.equal(api?.data.ports[0]?.asSource, false);
+  assert.equal(api?.data.ports[0]?.asTarget, true);
+});
+
 test("sequence flow keeps lifelines and does not remap message geometry", async () => {
   const raw = JSON.parse(
     await readFile(
@@ -67,4 +116,7 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /\.topbar-wide/);
   assert.match(css, /\.overlay-panel/);
   assert.match(css, /\.topbar \{[\s\S]*overflow: visible/);
+  assert.match(css, /\.node-kind \{[^}]*overflow: visible/);
+  assert.doesNotMatch(css, /\.node-kind \{[^}]*text-overflow: ellipsis/);
+  assert.match(css, /\.node-card-body/);
 });

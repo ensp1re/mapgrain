@@ -18,6 +18,25 @@ function groupOrigin(group: SceneGroup, groups: Map<string, SceneGroup>): { x: n
   return { x: group.rect.x - parent.rect.x, y: group.rect.y - parent.rect.y };
 }
 
+function portKey(nodeId: string, portId: string): string {
+  return `${nodeId}\0${portId}`;
+}
+
+function portRoles(scene: Scene): Map<string, { asSource: boolean; asTarget: boolean }> {
+  const roles = new Map<string, { asSource: boolean; asTarget: boolean }>();
+  const mark = (nodeId: string, portId: string, field: "asSource" | "asTarget") => {
+    const key = portKey(nodeId, portId);
+    const current = roles.get(key) ?? { asSource: false, asTarget: false };
+    current[field] = true;
+    roles.set(key, current);
+  };
+  for (const edge of scene.edges) {
+    mark(edge.source.nodeId, edge.source.portId, "asSource");
+    mark(edge.target.nodeId, edge.target.portId, "asTarget");
+  }
+  return roles;
+}
+
 export function sceneToFlow(scene: Scene): {
   nodes: FlowNodeDraft[];
   edges: FlowEdgeDraft[];
@@ -26,6 +45,7 @@ export function sceneToFlow(scene: Scene): {
 } {
   const groups = new Map(scene.groups.map((group) => [group.id, group]));
   const sequence = scene.lifelines.length > 0;
+  const roles = portRoles(scene);
   const groupNodes: FlowNodeDraft[] = scene.groups.map((group) => ({
     id: group.id,
     type: "group",
@@ -51,7 +71,15 @@ export function sceneToFlow(scene: Scene): {
       kindLabel: node.kindLabel.lines[0]?.text ?? node.kind.toUpperCase(),
       label: node.label.lines.map((line) => line.text).join(" "),
       lines: node.label.lines.map((line) => line.text),
-      ports: node.ports.map((port) => ({ id: port.id, side: port.side })),
+      ports: node.ports.map((port) => {
+        const role = roles.get(portKey(node.id, port.id));
+        return {
+          id: port.id,
+          side: port.side,
+          asSource: role?.asSource ?? false,
+          asTarget: role?.asTarget ?? false,
+        };
+      }),
     },
   }));
   const edges: FlowEdgeDraft[] = scene.edges.map((edge) => ({
