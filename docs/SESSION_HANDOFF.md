@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F058
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f057 @ a93016dd9589ea070c641edcb49b404023f7d2fc (dirty)
-- Updated: 2026-09-09T23:23:14.455Z
+- Git: feat/workflow-lanes @ 5329f4481a52e1ba0d245f20dc336831035b5811 (dirty)
+- Updated: 2026-09-09T23:50:42.584Z
 
 ### Next action
 
-Queue F058: workflow swimlanes. Do not start until asked.
+Implement F058 workflow groups as stacked swimlanes.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Queue F058: workflow swimlanes. Do not start until asked.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/79
-- https://github.com/ensp1re/mapgrain/actions/runs/34416469159
+- none
 
 ## Resume
 

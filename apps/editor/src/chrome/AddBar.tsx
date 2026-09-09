@@ -5,16 +5,24 @@ import { useFocusTrap } from "./focusTrap.ts";
 
 interface AddBarProps {
   kinds: NodeKind[];
+  groupLabel?: string;
   onAddNode: (kind: NodeKind) => void;
   onAddGroup: () => void;
   onConnect: () => void;
   canConnect: boolean;
 }
 
-export function AddBar({ kinds, onAddNode, onAddGroup, onConnect, canConnect }: AddBarProps) {
+export function AddBar({
+  kinds,
+  groupLabel = "group",
+  onAddNode,
+  onAddGroup,
+  onConnect,
+  canConnect,
+}: AddBarProps) {
   const addItems: Array<{ id: string; label: string; kind: NodeKind | "group" }> = [
     ...kinds.map((kind) => ({ id: kind, label: kind, kind })),
-    { id: "group", label: "group", kind: "group" as const },
+    { id: "group", label: groupLabel, kind: "group" as const },
   ];
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");

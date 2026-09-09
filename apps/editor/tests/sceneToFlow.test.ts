@@ -32,6 +32,25 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.equal(gateway?.data.kindFill, "gateway");
 });
 
+test("workflow groups expose lane data in the editor flow", async () => {
+  const raw = JSON.parse(
+    await readFile(
+      fileURLToPath(new URL("../../../tests/fixtures/documents/workflow-decision.json", import.meta.url)),
+      "utf8",
+    ),
+  ) as unknown;
+  const scene = buildScene(raw);
+  assert.equal(scene.ok, true);
+  if (!scene.ok) return;
+  const flow = sceneToFlow(scene.scene);
+  const authorLane = flow.nodes.find((node) => node.id === "author-lane");
+  const reviewLane = flow.nodes.find((node) => node.id === "review-lane");
+  assert.equal(authorLane?.type, "group");
+  assert.equal(authorLane?.data.lane, true);
+  assert.equal(reviewLane?.data.lane, true);
+  assert.equal(authorLane?.width, reviewLane?.width);
+});
+
 test("lifecycle flow exposes markers and tones and hides STATE as a chip", async () => {
   const raw = JSON.parse(
     await readFile(
@@ -148,4 +167,5 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /\.kind-legend \{[^}]*bottom: 72px/);
   assert.match(css, /data-kind-fill="gateway"/);
   assert.match(css, /@media \(max-width: 767px\) \{[\s\S]*\.kind-legend \{[^}]*bottom: 104px/);
+  assert.match(css, /\.group-frame\.is-lane/);
 });

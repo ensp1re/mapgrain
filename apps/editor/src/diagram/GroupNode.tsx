@@ -12,7 +12,10 @@ export function GroupNode({ data, selected }: NodeProps) {
 
   return (
     <div
-      className={selected ? "group-frame is-selected" : "group-frame"}
+      className={[selected ? "group-frame is-selected" : "group-frame", group.lane ? "is-lane" : ""]
+        .filter(Boolean)
+        .join(" ")}
+      data-lane={group.lane ? "true" : undefined}
       onDoubleClick={() => {
         if (!group.editing) group.onStartEdit();
       }}

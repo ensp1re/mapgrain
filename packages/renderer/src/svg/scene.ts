@@ -57,16 +57,18 @@ export function renderSvg(
   const ox = VIEW_PAD - scene.bounds.x;
   const oy = VIEW_PAD - scene.bounds.y;
   const font = { ...defaultFont, family: EXPORT_FONT_FAMILY };
-  const { background: bg, surface, border, text, muted, edge: edgeColor, group: groupColor, port } = paints;
+  const { background: bg, surface, border, text, muted, edge: edgeColor, group: groupColor, port, raised } = paints;
 
   const groups = scene.groups
-    .map(
-      (group) =>
-        `<g data-kind="group" data-id="${escapeXml(group.id)}">
-  <rect x="${n(group.rect.x + ox)}" y="${n(group.rect.y + oy)}" width="${n(group.rect.width)}" height="${n(group.rect.height)}" rx="${GROUP_RADIUS}" fill="none" stroke="${groupColor}" stroke-width="1"/>
+    .map((group) => {
+      const lane = group.role === "lane";
+      const fill = lane ? raised : "none";
+      const rx = lane ? 4 : GROUP_RADIUS;
+      return `<g data-kind="${lane ? "lane" : "group"}" data-id="${escapeXml(group.id)}">
+  <rect x="${n(group.rect.x + ox)}" y="${n(group.rect.y + oy)}" width="${n(group.rect.width)}" height="${n(group.rect.height)}" rx="${rx}" fill="${fill}" stroke="${groupColor}" stroke-width="1"/>
   <text x="${n(group.rect.x + ox + 12)}" y="${n(group.rect.y + oy + 16)}" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="12">${escapeXml(group.label.lines[0]?.text ?? group.id)}</text>
-</g>`,
-    )
+</g>`;
+    })
     .join("\n");
 
   const fragments = (scene.fragments ?? [])

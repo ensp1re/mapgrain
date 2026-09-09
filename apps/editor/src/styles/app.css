@@ -829,6 +829,12 @@ input {
 
 .group-frame.is-selected { border-color: var(--accent); }
 
+.group-frame.is-lane {
+  border-style: solid;
+  border-radius: 4px;
+  background: var(--bg-raised);
+}
+
 .group-label {
   position: absolute;
   top: 8px;

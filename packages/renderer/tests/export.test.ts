@@ -250,6 +250,32 @@ test("share-card export is a PNG of a named view", async () => {
   assert.ok(result.bytes.length > 100);
 });
 
+test("workflow SVG draws equal-width lanes from groups", async () => {
+  const raw = await load("workflow-decision.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.match(svg, /data-kind="lane"/);
+  assert.match(svg, /data-id="author-lane"/);
+  assert.match(svg, /data-id="review-lane"/);
+  const widths = [...svg.matchAll(/data-kind="lane"[^>]*>\s*<rect[^>]*width="([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  assert.equal(widths.length, 2);
+  assert.equal(widths[0], widths[1]);
+});
+
+test("architecture SVG keeps nested groups and omits lanes", async () => {
+  const raw = await load("nested-groups.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.match(svg, /data-kind="group"/);
+  assert.doesNotMatch(svg, /data-kind="lane"/);
+});
+
 test("architecture SVG tints kinds and draws a legend", async () => {
   const raw = await load("nested-groups.json");
   const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });

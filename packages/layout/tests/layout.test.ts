@@ -43,6 +43,25 @@ test("layout runs off the main thread and places nested, cyclic, and parallel gr
   }
 });
 
+test("workflow lanes stack groups vertically", async () => {
+  const engine = createLayoutEngine();
+  try {
+    const result = await engine.layout({ document: await load("workflow-decision.json") });
+    assert.equal(result.status, LAYOUT_STATUS.LAID_OUT);
+    if (result.status !== LAYOUT_STATUS.LAID_OUT) return;
+    const author = result.positions.author;
+    const route = result.positions.route;
+    const publish = result.positions.publish;
+    const revise = result.positions.revise;
+    assert.ok(author && route && publish && revise);
+    assert.ok(author.y + 40 < route.y);
+    assert.ok(publish.x > route.x);
+    assert.ok(Math.abs(publish.x - revise.x) < 16);
+  } finally {
+    await engine.dispose();
+  }
+});
+
 test("pinned nodes keep their coordinates when space allows", async () => {
   const engine = createLayoutEngine();
   try {

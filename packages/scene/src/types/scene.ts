@@ -81,6 +81,7 @@ export interface SceneGroup {
   label: MeasuredText;
   parentId: string | null;
   rect: Rect;
+  role?: string;
 }
 
 export interface SceneFragmentOperand {
