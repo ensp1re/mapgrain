@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F049
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/shortcut-help @ c2792719d027ac9611ae863b2ecbe6887ce289d2 (dirty)
-- Updated: 2026-09-09T19:32:24.103Z
+- Git: chore/stamp-f049 @ d2205d27462cb55a114398fcae6d81772ee5bad6 (dirty)
+- Updated: 2026-09-09T19:40:06.311Z
 
 ### Next action
 
-Implement F049 Help overlay, verify, draft PR against main.
+Publish mapgrain@0.2.0, then retarget docs/skill pins from 0.1.0.
 
 ### Decisions
 
@@ -34,7 +34,8 @@ Implement F049 Help overlay, verify, draft PR against main.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/62
+- https://github.com/ensp1re/mapgrain/actions/runs/34396175957
 
 ## Resume
 

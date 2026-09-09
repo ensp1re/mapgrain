@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F049",
+    "behavior": "Visible Help overlay lists COMMANDS shortcuts; drop five-user study from the public ledger.",
+    "acceptance": [
+      "Help button, ? key, and command palette open a shortcut overlay sourced from COMMANDS.",
+      "The overlay groups shortcuts, dismisses with Escape, outside click, and Close, and does not capture typing in inputs.",
+      "FEATURES, CAPABILITY, PLAN, README, and handoff no longer mention a five-user or device-smoke study."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788982392617-08931e",
+      "fingerprintBefore": "70445f6adc5612dfd07d55295ca18740f4dbe16351c078ebe9e59ee64224e7f7",
+      "fingerprintAfter": "70445f6adc5612dfd07d55295ca18740f4dbe16351c078ebe9e59ee64224e7f7",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T19:33:41.921Z"
+    },
+    "delivery": {
+      "implementationRevision": "d2205d27462cb55a114398fcae6d81772ee5bad6",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/62",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "d2205d27462cb55a114398fcae6d81772ee5bad6",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34396175957"
+        }
+      ],
+      "observedAt": "2026-09-09T19:39:30Z",
+      "closeoutRevision": "d2205d27462cb55a114398fcae6d81772ee5bad6"
+    }
+  },
+  "archivedAt": "2026-09-09T19:39:50.144Z"
+}
