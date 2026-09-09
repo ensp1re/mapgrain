@@ -1,17 +1,14 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F058",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f057",
-    "revision": "a93016dd9589ea070c641edcb49b404023f7d2fc",
+    "branch": "feat/workflow-lanes",
+    "revision": "5329f4481a52e1ba0d245f20dc336831035b5811",
     "dirty": true
   },
-  "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/79",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34416469159"
-  ],
+  "evidenceRefs": [],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -28,6 +25,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Queue F058: workflow swimlanes. Do not start until asked.",
-  "updatedAt": "2026-09-09T23:23:14.455Z"
+  "nextAction": "Implement F058 workflow groups as stacked swimlanes.",
+  "updatedAt": "2026-09-09T23:50:42.584Z"
 }

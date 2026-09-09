@@ -6,12 +6,15 @@
   "title": "Review decision",
   "theme": "light",
   "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
-  "groups": [],
+  "groups": [
+    { "id": "author-lane", "label": "Author", "parentId": null },
+    { "id": "review-lane", "label": "Review", "parentId": null }
+  ],
   "nodes": [
-    { "id": "author", "kind": "actor", "label": "Author", "groupId": null, "ports": [{ "id": "out", "side": "east" }] },
-    { "id": "route", "kind": "decision", "label": "Approve?", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
-    { "id": "publish", "kind": "job", "label": "Publish", "groupId": null, "ports": [{ "id": "in", "side": "west" }] },
-    { "id": "revise", "kind": "job", "label": "Revise", "groupId": null, "ports": [{ "id": "in", "side": "west" }] }
+    { "id": "author", "kind": "actor", "label": "Author", "groupId": "author-lane", "ports": [{ "id": "out", "side": "east" }] },
+    { "id": "route", "kind": "decision", "label": "Approve?", "groupId": "review-lane", "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "publish", "kind": "job", "label": "Publish", "groupId": "review-lane", "ports": [{ "id": "in", "side": "west" }] },
+    { "id": "revise", "kind": "job", "label": "Revise", "groupId": "review-lane", "ports": [{ "id": "in", "side": "west" }] }
   ],
   "edges": [
     { "id": "e-start", "source": { "nodeId": "author", "portId": "out" }, "target": { "nodeId": "route", "portId": "in" }, "type": "calls", "direction": "forward" },

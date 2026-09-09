@@ -6,11 +6,14 @@
   "title": "First generation",
   "theme": "dark",
   "layoutHints": { "direction": "right", "pinnedNodeIds": [] },
-  "groups": [],
+  "groups": [
+    { "id": "draft", "label": "Draft", "parentId": null },
+    { "id": "review", "label": "Review", "parentId": null }
+  ],
   "nodes": [
-    { "id": "interpret", "kind": "job", "label": "Interpreting", "groupId": null, "ports": [{ "id": "out", "side": "east" }] },
-    { "id": "arrange", "kind": "job", "label": "Arranging", "groupId": null, "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
-    { "id": "check", "kind": "job", "label": "Checking", "groupId": null, "ports": [{ "id": "in", "side": "west" }] }
+    { "id": "interpret", "kind": "job", "label": "Interpreting", "groupId": "draft", "ports": [{ "id": "out", "side": "east" }] },
+    { "id": "arrange", "kind": "job", "label": "Arranging", "groupId": "review", "ports": [{ "id": "in", "side": "west" }, { "id": "out", "side": "east" }] },
+    { "id": "check", "kind": "job", "label": "Checking", "groupId": "review", "ports": [{ "id": "in", "side": "west" }] }
   ],
   "edges": [
     { "id": "e1", "source": { "nodeId": "interpret", "portId": "out" }, "target": { "nodeId": "arrange", "portId": "in" }, "type": "calls", "direction": "forward" },

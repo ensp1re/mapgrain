@@ -18,6 +18,7 @@ export interface FlowNodeDraft {
     marker?: NodeMarker;
     stateTone?: StateTone;
     kindFill?: string;
+    lane?: boolean;
   };
 }
 
@@ -51,6 +52,7 @@ export interface ComponentNodeData extends Record<string, unknown> {
 
 export interface GroupNodeData extends Record<string, unknown> {
   label: string;
+  lane?: boolean;
   editing: boolean;
   onStartEdit: () => void;
   onCommitLabel: (label: string) => void;

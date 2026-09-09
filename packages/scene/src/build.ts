@@ -10,6 +10,7 @@ import {
 import { ICON_GAP, KIND_TITLE_GAP, PARALLEL_EDGE_OFFSET } from "./constants/metrics.ts";
 import { edgeCaption } from "./caption.ts";
 import { expandTop, inflate, midpoint, normalize, unionRects } from "./geometry.ts";
+import { applyWorkflowLanes } from "./lanes.ts";
 import { iconSizeFor, kindDisplayText, kindFontFor } from "./kind.ts";
 import { placeEdgeLabel } from "./routes.ts";
 import { defaultSceneOptions } from "./options.ts";
@@ -21,6 +22,7 @@ import {
   sequenceMessageY,
   sequencePositions,
 } from "./sequence.ts";
+import { isWorkflowLanesDocument, workflowLanePositions } from "./workflow.ts";
 import {
   facingSide,
   placePortsOnRect,
@@ -287,7 +289,9 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
 
   const positions = isSequenceDocument(document)
     ? sequencePositions(document, sizes)
-    : placeNodes(document, sizes, options);
+    : isWorkflowLanesDocument(document)
+      ? workflowLanePositions(document, sizes)
+      : placeNodes(document, sizes, options);
   for (const [id, point] of Object.entries(options.positions)) {
     positions.set(id, point);
   }
@@ -375,7 +379,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     };
   });
 
-  const groups = buildGroups(document, nodes, options);
+  const groups = applyWorkflowLanes(document.kind, buildGroups(document, nodes, options));
   const messageBottom = Math.max(
     0,
     ...edges.flatMap((edge) => edge.points.map((point) => point.y)),

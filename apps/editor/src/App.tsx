@@ -221,6 +221,7 @@ function toFlow(
       node.type === "group"
         ? ({
             label: node.data.label,
+            lane: node.data.lane,
             editing: editingId === node.id,
             onStartEdit: () => onStartEdit(node.id),
             onCommitLabel: (label: string) => onCommitLabel(node.id, "group", label),
@@ -528,7 +529,11 @@ function Specimen() {
   const addGroup = useCallback(() => {
     const current = historyRef.current.present;
     const id = nextPrefixedId("g", usedIds(current.document));
-    applyOp({ kind: OPERATION_KIND.ADD_GROUP, id, label: "Group" });
+    applyOp({
+      kind: OPERATION_KIND.ADD_GROUP,
+      id,
+      label: current.document.kind === DOCUMENT_KIND.WORKFLOW ? "Lane" : "Group",
+    });
   }, [applyOp]);
 
   const connectSelected = useCallback(() => {
@@ -1285,6 +1290,7 @@ function Specimen() {
           {presenting ? null : (
             <AddBar
               kinds={addableKinds(documentModel.kind)}
+              groupLabel={documentModel.kind === DOCUMENT_KIND.WORKFLOW ? "lane" : "group"}
               onAddNode={addNode}
               onAddGroup={addGroup}
               onConnect={connectSelected}

@@ -57,6 +57,7 @@ export function sceneToFlow(scene: Scene): {
       label: group.label.lines[0]?.text ?? group.id,
       lines: group.label.lines.map((line) => line.text),
       ports: [],
+      lane: group.role === "lane",
     },
   }));
   const componentNodes: FlowNodeDraft[] = scene.nodes.map((node) => ({
