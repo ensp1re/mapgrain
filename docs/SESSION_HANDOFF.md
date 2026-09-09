@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F053
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/npm-0.2.1-pins @ e41437c067a3144f3541e76772b2f550a66efefa (dirty)
-- Updated: 2026-09-09T20:39:52.370Z
+- Git: chore/stamp-f053 @ f81d43266e21cf71e286e938fc5decdca758c2ab (dirty)
+- Updated: 2026-09-09T20:50:05.086Z
 
 ### Next action
 
-Verify F053, open a draft PR, land on main, then archive.
+Open gaps remain. Do not claim live agent runs, Mermaid/draw.io, or hosted sharing.
 
 ### Decisions
 
@@ -36,7 +36,8 @@ Verify F053, open a draft PR, land on main, then archive.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/70
+- https://github.com/ensp1re/mapgrain/actions/runs/34403116822
 
 ## Resume
 

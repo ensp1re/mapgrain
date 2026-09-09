@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F053",
+    "behavior": "Retarget public CLI pins to npm mapgrain@0.2.1 after publish; keep 0.1.0 as historical architecture/workflow and 0.2.0 live on npm.",
+    "acceptance": [
+      "README, getting-started, skill, agents matrix, FEATURES, and CAPABILITY pin npx mapgrain@0.2.1 for all five modes and do not pin @latest.",
+      "npx mapgrain@0.1.0 remains documented as the historical architecture/workflow package and is still tested in an empty directory.",
+      "npx mapgrain@0.2.0 remains on npm and is still tested; sequence, data-flow, and lifecycle fixtures are not sent to mapgrain@0.1.0."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788986400150-5c88bf",
+      "fingerprintBefore": "60d114ced93f6d7ed961d415d5e8862815bd2a71ca018b8264d4a40cd72e85b2",
+      "fingerprintAfter": "60d114ced93f6d7ed961d415d5e8862815bd2a71ca018b8264d4a40cd72e85b2",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T20:40:24.594Z"
+    },
+    "delivery": {
+      "implementationRevision": "f81d43266e21cf71e286e938fc5decdca758c2ab",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/70",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "f81d43266e21cf71e286e938fc5decdca758c2ab",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34403116822"
+        }
+      ],
+      "observedAt": "2026-09-09T20:49:39Z",
+      "closeoutRevision": "f81d43266e21cf71e286e938fc5decdca758c2ab"
+    }
+  },
+  "archivedAt": "2026-09-09T20:49:53.468Z"
+}
