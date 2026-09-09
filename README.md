@@ -23,9 +23,9 @@ At 390px the canvas stays the main surface:
 ## CLI and skill
 
 ```sh
-npx mapgrain@0.2.0 validate diagram.json
-npx mapgrain@0.2.0 layout diagram.json
-npx mapgrain@0.2.0 view diagram.json -o view.html
+npx mapgrain@0.2.1 validate diagram.json
+npx mapgrain@0.2.1 layout diagram.json
+npx mapgrain@0.2.1 view diagram.json -o view.html
 npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
 ```
 
@@ -65,7 +65,7 @@ pnpm install
 pnpm verify
 ```
 
-Development CLI: `pnpm mapgrain` (source `0.2.1`). Last published package: `mapgrain@0.2.0`. Historical architecture/workflow package: `mapgrain@0.1.0`. Internals are bundled. Do not use `npx mapgrain@latest`. Do not overwrite `0.1.0` or `0.2.0`.
+Development CLI: `pnpm mapgrain` (source `0.2.1`). Last published package: `mapgrain@0.2.1`. Historical architecture/workflow package: `mapgrain@0.1.0`. Internals are bundled. Do not use `npx mapgrain@latest`. Do not overwrite `0.1.0` or `0.2.0`.
 
 ## License
 

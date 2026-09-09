@@ -16,7 +16,7 @@ Create a blank diagram, open a JSON file, or pick an example. Arrange runs in a 
 Studio binds loopback for one opened file:
 
 ```sh
-npx mapgrain@0.2.0 studio diagram.json
+npx mapgrain@0.2.1 studio diagram.json
 ```
 
 ## CLI
@@ -24,16 +24,16 @@ npx mapgrain@0.2.0 studio diagram.json
 End users pin the published package:
 
 ```sh
-npx mapgrain@0.2.0 validate diagram.json
-npx mapgrain@0.2.0 layout diagram.json
-npx mapgrain@0.2.0 view diagram.json --lang uk -o view.html
-npx mapgrain@0.2.0 export diagram.json --format svg -o diagram.svg
-npx mapgrain@0.2.0 export diagram.json --format card --view overview -o card.png
-npx mapgrain@0.2.0 watch diagram.json --once --format html -o view.html
-npx mapgrain@0.2.0 doctor
+npx mapgrain@0.2.1 validate diagram.json
+npx mapgrain@0.2.1 layout diagram.json
+npx mapgrain@0.2.1 view diagram.json --lang uk -o view.html
+npx mapgrain@0.2.1 export diagram.json --format svg -o diagram.svg
+npx mapgrain@0.2.1 export diagram.json --format card --view overview -o card.png
+npx mapgrain@0.2.1 watch diagram.json --once --format html -o view.html
+npx mapgrain@0.2.1 doctor
 ```
 
-From this checkout, `pnpm mapgrain` is the development command (source CLI `0.2.1`). Last published package: `npx mapgrain@0.2.0`. Historical architecture/workflow package: `npx mapgrain@0.1.0`, which does not validate sequence, data-flow, or lifecycle fixtures.
+From this checkout, `pnpm mapgrain` is the development command (source CLI `0.2.1`). Last published package: `npx mapgrain@0.2.1`. Historical architecture/workflow package: `npx mapgrain@0.1.0`, which does not validate sequence, data-flow, or lifecycle fixtures. `npx mapgrain@0.2.0` remains on npm.
 
 Internals are bundled; do not import `@mapgrain/*` from an application. Do not use an unversioned latest tag. Do not overwrite `0.1.0` or `0.2.0`.
 
@@ -55,9 +55,9 @@ The production editor precaches its own assets. API routes and Studio sessions a
 
 | Symptom | What to try |
 | --- | --- |
-| `unsupported schemaVersion` | The file is newer than this CLI. Upgrade `npx mapgrain@0.2.0` or export from a matching editor. |
+| `unsupported schemaVersion` | The file is newer than this CLI. Upgrade `npx mapgrain@0.2.1` or export from a matching editor. |
 | Studio refuses a write | Another writer changed the file. Reload or save a local JSON copy. |
 | Arrange shows a pin conflict | Pins overlap. Move one node or unpin it. |
 | PNG export is too large | Lower scale in the export dialog. |
-| Skill installed, CLI missing | Install Node 24+ and retry `npx mapgrain@0.2.0 doctor`. |
-| `npx mapgrain@0.1.0` rejects sequence, data-flow, or lifecycle | Use `npx mapgrain@0.2.0` or `pnpm mapgrain` from this checkout. |
+| Skill installed, CLI missing | Install Node 24+ and retry `npx mapgrain@0.2.1 doctor`. |
+| `npx mapgrain@0.1.0` rejects sequence, data-flow, or lifecycle | Use `npx mapgrain@0.2.1` or `pnpm mapgrain` from this checkout. |

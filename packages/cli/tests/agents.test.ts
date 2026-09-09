@@ -53,7 +53,7 @@ test("priority installer ids and paths match skills 1.5.25 and the matrix", asyn
   const skill = await readFile(path.join(skillDir, "SKILL.md"), "utf8");
   const matrix = await readFile(agentsDoc, "utf8");
   assert.equal(SKILLS_CLI_VERSION, "1.5.25");
-  assert.equal(PUBLISHED_CLI, "mapgrain@0.2.0");
+  assert.equal(PUBLISHED_CLI, "mapgrain@0.2.1");
   assert.equal(HISTORICAL_CLI, "mapgrain@0.1.0");
   assert.equal(SOURCE_CLI_VERSION, "0.2.1");
   assert.equal(SHARED_PROJECT_SKILL_PATH, ".agents/skills/mapgrain");
@@ -142,14 +142,31 @@ test("npx mapgrain@0.1.0 still validates architecture in an empty directory", { 
   assert.match(body, /Read-only view/);
 });
 
-test("npx mapgrain@0.2.0 validates sequence in an empty directory", { timeout: 90_000 }, async () => {
+test("npx mapgrain@0.2.0 still validates sequence in an empty directory", { timeout: 90_000 }, async () => {
+  const dest = await mkdtemp(path.join(tmpdir(), "mapgrain-npx-seq-020-"));
+  const sequence = path.join(root, "tests", "fixtures", "documents", "sequence-checkout.json");
+  const input = path.join(dest, "sequence.json");
+  await cp(sequence, input);
+  const version = await run("npx", ["--yes", "mapgrain@0.2.0", "--version"], dest);
+  assert.equal(version.code, EXIT_CODE.OK, version.stderr);
+  assert.match(version.stdout, /0\.2\.0/);
+  const validate = await run("npx", ["--yes", "mapgrain@0.2.0", "validate", input], dest);
+  assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
+  const html = path.join(dest, "sequence.html");
+  const view = await run("npx", ["--yes", "mapgrain@0.2.0", "view", input, "-o", html], dest);
+  assert.equal(view.code, EXIT_CODE.OK, view.stderr);
+  const body = await readFile(html, "utf8");
+  assert.match(body, /data-kind="lifeline"/);
+});
+
+test("npx mapgrain@0.2.1 validates sequence in an empty directory", { timeout: 90_000 }, async () => {
   const dest = await mkdtemp(path.join(tmpdir(), "mapgrain-npx-seq-"));
   const sequence = path.join(root, "tests", "fixtures", "documents", "sequence-checkout.json");
   const input = path.join(dest, "sequence.json");
   await cp(sequence, input);
   const version = await run("npx", ["--yes", PUBLISHED_CLI, "--version"], dest);
   assert.equal(version.code, EXIT_CODE.OK, version.stderr);
-  assert.match(version.stdout, /0\.2\.0/);
+  assert.match(version.stdout, /0\.2\.1/);
   const validate = await run("npx", ["--yes", PUBLISHED_CLI, "validate", input], dest);
   assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
   const html = path.join(dest, "sequence.html");
