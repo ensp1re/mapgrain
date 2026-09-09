@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F043
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/v4-usable-diagrams @ d8ae52522ed6bd8fc79a9fa4f1b50772414c2d89 (dirty)
-- Updated: 2026-09-09T16:13:46.952Z
+- Git: chore/stamp-f043 @ 935f735b0f6bb19077dce6e9f3ef55732e40400f (dirty)
+- Updated: 2026-09-09T16:24:00.000Z
 
 ### Next action
 
-F043 is locally verified (run-1788970617934-1b98cd). Push a draft PR against main, wait for CI, then merge.
+No live product tasks. Next id F044.
 
 ### Decisions
 
@@ -31,7 +31,8 @@ F043 is locally verified (run-1788970617934-1b98cd). Push a draft PR against mai
 
 ### Evidence
 
-- docs/runs/run-1788970617934-1b98cd.json
+- https://github.com/ensp1re/mapgrain/pull/49
+- https://github.com/ensp1re/mapgrain/actions/runs/34376186654
 
 ## Resume
 
