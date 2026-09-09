@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F054
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/png-node-labels @ 78eef36ee86841c51d57d04009e00cc9a9efde01 (dirty)
-- Updated: 2026-09-09T21:57:23.772Z
+- Git: chore/stamp-f054 @ 1ec158038d3d4facf234004e4baa3aae45b0fc30 (dirty)
+- Updated: 2026-09-09T22:15:53.379Z
 
 ### Next action
 
-Verify F054, open a draft PR for labeled PNG export.
+Queue F055: editor handles follow edge use; node cards grow with labels.
 
 ### Decisions
 
@@ -36,7 +36,8 @@ Verify F054, open a draft PR for labeled PNG export.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/73
+- https://github.com/ensp1re/mapgrain/actions/runs/34411003262
 
 ## Resume
 
