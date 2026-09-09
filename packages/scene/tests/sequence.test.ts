@@ -21,6 +21,9 @@ test("sequence messages stack by order and keep participant x order", async () =
   assert.ok(m1.points[0]!.y < m2.points[0]!.y);
   assert.equal(m4.points[0]!.x, m4.points.at(-1)?.x);
   assert.ok(scene.scene.lifelines.length === 3);
+  assert.equal(scene.scene.fragments.length, 2);
+  assert.equal(scene.scene.fragments[0]?.kind, "alt");
+  assert.ok((scene.scene.fragments[0]?.rect.height ?? 0) > 0);
 });
 
 test("presentation preset uses a larger font than compact", () => {

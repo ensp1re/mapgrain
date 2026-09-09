@@ -6,12 +6,12 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 - Task: none
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f046 @ a299b35315f267abe6275dd3326b3bdb2293894c (dirty)
-- Updated: 2026-09-09T17:36:00.000Z
+- Git: feat/v4-sequence-fragments @ f8916fa5c9e662dce250987f34a0132bf2b33d52 (dirty)
+- Updated: 2026-09-09T17:59:28.263Z
 
 ### Next action
 
-No live product tasks. Next id F047.
+F047 is locally verified. Push a draft PR against main.
 
 ### Decisions
 
@@ -19,7 +19,8 @@ No live product tasks. Next id F047.
 - JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.
 - A working-tree snapshot hash is not Git verification. verified requires a 40-character commit SHA whose blob matches snapshot.
 - Archive passing tasks. Keep PLAN, the live queue, and handoff as current-state only.
-- Do not claim sequence fragments, live agent prompt runs, Mermaid/draw.io import, hosted sharing, or a five-user study.
+- Sequence alt/opt fragments are modeled in this checkout. npm 0.1.0 does not validate them.
+- Do not claim live agent prompt runs, Mermaid/draw.io import, hosted sharing, or a five-user study.
 
 ### Rejected approaches
 
@@ -33,8 +34,7 @@ No live product tasks. Next id F047.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/55
-- https://github.com/ensp1re/mapgrain/actions/runs/34383684723
+- docs/runs/run-1788976728765-ddaf6b.json
 
 ## Resume
 

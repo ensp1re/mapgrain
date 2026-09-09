@@ -64,6 +64,23 @@ export function renderSvg(
     )
     .join("\n");
 
+  const fragments = (scene.fragments ?? [])
+    .map((fragment) => {
+      const splits = fragment.operands
+        .slice(1)
+        .map(
+          (operand) =>
+            `<line x1="${n(fragment.rect.x + ox)}" y1="${n(operand.y + oy)}" x2="${n(fragment.rect.x + ox + fragment.rect.width)}" y2="${n(operand.y + oy)}" stroke="${muted}" stroke-width="1" stroke-dasharray="4 4"/>`,
+        )
+        .join("\n  ");
+      return `<g data-kind="fragment" data-id="${escapeXml(fragment.id)}" data-fragment-kind="${escapeXml(fragment.kind)}">
+  <rect x="${n(fragment.rect.x + ox)}" y="${n(fragment.rect.y + oy)}" width="${n(fragment.rect.width)}" height="${n(fragment.rect.height)}" rx="6" fill="none" stroke="${muted}" stroke-width="1" stroke-dasharray="6 4"/>
+  <text x="${n(fragment.rect.x + ox + 10)}" y="${n(fragment.rect.y + oy + 14)}" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="11">${escapeXml(fragment.title)}</text>
+  ${splits}
+</g>`;
+    })
+    .join("\n");
+
   const edges = scene.edges
     .map((edge) => {
       const shifted = edge.points.map((point) => ({ x: point.x + ox, y: point.y + oy }));
@@ -151,6 +168,7 @@ export function renderSvg(
 <style><![CDATA[${interFontFaceCss()}]]></style>
 <rect class="mg-bg" width="${width}" height="${height}" fill="${bg}"/>
 ${groups}
+${fragments}
 ${lifelines}
 ${edges}
 ${nodes}

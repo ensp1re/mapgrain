@@ -22,6 +22,7 @@ export function sceneToFlow(scene: Scene): {
   nodes: FlowNodeDraft[];
   edges: FlowEdgeDraft[];
   lifelines: Scene["lifelines"];
+  fragments: Scene["fragments"];
 } {
   const groups = new Map(scene.groups.map((group) => [group.id, group]));
   const sequence = scene.lifelines.length > 0;
@@ -65,7 +66,12 @@ export function sceneToFlow(scene: Scene): {
     labelAnchor: edge.labelAnchor,
     preserveGeometry: sequence,
   }));
-  return { nodes: [...groupNodes, ...componentNodes], edges, lifelines: scene.lifelines };
+  return {
+    nodes: [...groupNodes, ...componentNodes],
+    edges,
+    lifelines: scene.lifelines,
+    fragments: scene.fragments,
+  };
 }
 
 export function handlePosition(side: PortSide): "top" | "bottom" | "left" | "right" {

@@ -1,5 +1,11 @@
 import { Value } from "@sinclair/typebox/value";
-import { DOCUMENT_KIND, NODE_KIND, NODE_MARKER, SCHEMA_VERSION } from "./constants/document.ts";
+import {
+  DOCUMENT_KIND,
+  NODE_KIND,
+  NODE_MARKER,
+  SCHEMA_VERSION,
+  SEQUENCE_FRAGMENT_KIND,
+} from "./constants/document.ts";
 import { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
 import { EDGES_FOR_KIND, NODES_FOR_KIND } from "./constants/modes.ts";
 import { DiagramDocumentSchema } from "./schema/document.ts";
@@ -117,6 +123,9 @@ function semanticErrors(document: DiagramDocument): ValidationIssue[] {
     for (const [stepIndex, step] of story.steps.entries()) {
       uniquePush(seen, step.id, `/stories/${storyIndex}/steps/${stepIndex}/id`, errors);
     }
+  }
+  for (const [index, fragment] of (document.fragments ?? []).entries()) {
+    uniquePush(seen, fragment.id, `/fragments/${index}/id`, errors);
   }
 
   document.nodes.forEach((node, index) => {
@@ -386,6 +395,75 @@ function semanticErrors(document: DiagramDocument): ValidationIssue[] {
       }
       seenOrder.set(edge.order, edge.id);
     });
+    for (const [index, fragment] of (document.fragments ?? []).entries()) {
+      if (fragment.kind === SEQUENCE_FRAGMENT_KIND.OPT && fragment.operands.length !== 1) {
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+            `opt fragment "${fragment.id}" needs exactly one operand`,
+            `/fragments/${index}/operands`,
+            fragment.id,
+          ),
+        );
+      }
+      if (fragment.kind === SEQUENCE_FRAGMENT_KIND.ALT && fragment.operands.length < 2) {
+        errors.push(
+          issue(
+            VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+            `alt fragment "${fragment.id}" needs at least two operands`,
+            `/fragments/${index}/operands`,
+            fragment.id,
+          ),
+        );
+      }
+      const sorted = fragment.operands
+        .map((operand, operandIndex) => ({ operand, operandIndex }))
+        .sort((a, b) => a.operand.startOrder - b.operand.startOrder);
+      let previousEnd = 0;
+      for (const { operand, operandIndex } of sorted) {
+        if (operand.startOrder > operand.endOrder) {
+          errors.push(
+            issue(
+              VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+              `fragment "${fragment.id}" operand "${operand.label}" has startOrder after endOrder`,
+              `/fragments/${index}/operands/${operandIndex}/startOrder`,
+              fragment.id,
+            ),
+          );
+        }
+        if (operand.startOrder <= previousEnd) {
+          errors.push(
+            issue(
+              VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+              `fragment "${fragment.id}" operands overlap`,
+              `/fragments/${index}/operands/${operandIndex}/startOrder`,
+              fragment.id,
+            ),
+          );
+        }
+        previousEnd = Math.max(previousEnd, operand.endOrder);
+        for (let order = operand.startOrder; order <= operand.endOrder; order += 1) {
+          if (!seenOrder.has(order)) {
+            errors.push(
+              issue(
+                VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+                `fragment "${fragment.id}" covers missing sequence order ${order}`,
+                `/fragments/${index}/operands/${operandIndex}/startOrder`,
+                fragment.id,
+              ),
+            );
+          }
+        }
+      }
+    }
+  } else if ((document.fragments ?? []).length > 0) {
+    errors.push(
+      issue(
+        VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
+        "fragments are only valid on sequence diagrams",
+        "/fragments",
+      ),
+    );
   }
 
   if (document.kind === DOCUMENT_KIND.LIFECYCLE) {

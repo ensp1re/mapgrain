@@ -6,7 +6,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | --- | --- | --- |
 | Architecture diagrams | shipped | Typed nodes, directed edges, nested groups, stable IDs |
 | Workflow diagrams | shipped | Jobs, actors, decisions with labelled outcomes |
-| Sequence diagrams | partial | CLI HTML draws lifelines and ordered messages; editor now keeps that geometry. npm `0.1.0` still rejects current sequence fixtures |
+| Sequence diagrams | partial | Lifelines, ordered messages, and alt/opt fragments in this checkout. npm `0.1.0` still rejects current sequence fixtures |
 | Data-flow diagrams | shipped | Processes, stores, entities, and data movement |
 | Lifecycle diagrams | shipped | States, initial/final markers, guarded transitions |
 | Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings |

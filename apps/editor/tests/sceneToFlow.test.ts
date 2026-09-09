@@ -42,6 +42,8 @@ test("sequence flow keeps lifelines and does not remap message geometry", async 
   if (!scene.ok) return;
   const flow = sceneToFlow(scene.scene);
   assert.equal(flow.lifelines.length, scene.scene.lifelines.length);
+  assert.equal(flow.fragments.length, scene.scene.fragments.length);
+  assert.ok(flow.fragments.some((fragment) => fragment.kind === "opt"));
   assert.ok(flow.lifelines.length >= 3);
   const message = flow.edges.find((item) => item.id === "m1");
   const sceneEdge = scene.scene.edges.find((item) => item.id === "m1");

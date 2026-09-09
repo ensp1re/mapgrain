@@ -29,5 +29,22 @@
         { "id": "step-reserve", "name": "Reserve", "description": "API asks the ledger.", "nodeId": "ledger", "viewId": "happy-path" }
       ]
     }
+  ],
+  "fragments": [
+    {
+      "id": "frag-alt-reserve",
+      "kind": "alt",
+      "operands": [
+        { "label": "[reserve]", "startOrder": 2, "endOrder": 2 },
+        { "label": "[reply]", "startOrder": 3, "endOrder": 3 }
+      ]
+    },
+    {
+      "id": "frag-opt-retry",
+      "kind": "opt",
+      "operands": [
+        { "label": "[timeout]", "startOrder": 4, "endOrder": 4 }
+      ]
+    }
   ]
 }

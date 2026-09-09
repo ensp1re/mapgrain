@@ -43,7 +43,7 @@ See [docs/FEATURES.md](docs/FEATURES.md) for shipped, partial, planned, and defe
 - CLI: validate, layout, view, export, diagnose, compare, watch, doctor, studio
 - Presets, share-card PNG, and story video from the first authored story
 
-Not shipped: hosted sharing, Mermaid/draw.io import, and live agent prompt runs. Five-user and device smoke evidence is still outstanding. Sequence fragments (alt/opt) are not modeled.
+Not shipped: hosted sharing, Mermaid/draw.io import, and live agent prompt runs. Five-user and device smoke evidence is still outstanding. Sequence alt/opt fragments are modeled in this checkout; npm `mapgrain@0.1.0` does not validate them.
 
 ## Examples
 

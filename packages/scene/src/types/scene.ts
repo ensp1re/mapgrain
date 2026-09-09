@@ -1,4 +1,11 @@
-import type { EdgeDirection, NodeKind, NodeMarker, PortSide, ValidationIssue } from "@mapgrain/document";
+import type {
+  EdgeDirection,
+  NodeKind,
+  NodeMarker,
+  PortSide,
+  SequenceFragmentKind,
+  ValidationIssue,
+} from "@mapgrain/document";
 import type { Point, Rect } from "./geometry.ts";
 
 export interface TextLine {
@@ -75,6 +82,20 @@ export interface SceneGroup {
   rect: Rect;
 }
 
+export interface SceneFragmentOperand {
+  label: string;
+  y: number;
+  height: number;
+}
+
+export interface SceneFragment {
+  id: string;
+  kind: SequenceFragmentKind;
+  title: string;
+  rect: Rect;
+  operands: SceneFragmentOperand[];
+}
+
 export interface Scene {
   documentId: string;
   revision: number;
@@ -83,6 +104,7 @@ export interface Scene {
   edges: SceneEdge[];
   groups: SceneGroup[];
   lifelines: SceneLifeline[];
+  fragments: SceneFragment[];
   presentation: ScenePresentation;
 }
 

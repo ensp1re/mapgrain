@@ -404,6 +404,24 @@ input {
   stroke-dasharray: 4 4;
 }
 
+.sequence-fragment {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+}
+
+.sequence-fragment-split {
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.sequence-fragment-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
 .edge-hit {
   stroke: transparent;
   stroke-width: 16;
