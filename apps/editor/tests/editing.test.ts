@@ -63,8 +63,16 @@ test("inspector relation captions use human labels", () => {
   assert.equal(directionLabel(EDGE_DIRECTION.NONE), "no arrow");
 });
 
-test("export dialog offers SVG, PNG, HTML, and JSON", () => {
-  assert.deepEqual(Object.values(EXPORT_CHOICE).sort(), ["html", "json", "png", "svg"]);
+test("export dialog offers SVG, PNG, JPEG, WebP, clipboard, HTML, and JSON", () => {
+  assert.deepEqual(Object.values(EXPORT_CHOICE).sort(), [
+    "clipboard",
+    "html",
+    "jpeg",
+    "json",
+    "png",
+    "svg",
+    "webp",
+  ]);
 });
 
 test("browser PNG uses a canvas raster and HTML uses the interactive viewer", async () => {
@@ -76,6 +84,8 @@ test("browser PNG uses a canvas raster and HTML uses the interactive viewer", as
   );
   assert.doesNotMatch(app, /PNG in the browser needs/);
   assert.match(app, /rasterSvgToPng/);
+  assert.match(app, /copyPngToClipboard/);
+  assert.match(app, /EXPORT_CHOICE.JPEG/);
   assert.match(app, /renderView/);
   assert.match(png, /document\.createElement\("canvas"\)/);
   assert.match(edge, /roundedPolylinePath/);

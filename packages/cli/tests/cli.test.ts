@@ -163,6 +163,36 @@ test("diagnose reports geometry issues as JSON", async () => {
   const result = JSON.parse(text(io.stdoutChunks)) as { ok: boolean; issues: unknown[] };
   assert.equal(result.ok, true);
   assert.ok(Array.isArray(result.issues));
+  assert.equal((result as { blocking?: unknown }).blocking !== undefined, true);
+});
+
+test("diagnose --strict fails when nodes overlap", async () => {
+  const source = {
+    schemaVersion: 1,
+    id: "doc-overlap",
+    revision: 1,
+    kind: "architecture",
+    title: "Overlap",
+    theme: "dark",
+    layoutHints: { direction: "right", pinnedNodeIds: [] },
+    groups: [],
+    views: [{ id: "overview", kind: "overview", name: "All" }],
+    nodes: [
+      { id: "a", kind: "service", label: "Alpha", groupId: null, ports: [] },
+      { id: "b", kind: "service", label: "Beta", groupId: null, ports: [] },
+    ],
+    edges: [],
+    layout: { version: 1, revision: 1, positions: { a: { x: 0, y: 0 }, b: { x: 0, y: 0 } } },
+  };
+  const io = memoryIo({ "overlap.json": JSON.stringify(source) });
+  const warning = await runCli(["diagnose", "overlap.json"], io);
+  assert.equal(warning, EXIT_CODE.OK);
+  const strictIo = memoryIo({ "overlap.json": JSON.stringify(source) });
+  const strict = await runCli(["diagnose", "--strict", "overlap.json"], strictIo);
+  assert.equal(strict, EXIT_CODE.ERROR);
+  const payload = JSON.parse(text(strictIo.stdoutChunks)) as { ok: boolean; blocking: string[] };
+  assert.equal(payload.ok, false);
+  assert.ok(payload.blocking.includes("overlap"));
 });
 
 test("compare reports a removed node between two documents", async () => {
@@ -179,6 +209,21 @@ test("compare reports a removed node between two documents", async () => {
   assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
   const result = JSON.parse(text(io.stdoutChunks)) as { removedNodeIds: string[] };
   assert.deepEqual(result.removedNodeIds, ["provider"]);
+  assert.ok(Array.isArray((result as { movedNodeIds?: string[] }).movedNodeIds));
+});
+
+test("compare writes a Before/Delta/After HTML review", async () => {
+  const source = await readFile(fixture, "utf8");
+  const files: Record<string, string> = {
+    "before.json": source,
+    "after.json": source,
+  };
+  const io = memoryIo(files);
+  const code = await runCli(["compare", "before.json", "after.json", "-o", "review.html"], io);
+  assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
+  assert.match(files["review.html"] ?? "", /Snapshot review/);
+  assert.match(files["review.html"] ?? "", /Moved nodes/);
+  assert.match(files["review.html"] ?? "", /does not invent impact ratings/);
 });
 
 test("unknown command exits 2 with a structured diagnostic", async () => {

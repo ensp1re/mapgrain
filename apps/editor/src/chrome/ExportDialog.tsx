@@ -49,6 +49,9 @@ export function ExportDialog({ open, theme, error, onTheme, onExport, onClose }:
       <div className="export-actions">
         <Button onClick={() => onExport(EXPORT_CHOICE.SVG, Number(scale))}>SVG</Button>
         <Button onClick={() => onExport(EXPORT_CHOICE.PNG, Number(scale))}>PNG</Button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.JPEG, Number(scale))}>JPEG</Button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.WEBP, Number(scale))}>WebP</Button>
+        <Button onClick={() => onExport(EXPORT_CHOICE.CLIPBOARD, Number(scale))}>Copy image</Button>
         <Button onClick={() => onExport(EXPORT_CHOICE.HTML, Number(scale))}>HTML</Button>
         <Button onClick={() => onExport(EXPORT_CHOICE.JSON, Number(scale))}>JSON</Button>
       </div>

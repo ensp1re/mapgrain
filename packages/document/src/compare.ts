@@ -4,9 +4,11 @@ export interface DocumentDelta {
   addedNodeIds: string[];
   removedNodeIds: string[];
   changedNodeIds: string[];
+  movedNodeIds: string[];
   addedEdgeIds: string[];
   removedEdgeIds: string[];
   changedEdgeIds: string[];
+  reroutedEdgeIds: string[];
 }
 
 function nodeKey(node: DiagramDocument["nodes"][number]): string {
@@ -24,6 +26,15 @@ function edgeKey(edge: DiagramDocument["edges"][number]): string {
     edge.guard ?? null,
     edge.outcome ?? null,
   ]);
+}
+
+function edgeRouteKey(edge: DiagramDocument["edges"][number]): string {
+  return JSON.stringify([edge.source.portId ?? null, edge.target.portId ?? null]);
+}
+
+function positionKey(document: DiagramDocument, nodeId: string): string {
+  const point = document.layout?.positions?.[nodeId];
+  return point ? JSON.stringify([point.x, point.y]) : "";
 }
 
 export function compareDocuments(before: DiagramDocument, after: DiagramDocument): DocumentDelta {
@@ -47,5 +58,28 @@ export function compareDocuments(before: DiagramDocument, after: DiagramDocument
       return previous !== undefined && edgeKey(previous) !== edgeKey(edge);
     })
     .map((edge) => edge.id);
-  return { addedNodeIds, removedNodeIds, changedNodeIds, addedEdgeIds, removedEdgeIds, changedEdgeIds };
+  const movedNodeIds = after.nodes
+    .filter((node) => {
+      const previous = beforeNodes.get(node.id);
+      if (!previous || nodeKey(previous) !== nodeKey(node)) return false;
+      return positionKey(before, node.id) !== positionKey(after, node.id);
+    })
+    .map((node) => node.id);
+  const reroutedEdgeIds = after.edges
+    .filter((edge) => {
+      const previous = beforeEdges.get(edge.id);
+      if (!previous || edgeKey(previous) !== edgeKey(edge)) return false;
+      return edgeRouteKey(previous) !== edgeRouteKey(edge);
+    })
+    .map((edge) => edge.id);
+  return {
+    addedNodeIds,
+    removedNodeIds,
+    changedNodeIds,
+    movedNodeIds,
+    addedEdgeIds,
+    removedEdgeIds,
+    changedEdgeIds,
+    reroutedEdgeIds,
+  };
 }

@@ -42,9 +42,28 @@ export function parseArgs(argv: string[]): ParsedArgs {
     return usage("Unknown command.");
   }
   if (command === CLI_COMMAND.COMPARE) {
-    const files = argv.slice(1).filter((token) => token && !token.startsWith("-"));
+    let out: string | null = null;
+    let noClobber = false;
+    const files: string[] = [];
+    for (let i = 1; i < argv.length; i += 1) {
+      const token = argv[i];
+      if (!token) continue;
+      if (token === "--out" || token === "-o") {
+        const value = argv[i + 1];
+        if (!value) return usage("Missing value for --out.");
+        out = value;
+        i += 1;
+        continue;
+      }
+      if (token === "--no-clobber") {
+        noClobber = true;
+        continue;
+      }
+      if (token.startsWith("-") && token !== "-") return usage(`Unknown flag ${token}.`);
+      files.push(token);
+    }
     if (files.length !== 2 || !files[0] || !files[1]) return usage("compare needs two files.");
-    return { ok: true, command, file: files[0], other: files[1] };
+    return { ok: true, command, file: files[0], other: files[1], out, noClobber };
   }
   if (command === CLI_COMMAND.DOCTOR) {
     if (argv.slice(1).some((token) => token.startsWith("-"))) return usage(`Unknown flag ${argv[1]}.`);
@@ -57,6 +76,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   let noClobber = false;
   let rearrange = false;
   let once = false;
+  let strict = false;
   let viewId: string | undefined;
   let lang: string | undefined;
   for (let i = 1; i < argv.length; i += 1) {
@@ -90,6 +110,11 @@ export function parseArgs(argv: string[]): ParsedArgs {
       once = true;
       continue;
     }
+    if (token === "--strict") {
+      if (command !== CLI_COMMAND.DIAGNOSE) return usage("Unknown flag --strict.");
+      strict = true;
+      continue;
+    }
     if (token === "--view") {
       const value = argv[i + 1];
       if (!value) return usage("Missing value for --view.");
@@ -110,7 +135,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   }
   if (!file) return usage("Missing input file.");
   if (command === CLI_COMMAND.VALIDATE) return { ok: true, command, file };
-  if (command === CLI_COMMAND.DIAGNOSE) return { ok: true, command, file };
+  if (command === CLI_COMMAND.DIAGNOSE) return { ok: true, command, file, strict };
   if (command === CLI_COMMAND.STUDIO) return { ok: true, command, file };
   if (command === CLI_COMMAND.LAYOUT) return { ok: true, command, file, out: out ?? file, noClobber, rearrange };
   if (command === CLI_COMMAND.RENDER) return { ok: true, command, file, out, noClobber };

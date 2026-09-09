@@ -39,7 +39,7 @@ import { renderView } from "@mapgrain/viewer";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json" with { type: "json" };
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
 import { EXPORT_CHOICE } from "./constants/export.ts";
-import { rasterSvgToPng } from "./export/png.ts";
+import { copyPngToClipboard, RASTER_TYPE, rasterSvgToPng } from "./export/png.ts";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { SHELL_LAYOUT } from "./constants/layout.ts";
 import { USER_MAX_ZOOM, USER_MIN_ZOOM, fitAllOptions, readableFitOptions } from "./constants/diagram.ts";
@@ -738,7 +738,12 @@ function Specimen() {
     (format: (typeof EXPORT_CHOICE)[keyof typeof EXPORT_CHOICE], scale = 1) => {
       if (!documentModel) return;
       void (async () => {
-        if (format === EXPORT_CHOICE.PNG) {
+        if (
+          format === EXPORT_CHOICE.PNG ||
+          format === EXPORT_CHOICE.JPEG ||
+          format === EXPORT_CHOICE.WEBP ||
+          format === EXPORT_CHOICE.CLIPBOARD
+        ) {
           const vector = exportVector({
             document: documentModel,
             format: EXPORT_FORMAT.SVG,
@@ -748,18 +753,36 @@ function Specimen() {
             setExportError(vector.errors[0]?.message ?? "Export failed");
             return;
           }
-          const png = await rasterSvgToPng(
+          const type =
+            format === EXPORT_CHOICE.JPEG
+              ? RASTER_TYPE.JPEG
+              : format === EXPORT_CHOICE.WEBP
+                ? RASTER_TYPE.WEBP
+                : RASTER_TYPE.PNG;
+          const raster = await rasterSvgToPng(
             new TextDecoder().decode(vector.bytes),
             vector.width ?? 1,
             vector.height ?? 1,
             scale,
+            type,
           );
-          if (!png.ok) {
-            setExportError(png.message);
+          if (!raster.ok) {
+            setExportError(raster.message);
+            return;
+          }
+          if (format === EXPORT_CHOICE.CLIPBOARD) {
+            const copied = await copyPngToClipboard(raster.bytes);
+            setExportError(copied.ok ? null : copied.message);
             return;
           }
           setExportError(null);
-          download("diagram.png", png.bytes, "image/png");
+          const name =
+            format === EXPORT_CHOICE.JPEG
+              ? "diagram.jpg"
+              : format === EXPORT_CHOICE.WEBP
+                ? "diagram.webp"
+                : "diagram.png";
+          download(name, raster.bytes, type);
           return;
         }
         if (format === EXPORT_CHOICE.HTML) {

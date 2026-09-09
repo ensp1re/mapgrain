@@ -26,4 +26,26 @@ test("compare reports added, removed, and changed nodes and edges", async () => 
   assert.ok(delta.addedNodeIds.includes("cache"));
   assert.ok(delta.changedNodeIds.includes("gateway"));
   assert.ok(delta.removedEdgeIds.includes("e-provider-gateway"));
+  assert.deepEqual(delta.movedNodeIds, []);
+  assert.deepEqual(delta.reroutedEdgeIds, []);
+});
+
+test("compare separates layout moves and port reroutes from semantic edits", async () => {
+  const loaded = validateDocument(JSON.parse(await readFile(fixture, "utf8")) as unknown);
+  assert.equal(loaded.ok, true);
+  if (!loaded.ok) return;
+  const before = structuredClone(loaded.document);
+  before.layout = { version: 1, revision: 1, positions: { gateway: { x: 0, y: 0 } } };
+  const after = structuredClone(before);
+  after.layout = { version: 1, revision: 1, positions: { gateway: { x: 40, y: 0 } } };
+  after.edges = after.edges.map((edge) =>
+    edge.id === "e-gateway-document"
+      ? { ...edge, source: { ...edge.source, portId: "east" } }
+      : edge,
+  );
+  const delta = compareDocuments(before, after);
+  assert.deepEqual(delta.changedNodeIds, []);
+  assert.deepEqual(delta.movedNodeIds, ["gateway"]);
+  assert.deepEqual(delta.changedEdgeIds, []);
+  assert.deepEqual(delta.reroutedEdgeIds, ["e-gateway-document"]);
 });
