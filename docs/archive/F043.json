@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F043",
+    "behavior": "V4 usable-diagram gates: reachable chrome, one presentation contract, structured icons, sequence editor geometry, mode chooser, and honest packaged-CLI status.",
+    "acceptance": [
+      "Header actions collapse from content, not only a 390px rule; More/menus/selects render outside clipped ancestors and dismiss with Escape, outside click, and focus return.",
+      "Node inspector always has a visible Close; phone outline and details are dismissible overlays that keep selection and camera.",
+      "Minus, zoom percent, plus, Fit all, and Focus share one viewport toolbar; the percent does not cover a button.",
+      "Editor, SVG, PNG, and HTML use one kind/title/icon/padding contract; sequence editor draws lifelines and ordered message routes instead of remapping them onto node handles.",
+      "New offers a mode choice; inspector fields and add/connect options follow the document kind; skill and docs do not claim npm 0.1.0 validates sequence/data-flow/lifecycle.",
+      "Rename overlap surfaces a local repair preview; keyboard command palette can find components; remaining parity rows stay listed as outstanding."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788970617934-1b98cd",
+      "fingerprintBefore": "05486ab933247d762bd892b27351808bb0ae0dbaeb0aedd34502e98a150ad683",
+      "fingerprintAfter": "05486ab933247d762bd892b27351808bb0ae0dbaeb0aedd34502e98a150ad683",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T16:17:28.189Z"
+    },
+    "delivery": {
+      "implementationRevision": "935f735b0f6bb19077dce6e9f3ef55732e40400f",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/49",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "935f735b0f6bb19077dce6e9f3ef55732e40400f",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34376186654"
+        }
+      ],
+      "observedAt": "2026-09-09T16:23:00Z",
+      "closeoutRevision": "935f735b0f6bb19077dce6e9f3ef55732e40400f"
+    }
+  },
+  "archivedAt": "2026-09-09T16:24:02.476Z"
+}
