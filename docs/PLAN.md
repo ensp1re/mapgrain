@@ -2,13 +2,9 @@
 
 Mapgrain is a local editor, CLI (`npx mapgrain@0.1.0`), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
 
-**Status:** F044 active. Next task id after this slice: `F045`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
+**Status:** shipped through F044. No live slices. Next task id: `F045`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
 
-## Live slice
-
-**F044 — export review and delivery gate.** JPEG/WebP/clipboard in the editor, compare moved/rerouted facts plus a Before/Delta/After HTML review, and diagnose --strict for overlap/clipping.
-
-## Open gaps (not this slice)
+## Open gaps (not queued)
 
 - Browser WebM / route-story capture (distinct from FFmpeg story MP4)
 - Optional pinned-revision Git verification
@@ -17,7 +13,7 @@ Mapgrain is a local editor, CLI (`npx mapgrain@0.1.0`), and agent skill. Users m
 - Sequence fragments (alt/opt)
 - Mermaid/draw.io import and hosted sharing
 - Five-user study / physical-device smoke
-- README/social media recapture from the F043 production commit
+- README/social media recapture from the F043/F044 production commits
 
 Do not claim those as shipped.
 
