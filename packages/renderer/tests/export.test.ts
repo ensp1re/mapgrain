@@ -250,6 +250,28 @@ test("share-card export is a PNG of a named view", async () => {
   assert.ok(result.bytes.length > 100);
 });
 
+test("architecture SVG tints kinds and draws a legend", async () => {
+  const raw = await load("nested-groups.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.match(svg, /data-kind-fill="gateway"/);
+  assert.match(svg, /data-kind-fill="external"/);
+  assert.match(svg, /data-kind="legend"/);
+  assert.match(svg, /data-legend-kind="gateway"/);
+});
+
+test("lifecycle SVG omits the architecture kind legend", async () => {
+  const raw = await load("lifecycle-session.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.doesNotMatch(svg, /data-kind="legend"/);
+  assert.doesNotMatch(svg, /data-kind-fill=/);
+});
+
 test("lifecycle SVG draws initial disk and arrow, final ring, and omits STATE chips", async () => {
   const raw = await load("lifecycle-session.json");
   const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });

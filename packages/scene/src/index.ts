@@ -15,7 +15,7 @@ export { diagnoseGeometry } from "./diagnostics.ts";
 export { overlappingIds, localOverlapRepair } from "./collision.ts";
 export { rectsOverlap } from "./geometry.ts";
 export { iconMarkup, iconShapesFor, ICON_VIEWBOX } from "./icons.ts";
-export { iconSizeFor, kindDisplayText, kindFontFor } from "./kind.ts";
+export { iconSizeFor, KIND_ORDER, kindDisplayText, kindFontFor, kindLegendLabel, presentKinds } from "./kind.ts";
 export { STATE_FAIL_PATTERN, STATE_TONE, STATE_WAIT_PATTERN } from "./constants/state.ts";
 export { stateTone } from "./stateTone.ts";
 export type { StateTone } from "./constants/state.ts";

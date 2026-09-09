@@ -35,7 +35,13 @@ import {
 } from "@mapgrain/document";
 import { LAYOUT_STATUS } from "@mapgrain/layout/run";
 import { EXPORT_FORMAT, exportVector } from "@mapgrain/renderer/vector";
-import { buildScene, localOverlapRepair, overlappingIds, presentationCssVars } from "@mapgrain/scene";
+import {
+  buildScene,
+  localOverlapRepair,
+  overlappingIds,
+  presentKinds,
+  presentationCssVars,
+} from "@mapgrain/scene";
 import { renderView } from "@mapgrain/viewer";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json" with { type: "json" };
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
@@ -48,6 +54,7 @@ import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { SHELL_LAYOUT } from "./constants/layout.ts";
 import { USER_MAX_ZOOM, USER_MIN_ZOOM, fitAllOptions, readableFitOptions } from "./constants/diagram.ts";
 import { ViewportBar } from "./chrome/ViewportBar.tsx";
+import { KindLegend } from "./diagram/KindLegend.tsx";
 import { shellLayoutForWidth, useViewportWidth } from "./chrome/viewport.ts";
 import { StartSurface } from "./chrome/StartSurface.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
@@ -227,6 +234,7 @@ function toFlow(
             ports: node.data.ports,
             marker: node.data.marker,
             stateTone: node.data.stateTone,
+            kindFill: node.data.kindFill,
             editing: editingId === node.id,
             onStartEdit: () => onStartEdit(node.id),
             onCommitLabel: (label: string) => onCommitLabel(node.id, "component", label),
@@ -1224,6 +1232,9 @@ function Specimen() {
               />
             )}
           </ReactFlow>
+          {documentModel.kind === DOCUMENT_KIND.ARCHITECTURE ? (
+            <KindLegend kinds={presentKinds(documentModel.nodes.map((node) => node.kind))} />
+          ) : null}
           {presenting ? null : (
             <div className="canvas-status">
               {documentModel.views.find((view) => view.kind === VIEW_KIND.OVERVIEW)?.name ??

@@ -28,6 +28,8 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.equal(edge?.caption, sceneEdge?.caption);
   assert.deepEqual(edge?.labelAnchor, sceneEdge?.labelAnchor);
   assert.equal(edge?.preserveGeometry, false);
+  const gateway = flow.nodes.find((node) => node.id === "gateway");
+  assert.equal(gateway?.data.kindFill, "gateway");
 });
 
 test("lifecycle flow exposes markers and tones and hides STATE as a chip", async () => {
@@ -47,6 +49,7 @@ test("lifecycle flow exposes markers and tones and hides STATE as a chip", async
   assert.equal(idle?.data.stateTone, "start");
   assert.equal(closed?.data.marker, "final");
   assert.equal(closed?.data.stateTone, "done");
+  assert.equal(idle?.data.kindFill, undefined);
 });
 
 test("west source ports stay sources so those edges can paint", async () => {
@@ -141,4 +144,8 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /\.state-initial/);
   assert.match(css, /data-state-tone="start"/);
   assert.match(css, /--state-start:/);
+  assert.match(css, /--kind-service:/);
+  assert.match(css, /\.kind-legend \{[^}]*bottom: 72px/);
+  assert.match(css, /data-kind-fill="gateway"/);
+  assert.match(css, /@media \(max-width: 767px\) \{[\s\S]*\.kind-legend \{[^}]*bottom: 104px/);
 });

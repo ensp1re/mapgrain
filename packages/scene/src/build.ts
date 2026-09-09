@@ -404,6 +404,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
 
   const scene: Scene = {
     documentId: document.id,
+    documentKind: document.kind,
     revision: document.revision,
     bounds,
     nodes,

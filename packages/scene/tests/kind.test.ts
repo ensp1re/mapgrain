@@ -1,15 +1,23 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PRESET } from "@mapgrain/document";
+import { NODE_KIND, PRESET } from "@mapgrain/document";
 import {
   iconMarkup,
   kindDisplayText,
   kindFontFor,
+  kindLegendLabel,
   measureText,
   presentationFromOptions,
+  presentKinds,
   defaultSceneOptions,
   presetOverrides,
 } from "../src/index.ts";
+
+test("legend labels are title case and presentKinds keeps a stable order", () => {
+  assert.equal(kindLegendLabel("datastore"), "Datastore");
+  assert.equal(kindLegendLabel("external"), "External");
+  assert.deepEqual(presentKinds(["job", "gateway", "job"]), [NODE_KIND.GATEWAY, NODE_KIND.JOB]);
+});
 
 test("kind display uses uppercase tracking that compact and presentation both follow", () => {
   assert.equal(kindDisplayText("gateway"), "GATEWAY");

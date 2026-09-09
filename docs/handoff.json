@@ -1,16 +1,15 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F057",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f056",
-    "revision": "6fcc158c4ea899dc71988044e214b280fdc15cef",
+    "branch": "feat/architecture-kind-legend",
+    "revision": "dd39bfde49809ffb8561316ddd1243265de92d31",
     "dirty": true
   },
   "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/77",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34413464607"
+    "docs/runs/run-1788994492481-086400.json"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
@@ -28,6 +27,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Queue F057: architecture kind color, glyph, and in-canvas legend.",
-  "updatedAt": "2026-09-09T22:43:58.603Z"
+  "nextAction": "Verify F057, open a draft PR for architecture kind fills and legend.",
+  "updatedAt": "2026-09-09T23:15:57.375Z"
 }
