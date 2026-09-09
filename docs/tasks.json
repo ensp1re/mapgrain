@@ -1,52 +1,5 @@
 {
   "schemaVersion": 1,
   "nextId": 49,
-  "tasks": [
-    {
-      "id": "F048",
-      "behavior": "Advertise a matching packed mapgrain@0.2.0 tarball so all five mode fixtures validate and render outside the monorepo without publishing npm.",
-      "acceptance": [
-        "Packed 0.2.0 CLI from an empty directory validates architecture, workflow, sequence, data-flow, and lifecycle fixtures and writes sequence HTML.",
-        "README, getting-started, skill, and agents.md give the exact pack and install commands and do not send sequence/data-flow/lifecycle to npx mapgrain@0.1.0.",
-        "npm mapgrain@0.1.0 remains the last published package; no latest pin and no overwrite of 0.1.0."
-      ],
-      "dependsOn": [],
-      "state": "verified",
-      "spec": "docs/PROJECT.md",
-      "plan": "docs/PLAN.md",
-      "verification": [
-        "unit",
-        "lint",
-        "typecheck",
-        "build"
-      ],
-      "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1788980308007-d9869f",
-        "fingerprintBefore": "6e1be6b7168e7e80ef19a9adca73837e08a6f2433e88257d66d80dddef2ccf6c",
-        "fingerprintAfter": "6e1be6b7168e7e80ef19a9adca73837e08a6f2433e88257d66d80dddef2ccf6c",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          },
-          {
-            "id": "build",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-09T18:58:47.102Z"
-      },
-      "delivery": null
-    }
-  ]
+  "tasks": []
 }
