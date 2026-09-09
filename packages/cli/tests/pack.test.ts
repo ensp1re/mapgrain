@@ -60,7 +60,7 @@ test(
       assert.equal(help.code, EXIT_CODE.OK);
       assert.match(help.stdout, /studio/);
       const version = await run(bin, ["--version"], installDir);
-      assert.match(version.stdout, /0\.2\.0/);
+      assert.match(version.stdout, /0\.2\.1/);
       const validate = await run(bin, ["validate", fixture], installDir);
       assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
       for (const name of modeFixtures) {

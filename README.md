@@ -65,7 +65,7 @@ pnpm install
 pnpm verify
 ```
 
-Development CLI: `pnpm mapgrain` (source `0.2.0`). Last published package: `mapgrain@0.2.0`. Historical architecture/workflow package: `mapgrain@0.1.0`. Internals are bundled. Do not use `npx mapgrain@latest`. Do not overwrite `0.1.0`.
+Development CLI: `pnpm mapgrain` (source `0.2.1`). Last published package: `mapgrain@0.2.0`. Historical architecture/workflow package: `mapgrain@0.1.0`. Internals are bundled. Do not use `npx mapgrain@latest`. Do not overwrite `0.1.0` or `0.2.0`.
 
 ## License
 

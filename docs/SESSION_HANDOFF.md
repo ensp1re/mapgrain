@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F052
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f051 @ 67ecd5dabdab51217e693e7782328617835ac74e (dirty)
-- Updated: 2026-09-09T20:13:50.000Z
+- Git: feat/cli-0.2.1 @ 2fcc3f4df88fa1716412cf70f4e82f3cd24f8bc0 (dirty)
+- Updated: 2026-09-09T20:22:09.602Z
 
 ### Next action
 
-No live product tasks. Next id F052.
+Implement F052 0.2.1 source bump, verify, draft PR against main.
 
 ### Decisions
 
@@ -35,8 +35,7 @@ No live product tasks. Next id F052.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/66
-- https://github.com/ensp1re/mapgrain/actions/runs/34399600010
+- none
 
 ## Resume
 
