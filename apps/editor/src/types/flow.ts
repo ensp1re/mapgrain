@@ -13,7 +13,7 @@ export interface FlowNodeDraft {
     label: string;
     lines: string[];
     description?: string;
-    ports: Array<{ id: string; side: PortSide }>;
+    ports: Array<{ id: string; side: PortSide; asSource: boolean; asTarget: boolean }>;
   };
 }
 
@@ -35,7 +35,7 @@ export interface ComponentNodeData extends Record<string, unknown> {
   kindLabel: string;
   label: string;
   lines: string[];
-  ports: Array<{ id: string; side: PortSide }>;
+  ports: Array<{ id: string; side: PortSide; asSource: boolean; asTarget: boolean }>;
   editing: boolean;
   onStartEdit: () => void;
   onCommitLabel: (label: string) => void;

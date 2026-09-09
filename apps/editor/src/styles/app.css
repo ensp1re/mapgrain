@@ -359,8 +359,8 @@ input {
 .outline-row.is-group { color: var(--muted); }
 .outline-row .kind {
   margin-left: auto;
+  flex-shrink: 0;
   font-size: 12px;
-  text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--muted);
 }
@@ -534,11 +534,12 @@ input {
 
 .command-menu {
   width: min(520px, calc(100% - 24px));
+  max-height: min(72vh, 560px);
+  overflow: auto;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface);
   box-shadow: var(--shadow);
-  overflow: hidden;
 }
 
 .command-menu input {
@@ -628,13 +629,20 @@ input {
 .node-card {
   width: 100%;
   height: 100%;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--node-radius);
   background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+  padding: 0;
+}
+
+.node-card-body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: var(--node-kind-title-gap, 4px);
+  min-width: 0;
+  height: 100%;
   padding: var(--node-pad-y) var(--node-pad-x);
 }
 
@@ -648,7 +656,7 @@ input {
   align-items: center;
   gap: var(--node-icon-gap, 8px);
   color: var(--muted);
-  min-width: 0;
+  flex-shrink: 0;
 }
 
 .kind-icon {
@@ -667,9 +675,9 @@ input {
   line-height: var(--node-kind-line, 14px);
   letter-spacing: var(--node-kind-tracking, 0.05em);
   color: var(--muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .node-title {
