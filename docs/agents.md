@@ -2,7 +2,12 @@
 
 Source of installer IDs and paths: `npx skills@1.5.25` (2026-09-08). Do not invent agent IDs. Further targets exist in that CLI; this table covers the usable-release priority set. Installation success is not a live task pass.
 
-Host for this matrix: macOS, Node 24+. CLI prerequisite for architecture/workflow: Node `>=24 <27` and `npx mapgrain@0.1.0`. Sequence, data-flow, and lifecycle require the source CLI `0.2.0` (checkout or packed tarball) until that version is published.
+Host for this matrix: macOS, Node 24+. CLI prerequisite for architecture/workflow: Node `>=24 <27` and `npx mapgrain@0.1.0`. Sequence, data-flow, and lifecycle require source CLI `0.2.0` until that version is published:
+
+```sh
+pnpm --filter mapgrain pack --pack-destination /tmp/mapgrain-dist
+npm install --omit=dev /tmp/mapgrain-dist/mapgrain-0.2.0.tgz
+```
 
 Project install (default):
 

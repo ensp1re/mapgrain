@@ -22,11 +22,22 @@ At 390px the canvas stays the main surface:
 
 ## CLI and skill
 
+Architecture and workflow on the last published package:
+
 ```sh
 npx mapgrain@0.1.0 validate diagram.json
 npx mapgrain@0.1.0 layout diagram.json
 npx mapgrain@0.1.0 view diagram.json -o view.html
 npx skills add ensp1re/mapgrain --skill mapgrain --yes --agent cursor
+```
+
+All five modes with a matching packed `0.2.0` tarball (not on npm yet):
+
+```sh
+pnpm --filter mapgrain pack --pack-destination /tmp/mapgrain-dist
+npm install --omit=dev /tmp/mapgrain-dist/mapgrain-0.2.0.tgz
+npx mapgrain validate tests/fixtures/documents/sequence-checkout.json
+npx mapgrain view tests/fixtures/documents/sequence-checkout.json -o sequence.html
 ```
 
 ![CLI validate and layout receipts](docs/media/cli-workflow.gif)
@@ -65,7 +76,7 @@ pnpm install
 pnpm verify
 ```
 
-Development CLI: `pnpm mapgrain` (source `0.2.0`). Last published package: `mapgrain@0.1.0`, which does not validate sequence, data-flow, or lifecycle fixtures from this checkout. Internals are bundled. Do not use `npx mapgrain@latest`.
+Development CLI: `pnpm mapgrain` (source `0.2.0`). Last published package: `mapgrain@0.1.0`, which does not validate sequence, data-flow, or lifecycle fixtures from this checkout. The matching five-mode CLI is the packed `mapgrain-0.2.0.tgz` tarball. Internals are bundled. Do not use `npx mapgrain@latest`. Do not overwrite `0.1.0`.
 
 ## License
 

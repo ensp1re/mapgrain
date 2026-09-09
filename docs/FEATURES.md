@@ -14,7 +14,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Direct edit, arrange, save, export | shipped | Production blank→export→reimport journey |
 | Portable HTML viewer | shipped | Search, fit, reach, route, named views, local hashes |
 | Offline editor | shipped | Versioned precache; API and studio sessions excluded |
-| Agent skill | partial | Install paths proven; live agent prompt runs untested; published CLI lags source `0.2.0` |
+| Agent skill | partial | Install paths proven; live agent prompt runs untested; matching five-mode CLI is packed `mapgrain-0.2.0.tgz`; npm stays `0.1.0` |
 | Stories and role lenses | shipped | Viewer prev/next and role filter; source unchanged |
 | Visual presets, share-card, video, localization | shipped | compact/comfortable/presentation; card PNG; story mp4; en/uk chrome |
 | JPEG, WebP, clipboard image | partial | Editor JPEG/WebP download and PNG clipboard copy; CLI stays PNG/SVG/HTML/JSON |

@@ -33,7 +33,18 @@ npx mapgrain@0.1.0 watch diagram.json --once --format html -o view.html
 npx mapgrain@0.1.0 doctor
 ```
 
-From this checkout, `pnpm mapgrain` is the development command (source CLI `0.2.0`). `npx mapgrain@0.1.0` is the last published package and does not validate sequence, data-flow, or lifecycle fixtures from this checkout. Internals are bundled; do not import `@mapgrain/*` from an application. Do not use an unversioned latest tag.
+From this checkout, `pnpm mapgrain` is the development command (source CLI `0.2.0`). `npx mapgrain@0.1.0` is the last published package and does not validate sequence, data-flow, or lifecycle fixtures from this checkout.
+
+Matching five-mode CLI without publishing npm:
+
+```sh
+pnpm --filter mapgrain pack --pack-destination /tmp/mapgrain-dist
+npm install --omit=dev /tmp/mapgrain-dist/mapgrain-0.2.0.tgz
+npx mapgrain validate tests/fixtures/documents/sequence-checkout.json
+npx mapgrain view tests/fixtures/documents/sequence-checkout.json -o sequence.html
+```
+
+Internals are bundled; do not import `@mapgrain/*` from an application. Do not use an unversioned latest tag. Do not overwrite `0.1.0`.
 
 `diagnose` reports geometry warnings, working-tree snapshot matches, and optional Git verification. `verified` is true only when `evidence.revision` is a 40-character commit SHA and that commit's blob matches `evidence.snapshot`. A matching working-tree hash is `snapshotMatches`, not Git evidence. `diagnose --strict` exits non-zero on overlap or clipping. `compare` reports added, removed, changed, moved, and rerouted facts, and `compare a.json b.json -o review.html` writes a Before/Delta/After review. `watch` keeps last-good output while a file is invalid. JPEG/WebP, clipboard copy, and story WebM are editor exports. Story WebM is 1280×720, cancellable, and recorded in the browser. The CLI raster format is PNG; CLI `--format video` is FFmpeg MP4.
 
@@ -58,3 +69,4 @@ The production editor precaches its own assets. API routes and Studio sessions a
 | Arrange shows a pin conflict | Pins overlap. Move one node or unpin it. |
 | PNG export is too large | Lower scale in the export dialog. |
 | Skill installed, CLI missing | Install Node 24+ and retry `npx mapgrain@0.1.0 doctor`. |
+| `npx mapgrain@0.1.0` rejects sequence, data-flow, or lifecycle | Use packed `mapgrain-0.2.0.tgz` or `pnpm mapgrain` from this checkout. |

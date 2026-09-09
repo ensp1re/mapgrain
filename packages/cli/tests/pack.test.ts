@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { copyFile, mkdtemp, readdir, rm } from "node:fs/promises";
+import { copyFile, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -9,9 +9,15 @@ import { EXIT_CODE } from "../src/constants/cli.ts";
 
 const enabled = process.env.MAPGRAIN_PACK_TEST === "1";
 const cliRoot = fileURLToPath(new URL("..", import.meta.url));
-const fixture = fileURLToPath(
-  new URL("../../../tests/fixtures/documents/nested-groups.json", import.meta.url),
-);
+const fixtures = fileURLToPath(new URL("../../../tests/fixtures/documents", import.meta.url));
+const fixture = join(fixtures, "nested-groups.json");
+const modeFixtures = [
+  "nested-groups.json",
+  "workflow-decision.json",
+  "sequence-checkout.json",
+  "data-flow-ingest.json",
+  "lifecycle-session.json",
+] as const;
 
 function run(
   command: string,
@@ -55,13 +61,20 @@ test(
       assert.match(help.stdout, /studio/);
       const version = await run(bin, ["--version"], installDir);
       assert.match(version.stdout, /0\.2\.0/);
-      const sequence = fileURLToPath(
-        new URL("../../../tests/fixtures/documents/sequence-checkout.json", import.meta.url),
-      );
       const validate = await run(bin, ["validate", fixture], installDir);
       assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
-      const validateSequence = await run(bin, ["validate", sequence], installDir);
-      assert.equal(validateSequence.code, EXIT_CODE.OK, validateSequence.stderr);
+      for (const name of modeFixtures) {
+        const path = join(fixtures, name);
+        const result = await run(bin, ["validate", path], installDir);
+        assert.equal(result.code, EXIT_CODE.OK, `${name}: ${result.stderr}`);
+      }
+      const sequence = join(fixtures, "sequence-checkout.json");
+      const sequenceHtml = join(installDir, "sequence.html");
+      const viewed = await run(bin, ["view", sequence, "-o", sequenceHtml], installDir);
+      assert.equal(viewed.code, EXIT_CODE.OK, viewed.stderr);
+      const sequenceBody = await readFile(sequenceHtml, "utf8");
+      assert.match(sequenceBody, /data-kind="lifeline"/);
+      assert.match(sequenceBody, /data-kind="fragment"/);
       const svg = join(installDir, "diagram.svg");
       const png = join(installDir, "diagram.png");
       const html = join(installDir, "diagram.html");
