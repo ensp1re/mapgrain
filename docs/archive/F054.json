@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F054",
+    "behavior": "CLI PNG and share-card rasters include the same node labels as SVG; doctor fails when label paint is missing.",
+    "acceptance": [
+      "PNG export of a fixture contains theme text paint, not only node surface fill.",
+      "doctor renderer check fails closed when PNG has no node label paint.",
+      "Rasterizer loads a TTF Inter file; SVG/HTML keep the WOFF2 face."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1788991043857-eebcc3",
+      "fingerprintBefore": "698591ef30f39f9cbb066bed74380a12e88ee49eba5e3d5322387ac93f898479",
+      "fingerprintAfter": "698591ef30f39f9cbb066bed74380a12e88ee49eba5e3d5322387ac93f898479",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-09T21:57:46.990Z"
+    },
+    "delivery": {
+      "implementationRevision": "1ec158038d3d4facf234004e4baa3aae45b0fc30",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/73",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "1ec158038d3d4facf234004e4baa3aae45b0fc30",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34411003262"
+        }
+      ],
+      "observedAt": "2026-09-09T22:14:14Z",
+      "closeoutRevision": "1ec158038d3d4facf234004e4baa3aae45b0fc30"
+    }
+  },
+  "archivedAt": "2026-09-09T22:15:34.166Z"
+}
