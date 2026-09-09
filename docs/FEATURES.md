@@ -17,6 +17,8 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Agent skill | partial | Install paths proven; live agent prompt runs untested; published CLI lags source `0.2.0` |
 | Stories and role lenses | shipped | Viewer prev/next and role filter; source unchanged |
 | Visual presets, share-card, video, localization | shipped | compact/comfortable/presentation; card PNG; story mp4; en/uk chrome |
+| JPEG, WebP, clipboard image | partial | Editor JPEG/WebP download and PNG clipboard copy; CLI stays PNG/SVG/HTML/JSON |
+| Snapshot review HTML | partial | compare reports moved/rerouted IDs and can write Before/Delta/After HTML |
 | Watch/reload last-good agent file | shipped | `mapgrain watch` keeps last-good while JSON is invalid |
 | Five-user study / device smoke | deferred | Not queued; no fabricated study |
 | Mermaid/draw.io import, hosted sharing | deferred | Demand not validated |

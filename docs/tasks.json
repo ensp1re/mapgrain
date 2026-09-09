@@ -1,5 +1,59 @@
 {
   "schemaVersion": 1,
-  "nextId": 44,
-  "tasks": []
+  "nextId": 45,
+  "tasks": [
+    {
+      "id": "F044",
+      "behavior": "Editor JPEG/WebP/clipboard export, compare moved/rerouted facts with a Before/Delta/After HTML review, and diagnose --strict as a delivery gate.",
+      "acceptance": [
+        "Export dialog can download JPEG and WebP and copy a PNG to the clipboard from the production editor.",
+        "compare reports moved node IDs from layout positions and rerouted edge IDs from port changes, separately from semantic added/removed/changed.",
+        "compare can write a Before/Delta/After HTML review that does not invent impact or risk scores.",
+        "diagnose --strict exits non-zero when overlap or clipping is present; default diagnose still reports issues with ok:true.",
+        "CLI JPEG/WebP stay undocumented as CLI formats; editor-only support is stated in FEATURES/CAPABILITY."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1788971530907-cf7a6c",
+        "fingerprintBefore": "ab51d56540365a005fd7fe0e896c7bdf177e1ad8a53bab848d284de1a9d3cab2",
+        "fingerprintAfter": "ab51d56540365a005fd7fe0e896c7bdf177e1ad8a53bab848d284de1a9d3cab2",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-09T16:32:40.351Z"
+      },
+      "delivery": null
+    }
+  ]
 }

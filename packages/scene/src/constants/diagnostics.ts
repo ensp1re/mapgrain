@@ -7,4 +7,10 @@ export const GEOMETRY_DIAGNOSTIC = {
 
 export const DIAGNOSTIC_SEVERITY = {
   WARNING: "warning",
+  ERROR: "error",
 } as const;
+
+export const BLOCKING_GEOMETRY = [
+  GEOMETRY_DIAGNOSTIC.OVERLAP,
+  GEOMETRY_DIAGNOSTIC.CLIPPING,
+] as const;

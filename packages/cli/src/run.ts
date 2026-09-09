@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { compareDocuments, snapshotMatches, validateDocument } from "@mapgrain/document";
 import { EXPORT_FORMAT, exportDiagram } from "@mapgrain/renderer";
-import { buildScene, diagnoseGeometry } from "@mapgrain/scene";
+import { BLOCKING_GEOMETRY, buildScene, diagnoseGeometry } from "@mapgrain/scene";
+import { compareReviewHtml } from "./compareHtml.ts";
 import { localeFrom, renderView } from "@mapgrain/viewer";
 import { CLI_COMMAND, EXIT_CODE, HELP_TEXT } from "./constants/cli.ts";
 import { runDoctor } from "./doctor.ts";
@@ -43,7 +44,13 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
     const after = validateDocument(right.value);
     if (!before.ok) return fail(io, before.errors, EXIT_CODE.ERROR);
     if (!after.ok) return fail(io, after.errors, EXIT_CODE.ERROR);
-    io.stdout.write(`${JSON.stringify({ ok: true, ...compareDocuments(before.document, after.document) })}\n`);
+    const delta = compareDocuments(before.document, after.document);
+    if (parsed.out && parsed.out.endsWith(".html")) {
+      const html = compareReviewHtml(before.document, after.document, delta);
+      const written = await writeBytes(io, parsed.out, new TextEncoder().encode(html), parsed.noClobber);
+      return written.ok ? EXIT_CODE.OK : written.exit;
+    }
+    io.stdout.write(`${JSON.stringify({ ok: true, ...delta })}\n`);
     return EXIT_CODE.OK;
   }
   if (parsed.command === CLI_COMMAND.WATCH) {
@@ -89,6 +96,9 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
     const scene = buildScene(laid.document);
     if (!scene.ok) return fail(io, scene.errors, EXIT_CODE.ERROR);
     const issues = diagnoseGeometry(scene.scene);
+    const blocking = issues.filter((issue) =>
+      (BLOCKING_GEOMETRY as readonly string[]).includes(issue.code),
+    );
     const evidence = [];
     for (const item of laid.document.evidence ?? []) {
       if (!item.path) continue;
@@ -110,8 +120,17 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
         verified: false,
       });
     }
-    io.stdout.write(`${JSON.stringify({ ok: true, id: laid.document.id, issues, evidence })}\n`);
-    return EXIT_CODE.OK;
+    const gated = parsed.strict && blocking.length > 0;
+    io.stdout.write(
+      `${JSON.stringify({
+        ok: !gated,
+        id: laid.document.id,
+        issues,
+        blocking: blocking.map((issue) => issue.code),
+        evidence,
+      })}\n`,
+    );
+    return gated ? EXIT_CODE.ERROR : EXIT_CODE.OK;
   }
 
   const laid = await ensureLaidOut(

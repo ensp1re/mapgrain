@@ -48,8 +48,8 @@ export type ParsedArgs =
   | { ok: true; command: "view"; file: string; out: string | null; noClobber: boolean; lang?: string }
   | { ok: true; command: "layout"; file: string; out: string | null; noClobber: boolean; rearrange: boolean }
   | { ok: true; command: "studio"; file: string }
-  | { ok: true; command: "diagnose"; file: string }
-  | { ok: true; command: "compare"; file: string; other: string }
+  | { ok: true; command: "diagnose"; file: string; strict: boolean }
+  | { ok: true; command: "compare"; file: string; other: string; out: string | null; noClobber: boolean }
   | {
       ok: true;
       command: "watch";

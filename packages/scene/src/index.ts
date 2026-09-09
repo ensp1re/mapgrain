@@ -10,7 +10,7 @@ export {
   KIND_LINE_HEIGHT,
   KIND_TITLE_GAP,
 } from "./constants/metrics.ts";
-export { DIAGNOSTIC_SEVERITY, GEOMETRY_DIAGNOSTIC } from "./constants/diagnostics.ts";
+export { BLOCKING_GEOMETRY, DIAGNOSTIC_SEVERITY, GEOMETRY_DIAGNOSTIC } from "./constants/diagnostics.ts";
 export { diagnoseGeometry } from "./diagnostics.ts";
 export { overlappingIds, localOverlapRepair } from "./collision.ts";
 export { rectsOverlap } from "./geometry.ts";
