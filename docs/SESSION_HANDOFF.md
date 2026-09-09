@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F055
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/canvas-handles-cards @ 82c94a3414b8270f78c5602c636e3eac8a8e5e01 (dirty)
-- Updated: 2026-09-09T22:22:24.452Z
+- Git: chore/stamp-f055 @ 4a80ba9a767f6f3b602a1960018c2c99174a87a7 (dirty)
+- Updated: 2026-09-09T22:27:59.275Z
 
 ### Next action
 
-Verify F055, open a draft PR for canvas handles and adaptive cards.
+Queue F056: lifecycle canvas marks (initial disk, final double border, start/wait/fail fills).
 
 ### Decisions
 
@@ -36,7 +36,8 @@ Verify F055, open a draft PR for canvas handles and adaptive cards.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/75
+- https://github.com/ensp1re/mapgrain/actions/runs/34412127352
 
 ## Resume
 

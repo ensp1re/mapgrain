@@ -1,14 +1,17 @@
 {
   "schemaVersion": 1,
-  "taskId": "F055",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/canvas-handles-cards",
-    "revision": "82c94a3414b8270f78c5602c636e3eac8a8e5e01",
+    "branch": "chore/stamp-f055",
+    "revision": "4a80ba9a767f6f3b602a1960018c2c99174a87a7",
     "dirty": true
   },
-  "evidenceRefs": [],
+  "evidenceRefs": [
+    "https://github.com/ensp1re/mapgrain/pull/75",
+    "https://github.com/ensp1re/mapgrain/actions/runs/34412127352"
+  ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -25,6 +28,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Verify F055, open a draft PR for canvas handles and adaptive cards.",
-  "updatedAt": "2026-09-09T22:22:24.452Z"
+  "nextAction": "Queue F056: lifecycle canvas marks (initial disk, final double border, start/wait/fail fills).",
+  "updatedAt": "2026-09-09T22:27:59.275Z"
 }

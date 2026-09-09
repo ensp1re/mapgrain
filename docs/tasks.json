@@ -1,52 +1,5 @@
 {
   "schemaVersion": 1,
   "nextId": 56,
-  "tasks": [
-    {
-      "id": "F055",
-      "behavior": "Editor port handles follow whether an edge starts or ends there; node cards grow with kind and title instead of clipping.",
-      "acceptance": [
-        "A west or north source port still creates a React Flow source handle so the edge paints.",
-        "Node kind text is not ellipsized on the canvas; card inner padding matches scene padding without a second shrink.",
-        "Outline kind chips use a short label that fits the pane."
-      ],
-      "dependsOn": [],
-      "state": "verified",
-      "spec": "docs/PROJECT.md",
-      "plan": "docs/PLAN.md",
-      "verification": [
-        "unit",
-        "lint",
-        "typecheck",
-        "build"
-      ],
-      "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1788992544528-84bb65",
-        "fingerprintBefore": "8d7ea906787c8b36d2523555bde204b47b813565847796ac858d5b9c02f2148b",
-        "fingerprintAfter": "8d7ea906787c8b36d2523555bde204b47b813565847796ac858d5b9c02f2148b",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          },
-          {
-            "id": "build",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-09T22:22:47.223Z"
-      },
-      "delivery": null
-    }
-  ]
+  "tasks": []
 }
