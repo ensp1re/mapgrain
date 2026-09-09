@@ -1,15 +1,16 @@
 {
   "schemaVersion": 1,
-  "taskId": "F057",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/architecture-kind-legend",
-    "revision": "dd39bfde49809ffb8561316ddd1243265de92d31",
+    "branch": "chore/stamp-f057",
+    "revision": "a93016dd9589ea070c641edcb49b404023f7d2fc",
     "dirty": true
   },
   "evidenceRefs": [
-    "docs/runs/run-1788994492481-086400.json"
+    "https://github.com/ensp1re/mapgrain/pull/79",
+    "https://github.com/ensp1re/mapgrain/actions/runs/34416469159"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
@@ -27,6 +28,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Verify F057, open a draft PR for architecture kind fills and legend.",
-  "updatedAt": "2026-09-09T23:15:57.375Z"
+  "nextAction": "Queue F058: workflow swimlanes. Do not start until asked.",
+  "updatedAt": "2026-09-09T23:23:14.455Z"
 }
