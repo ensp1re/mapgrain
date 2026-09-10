@@ -4,6 +4,7 @@ import { threadId as mainThreadId } from "node:worker_threads";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { GEOMETRY_DIAGNOSTIC, buildScene, diagnoseGeometry } from "@mapgrain/scene";
 import { LAYOUT_CONFLICT_CODE, LAYOUT_STATUS, createLayoutEngine } from "../src/index.ts";
 
 const fixturesDir = fileURLToPath(new URL("../../../tests/fixtures/documents", import.meta.url));
@@ -37,6 +38,27 @@ test("layout runs off the main thread and places nested, cyclic, and parallel gr
           assert.equal(Number.isFinite(point.y), true);
         }
       }
+    }
+  } finally {
+    await engine.dispose();
+  }
+});
+
+test("laid-out fixtures keep edge labels off nodes", async () => {
+  const engine = createLayoutEngine();
+  try {
+    for (const name of ["nested-groups.json", "data-flow-ingest.json", "cycle.json", "workflow-decision.json"]) {
+      const document = await load(name);
+      const result = await engine.layout({ document });
+      assert.equal(result.status, LAYOUT_STATUS.LAID_OUT, name);
+      if (result.status !== LAYOUT_STATUS.LAID_OUT) return;
+      const scene = buildScene(document, { positions: result.positions });
+      assert.equal(scene.ok, true, name);
+      if (!scene.ok) return;
+      const issues = diagnoseGeometry(scene.scene).filter(
+        (issue) => issue.code === GEOMETRY_DIAGNOSTIC.LABEL_CLEARANCE,
+      );
+      assert.equal(issues.length, 0, `${name} ${JSON.stringify(issues)}`);
     }
   } finally {
     await engine.dispose();

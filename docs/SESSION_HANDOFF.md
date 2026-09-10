@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F060
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f059 @ 6d0fe9c7d09e41e83311b1fbb8699659452d3edb (dirty)
-- Updated: 2026-09-10T10:56:25.000Z
+- Git: feat/elk-label-clearance @ afd61ae9d961de37765a9f17f447c95386c7388e (dirty)
+- Updated: 2026-09-10T11:26:38.714Z
 
 ### Next action
 
-Queue F060: ELK label clearance. Do not start until asked.
+Open draft PR for F060.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Queue F060: ELK label clearance. Do not start until asked.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/83
-- https://github.com/ensp1re/mapgrain/actions/runs/34468476905
+- docs/runs/run-1789039543292-ae0817.json
 
 ## Resume
 

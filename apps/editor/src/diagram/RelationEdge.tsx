@@ -1,6 +1,7 @@
-import { BaseEdge, EdgeLabelRenderer, type EdgeProps } from "@xyflow/react";
+import { BaseEdge, EdgeLabelRenderer, useNodes, type EdgeProps } from "@xyflow/react";
 import { edgeCaption, mapScenePolyline, placeEdgeLabel, roundedPolylinePath } from "@mapgrain/scene";
 import type { RelationEdgeData } from "../types/flow.ts";
+import { captionLabelSize, flowComponentObstacles } from "./edgeObstacles.ts";
 
 export function RelationEdge({
   id,
@@ -13,6 +14,7 @@ export function RelationEdge({
   data,
 }: EdgeProps) {
   const edge = data as RelationEdgeData | undefined;
+  const nodes = useNodes();
   const mapped = edge?.preserveGeometry
     ? (edge.points ?? [])
     : mapScenePolyline(edge?.points ?? [], sourceX, sourceY, targetX, targetY);
@@ -21,7 +23,11 @@ export function RelationEdge({
     { x: targetX, y: targetY },
   ]);
   const caption = edge?.caption || edgeCaption(edge?.type ?? "", edge?.label);
-  const placed = placeEdgeLabel(mapped, { width: 0, height: 14 });
+  const placed = placeEdgeLabel(
+    mapped,
+    captionLabelSize(caption, edge?.labelSize),
+    flowComponentObstacles(nodes),
+  );
   const labelX = edge?.preserveGeometry && edge.labelAnchor ? edge.labelAnchor.x : placed.anchor.x;
   const labelY = edge?.preserveGeometry && edge.labelAnchor ? edge.labelAnchor.y : placed.anchor.y;
   return (

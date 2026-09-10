@@ -103,6 +103,7 @@ export function sceneToFlow(scene: Scene): {
     direction: edge.direction,
     caption: edge.caption,
     labelAnchor: edge.labelAnchor,
+    labelSize: { width: edge.label.width, height: edge.label.height },
     preserveGeometry: sequence,
   }));
   return {

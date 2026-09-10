@@ -439,6 +439,7 @@ function Specimen() {
           points: edge.points,
           caption: edge.caption,
           labelAnchor: edge.labelAnchor,
+          labelSize: edge.labelSize,
           preserveGeometry: edge.preserveGeometry,
         },
       };
