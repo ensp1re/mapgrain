@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F058
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/workflow-lanes @ 5329f4481a52e1ba0d245f20dc336831035b5811 (dirty)
-- Updated: 2026-09-09T23:50:42.584Z
+- Git: chore/stamp-f058 @ 934d6465090292cab4bc81ff8b787195b58a429e (dirty)
+- Updated: 2026-09-09T23:56:59.000Z
 
 ### Next action
 
-Implement F058 workflow groups as stacked swimlanes.
+Queue F059: data-flow process versus store shapes. Do not start until asked.
 
 ### Decisions
 
@@ -36,7 +36,8 @@ Implement F058 workflow groups as stacked swimlanes.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/81
+- https://github.com/ensp1re/mapgrain/actions/runs/34418999279
 
 ## Resume
 
