@@ -17,8 +17,8 @@
         "The canvas view name renders as a bordered chip."
       ],
       "dependsOn": [],
-      "state": "verified",
-      "spec": "docs/UI_UX_AUDIT.md",
+      "state": "passing",
+      "spec": null,
       "plan": "docs/PLAN.md",
       "verification": [
         "unit",
@@ -30,9 +30,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789072309685-71a4a3",
-        "fingerprintBefore": "cd83aa1c79febe64dae5b8243400d8fe607710d4f5e416401fe2423c2f9130ca",
-        "fingerprintAfter": "cd83aa1c79febe64dae5b8243400d8fe607710d4f5e416401fe2423c2f9130ca",
+        "attemptId": "run-1789073199038-0c1e43",
+        "fingerprintBefore": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
+        "fingerprintAfter": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
         "checks": [
           {
             "id": "unit",
@@ -55,9 +55,22 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-10T20:32:55.696Z"
+        "verifiedAt": "2026-09-10T20:47:53.075Z"
       },
-      "delivery": null
+      "delivery": {
+        "implementationRevision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
+        "remote": "https://git-manager.devin.ai/proxy/github.com/ensp1re/mapgrain.git",
+        "prUrl": "https://github.com/ensp1re/mapgrain/pull/95",
+        "checkRuns": [
+          {
+            "name": "verify",
+            "revision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
+            "conclusion": "pass",
+            "url": "https://github.com/ensp1re/mapgrain/actions/runs/34528673792/job/103043755364"
+          }
+        ],
+        "observedAt": "2026-09-10T20:54:03.506Z"
+      }
     }
   ]
 }
