@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextId": 64,
+  "nextId": 65,
   "tasks": [
     {
       "id": "F063",
@@ -30,9 +30,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789072309685-71a4a3",
-        "fingerprintBefore": "cd83aa1c79febe64dae5b8243400d8fe607710d4f5e416401fe2423c2f9130ca",
-        "fingerprintAfter": "cd83aa1c79febe64dae5b8243400d8fe607710d4f5e416401fe2423c2f9130ca",
+        "attemptId": "run-1789073701827-32420e",
+        "fingerprintBefore": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
+        "fingerprintAfter": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
         "checks": [
           {
             "id": "unit",
@@ -55,7 +55,58 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-10T20:32:55.696Z"
+        "verifiedAt": "2026-09-10T20:56:05.666Z"
+      },
+      "delivery": null
+    },
+    {
+      "id": "F064",
+      "behavior": "Panel toggle and arrange-preview follow-ups: I toggles the desktop Details pane without destroying selection, hiding both split-shell panes leaves the canvas full-width, and the arrange-preview refit runs after the preview positions reach React Flow.",
+      "acceptance": [
+        "Pressing I at split width hides the Details pane and pressing it again reopens it; the pane close button hides the pane without clearing the selection.",
+        "With the outline collapsed and the inspector hidden at split width, the canvas occupies the full workspace width.",
+        "After entering an arrange preview, all arranged nodes are inside the viewport bounds once React Flow has the preview positions."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789073417574-90b181",
+        "fingerprintBefore": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
+        "fingerprintAfter": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-10T20:51:20.583Z"
       },
       "delivery": null
     }
