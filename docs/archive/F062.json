@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F062",
+    "behavior": "Switching an existing diagram kind previews kept, remapped, and dropped elements before apply.",
+    "acceptance": [
+      "SET_DOCUMENT_KIND converts nested-groups to workflow, keeps gateway and job, and drops datastore, service, and external.",
+      "The inverse of SET_DOCUMENT_KIND restores the previous document.",
+      "Editor Switch diagram kind shows a keep/remap/drop preview and Apply writes the converted kind."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789044081720-a20f79",
+      "fingerprintBefore": "7c0404abc2a23ffa265b0fbd79395cf8cea1f7d56c915ed4d71217e62fcc8ac2",
+      "fingerprintAfter": "7c0404abc2a23ffa265b0fbd79395cf8cea1f7d56c915ed4d71217e62fcc8ac2",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-10T12:41:45.726Z"
+    },
+    "delivery": {
+      "implementationRevision": "db6a653217dd33b6f18a775dfc4801dbaaf35050",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/89",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "db6a653217dd33b6f18a775dfc4801dbaaf35050",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34479406571"
+        }
+      ],
+      "observedAt": "2026-09-10T12:56:00.000Z",
+      "closeoutRevision": "db6a653217dd33b6f18a775dfc4801dbaaf35050"
+    }
+  },
+  "archivedAt": "2026-09-10T12:57:20.018Z"
+}
