@@ -1,5 +1,63 @@
 {
   "schemaVersion": 1,
-  "nextId": 63,
-  "tasks": []
+  "nextId": 64,
+  "tasks": [
+    {
+      "id": "F063",
+      "behavior": "Editor UI/UX audit phase 1: advertised keyboard shortcuts actually run their commands, arrange preview and present mode refit the viewport, phone controls stay clickable above the inspector sheet, native controls and initial theme follow the active color scheme, outline search is not clipped, congested edge labels fall back to least-overlap placement, fit zoom is capped, and the view name renders as a chip.",
+      "acceptance": [
+        "Keys A, N, P, E, J, O, I, T, F, and Shift+F run their advertised commands; single-letter shortcuts ignore editable targets and modifier chords.",
+        "Entering an arrange preview refits the viewport so the arranged nodes are visible.",
+        "At <=767px the Outline and Details buttons stay clickable while the inspector sheet is open.",
+        "Present mode hides the selection bar and kind legend and refits the diagram on entry.",
+        "Checkboxes and other native controls follow the active theme via color-scheme; the initial theme honors prefers-color-scheme.",
+        "Outline search field is not clipped at <=1279px.",
+        "When every edge-label candidate collides, placeEdgeLabel returns the least-overlapping candidate instead of ignoring obstacles.",
+        "fitView calls cap zoom at 1.25.",
+        "The canvas view name renders as a bordered chip."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": "docs/UI_UX_AUDIT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789072309685-71a4a3",
+        "fingerprintBefore": "cd83aa1c79febe64dae5b8243400d8fe607710d4f5e416401fe2423c2f9130ca",
+        "fingerprintAfter": "cd83aa1c79febe64dae5b8243400d8fe607710d4f5e416401fe2423c2f9130ca",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-10T20:32:55.696Z"
+      },
+      "delivery": null
+    }
+  ]
 }

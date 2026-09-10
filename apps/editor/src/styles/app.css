@@ -1,4 +1,5 @@
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #1c1c1f;
   --bg-raised: #222226;
   --surface: #27272a;
@@ -29,6 +30,7 @@
 }
 
 :root[data-theme="light"] {
+  color-scheme: light;
   --bg: #f4f1ea;
   --bg-raised: #faf7f1;
   --surface: #fffcf7;
@@ -587,9 +589,13 @@ input {
 
 .canvas-status {
   position: absolute;
-  top: 25px;
+  top: 16px;
   right: 16px;
   z-index: 4;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-raised);
   font-size: 12px;
   color: var(--muted);
   pointer-events: none;
@@ -609,6 +615,7 @@ input {
   position: absolute;
   bottom: 16px;
   right: 16px;
+  z-index: 8;
   gap: 4px;
 }
 
@@ -1605,6 +1612,15 @@ input {
   :root {
     --outline-w: 160px;
     --inspector-w: 264px;
+  }
+
+  .outline-search {
+    margin: 0 8px 16px;
+    padding: 8px 6px;
+  }
+
+  .outline-search kbd {
+    display: none;
   }
 
   .workspace.is-single {

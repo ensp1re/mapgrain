@@ -91,6 +91,16 @@ function labelBoxAt(
   return { anchor: { x: box.x + box.width / 2, y: box.y + box.height / 2 }, box };
 }
 
+function overlapArea(box: Rect, obstacles: readonly Rect[]): number {
+  let area = 0;
+  for (const obstacle of obstacles) {
+    const width = Math.min(box.x + box.width, obstacle.x + obstacle.width) - Math.max(box.x, obstacle.x);
+    const height = Math.min(box.y + box.height, obstacle.y + obstacle.height) - Math.max(box.y, obstacle.y);
+    if (width > 0 && height > 0) area += width * height;
+  }
+  return area;
+}
+
 export function placeEdgeLabel(
   points: Point[],
   size: { width: number; height: number },
@@ -102,14 +112,21 @@ export function placeEdgeLabel(
   if (size.width <= 0 || size.height <= 0 || obstacles.length === 0) {
     return labelBoxAt(points, size, clamp(total * 0.5), "above");
   }
+  let best: { anchor: Point; box: Rect } | null = null;
+  let bestOverlap = Infinity;
   for (const fraction of LABEL_FRACTIONS) {
     const distance = clamp(total * fraction);
     for (const side of ["above", "over", "below", "under"] as const) {
       const placed = labelBoxAt(points, size, distance, side);
       if (!obstacles.some((obstacle) => rectsOverlap(placed.box, obstacle))) return placed;
+      const overlap = overlapArea(placed.box, obstacles);
+      if (overlap < bestOverlap) {
+        best = placed;
+        bestOverlap = overlap;
+      }
     }
   }
-  return labelBoxAt(points, size, clamp(total * 0.5), "above");
+  return best ?? labelBoxAt(points, size, clamp(total * 0.5), "above");
 }
 
 export function roundedPolylinePath(points: Point[], radius = CORNER_RADIUS): string {

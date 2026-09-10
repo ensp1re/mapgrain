@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   Background,
   MarkerType,
@@ -98,7 +98,7 @@ import {
   isRedoEvent,
   isUndoEvent,
 } from "./keyboard/editShortcut.ts";
-import { shouldOpenCommandMenu, shouldOpenHelp } from "./keyboard/commandShortcut.ts";
+import { commandForKeyEvent, shouldOpenCommandMenu, shouldOpenHelp } from "./keyboard/commandShortcut.ts";
 import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
 import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
 import { EXAMPLES } from "./create/examples.ts";
@@ -252,7 +252,9 @@ function toFlow(
 function Specimen() {
   const { fitView, getNodes } = useReactFlow();
   const initial = useMemo(() => loadSnapshot(), []);
-  const [theme, setTheme] = useState<Theme>(THEME.DARK);
+  const [theme, setTheme] = useState<Theme>(() =>
+    globalThis.matchMedia?.("(prefers-color-scheme: light)").matches ? THEME.LIGHT : THEME.DARK,
+  );
   const [selection, setSelection] = useState<EditorSelection>({ nodeIds: ["gateway"], edgeIds: [] });
   const [outlineOpen, setOutlineOpen] = useState(true);
   const [narrowPanel, setNarrowPanel] = useState<"outline" | "inspector" | "none">("none");
@@ -477,9 +479,25 @@ function Specimen() {
     }
   }, [selection.nodeIds, selection.edgeIds, shellLayout]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     globalThis.document.documentElement.dataset.theme = theme;
   }, [theme]);
+
+  useEffect(() => {
+    if (!presenting) return;
+    const outer = requestAnimationFrame(() => {
+      requestAnimationFrame(() => void fitView(fitAllOptions()));
+    });
+    return () => cancelAnimationFrame(outer);
+  }, [presenting, fitView]);
+
+  useEffect(() => {
+    if (arrange.status !== "preview") return;
+    const outer = requestAnimationFrame(() => {
+      requestAnimationFrame(() => void fitView(readableFitOptions()));
+    });
+    return () => cancelAnimationFrame(outer);
+  }, [arrange.status, fitView]);
 
   const applyOp = useCallback((operation: Operation, nextPositions?: PositionMap) => {
     if (presenting) return false;
@@ -983,6 +1001,12 @@ function Specimen() {
         setHelpOpen((open) => !open);
         return;
       }
+      const keyCommand = commandForKeyEvent(event);
+      if (keyCommand) {
+        event.preventDefault();
+        runCommand(keyCommand);
+        return;
+      }
       if (isUndoEvent(event)) {
         event.preventDefault();
         runCommand(COMMAND_ID.UNDO);
@@ -1269,7 +1293,7 @@ function Specimen() {
               />
             )}
           </ReactFlow>
-          {documentModel.kind === DOCUMENT_KIND.ARCHITECTURE ? (
+          {documentModel.kind === DOCUMENT_KIND.ARCHITECTURE && !presenting ? (
             <KindLegend kinds={presentKinds(documentModel.nodes.map((node) => node.kind))} />
           ) : null}
           {presenting ? null : (
@@ -1279,7 +1303,7 @@ function Specimen() {
                 "Overview"}
             </div>
           )}
-          {selectedNode ? (
+          {selectedNode && !presenting ? (
             <div className="selection-bar">
               {selectedNode.data.label} selected · Enter to edit
             </div>
