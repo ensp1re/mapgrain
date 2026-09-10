@@ -4,7 +4,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { EDGE_DIRECTION, EDGE_TYPE, NODE_KIND } from "@mapgrain/document";
 import { EXPORT_CHOICE } from "../src/constants/export.ts";
-import { directionLabel, relationCaption } from "../src/export/labels.ts";
+import { directionLabel, relationCaption, relationSummary } from "../src/export/labels.ts";
 import { matchesQuery } from "../src/outline/search.ts";
 import { outlineTree } from "../src/outline/tree.ts";
 import type { FlowNodeDraft } from "../src/types/flow.ts";
@@ -59,6 +59,7 @@ test("inspector relation captions use human labels", () => {
     type: EDGE_TYPE.CALLS,
   } as unknown as Parameters<typeof relationCaption>[1];
   assert.equal(relationCaption(document, edge), "Browser one way API");
+  assert.equal(relationSummary(document, edge, "api"), "From Browser · calls");
   assert.equal(directionLabel(EDGE_DIRECTION.BOTH), "both ways");
   assert.equal(directionLabel(EDGE_DIRECTION.NONE), "no arrow");
 });

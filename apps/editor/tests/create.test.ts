@@ -73,14 +73,16 @@ test("a blank diagram validates and can become Browser, API, Database with a gro
 
 test("start surface offers blank, file, examples, and agent path", async () => {
   const source = await readFile(new URL("../src/chrome/StartSurface.tsx", import.meta.url), "utf8");
-  assert.match(source, /New blank diagram/);
+  assert.match(source, /New diagram/);
+  assert.match(source, /New \{mode\.title/);
+  assert.doesNotMatch(source, /New blank diagram/);
   assert.match(source, /Choose a mode/);
   assert.match(source, /MODE_CHOICES/);
   assert.match(source, /Open file/);
-  assert.match(source, /Use with your agent/);
+  assert.match(source, /Use with an agent/);
   assert.match(source, /Recent diagrams/);
-  assert.match(source, /npx skills add ensp1re\/mapgrain --skill mapgrain/);
-  assert.match(source, /--agent cursor/);
+  assert.match(source, /skillInstallCommand/);
+  assert.match(source, /AGENT_CHOICES/);
   assert.match(source, /npx mapgrain@0\.2\.1 validate/);
   assert.doesNotMatch(source, /pnpm mapgrain validate/);
   assert.doesNotMatch(source, /Describe a diagram/);

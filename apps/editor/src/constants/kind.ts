@@ -1,4 +1,5 @@
 import { NODE_KIND } from "@mapgrain/document";
+import { kindLegendLabel } from "@mapgrain/scene";
 
 export const KIND_SHORT: Record<string, string> = {
   [NODE_KIND.SERVICE]: "SVC",
@@ -18,4 +19,8 @@ export const KIND_SHORT: Record<string, string> = {
 
 export function kindShort(kind: string): string {
   return KIND_SHORT[kind] ?? kind.slice(0, 3).toUpperCase();
+}
+
+export function kindTitle(kind: string): string {
+  return kindLegendLabel(kind);
 }

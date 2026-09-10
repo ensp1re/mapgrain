@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { SAVE_STATE } from "../constants/persist.ts";
+import { COMMAND_ID, COMMANDS } from "../constants/commands.ts";
+import { shortcutLabel } from "../keyboard/shortcutLabel.ts";
 import type { SaveState } from "../types/persist.ts";
+import { MenuItem, MenuSeparator } from "../ui/Menu.tsx";
 import { Overlay } from "../ui/Overlay.tsx";
+import {
+  HEADER_LAYOUT,
+  headerShowsArrange,
+  headerShowsHistory,
+  headerShowsPresent,
+  stabilizeHeaderLayout,
+  type HeaderLayout,
+} from "./headerLayout.ts";
 
 interface TopBarProps {
   title: string;
@@ -17,6 +28,7 @@ interface TopBarProps {
   onUndo: () => void;
   onRedo: () => void;
   onNew: () => void;
+  onOpenFile: (file: File) => void;
   onArrange: () => void;
   onPresent: () => void;
   onExport: () => void;
@@ -24,6 +36,18 @@ interface TopBarProps {
   onHelp: () => void;
   onToggleOutline: () => void;
   onToggleDetails?: () => void;
+}
+
+function commandShortcut(id: string): string {
+  const spec = COMMANDS.find((item) => item.id === id);
+  return spec?.shortcut ? shortcutLabel(spec.shortcut) : "";
+}
+
+function saveSlotLabel(saveState: SaveState): string {
+  if (saveState === SAVE_STATE.SAVING || saveState === SAVE_STATE.FILE_SAVING) return "Saving…";
+  if (saveState === SAVE_STATE.RECOVERY) return "Failed";
+  if (saveState === SAVE_STATE.TEMPORARY) return "Local";
+  return "Saved";
 }
 
 export function TopBar({
@@ -40,6 +64,7 @@ export function TopBar({
   onUndo,
   onRedo,
   onNew,
+  onOpenFile,
   onArrange,
   onPresent,
   onExport,
@@ -50,10 +75,15 @@ export function TopBar({
 }: TopBarProps) {
   const [draft, setDraft] = useState(title);
   const [moreOpen, setMoreOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [docOpen, setDocOpen] = useState(false);
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [layout, setLayout] = useState<HeaderLayout>(HEADER_LAYOUT.FULL);
   const barRef = useRef<HTMLElement>(null);
-  const measureRef = useRef<HTMLDivElement>(null);
   const moreRef = useRef<HTMLButtonElement>(null);
+  const docRef = useRef<HTMLButtonElement>(null);
+  const saveRef = useRef<HTMLButtonElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const failed = saveState === SAVE_STATE.RECOVERY || saveState === SAVE_STATE.TEMPORARY;
 
   useEffect(() => {
     setDraft(title);
@@ -61,22 +91,19 @@ export function TopBar({
 
   useEffect(() => {
     const bar = barRef.current;
-    const measure = measureRef.current;
-    if (!bar || !measure) return;
+    if (!bar) return;
     const update = () => {
-      const identity = [...bar.querySelectorAll<HTMLElement>("[data-identity]")].reduce(
-        (sum, node) => sum + node.getBoundingClientRect().width,
-        0,
-      );
-      const available = bar.clientWidth - identity - 120;
-      setCollapsed(measure.scrollWidth > available);
+      setLayout((current) => stabilizeHeaderLayout(bar.clientWidth, current));
     };
     update();
     const observer = new ResizeObserver(update);
     observer.observe(bar);
-    observer.observe(measure);
-    return () => observer.disconnect();
-  }, [title, saveState, saveError]);
+    window.addEventListener("resize", update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   const commitTitle = () => {
     const next = draft.trim();
@@ -100,35 +127,67 @@ export function TopBar({
     );
   }
 
-  const overflowItems = [
-    { label: "Undo", onClick: onUndo, disabled: !canUndo },
-    { label: "Redo", onClick: onRedo, disabled: !canRedo },
-    { label: "New", onClick: onNew },
-    { label: "Present", onClick: onPresent },
-    { label: "Outline", onClick: onToggleOutline },
-    { label: "Details", onClick: onToggleDetails ?? onToggleOutline },
-    { label: "Commands", onClick: onCommand },
-    { label: "Help", onClick: onHelp },
-    { label: "Chat", onClick: undefined, disabled: true, ariaLabel: "Chat is unavailable" },
-  ];
+  const showArrange = headerShowsArrange(layout);
+  const showPresent = headerShowsPresent(layout);
+  const showHistory = headerShowsHistory(layout);
 
   return (
-    <header className="topbar" ref={barRef}>
-      <div className="brand" data-identity="">
+    <header className="topbar" ref={barRef} data-layout={layout}>
+      <button
+        ref={docRef}
+        type="button"
+        className="brand-menu"
+        aria-haspopup="menu"
+        aria-expanded={docOpen}
+        aria-label="Document menu"
+        onClick={() => setDocOpen((value) => !value)}
+      >
         Mapgrain
-      </div>
-      <label className="title-field" data-identity="">
+      </button>
+      <Overlay open={docOpen} anchorRef={docRef} onClose={() => setDocOpen(false)} align="start" pattern="menu" label="Document">
+        <MenuItem
+          onClick={() => {
+            setDocOpen(false);
+            onNew();
+          }}
+        >
+          New diagram
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setDocOpen(false);
+            fileRef.current?.click();
+          }}
+        >
+          Open file
+        </MenuItem>
+      </Overlay>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="application/json,.json"
+        hidden
+        aria-label="Open file"
+        tabIndex={-1}
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (file) onOpenFile(file);
+          event.target.value = "";
+        }}
+      />
+      <label className="title-field">
         <span className="visually-hidden">Document title</span>
         <input
           aria-label="Document title"
           title={title}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
+          onFocus={(event) => event.currentTarget.select()}
           onBlur={commitTitle}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               event.preventDefault();
-              (event.currentTarget as HTMLInputElement).blur();
+              event.currentTarget.blur();
             }
             if (event.key === "Escape") {
               setDraft(title);
@@ -137,118 +196,156 @@ export function TopBar({
           }}
         />
       </label>
-      <span className="save-state" aria-live="polite" data-identity="">
-        {saveState}
-      </span>
-      {saveError ? (
-        <span className="save-error" role="status" data-identity="">
-          {saveError}
-        </span>
-      ) : null}
-      {saveState === SAVE_STATE.RECOVERY || saveState === SAVE_STATE.TEMPORARY ? (
-        <span data-identity="">
-          <button type="button" className="text-btn" onClick={onBackup}>
-            Download backup
+      <div className="save-slot">
+        {failed ? (
+          <button
+            ref={saveRef}
+            type="button"
+            className="save-failed"
+            aria-haspopup="menu"
+            aria-expanded={saveOpen}
+            aria-label={saveError ? `Save failed. ${saveError}` : "Save failed"}
+            onClick={() => setSaveOpen((value) => !value)}
+          >
+            Failed
           </button>
+        ) : (
+          <span className="save-state" aria-live="polite">
+            {saveSlotLabel(saveState)}
+          </span>
+        )}
+      </div>
+      {failed ? (
+        <Overlay open={saveOpen} anchorRef={saveRef} onClose={() => setSaveOpen(false)} pattern="menu" label="Save recovery">
+          {saveError ? <p className="menu-note">{saveError}</p> : null}
           {saveState === SAVE_STATE.RECOVERY && onRetrySave ? (
-            <button type="button" className="text-btn" onClick={onRetrySave}>
+            <MenuItem
+              onClick={() => {
+                setSaveOpen(false);
+                onRetrySave();
+              }}
+            >
               Retry save
-            </button>
+            </MenuItem>
           ) : null}
           {saveState === SAVE_STATE.RECOVERY && onReloadSaved ? (
-            <button type="button" className="text-btn" onClick={onReloadSaved}>
+            <MenuItem
+              onClick={() => {
+                setSaveOpen(false);
+                onReloadSaved();
+              }}
+            >
               Reload saved
-            </button>
+            </MenuItem>
           ) : null}
-        </span>
+          <MenuItem
+            onClick={() => {
+              setSaveOpen(false);
+              onBackup();
+            }}
+          >
+            Download backup
+          </MenuItem>
+        </Overlay>
       ) : null}
       <div className="spacer" />
       <div className="topbar-actions">
-        <button type="button" className="text-btn" onClick={onArrange}>
-          Arrange
-        </button>
-        <button type="button" className="text-btn primary" onClick={onExport}>
-          Export
-        </button>
-        <div className={collapsed ? "topbar-secondary is-collapsed" : "topbar-secondary"}>
-          <button type="button" className="text-btn ghost topbar-wide" onClick={onUndo} disabled={!canUndo}>
-            Undo
+        {showHistory ? (
+          <>
+            <button
+              type="button"
+              className="text-btn ghost"
+              onClick={onUndo}
+              disabled={!canUndo}
+              aria-label="Undo"
+              title={`Undo ${commandShortcut(COMMAND_ID.UNDO)}`}
+            >
+              Undo
+            </button>
+            <button
+              type="button"
+              className="text-btn ghost"
+              onClick={onRedo}
+              disabled={!canRedo}
+              aria-label="Redo"
+              title={`Redo ${commandShortcut(COMMAND_ID.REDO)}`}
+            >
+              Redo
+            </button>
+          </>
+        ) : null}
+        {showArrange ? (
+          <button
+            type="button"
+            className="text-btn"
+            onClick={onArrange}
+            aria-label="Arrange"
+            title={`Arrange ${commandShortcut(COMMAND_ID.ARRANGE)}`}
+          >
+            Arrange
           </button>
-          <button type="button" className="text-btn ghost topbar-wide" onClick={onRedo} disabled={!canRedo}>
-            Redo
-          </button>
-          <button type="button" className="text-btn ghost topbar-wide" onClick={onNew}>
-            New
-          </button>
-          <button type="button" className="text-btn ghost topbar-wide" onClick={onPresent}>
+        ) : null}
+        {showPresent ? (
+          <button type="button" className="text-btn ghost" onClick={onPresent} aria-label="Present" title="Present P">
             Present
           </button>
-          <button type="button" className="text-btn ghost topbar-wide" onClick={onToggleOutline}>
-            Outline
-          </button>
-          <button type="button" className="text-btn ghost topbar-wide" onClick={onCommand}>
-            Commands
-          </button>
-          <button type="button" className="text-btn ghost topbar-wide" onClick={onHelp}>
-            Help
-          </button>
-        </div>
+        ) : null}
+        <button
+          type="button"
+          className="text-btn primary"
+          onClick={onExport}
+          aria-label="Export"
+          title={`Export ${commandShortcut(COMMAND_ID.EXPORT)}`}
+        >
+          Export
+        </button>
         <button
           ref={moreRef}
           type="button"
-          className={collapsed ? "text-btn ghost topbar-more is-needed" : "text-btn ghost topbar-more"}
+          className="text-btn ghost"
           aria-label="More"
           aria-expanded={moreOpen}
           aria-haspopup="menu"
+          title="More"
           onClick={() => setMoreOpen((value) => !value)}
         >
-          ···
+          More
         </button>
-        <Overlay
-          open={moreOpen}
-          anchorRef={moreRef}
-          onClose={() => setMoreOpen(false)}
-          label="More actions"
-        >
-          {overflowItems.map((item) => (
-            <button
-              key={item.label}
-              type="button"
-              className="text-btn"
-              disabled={item.disabled}
-              aria-label={item.ariaLabel}
-              onClick={() => {
-                item.onClick?.();
-                setMoreOpen(false);
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+        <Overlay open={moreOpen} anchorRef={moreRef} onClose={() => setMoreOpen(false)} pattern="menu" label="More actions">
+          {showHistory ? null : (
+            <>
+              <MenuItem shortcut={commandShortcut(COMMAND_ID.UNDO)} disabled={!canUndo} onClick={() => { onUndo(); setMoreOpen(false); }}>
+                Undo
+              </MenuItem>
+              <MenuItem shortcut={commandShortcut(COMMAND_ID.REDO)} disabled={!canRedo} onClick={() => { onRedo(); setMoreOpen(false); }}>
+                Redo
+              </MenuItem>
+              <MenuSeparator />
+            </>
+          )}
+          {showArrange ? null : (
+            <MenuItem shortcut={commandShortcut(COMMAND_ID.ARRANGE)} onClick={() => { onArrange(); setMoreOpen(false); }}>
+              Arrange
+            </MenuItem>
+          )}
+          {showPresent ? null : (
+            <MenuItem shortcut="P" onClick={() => { onPresent(); setMoreOpen(false); }}>
+              Present
+            </MenuItem>
+          )}
+          <MenuItem shortcut="O" onClick={() => { onToggleOutline(); setMoreOpen(false); }}>
+            Outline
+          </MenuItem>
+          <MenuItem shortcut="I" onClick={() => { (onToggleDetails ?? onToggleOutline)(); setMoreOpen(false); }}>
+            Details
+          </MenuItem>
+          <MenuItem onClick={() => { onCommand(); setMoreOpen(false); }}>
+            Commands
+          </MenuItem>
+          <MenuItem shortcut="?" onClick={() => { onHelp(); setMoreOpen(false); }}>
+            Help
+          </MenuItem>
         </Overlay>
-      </div>
-      <div className="topbar-measure" ref={measureRef} aria-hidden="true">
-        <button type="button" className="text-btn">
-          Undo
-        </button>
-        <button type="button" className="text-btn">
-          Redo
-        </button>
-        <button type="button" className="text-btn">
-          New
-        </button>
-        <button type="button" className="text-btn">
-          Present
-        </button>
-        <button type="button" className="text-btn">
-          Outline
-        </button>
-        <button type="button" className="text-btn">
-          Commands
-        </button>
-        <button type="button" className="text-btn">
-          Help
-        </button>
       </div>
     </header>
   );

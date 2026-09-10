@@ -46,7 +46,7 @@ test("selection measurement is next-paint with a published 100-node budget", asy
   assert.match(interact, /SELECT_P95_BUDGET_MS/);
   assert.match(interact, /PAINT_MEASURE/);
   assert.doesNotMatch(interact, /force: true/);
-  assert.match(journey, /New blank diagram/);
+  assert.match(journey, /New architecture/);
   assert.match(journey, /reimport/);
   assert.match(journey, /diagram.json/);
 });

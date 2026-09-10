@@ -30,10 +30,23 @@ export function ViewportBar({ canFocus, onFitAll, onFocus }: ViewportBarProps) {
       >
         +
       </button>
-      <button type="button" className="text-btn fit-label" onClick={onFitAll}>
-        Fit all
+      <button
+        type="button"
+        className="text-btn"
+        aria-label="Fit all, show the whole diagram"
+        title="Fit all"
+        onClick={onFitAll}
+      >
+        <span className="fit-label">Fit all</span>
       </button>
-      <button type="button" className="text-btn" onClick={onFocus} disabled={!canFocus}>
+      <button
+        type="button"
+        className="text-btn"
+        aria-label="Focus selection"
+        title="Focus"
+        onClick={onFocus}
+        disabled={!canFocus}
+      >
         Focus
       </button>
     </Panel>

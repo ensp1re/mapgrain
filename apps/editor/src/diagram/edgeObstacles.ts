@@ -12,9 +12,10 @@ export function flowNodeRect(node: Node, byId: Map<string, Node>): Rect {
     y += parent.position.y;
     parentId = parent.parentId;
   }
+  const pad = 8;
   const width = Number(node.measured?.width ?? node.width ?? node.style?.width ?? 0);
   const height = Number(node.measured?.height ?? node.height ?? node.style?.height ?? 0);
-  return { x, y, width, height };
+  return { x: x - pad, y: y - pad, width: width + pad * 2, height: height + pad * 2 };
 }
 
 export function flowComponentObstacles(nodes: readonly Node[]): Rect[] {
@@ -28,5 +29,5 @@ export function flowComponentObstacles(nodes: readonly Node[]): Rect[] {
 export function captionLabelSize(caption: string, measured?: Size): Size {
   if (measured && measured.width > 0 && measured.height > 0) return measured;
   if (!caption) return { width: 0, height: 0 };
-  return { width: Math.max(24, caption.length * 7), height: 14 };
+  return { width: Math.max(32, caption.length * 7 + 12), height: 16 };
 }

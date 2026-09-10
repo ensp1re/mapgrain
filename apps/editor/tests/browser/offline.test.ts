@@ -5,6 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
+import { waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -74,17 +75,9 @@ test("production bundle stays usable after disconnect, arrange, and reload", asy
     { timeout: 20_000 },
   );
   const arrange = page.getByRole("button", { name: "Arrange" });
-  const start = page.getByRole("button", { name: "New blank diagram" });
+  const start = page.getByRole("button", { name: "New architecture" });
   async function reachEditor(): Promise<void> {
-    await page.waitForFunction(
-      () =>
-        [...document.querySelectorAll("button")].some((button) => {
-          const label = button.textContent?.trim();
-          return label === "Arrange" || label === "New blank diagram";
-        }),
-      undefined,
-      { timeout: 15_000 },
-    );
+    await waitStartOrEditor(page);
     if (await start.isVisible().catch(() => false)) {
       await start.click();
       await arrange.waitFor({ timeout: 10_000 });

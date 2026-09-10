@@ -6,6 +6,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
+import { addKind, goNew, waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -45,11 +46,6 @@ async function listen(): Promise<{ url: string; close: () => Promise<void> }> {
   };
 }
 
-async function addKind(page: import("playwright").Page, kind: string): Promise<void> {
-  await page.getByRole("button", { name: "Add", exact: true }).click();
-  await page.getByRole("option", { name: kind }).click();
-}
-
 test("blank through export and reimport keeps ids on the production build", async (t) => {
   await stat(join(dist, "index.html"));
   const server = await listen();
@@ -61,19 +57,11 @@ test("blank through export and reimport keeps ids on the production build", asyn
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, acceptDownloads: true });
   const page = await context.newPage();
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(
-    () =>
-      [...document.querySelectorAll("button")].some((button) => {
-        const label = button.textContent?.trim();
-        return label === "Arrange" || label === "New blank diagram";
-      }),
-    undefined,
-    { timeout: 15_000 },
-  );
+  await waitStartOrEditor(page);
   if (await page.getByRole("button", { name: "Arrange" }).isVisible().catch(() => false)) {
-    await page.getByRole("button", { name: "New", exact: true }).click();
+    await goNew(page);
   }
-  await page.getByRole("button", { name: "New blank diagram" }).click();
+  await page.getByRole("button", { name: "New architecture" }).click();
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
 
   await addKind(page, "service");
@@ -143,7 +131,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   assert.match(html, /API/);
 
   await page.getByRole("button", { name: "Close", exact: true }).click();
-  await page.getByRole("button", { name: "New", exact: true }).click();
+  await goNew(page);
   await page.locator('input[type="file"][aria-label="Open file"]').setInputFiles(saved.JSON);
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
   await page.locator(".outline-row:not(.is-group)").filter({ hasText: "API" }).first().waitFor();

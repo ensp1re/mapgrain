@@ -43,7 +43,6 @@ test("chrome CSS implements the layout spec at each breakpoint", async () => {
   assert.match(css, /\.outline-search/);
   assert.match(css, /grid-template-rows: 1fr/);
   assert.match(css, /\.add-bar/);
-  assert.match(css, /\.add-menu-pop/);
   assert.match(css, /\.export-dialog/);
   assert.match(css, /--node-radius/);
   assert.match(css, /--space-4: 16px/);
@@ -75,7 +74,7 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
   assert.match(library, /aria-label="Library"/);
   assert.match(library, /aria-label="Add"/);
   assert.match(library, /Add component/);
-  assert.match(library, /Search kinds/);
+  assert.match(library, /<Overlay/);
   assert.doesNotMatch(library, /Add service/);
   assert.match(node, /from "\.\/NodeCard\.tsx"/);
   assert.match(node, /dataShape=\{node\.shape\}/);
@@ -85,5 +84,6 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
   assert.match(group, /is-lane/);
   assert.match(node, /asSource/);
   assert.doesNotMatch(node, /port\.side === PORT_SIDE\.WEST \|\| port\.side === PORT_SIDE\.NORTH \? "target"/);
-  assert.match(outline, /kindShort/);
+  assert.match(outline, /outline-chevron/);
+  assert.match(outline, /KindIcon/);
 });

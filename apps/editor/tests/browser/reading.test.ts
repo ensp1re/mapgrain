@@ -5,6 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
+import { goNew, waitStartOrEditor } from "./helpers.ts";
 import { DIAGRAM_FONT_SIZE, READING_LABEL_SIZE } from "../../src/constants/diagram.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
@@ -55,17 +56,9 @@ test("showcase example keeps readable labels after default fit and shows zoom", 
   });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(
-    () =>
-      [...document.querySelectorAll("button")].some((button) => {
-        const label = button.textContent?.trim();
-        return label === "Arrange" || label === "New blank diagram";
-      }),
-    undefined,
-    { timeout: 15_000 },
-  );
+  await waitStartOrEditor(page);
   if (await page.getByRole("button", { name: "Arrange" }).isVisible().catch(() => false)) {
-    await page.getByRole("button", { name: "New", exact: true }).click();
+    await goNew(page);
   }
   await page.getByRole("button", { name: /Feedback loop/ }).click();
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
@@ -78,13 +71,15 @@ test("showcase example keeps readable labels after default fit and shows zoom", 
   assert.ok(fontSize >= DIAGRAM_FONT_SIZE - 0.5, `title font ${fontSize}`);
   assert.ok(fontSize * zoom >= READING_LABEL_SIZE - 0.5, `effective ${fontSize * zoom} at zoom ${zoom}`);
 
-  await page.getByRole("button", { name: "Commands" }).click();
+  await page.getByRole("button", { name: "More" }).click();
+  await page.getByRole("menuitem", { name: "Commands" }).click();
   const command = page.getByRole("dialog", { name: "Command menu" });
   await command.waitFor();
   await page.keyboard.press("Escape");
   await command.waitFor({ state: "hidden" });
 
-  await page.getByRole("button", { name: "Help" }).click();
+  await page.getByRole("button", { name: "More" }).click();
+  await page.getByRole("menuitem", { name: "Help" }).click();
   const help = page.getByRole("dialog", { name: "Keyboard shortcuts" });
   await help.waitFor();
   const helpText = (await help.innerText()) ?? "";

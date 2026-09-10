@@ -5,6 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
+import { goNew } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -61,11 +62,11 @@ test("production build opens a blank diagram and every example without page erro
   const editorReady = () => page.getByRole("button", { name: "Arrange" });
 
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
-  await page.getByRole("button", { name: "New blank diagram" }).click();
+  await page.getByRole("button", { name: "New architecture" }).click();
   await editorReady().waitFor({ timeout: 10_000 });
   assert.equal(errors.join("\n"), "", "blank");
 
-  await page.getByRole("button", { name: "New", exact: true }).click();
+  await goNew(page);
   const examples = [
     "Local diagram workspace",
     "Review workflow",
@@ -78,13 +79,13 @@ test("production build opens a blank diagram and every example without page erro
     await page.getByRole("button", { name: new RegExp(name) }).click();
     await editorReady().waitFor({ timeout: 10_000 });
     assert.equal(errors.join("\n"), "", name);
-    await page.getByRole("button", { name: "New", exact: true }).click();
+    await goNew(page);
   }
 
-  await page.getByRole("button", { name: "New blank diagram" }).click();
+  await page.getByRole("button", { name: "New architecture" }).click();
   await editorReady().waitFor();
   await page.getByRole("button", { name: "Add", exact: true }).click();
-  await page.getByRole("option", { name: "service" }).click();
+  await page.getByRole("menuitem", { name: /service/i }).click();
   await page.getByRole("button", { name: "Undo" }).click();
   await page.getByText("Saved", { exact: true }).waitFor({ timeout: 10_000 });
   await page.reload({ waitUntil: "domcontentloaded" });

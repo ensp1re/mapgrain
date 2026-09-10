@@ -22,11 +22,11 @@ test("component obstacles use absolute coordinates inside groups", () => {
       style: { width: 80, height: 36 },
     }),
   ];
-  assert.deepEqual(flowComponentObstacles(nodes), [{ x: 40, y: 60, width: 80, height: 36 }]);
+  assert.deepEqual(flowComponentObstacles(nodes), [{ x: 32, y: 52, width: 96, height: 52 }]);
 });
 
 test("caption size prefers measured text and estimates otherwise", () => {
   assert.deepEqual(captionLabelSize("writes", { width: 52, height: 16 }), { width: 52, height: 16 });
-  assert.deepEqual(captionLabelSize("calls"), { width: 35, height: 14 });
+  assert.deepEqual(captionLabelSize("calls"), { width: 47, height: 16 });
   assert.deepEqual(captionLabelSize(""), { width: 0, height: 0 });
 });

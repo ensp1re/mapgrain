@@ -74,7 +74,7 @@ async function waitEditor(page: Page): Promise<void> {
 }
 
 async function openImported(page: Page, file: string): Promise<void> {
-  await page.getByRole("button", { name: "New blank diagram" }).waitFor({ timeout: 15_000 });
+  await page.getByRole("button", { name: "New architecture" }).waitFor({ timeout: 15_000 });
   await page.locator('input[type="file"][aria-label="Open file"]').setInputFiles(file);
   await waitEditor(page);
 }

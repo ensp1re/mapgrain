@@ -1,9 +1,10 @@
-import { useId, useRef, useState } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import { Overlay } from "./Overlay.tsx";
 
 export interface SelectOption {
   value: string;
   label: string;
+  icon?: ReactNode;
 }
 
 interface SelectProps {
@@ -15,19 +16,21 @@ interface SelectProps {
 
 export function Select({ label, value, options, onChange }: SelectProps) {
   const [open, setOpen] = useState(false);
+  const [highlight, setHighlight] = useState(value);
   const trigger = useRef<HTMLButtonElement>(null);
   const listId = useId();
-  const current = options.find((option) => option.value === value)?.label ?? value;
-  const selectedIndex = Math.max(
-    0,
-    options.findIndex((option) => option.value === value),
-  );
+  const current = options.find((option) => option.value === value);
+  const currentLabel = current?.label ?? value;
 
-  const move = (delta: number) => {
-    if (options.length === 0) return;
-    const next = (selectedIndex + delta + options.length) % options.length;
-    const option = options[next];
-    if (option) onChange(option.value);
+  const commit = (next: string) => {
+    onChange(next);
+    setOpen(false);
+    trigger.current?.focus();
+  };
+
+  const close = () => {
+    setHighlight(value);
+    setOpen(false);
   };
 
   return (
@@ -40,69 +43,72 @@ export function Select({ label, value, options, onChange }: SelectProps) {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          setHighlight(value);
+          setOpen((currentOpen) => !currentOpen);
+        }}
         onKeyDown={(event) => {
-          if (event.key === "Escape") {
-            setOpen(false);
-            return;
-          }
-          if (event.key === "Home") {
+          if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             event.preventDefault();
-            const first = options[0];
-            if (first) onChange(first.value);
-            return;
-          }
-          if (event.key === "End") {
-            event.preventDefault();
-            const last = options[options.length - 1];
-            if (last) onChange(last.value);
-            return;
-          }
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            if (!open) setOpen(true);
-            else move(1);
-            return;
-          }
-          if (event.key === "ArrowUp") {
-            event.preventDefault();
-            if (!open) setOpen(true);
-            else move(-1);
-            return;
-          }
-          if (event.key.length === 1 && !event.metaKey && !event.ctrlKey) {
-            const needle = event.key.toLowerCase();
-            const start = selectedIndex + 1;
-            const ordered = options.slice(start).concat(options.slice(0, start));
-            const match = ordered.find((option) => option.label.toLowerCase().startsWith(needle));
-            if (match) onChange(match.value);
+            setHighlight(value);
+            setOpen(true);
           }
         }}
       >
-        {current}
+        {current?.icon ? <span className="select-icon">{current.icon}</span> : null}
+        {currentLabel}
       </button>
       <Overlay
         open={open}
         anchorRef={trigger}
-        onClose={() => setOpen(false)}
+        onClose={close}
         align="start"
-        role="listbox"
+        pattern="listbox"
+        matchAnchorWidth
         label={label}
       >
-        <ul className="ui-select-list is-overlay" id={listId} role="presentation">
+        <ul className="menu-list" id={listId} role="presentation">
           {options.map((option) => (
             <li key={option.value} role="none">
               <button
                 type="button"
                 role="option"
-                aria-selected={option.value === value}
-                className={option.value === value ? "ui-select-option is-selected" : "ui-select-option"}
-                onClick={() => {
-                  onChange(option.value);
-                  setOpen(false);
+                aria-selected={option.value === highlight}
+                className={
+                  option.value === highlight ? "menu-item is-active" : "menu-item"
+                }
+                onFocus={() => setHighlight(option.value)}
+                onMouseEnter={() => setHighlight(option.value)}
+                onClick={() => commit(option.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    commit(highlight);
+                  }
+                  if (event.key === "Home") {
+                    event.preventDefault();
+                    const first = options[0];
+                    if (first) setHighlight(first.value);
+                  }
+                  if (event.key === "End") {
+                    event.preventDefault();
+                    const last = options[options.length - 1];
+                    if (last) setHighlight(last.value);
+                  }
+                  if (event.key.length === 1 && !event.metaKey && !event.ctrlKey) {
+                    const needle = event.key.toLowerCase();
+                    const start = options.findIndex((item) => item.value === highlight) + 1;
+                    const ordered = options.slice(start).concat(options.slice(0, start));
+                    const match = ordered.find((item) => item.label.toLowerCase().startsWith(needle));
+                    if (match) setHighlight(match.value);
+                  }
                 }}
               >
-                {option.label}
+                <span className="menu-icon" aria-hidden="true">
+                  {option.icon}
+                </span>
+                <span className="menu-label">{option.label}</span>
+                <span className="menu-extra">{option.value === value ? "✓" : ""}</span>
               </button>
             </li>
           ))}
