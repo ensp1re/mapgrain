@@ -23,6 +23,7 @@ export const COMMAND_ID = {
   CONNECT: "connect",
   EXPORT: "export",
   HELP: "help",
+  CONVERT_KIND: "convert-kind",
 } as const;
 
 export type CommandId = (typeof COMMAND_ID)[keyof typeof COMMAND_ID];
@@ -66,6 +67,7 @@ export const COMMANDS: CommandSpec[] = [
   { id: COMMAND_ID.FIT_ALL, label: "Fit all", shortcut: "F", scope: ACTION_SCOPE.CANVAS },
   { id: COMMAND_ID.FOCUS, label: "Focus", shortcut: "⇧F", scope: ACTION_SCOPE.CANVAS },
   { id: COMMAND_ID.HELP, label: "Keyboard shortcuts", shortcut: "?", scope: ACTION_SCOPE.GLOBAL },
+  { id: COMMAND_ID.CONVERT_KIND, label: "Switch diagram kind", shortcut: "", scope: ACTION_SCOPE.GLOBAL },
 ];
 
 export const COMMAND_SCOPE_LABEL: Record<ActionScope, string> = {

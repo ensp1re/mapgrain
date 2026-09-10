@@ -60,6 +60,7 @@ import { StartSurface } from "./chrome/StartSurface.tsx";
 import { CommandMenu } from "./chrome/CommandMenu.tsx";
 import { HelpOverlay } from "./chrome/HelpOverlay.tsx";
 import { ConnectDialog } from "./chrome/ConnectDialog.tsx";
+import { ConvertKindDialog } from "./chrome/ConvertKindDialog.tsx";
 import { Inspector } from "./chrome/Inspector.tsx";
 import { Outline } from "./chrome/Outline.tsx";
 import { TopBar } from "./chrome/TopBar.tsx";
@@ -101,6 +102,7 @@ import { shouldOpenCommandMenu, shouldOpenHelp } from "./keyboard/commandShortcu
 import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
 import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
 import { EXAMPLES } from "./create/examples.ts";
+import { MODE_CHOICES } from "./create/modes.ts";
 import { importDocumentText } from "./create/importDocument.ts";
 import { backupBytes, snapshotFromStored } from "./persist/codec.ts";
 import { indexedDbStore } from "./persist/indexeddb.ts";
@@ -195,6 +197,8 @@ function isNoOp(document: DiagramDocument, operation: Operation): boolean {
       return JSON.stringify(portablePositions(document)) === JSON.stringify(operation.positions);
     case OPERATION_KIND.SET_THEME:
       return document.theme === operation.theme;
+    case OPERATION_KIND.SET_DOCUMENT_KIND:
+      return !operation.restore && document.kind === operation.documentKind;
     default:
       return false;
   }
@@ -268,6 +272,8 @@ function Specimen() {
   const [saveState, setSaveState] = useState<SaveState>(SAVE_STATE.SAVED);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
+  const [convertOpen, setConvertOpen] = useState(false);
+  const [convertTarget, setConvertTarget] = useState<DocumentKind>(DOCUMENT_KIND.WORKFLOW);
   const [exportError, setExportError] = useState<string | null>(null);
   const [exportBusy, setExportBusy] = useState(false);
   const exportAbort = useRef<AbortController | null>(null);
@@ -924,8 +930,14 @@ function Specimen() {
         setCommandsOpen(false);
         setHelpOpen(true);
       }
+      if (id === COMMAND_ID.CONVERT_KIND && documentModel) {
+        const nextKind =
+          MODE_CHOICES.find((choice) => choice.kind !== documentModel.kind)?.kind ?? documentModel.kind;
+        setConvertTarget(nextKind);
+        setConvertOpen(true);
+      }
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, exportFormat, fitView, flushThen, getNodes, presenting, selection.nodeIds, shellLayout, startArrange, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, exportFormat, fitView, flushThen, getNodes, presenting, selection.nodeIds, shellLayout, startArrange, theme],
   );
 
   useEffect(() => {
@@ -1288,6 +1300,17 @@ function Specimen() {
             onExport={exportFormat}
             onCancel={() => exportAbort.current?.abort()}
             onClose={() => setExportOpen(false)}
+          />
+          <ConvertKindDialog
+            open={convertOpen}
+            document={documentModel}
+            target={convertTarget}
+            onTarget={setConvertTarget}
+            onApply={() => {
+              applyOp({ kind: OPERATION_KIND.SET_DOCUMENT_KIND, documentKind: convertTarget });
+              setConvertOpen(false);
+            }}
+            onClose={() => setConvertOpen(false)}
           />
           {presenting ? null : (
             <AddBar

@@ -19,6 +19,7 @@ export const OPERATION_KIND = {
   SET_NODE_PINNED: "set_node_pinned",
   SET_LAYOUT: "set_layout",
   SET_THEME: "set_theme",
+  SET_DOCUMENT_KIND: "set_document_kind",
   ADD_GROUP: "add_group",
   DELETE_GROUP: "delete_group",
 } as const;

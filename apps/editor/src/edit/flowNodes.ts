@@ -17,7 +17,12 @@ export function sameNodeContent(left: Node, right: Node): boolean {
     left.style?.height === right.style?.height &&
     dataField(left.data, "label") === dataField(right.data, "label") &&
     dataField(left.data, "editing") === dataField(right.data, "editing") &&
-    dataField(left.data, "kind") === dataField(right.data, "kind")
+    dataField(left.data, "kind") === dataField(right.data, "kind") &&
+    dataField(left.data, "kindFill") === dataField(right.data, "kindFill") &&
+    dataField(left.data, "shape") === dataField(right.data, "shape") &&
+    dataField(left.data, "marker") === dataField(right.data, "marker") &&
+    dataField(left.data, "stateTone") === dataField(right.data, "stateTone") &&
+    dataField(left.data, "lane") === dataField(right.data, "lane")
   );
 }
 

@@ -4,7 +4,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 test("inspector, connect, and export use the custom Select, not a native select", async () => {
-  const files = ["Inspector.tsx", "ConnectDialog.tsx", "ExportDialog.tsx"].map((name) =>
+  const files = ["Inspector.tsx", "ConnectDialog.tsx", "ExportDialog.tsx", "ConvertKindDialog.tsx"].map((name) =>
     fileURLToPath(new URL(`../src/chrome/${name}`, import.meta.url)),
   );
   for (const file of files) {
