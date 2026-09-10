@@ -1,3 +1,5 @@
+import { COMMAND_ID, type CommandId } from "../constants/commands.ts";
+
 export function isEditableTarget(target: EventTarget | null): boolean {
   if (!target || typeof target !== "object" || !("tagName" in target)) return false;
   const tag = String(target.tagName);
@@ -26,4 +28,29 @@ export function shouldOpenHelp(event: {
   if (isEditableTarget(event.target)) return false;
   if (event.metaKey || event.ctrlKey || event.altKey) return false;
   return event.key === "?" || event.key === "F1";
+}
+
+const KEY_COMMANDS: Record<string, CommandId> = {
+  a: COMMAND_ID.ARRANGE,
+  n: COMMAND_ID.NEW,
+  p: COMMAND_ID.PRESENT,
+  e: COMMAND_ID.EXPORT,
+  j: COMMAND_ID.EXPORT_JSON,
+  o: COMMAND_ID.TOGGLE_OUTLINE,
+  i: COMMAND_ID.TOGGLE_INSPECTOR,
+  t: COMMAND_ID.TOGGLE_THEME,
+  f: COMMAND_ID.FIT_ALL,
+};
+
+export function commandForKeyEvent(event: {
+  metaKey: boolean;
+  ctrlKey: boolean;
+  altKey: boolean;
+  key: string;
+  target: EventTarget | null;
+}): CommandId | null {
+  if (isEditableTarget(event.target)) return null;
+  if (event.metaKey || event.ctrlKey || event.altKey) return null;
+  if (event.key === "F") return COMMAND_ID.FOCUS;
+  return KEY_COMMANDS[event.key.toLowerCase()] ?? null;
 }
