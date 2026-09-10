@@ -133,7 +133,8 @@ async function main(): Promise<void> {
       fixture: "skills/mapgrain/examples/ten-node.json",
     });
 
-    await page.getByRole("button", { name: "Commands" }).first().click();
+    await page.getByRole("button", { name: "More" }).click();
+    await page.getByRole("menuitem", { name: "Commands" }).click();
     await page.getByRole("button", { name: "Toggle theme" }).click();
     await page.waitForTimeout(400);
     const heroLight = join(mediaDir, "hero-light.png");

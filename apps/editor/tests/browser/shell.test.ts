@@ -66,12 +66,11 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     const context = await browser.newContext({ viewport });
     const page = await context.newPage();
     await page.goto(server.url, { waitUntil: "domcontentloaded" });
-    const arrange = page.getByRole("button", { name: "Arrange" });
     const start = page.getByRole("button", { name: "New architecture" });
     await waitStartOrEditor(page);
     if (await start.isVisible().catch(() => false)) {
       await start.click();
-      await arrange.waitFor({ timeout: 10_000 });
+      await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
     }
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     assert.ok(overflow <= 1, `${viewport.width}x${viewport.height} overflow ${overflow}`);

@@ -71,13 +71,15 @@ test("showcase example keeps readable labels after default fit and shows zoom", 
   assert.ok(fontSize >= DIAGRAM_FONT_SIZE - 0.5, `title font ${fontSize}`);
   assert.ok(fontSize * zoom >= READING_LABEL_SIZE - 0.5, `effective ${fontSize * zoom} at zoom ${zoom}`);
 
-  await page.getByRole("button", { name: "Commands" }).click();
+  await page.getByRole("button", { name: "More" }).click();
+  await page.getByRole("menuitem", { name: "Commands" }).click();
   const command = page.getByRole("dialog", { name: "Command menu" });
   await command.waitFor();
   await page.keyboard.press("Escape");
   await command.waitFor({ state: "hidden" });
 
-  await page.getByRole("button", { name: "Help" }).click();
+  await page.getByRole("button", { name: "More" }).click();
+  await page.getByRole("menuitem", { name: "Help" }).click();
   const help = page.getByRole("dialog", { name: "Keyboard shortcuts" });
   await help.waitFor();
   const helpText = (await help.innerText()) ?? "";
