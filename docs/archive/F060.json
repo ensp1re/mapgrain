@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F060",
+    "behavior": "Arrange leaves space so edge labels do not sit on nodes.",
+    "acceptance": [
+      "After layout, nested-groups and data-flow-ingest have no label_clearance diagnostics.",
+      "placeEdgeLabel slides off a node that covers the midpoint.",
+      "Editor Arrange on the architecture example leaves edge captions outside node cards."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789039543292-ae0817",
+      "fingerprintBefore": "a35719985f40600ed98eb74705e705cecd43a97cc5242e953e88a6d84b51f898",
+      "fingerprintAfter": "a35719985f40600ed98eb74705e705cecd43a97cc5242e953e88a6d84b51f898",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-10T11:26:15.495Z"
+    },
+    "delivery": {
+      "implementationRevision": "7e0dcafc5aa094682d4410b0f8cc10b79e9390cc",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/85",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "7e0dcafc5aa094682d4410b0f8cc10b79e9390cc",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34472624825"
+        }
+      ],
+      "observedAt": "2026-09-10T11:43:30.000Z",
+      "closeoutRevision": "7e0dcafc5aa094682d4410b0f8cc10b79e9390cc"
+    }
+  },
+  "archivedAt": "2026-09-10T11:44:29.055Z"
+}
