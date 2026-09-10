@@ -1,5 +1,52 @@
 {
   "schemaVersion": 1,
-  "nextId": 61,
-  "tasks": []
+  "nextId": 62,
+  "tasks": [
+    {
+      "id": "F061",
+      "behavior": "README media is recaptured from the current production editor and CLI.",
+      "acceptance": [
+        "capture.json records a 40-character commit, mapgrain 0.2.1, and the ten-node fixture.",
+        "CLI receipt stills are labeled npx mapgrain@0.2.1, not 0.1.0.",
+        "Production media files stay within documented size limits and README still links them."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": "docs/PROJECT.md",
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789041682149-a45db0",
+        "fingerprintBefore": "86c5df2d0871b211a45eaccfee5a5d2029bf095e7cc1ead157f7259396e23da8",
+        "fingerprintAfter": "86c5df2d0871b211a45eaccfee5a5d2029bf095e7cc1ead157f7259396e23da8",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-10T12:01:46.229Z"
+      },
+      "delivery": null
+    }
+  ]
 }

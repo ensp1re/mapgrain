@@ -1,17 +1,14 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F061",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f060",
-    "revision": "7e0dcafc5aa094682d4410b0f8cc10b79e9390cc",
+    "branch": "feat/recapture-readme-media",
+    "revision": "4d12f16eb35f98d6aee6defb072701220cb95479",
     "dirty": true
   },
-  "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/85",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34472624825"
-  ],
+  "evidenceRefs": [],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -28,6 +25,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Queue F061. Do not start until asked.",
-  "updatedAt": "2026-09-10T11:44:55.353Z"
+  "nextAction": "Open draft PR for F061.",
+  "updatedAt": "2026-09-10T11:57:49.844Z"
 }

@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F061
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f060 @ 7e0dcafc5aa094682d4410b0f8cc10b79e9390cc (dirty)
-- Updated: 2026-09-10T11:44:55.353Z
+- Git: feat/recapture-readme-media @ 4d12f16eb35f98d6aee6defb072701220cb95479 (dirty)
+- Updated: 2026-09-10T11:57:49.844Z
 
 ### Next action
 
-Queue F061. Do not start until asked.
+Open draft PR for F061.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Queue F061. Do not start until asked.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/85
-- https://github.com/ensp1re/mapgrain/actions/runs/34472624825
+- none
 
 ## Resume
 

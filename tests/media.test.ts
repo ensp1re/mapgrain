@@ -31,9 +31,12 @@ test("capture manifest records commit, fixture, viewport, and theme", async () =
     commit?: string;
     fixture?: string;
     buildCommand?: string;
+    package?: { name?: string; version?: string };
     artifacts?: Array<{ file: string; viewport?: { width: number; height: number }; theme?: string }>;
   };
   assert.match(manifest.commit ?? "", /^[0-9a-f]{40}$/);
+  assert.equal(manifest.package?.name, "mapgrain");
+  assert.equal(manifest.package?.version, "0.2.1");
   assert.equal(manifest.fixture, "skills/mapgrain/examples/ten-node.json");
   assert.match(manifest.buildCommand ?? "", /@mapgrain\/editor build/);
   const files = new Set((manifest.artifacts ?? []).map((item) => item.file));
@@ -63,4 +66,10 @@ test("README links production media, the feature table, and getting-started", as
   }
   assert.doesNotMatch(readme, /universal agent/i);
   assert.doesNotMatch(readme, /perfect quality/i);
+});
+
+test("capture script labels CLI receipts with the source package version", async () => {
+  const source = await text("../apps/editor/tests/capture-media.ts");
+  assert.match(source, /npx mapgrain@\$\{cliVersion\}/);
+  assert.doesNotMatch(source, /npx mapgrain@0\.1\.0 validate/);
 });
