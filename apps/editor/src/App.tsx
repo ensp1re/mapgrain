@@ -257,6 +257,7 @@ function Specimen() {
   );
   const [selection, setSelection] = useState<EditorSelection>({ nodeIds: ["gateway"], edgeIds: [] });
   const [outlineOpen, setOutlineOpen] = useState(true);
+  const [inspectorOpen, setInspectorOpen] = useState(true);
   const [narrowPanel, setNarrowPanel] = useState<"outline" | "inspector" | "none">("none");
   const [presenting, setPresenting] = useState(false);
   const [commandsOpen, setCommandsOpen] = useState(false);
@@ -470,7 +471,7 @@ function Specimen() {
     (shellLayout === SHELL_LAYOUT.SPLIT ? outlineOpen : narrowPanel === "outline");
   const showInspector =
     inspectorWanted &&
-    (shellLayout === SHELL_LAYOUT.SPLIT || narrowPanel === "inspector");
+    (shellLayout === SHELL_LAYOUT.SPLIT ? inspectorOpen : narrowPanel === "inspector");
 
   useEffect(() => {
     if (shellLayout === SHELL_LAYOUT.SPLIT) return;
@@ -497,7 +498,7 @@ function Specimen() {
       requestAnimationFrame(() => void fitView(readableFitOptions()));
     });
     return () => cancelAnimationFrame(outer);
-  }, [arrange.status, fitView]);
+  }, [arrange.status, fitView, nodes]);
 
   const applyOp = useCallback((operation: Operation, nextPositions?: PositionMap) => {
     if (presenting) return false;
@@ -932,7 +933,7 @@ function Specimen() {
         );
       }
       if (id === COMMAND_ID.TOGGLE_INSPECTOR) {
-        if (shellLayout === SHELL_LAYOUT.SPLIT) setSelection(emptySelection);
+        if (shellLayout === SHELL_LAYOUT.SPLIT) setInspectorOpen((value) => !value);
         else setNarrowPanel((value) => (value === "inspector" ? "none" : "inspector"));
       }
       if (id === COMMAND_ID.EXPORT || id === COMMAND_ID.EXPORT_SVG || id === COMMAND_ID.EXPORT_JSON) {
@@ -1391,7 +1392,7 @@ function Specimen() {
             onDuplicate={duplicateSelection}
             onFocusNode={(id) => setSelection({ nodeIds: [id], edgeIds: [] })}
             onClose={() => {
-              if (shellLayout === SHELL_LAYOUT.SPLIT) setSelection(emptySelection);
+              if (shellLayout === SHELL_LAYOUT.SPLIT) setInspectorOpen(false);
               else setNarrowPanel("none");
             }}
             onApplyCollision={() => {

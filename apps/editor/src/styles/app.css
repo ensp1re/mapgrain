@@ -431,6 +431,10 @@ input {
   grid-template-columns: var(--outline-w) 1fr 0;
 }
 
+.workspace.is-outline-collapsed.is-inspector-hidden {
+  grid-template-columns: 1fr;
+}
+
 .workspace.is-inspector-hidden .inspector {
   display: none;
 }
