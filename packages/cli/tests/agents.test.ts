@@ -55,7 +55,7 @@ test("priority installer ids and paths match skills 1.5.25 and the matrix", asyn
   assert.equal(SKILLS_CLI_VERSION, "1.5.25");
   assert.equal(PUBLISHED_CLI, "mapgrain@0.2.1");
   assert.equal(HISTORICAL_CLI, "mapgrain@0.1.0");
-  assert.equal(SOURCE_CLI_VERSION, "0.2.1");
+  assert.equal(SOURCE_CLI_VERSION, "0.2.2");
   assert.equal(SHARED_PROJECT_SKILL_PATH, ".agents/skills/mapgrain");
   assert.equal(PRIORITY_AGENTS.length, 8);
   for (const agent of PRIORITY_AGENTS) {

@@ -510,7 +510,7 @@ test("version prints the package version", async () => {
   const io = memoryIo();
   const code = await runCli(["--version"], io);
   assert.equal(code, EXIT_CODE.OK);
-  assert.match(text(io.stdoutChunks), /^0\.2\.1\n$/);
+  assert.match(text(io.stdoutChunks), /^0\.2\.2\n$/);
 });
 
 test("validate reads stdin", async () => {
