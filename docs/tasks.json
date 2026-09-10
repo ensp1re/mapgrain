@@ -17,58 +17,7 @@
         "The canvas view name renders as a bordered chip."
       ],
       "dependsOn": [],
-      "state": "verified",
-      "spec": "docs/UI_UX_AUDIT.md",
-      "plan": "docs/PLAN.md",
-      "verification": [
-        "unit",
-        "lint",
-        "typecheck",
-        "build",
-        "browser"
-      ],
-      "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1789073701827-32420e",
-        "fingerprintBefore": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
-        "fingerprintAfter": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          },
-          {
-            "id": "build",
-            "status": "passed"
-          },
-          {
-            "id": "browser",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-10T20:56:05.666Z"
-      },
-      "delivery": null
-    },
-    {
-      "id": "F064",
-      "behavior": "Panel toggle and arrange-preview follow-ups: I toggles the desktop Details pane without destroying selection, hiding both split-shell panes leaves the canvas full-width, and the arrange-preview refit runs after the preview positions reach React Flow.",
-      "acceptance": [
-        "Pressing I at split width hides the Details pane and pressing it again reopens it; the pane close button hides the pane without clearing the selection.",
-        "With the outline collapsed and the inspector hidden at split width, the canvas occupies the full workspace width.",
-        "After entering an arrange preview, all arranged nodes are inside the viewport bounds once React Flow has the preview positions."
-      ],
-      "dependsOn": [],
-      "state": "verified",
+      "state": "passing",
       "spec": null,
       "plan": "docs/PLAN.md",
       "verification": [
@@ -81,9 +30,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789073417574-90b181",
-        "fingerprintBefore": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
-        "fingerprintAfter": "0c60c28e34e1a2f29e6bcb272c97a809d6772e96ac79f1f85325a8dd825c71cc",
+        "attemptId": "run-1789073199038-0c1e43",
+        "fingerprintBefore": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
+        "fingerprintAfter": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
         "checks": [
           {
             "id": "unit",
@@ -106,9 +55,22 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-10T20:51:20.583Z"
+        "verifiedAt": "2026-09-10T20:47:53.075Z"
       },
-      "delivery": null
+      "delivery": {
+        "implementationRevision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
+        "remote": "https://git-manager.devin.ai/proxy/github.com/ensp1re/mapgrain.git",
+        "prUrl": "https://github.com/ensp1re/mapgrain/pull/95",
+        "checkRuns": [
+          {
+            "name": "verify",
+            "revision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
+            "conclusion": "pass",
+            "url": "https://github.com/ensp1re/mapgrain/actions/runs/34528673792/job/103043755364"
+          }
+        ],
+        "observedAt": "2026-09-10T20:54:03.506Z"
+      }
     }
   ]
 }
