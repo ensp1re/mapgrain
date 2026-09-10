@@ -9,7 +9,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Sequence diagrams | shipped | Lifelines, ordered messages, and alt/opt fragments. npm `mapgrain@0.2.1` validates them; `0.1.0` still rejects them |
 | Data-flow diagrams | shipped | Processes, stores, entities, and data movement, with process and store shapes |
 | Lifecycle diagrams | shipped | States, initial/final markers, guarded transitions |
-| Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings |
+| Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings. Arrange slides edge labels off nodes |
 | Snapshot compare | shipped | Added/removed/changed nodes and edges via `mapgrain compare` |
 | Direct edit, arrange, save, export | shipped | Production blank→export→reimport journey; Help overlay lists COMMANDS shortcuts |
 | Portable HTML viewer | shipped | Search, fit, reach, route, named views, local hashes |

@@ -33,7 +33,11 @@ function childrenOf(
     ...groups.map((group) => ({
       id: group.id,
       layoutOptions: {
+        "elk.algorithm": "layered",
+        "elk.direction": elkDirection(document.layoutHints.direction),
         "elk.padding": "[top=46,left=24,bottom=24,right=24]",
+        "elk.spacing.nodeNode": "96",
+        "elk.layered.spacing.nodeNodeBetweenLayers": "120",
       },
       children: childrenOf(document, sizes, group.id),
     })),
@@ -56,8 +60,9 @@ export function toElkGraph(document: DiagramDocument, sizes: Map<string, Size>):
       "elk.direction": elkDirection(document.layoutHints.direction),
       "elk.hierarchyHandling": "INCLUDE_CHILDREN",
       "elk.edgeRouting": "ORTHOGONAL",
-      "elk.spacing.nodeNode": "72",
-      "elk.layered.spacing.nodeNodeBetweenLayers": "72",
+      "elk.spacing.nodeNode": "96",
+      "elk.layered.spacing.nodeNodeBetweenLayers": "120",
+      "elk.spacing.edgeLabel": "12",
       "elk.spacing.edgeEdge": "16",
       "elk.layered.mergeEdges": "false",
     },

@@ -327,6 +327,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     pairCounts.set(key, (pairCounts.get(key) ?? 0) + 1);
   }
 
+  const labelObstacles: Rect[] = nodes.map((node) => node.rect);
   const edges: SceneEdge[] = document.edges.map((edge) => {
     const sourceNode = nodeById.get(edge.source.nodeId);
     const targetNode = nodeById.get(edge.target.nodeId);
@@ -367,7 +368,8 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       edge.outcome ?? edge.guard ?? (edge.order !== undefined ? String(edge.order) : undefined);
     const caption = edgeCaption(edge.type, edge.label, extra);
     const label = measureText(caption || " ", options.font, options.maxLabelWidth, options.measurer);
-    const placed = placeEdgeLabel(points, caption ? label : { width: 0, height: 0 });
+    const placed = placeEdgeLabel(points, caption ? label : { width: 0, height: 0 }, labelObstacles);
+    if (caption) labelObstacles.push(placed.box);
     return {
       id: edge.id,
       source: { nodeId: sourceNode.id, portId: sourcePort.id },

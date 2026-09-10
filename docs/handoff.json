@@ -1,16 +1,15 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F060",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f059",
-    "revision": "6d0fe9c7d09e41e83311b1fbb8699659452d3edb",
+    "branch": "feat/elk-label-clearance",
+    "revision": "afd61ae9d961de37765a9f17f447c95386c7388e",
     "dirty": true
   },
   "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/83",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34468476905"
+    "docs/runs/run-1789039543292-ae0817.json"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
@@ -28,6 +27,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Queue F060: ELK label clearance. Do not start until asked.",
-  "updatedAt": "2026-09-10T10:56:25.000Z"
+  "nextAction": "Open draft PR for F060.",
+  "updatedAt": "2026-09-10T11:26:38.714Z"
 }

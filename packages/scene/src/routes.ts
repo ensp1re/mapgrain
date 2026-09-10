@@ -1,4 +1,5 @@
-import { CORNER_RADIUS, EDGE_LABEL_PAD } from "./constants/metrics.ts";
+import { CORNER_RADIUS, EDGE_LABEL_CLEARANCE, EDGE_LABEL_PAD } from "./constants/metrics.ts";
+import { rectsOverlap } from "./geometry.ts";
 import type { Point, Rect } from "./types/geometry.ts";
 
 export function polylinePath(points: Point[]): string {
@@ -61,21 +62,54 @@ export function pointAlongPolyline(points: Point[], distance: number): Point {
   return points[points.length - 1] ?? first;
 }
 
+const LABEL_FRACTIONS = [0.5, 0.38, 0.62, 0.28, 0.72, 0.2, 0.8] as const;
+
+function labelBoxAt(
+  points: Point[],
+  size: { width: number; height: number },
+  distance: number,
+  side: "above" | "below" | "over" | "under",
+): { anchor: Point; box: Rect } {
+  const along = pointAlongPolyline(points, distance);
+  const width = size.width + EDGE_LABEL_PAD * 2;
+  const height = size.height + EDGE_LABEL_PAD;
+  const close = size.height + EDGE_LABEL_PAD * 2;
+  const y =
+    side === "above"
+      ? along.y - close
+      : side === "below"
+        ? along.y + EDGE_LABEL_PAD
+        : side === "over"
+          ? along.y - close - EDGE_LABEL_CLEARANCE
+          : along.y + EDGE_LABEL_PAD + EDGE_LABEL_CLEARANCE;
+  const box = {
+    x: along.x - size.width / 2 - EDGE_LABEL_PAD,
+    y,
+    width,
+    height,
+  };
+  return { anchor: { x: box.x + box.width / 2, y: box.y + box.height / 2 }, box };
+}
+
 export function placeEdgeLabel(
   points: Point[],
   size: { width: number; height: number },
+  obstacles: readonly Rect[] = [],
 ): { anchor: Point; box: Rect } {
   const total = polylineLength(points);
   const inset = Math.min(16, total / 4);
-  const distance = Math.min(Math.max(inset, total * 0.5), Math.max(0, total - inset));
-  const along = pointAlongPolyline(points, distance);
-  const box = {
-    x: along.x - size.width / 2 - EDGE_LABEL_PAD,
-    y: along.y - size.height - EDGE_LABEL_PAD * 2,
-    width: size.width + EDGE_LABEL_PAD * 2,
-    height: size.height + EDGE_LABEL_PAD,
-  };
-  return { anchor: { x: box.x + box.width / 2, y: box.y + box.height / 2 }, box };
+  const clamp = (value: number) => Math.min(Math.max(inset, value), Math.max(0, total - inset));
+  if (size.width <= 0 || size.height <= 0 || obstacles.length === 0) {
+    return labelBoxAt(points, size, clamp(total * 0.5), "above");
+  }
+  for (const fraction of LABEL_FRACTIONS) {
+    const distance = clamp(total * fraction);
+    for (const side of ["above", "over", "below", "under"] as const) {
+      const placed = labelBoxAt(points, size, distance, side);
+      if (!obstacles.some((obstacle) => rectsOverlap(placed.box, obstacle))) return placed;
+    }
+  }
+  return labelBoxAt(points, size, clamp(total * 0.5), "above");
 }
 
 export function roundedPolylinePath(points: Point[], radius = CORNER_RADIUS): string {

@@ -27,6 +27,10 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.deepEqual(edge?.points, sceneEdge?.points);
   assert.equal(edge?.caption, sceneEdge?.caption);
   assert.deepEqual(edge?.labelAnchor, sceneEdge?.labelAnchor);
+  assert.deepEqual(edge?.labelSize, {
+    width: sceneEdge?.label.width,
+    height: sceneEdge?.label.height,
+  });
   assert.equal(edge?.preserveGeometry, false);
   const gateway = flow.nodes.find((node) => node.id === "gateway");
   assert.equal(gateway?.data.kindFill, "gateway");

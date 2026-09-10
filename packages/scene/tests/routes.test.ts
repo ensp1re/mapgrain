@@ -6,6 +6,7 @@ import {
   pointAlongPolyline,
   polylineLength,
   polylinePath,
+  rectsOverlap,
   roundedPolylinePath,
 } from "../src/index.ts";
 
@@ -47,6 +48,19 @@ test("edge labels sit at half the path length, not the middle vertex", () => {
   assert.ok(Math.abs(along.y) < 1e-6);
   assert.notEqual(placed.anchor.x, midVertex?.x);
   assert.ok(Math.abs(placed.anchor.x - along.x) < 1);
+});
+
+test("edge labels slide off a node that covers the midpoint", () => {
+  const points = [
+    { x: 0, y: 40 },
+    { x: 200, y: 40 },
+  ];
+  const size = { width: 24, height: 10 };
+  const obstacle = { x: 80, y: 20, width: 40, height: 30 };
+  const blocked = placeEdgeLabel(points, size, [obstacle]);
+  const clear = placeEdgeLabel(points, size);
+  assert.notDeepEqual(blocked.box, clear.box);
+  assert.equal(rectsOverlap(blocked.box, obstacle), false);
 });
 
 test("rounded orthogonal paths use quadratic corners capped by segment length", () => {

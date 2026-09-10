@@ -33,6 +33,7 @@ export interface FlowEdgeDraft {
   direction: EdgeDirection;
   caption: string;
   labelAnchor: { x: number; y: number };
+  labelSize: { width: number; height: number };
   preserveGeometry: boolean;
 }
 
@@ -68,5 +69,6 @@ export interface RelationEdgeData extends Record<string, unknown> {
   points: Array<{ x: number; y: number }>;
   caption: string;
   labelAnchor: { x: number; y: number };
+  labelSize: { width: number; height: number };
   preserveGeometry: boolean;
 }
