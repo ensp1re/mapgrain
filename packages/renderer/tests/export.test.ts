@@ -250,6 +250,27 @@ test("share-card export is a PNG of a named view", async () => {
   assert.ok(result.bytes.length > 100);
 });
 
+test("data-flow SVG draws process pills and store cylinders", async () => {
+  const raw = await load("data-flow-ingest.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.match(svg, /data-id="capture"[^>]*data-shape="process"/);
+  assert.match(svg, /data-id="records"[^>]*data-shape="store"/);
+  assert.match(svg, /data-id="user"[^>]*data-shape="entity"/);
+  assert.match(svg, /<ellipse /);
+});
+
+test("architecture SVG omits data-flow shapes", async () => {
+  const raw = await load("nested-groups.json");
+  const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const svg = new TextDecoder().decode(result.bytes);
+  assert.doesNotMatch(svg, /data-shape=/);
+});
+
 test("workflow SVG draws equal-width lanes from groups", async () => {
   const raw = await load("workflow-decision.json");
   const result = exportDiagram({ document: raw, format: EXPORT_FORMAT.SVG });

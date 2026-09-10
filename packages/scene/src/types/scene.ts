@@ -7,6 +7,7 @@ import type {
   SequenceFragmentKind,
   ValidationIssue,
 } from "@mapgrain/document";
+import type { NodeShape } from "../constants/shape.ts";
 import type { Point, Rect } from "./geometry.ts";
 
 export interface TextLine {
@@ -54,6 +55,7 @@ export interface SceneNode {
   groupId: string | null;
   marker?: NodeMarker;
   role?: string;
+  shape?: NodeShape;
   iconSize: number;
 }
 

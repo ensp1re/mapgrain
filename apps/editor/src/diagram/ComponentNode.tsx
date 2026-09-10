@@ -34,6 +34,7 @@ export function ComponentNode({ data, selected }: NodeProps) {
       dataMarker={node.marker}
       dataStateTone={node.stateTone}
       dataKindFill={node.kindFill}
+      dataShape={node.shape}
       onDoubleClick={() => {
         if (!node.editing) node.onStartEdit();
       }}

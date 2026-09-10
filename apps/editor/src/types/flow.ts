@@ -19,6 +19,7 @@ export interface FlowNodeDraft {
     stateTone?: StateTone;
     kindFill?: string;
     lane?: boolean;
+    shape?: string;
   };
 }
 
@@ -44,6 +45,7 @@ export interface ComponentNodeData extends Record<string, unknown> {
   marker?: NodeMarker;
   stateTone?: StateTone;
   kindFill?: string;
+  shape?: string;
   editing: boolean;
   onStartEdit: () => void;
   onCommitLabel: (label: string) => void;

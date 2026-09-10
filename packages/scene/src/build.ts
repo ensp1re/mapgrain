@@ -11,6 +11,7 @@ import { ICON_GAP, KIND_TITLE_GAP, PARALLEL_EDGE_OFFSET } from "./constants/metr
 import { edgeCaption } from "./caption.ts";
 import { expandTop, inflate, midpoint, normalize, unionRects } from "./geometry.ts";
 import { applyWorkflowLanes } from "./lanes.ts";
+import { shapeForNode } from "./shape.ts";
 import { iconSizeFor, kindDisplayText, kindFontFor } from "./kind.ts";
 import { placeEdgeLabel } from "./routes.ts";
 import { defaultSceneOptions } from "./options.ts";
@@ -312,6 +313,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       groupId: node.groupId,
       marker: node.marker,
       role: node.role,
+      shape: shapeForNode(document.kind, node.kind),
       iconSize,
       ports: placePortsOnRect(node.id, rect, node.ports),
     };

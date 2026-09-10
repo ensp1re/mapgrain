@@ -7,7 +7,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Architecture diagrams | shipped | Typed nodes, directed edges, nested groups, stable IDs |
 | Workflow diagrams | shipped | Jobs, actors, decisions with labelled outcomes, and group lanes |
 | Sequence diagrams | shipped | Lifelines, ordered messages, and alt/opt fragments. npm `mapgrain@0.2.1` validates them; `0.1.0` still rejects them |
-| Data-flow diagrams | shipped | Processes, stores, entities, and data movement |
+| Data-flow diagrams | shipped | Processes, stores, entities, and data movement, with process and store shapes |
 | Lifecycle diagrams | shipped | States, initial/final markers, guarded transitions |
 | Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings |
 | Snapshot compare | shipped | Added/removed/changed nodes and edges via `mapgrain compare` |

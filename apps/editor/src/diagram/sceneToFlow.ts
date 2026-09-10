@@ -81,6 +81,7 @@ export function sceneToFlow(scene: Scene): {
         scene.documentKind === DOCUMENT_KIND.ARCHITECTURE && node.kind !== NODE_KIND.STATE
           ? node.kind
           : undefined,
+      shape: node.shape,
       ports: node.ports.map((port) => {
         const role = roles.get(portKey(node.id, port.id));
         return {
