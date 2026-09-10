@@ -1,4 +1,4 @@
-export const PUBLISHED_CLI = "mapgrain@0.2.1";
+export const PUBLISHED_CLI = "mapgrain@0.2.2";
 export const HISTORICAL_CLI = "mapgrain@0.1.0";
 export const SOURCE_CLI_VERSION = "0.2.2";
 export const SKILLS_CLI_VERSION = "1.5.25";

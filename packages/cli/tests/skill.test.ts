@@ -24,11 +24,11 @@ test("the skill directory ships schema, examples, and local runtime instructions
   assert.match(text, /--agent gemini-cli/);
   assert.match(text, /--agent windsurf/);
   assert.doesNotMatch(text, /copilot-codex/);
-  assert.match(text, /npx mapgrain@0\.2\.1 validate/);
-  assert.match(text, /npx mapgrain@0\.2\.1 layout/);
+  assert.match(text, /npx mapgrain@0\.2\.2 validate/);
+  assert.match(text, /npx mapgrain@0\.2\.2 layout/);
   assert.match(text, /pnpm mapgrain layout/);
   assert.match(text, /sequence, data-flow, or lifecycle/);
-  assert.match(text, /0\.2\.1/);
+  assert.match(text, /0\.2\.2/);
   assert.match(text, /npx mapgrain@0\.1\.0/);
   assert.doesNotMatch(text, /npx mapgrain@latest/);
   assert.match(text, /From a Mapgrain checkout only/);

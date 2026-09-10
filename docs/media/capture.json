@@ -1,8 +1,8 @@
 {
-  "commit": "4d12f16eb35f98d6aee6defb072701220cb95479",
+  "commit": "1c59386516a5b9d8e0b2ed40cb035c48906cde5e",
   "package": {
     "name": "mapgrain",
-    "version": "0.2.1"
+    "version": "0.2.2"
   },
   "buildCommand": "pnpm --filter @mapgrain/editor build && pnpm --filter mapgrain build",
   "fixture": "skills/mapgrain/examples/ten-node.json",
@@ -12,7 +12,7 @@
     "playwright": "1.63.0"
   },
   "deviceScaleFactor": 1,
-  "capturedAt": "2026-09-10T12:00:15.400Z",
+  "capturedAt": "2026-09-10T14:22:39.770Z",
   "artifacts": [
     {
       "file": "docs/media/hero-dark.png",
@@ -87,32 +87,32 @@
   ],
   "sizes": {
     "hero-dark.png": {
-      "bytes": 140801,
-      "sha256": "201a23a33b9a64d7376720ba1a33f7df289bb4ffb82866ed7131803ee4f73b7f"
+      "bytes": 131952,
+      "sha256": "dc34cb07ee349fe703c57bc9d32143cf746b722d5ce2ca066a8ec64fe6f680f0"
     },
     "hero-light.png": {
-      "bytes": 143157,
-      "sha256": "b9d5d3cf09e69953f2175aad0f3bd8e7aef28401b87469e8ce83cc7d2e1f2ff6"
+      "bytes": 136317,
+      "sha256": "dae1f60943e637355279dd2636ecf7987922efe70157c6737ae790a485eed4be"
     },
     "narrow-390.png": {
-      "bytes": 35433,
-      "sha256": "1f16a1db080dd70d23889152a741ea049c9aeef3fe5016bd09a219a0f1a4cce0"
+      "bytes": 35672,
+      "sha256": "5bf07395dccdf2e98e2cfc7252db25015fcd2a155dbe899477bb22d7eeed333e"
     },
     "editing.gif": {
-      "bytes": 1997542,
-      "sha256": "f803db1519ee5de9d43b8df94d62d972d1a27f570f98b9342bb1f74a634228f5"
+      "bytes": 1788231,
+      "sha256": "0f6152af7a8b05dfc0a8e25983a991ad3760edb3bf2004926cf7381d4de42cbd"
     },
     "viewer.gif": {
-      "bytes": 753789,
-      "sha256": "29adc7e98261e89a313d3a1621bdd2765af0b5311ea68177d76f7752a679f47d"
+      "bytes": 599757,
+      "sha256": "7f89aaa0add30b508af4934cd70ead8b102715f64a5ff562e144bde5db5877e4"
     },
     "cli-receipts.png": {
-      "bytes": 16416,
-      "sha256": "b3ada7acb424f553c7b9f94a49dc9904f4721eac6b4aadefd18efdc96a51305b"
+      "bytes": 16479,
+      "sha256": "d2c7052dfbd38d90ea5815259099243626c7336910d4e958b5e4d8fec006bd97"
     },
     "cli-workflow.gif": {
-      "bytes": 76612,
-      "sha256": "52646bd78e9c25d12b4493c7aed269e16e5c96a20114a9510e9c3d62d1fbe2b0"
+      "bytes": 54117,
+      "sha256": "09e821929259fea697f363e641341badb6ec6547eb9e910cbf1c970bf5cd69e7"
     }
   }
 }
