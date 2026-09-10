@@ -3,6 +3,7 @@ import { OPERATION_KIND } from "../constants/operations.ts";
 import type { DiagramDocument, DiagramEdge, DiagramNode } from "../types/document.ts";
 import type { ApplyResult, Operation } from "../types/operation.ts";
 import type { ValidationIssue } from "../types/validation.ts";
+import { convertDocument } from "../convert.ts";
 import { applyPortableLayout } from "../layout/portable.ts";
 import { validateDocument } from "../validate.ts";
 
@@ -333,6 +334,26 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
       const inverse: Operation = { kind: OPERATION_KIND.SET_THEME, theme: document.theme };
       next.theme = operation.theme;
       return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_DOCUMENT_KIND: {
+      if (operation.restore) {
+        const restored = cloneDocument(operation.restore);
+        restored.revision = next.revision;
+        return commit(restored, { kind: OPERATION_KIND.SET_DOCUMENT_KIND, documentKind: operation.documentKind }, document);
+      }
+      if (operation.documentKind === document.kind) {
+        return fail(document, `document is already ${document.kind}`, "/kind");
+      }
+      const preview = convertDocument(next, operation.documentKind);
+      return commit(
+        preview.document,
+        {
+          kind: OPERATION_KIND.SET_DOCUMENT_KIND,
+          documentKind: document.kind,
+          restore: document,
+        },
+        document,
+      );
     }
     case OPERATION_KIND.SET_LAYOUT: {
       const inverse: Operation = {

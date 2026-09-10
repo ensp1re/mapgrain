@@ -86,6 +86,20 @@ test("start surface offers blank, file, examples, and agent path", async () => {
   assert.doesNotMatch(source, /Describe a diagram/);
 });
 
+test("commands include switch diagram kind for an existing file", async () => {
+  const source = await readFile(new URL("../src/constants/commands.ts", import.meta.url), "utf8");
+  assert.match(source, /CONVERT_KIND/);
+  assert.match(source, /Switch diagram kind/);
+});
+
+test("kind conversion dialog previews keep remap drop before apply", async () => {
+  const source = await readFile(new URL("../src/chrome/ConvertKindDialog.tsx", import.meta.url), "utf8");
+  assert.match(source, /conversionSummary/);
+  assert.match(source, /Dropped:/);
+  assert.match(source, /Apply/);
+  assert.doesNotMatch(source, /<select[\s>]/);
+});
+
 test("mode chooser names every diagram kind", async () => {
   const source = await readFile(new URL("../src/create/modes.ts", import.meta.url), "utf8");
   assert.match(source, /Architecture/);

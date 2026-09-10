@@ -1,16 +1,15 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F062",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f061",
-    "revision": "9723dbb03afbcce2d1036f99ac86ea73314c662a",
+    "branch": "feat/kind-conversion-preview",
+    "revision": "72676a1825feae9b9462504077f9f6269def3298",
     "dirty": true
   },
   "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/87",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34475482361"
+    "docs/runs/run-1789044081720-a20f79.json"
   ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
@@ -28,6 +27,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Queue F062. Do not start until asked.",
-  "updatedAt": "2026-09-10T12:16:07.319Z"
+  "nextAction": "Open draft PR for F062.",
+  "updatedAt": "2026-09-10T12:41:59.174Z"
 }

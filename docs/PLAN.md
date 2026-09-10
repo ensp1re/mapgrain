@@ -2,13 +2,12 @@
 
 Mapgrain is a local editor, CLI (`npx mapgrain@0.2.1`), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
 
-**Status:** shipped through F061. No live slices. Next task id: `F062`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
+**Status:** shipped through F061. Live: F062 document-kind conversion preview. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
 
 ## Open gaps (not queued)
 
 - Live agent prompt runs
 - Mermaid/draw.io import and hosted sharing
-- Document-kind conversion preview if an existing file is switched
 
 Do not claim those as shipped.
 

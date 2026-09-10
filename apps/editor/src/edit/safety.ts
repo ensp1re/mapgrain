@@ -38,6 +38,7 @@ const MUTATING_COMMANDS = new Set<CommandId>([
   COMMAND_ID.IMPORT,
   COMMAND_ID.CONNECT,
   COMMAND_ID.TOGGLE_THEME,
+  COMMAND_ID.CONVERT_KIND,
 ]);
 
 export function commandAllowed(presenting: boolean, id: CommandId): boolean {

@@ -31,6 +31,15 @@ test("reuseUnchangedNodes replaces a node when its label or selection changes", 
   assert.equal(sameNodeContent(first[0]!, node("n1")), true);
 });
 
+test("reuseUnchangedNodes replaces a node when kind fill changes", () => {
+  const first = [node("n1", { data: { label: "A", editing: false, kind: "gateway", kindFill: "gateway" } })];
+  const next = reuseUnchangedNodes(first, [
+    node("n1", { data: { label: "A", editing: false, kind: "gateway" } }),
+  ]);
+  assert.notEqual(next[0], first[0]);
+  assert.equal((next[0]?.data as { kindFill?: string }).kindFill, undefined);
+});
+
 test("reuseUnchangedNodes keeps measured size when only selection changes", () => {
   const first = [node("n1", { measured: { width: 180, height: 72 }, width: 180, height: 72 })];
   const next = reuseUnchangedNodes(first, [node("n1", { selected: true })]);

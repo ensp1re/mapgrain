@@ -11,7 +11,7 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Lifecycle diagrams | shipped | States, initial/final markers, guarded transitions |
 | Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings. Arrange slides edge labels off nodes |
 | Snapshot compare | shipped | Added/removed/changed nodes and edges via `mapgrain compare` |
-| Direct edit, arrange, save, export | shipped | Production blank→export→reimport journey; Help overlay lists COMMANDS shortcuts |
+| Direct edit, arrange, save, export | shipped | Production blank→export→reimport journey; Help overlay lists COMMANDS shortcuts; switching kind previews keep/remap/drop |
 | Portable HTML viewer | shipped | Search, fit, reach, route, named views, local hashes |
 | Offline editor | shipped | Versioned precache; API and studio sessions excluded |
 | Agent skill | partial | Install paths proven; live agent prompt runs untested; matching CLI is `npx mapgrain@0.2.1` |

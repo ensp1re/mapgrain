@@ -1169,6 +1169,31 @@ input {
   margin: 8px 0;
 }
 
+.convert-dialog {
+  position: absolute;
+  z-index: 8;
+  right: 12px;
+  top: 12px;
+  width: min(320px, calc(100% - 24px));
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.convert-dialog p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.convert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
 .outline-search {
   display: flex;
   align-items: center;

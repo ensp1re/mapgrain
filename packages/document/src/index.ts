@@ -18,6 +18,8 @@ export {
   VIEW_KIND,
 } from "./constants/document.ts";
 export { gitVerified, isPinnedGitRevision, snapshotMatches } from "./evidence.ts";
+export { mappedNodeKind } from "./constants/convert.ts";
+export { conversionSummary, convertDocument } from "./convert.ts";
 export { defaultEdgeType, EDGES_FOR_KIND, NODES_FOR_KIND } from "./constants/modes.ts";
 export { VALIDATION_ERROR_CODE } from "./constants/errors.ts";
 export { OPERATION_KIND } from "./constants/operations.ts";
@@ -52,6 +54,7 @@ export type {
   Theme,
 } from "./types/document.ts";
 
+export type { ConversionAction, ConversionChange, ConversionPreview } from "./types/convert.ts";
 export type { DocumentDelta } from "./compare.ts";
 export type { ApplyResult, Operation, OperationKind } from "./types/operation.ts";
 export type { ValidationErrorCode, ValidationIssue, ValidationResult } from "./types/validation.ts";

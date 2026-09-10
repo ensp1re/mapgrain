@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import {
+  DOCUMENT_KIND,
   EDGE_DIRECTION,
   EDGE_TYPE,
   NODE_KIND,
@@ -196,4 +197,24 @@ test("set_node_pinned toggles keep-position and inverse restores it", async () =
   assert.equal(restored.ok, true);
   if (!restored.ok) return;
   assert.equal(restored.document.layoutHints.pinnedNodeIds.includes("gateway"), true);
+});
+
+test("set_document_kind converts to workflow and inverse restores dropped nodes", async () => {
+  const document = await load();
+  const converted = applyOperation(document, {
+    kind: OPERATION_KIND.SET_DOCUMENT_KIND,
+    documentKind: DOCUMENT_KIND.WORKFLOW,
+  });
+  assert.equal(converted.ok, true);
+  if (!converted.ok) return;
+  assert.equal(converted.document.kind, DOCUMENT_KIND.WORKFLOW);
+  assert.deepEqual(converted.document.nodes.map((node) => node.id).sort(), ["gateway", "layout"]);
+  const undone = applyOperation(converted.document, converted.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(undone.document.kind, DOCUMENT_KIND.ARCHITECTURE);
+  assert.deepEqual(
+    undone.document.nodes.map((node) => node.id).sort(),
+    document.nodes.map((node) => node.id).sort(),
+  );
 });
