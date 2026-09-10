@@ -239,6 +239,7 @@ async function main(): Promise<void> {
     const hit = viewPage.getByRole("list", { name: "Search results" }).getByRole("button").first();
     if (await hit.isVisible().catch(() => false)) await hit.click();
     await viewPage.waitForTimeout(400);
+    await viewPage.getByRole("button", { name: "More" }).click();
     await viewPage.getByRole("button", { name: "Theme" }).click();
     await viewPage.waitForTimeout(400);
     await viewPage.mouse.move(720, 480);
@@ -264,6 +265,7 @@ async function main(): Promise<void> {
     const cliVideoDir = join(work, "cli");
     await mkdir(cliVideoDir, { recursive: true });
     const receipts = join(work, "receipts.html");
+    const cliVersion = await packageVersion();
     const validated = execFileSync(
       "node",
       ["--experimental-strip-types", join(repoRoot, "packages/cli/src/cli.ts"), "validate", fixture],
@@ -287,7 +289,7 @@ async function main(): Promise<void> {
 <style>body{margin:0;background:#1c1c1f;color:#ececec;font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
 main{padding:32px 40px} h1{font:600 16px/1.3 ui-sans-serif,system-ui;margin:0 0 16px}
 pre{white-space:pre-wrap;background:#141416;border:1px solid #2a2a2e;padding:16px;border-radius:8px}</style></head>
-<body><main><h1>npx mapgrain@0.1.0 validate / layout</h1>
+<body><main><h1>npx mapgrain@${cliVersion} validate / layout</h1>
 <pre>${validated.replaceAll("<", "&lt;")}\n\nlayout wrote laid.json</pre></main></body></html>`,
     );
     const receiptServer = await listen(work);
