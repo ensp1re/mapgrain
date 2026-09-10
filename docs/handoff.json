@@ -1,14 +1,17 @@
 {
   "schemaVersion": 1,
-  "taskId": "F061",
+  "taskId": null,
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "feat/recapture-readme-media",
-    "revision": "4d12f16eb35f98d6aee6defb072701220cb95479",
+    "branch": "chore/stamp-f061",
+    "revision": "9723dbb03afbcce2d1036f99ac86ea73314c662a",
     "dirty": true
   },
-  "evidenceRefs": [],
+  "evidenceRefs": [
+    "https://github.com/ensp1re/mapgrain/pull/87",
+    "https://github.com/ensp1re/mapgrain/actions/runs/34475482361"
+  ],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -25,6 +28,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Open draft PR for F061.",
-  "updatedAt": "2026-09-10T11:57:49.844Z"
+  "nextAction": "Queue F062. Do not start until asked.",
+  "updatedAt": "2026-09-10T12:16:07.319Z"
 }
