@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: F059
+- Task: none
 - Plan: docs/PLAN.md
-- Git: feat/data-flow-shapes @ 800e1314b5fdc4dfe7f15628ed2628fc78980e16 (dirty)
-- Updated: 2026-09-10T10:50:34.812Z
+- Git: chore/stamp-f059 @ 6d0fe9c7d09e41e83311b1fbb8699659452d3edb (dirty)
+- Updated: 2026-09-10T10:56:25.000Z
 
 ### Next action
 
-Implement F059 data-flow process versus store shapes.
+Queue F060: ELK label clearance. Do not start until asked.
 
 ### Decisions
 
@@ -36,7 +36,8 @@ Implement F059 data-flow process versus store shapes.
 
 ### Evidence
 
-- none
+- https://github.com/ensp1re/mapgrain/pull/83
+- https://github.com/ensp1re/mapgrain/actions/runs/34468476905
 
 ## Resume
 

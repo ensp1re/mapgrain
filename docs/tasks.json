@@ -1,52 +1,5 @@
 {
   "schemaVersion": 1,
   "nextId": 60,
-  "tasks": [
-    {
-      "id": "F059",
-      "behavior": "Data-flow diagrams draw processes as pills and stores as cylinders.",
-      "acceptance": [
-        "SVG for data-flow-ingest includes data-shape=process and data-shape=store.",
-        "Architecture nested-groups SVG has no data-shape attribute.",
-        "Editor data-flow cards expose data-shape on process and store nodes."
-      ],
-      "dependsOn": [],
-      "state": "verified",
-      "spec": "docs/PROJECT.md",
-      "plan": "docs/PLAN.md",
-      "verification": [
-        "unit",
-        "lint",
-        "typecheck",
-        "build"
-      ],
-      "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1789037434900-36bfbc",
-        "fingerprintBefore": "2435b297eedaa2f6a26d9d89009ab53b106777888568bdf77aa99866eae0245a",
-        "fingerprintAfter": "2435b297eedaa2f6a26d9d89009ab53b106777888568bdf77aa99866eae0245a",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          },
-          {
-            "id": "build",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-10T10:50:59.394Z"
-      },
-      "delivery": null
-    }
-  ]
+  "tasks": []
 }

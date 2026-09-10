@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F059",
+    "behavior": "Data-flow diagrams draw processes as pills and stores as cylinders.",
+    "acceptance": [
+      "SVG for data-flow-ingest includes data-shape=process and data-shape=store.",
+      "Architecture nested-groups SVG has no data-shape attribute.",
+      "Editor data-flow cards expose data-shape on process and store nodes."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": "docs/PROJECT.md",
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789037434900-36bfbc",
+      "fingerprintBefore": "2435b297eedaa2f6a26d9d89009ab53b106777888568bdf77aa99866eae0245a",
+      "fingerprintAfter": "2435b297eedaa2f6a26d9d89009ab53b106777888568bdf77aa99866eae0245a",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-10T10:50:59.394Z"
+    },
+    "delivery": {
+      "implementationRevision": "6d0fe9c7d09e41e83311b1fbb8699659452d3edb",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/83",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "6d0fe9c7d09e41e83311b1fbb8699659452d3edb",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34468476905"
+        }
+      ],
+      "observedAt": "2026-09-10T10:56:25Z",
+      "closeoutRevision": "6d0fe9c7d09e41e83311b1fbb8699659452d3edb"
+    }
+  },
+  "archivedAt": "2026-09-10T10:56:41.042Z"
+}
