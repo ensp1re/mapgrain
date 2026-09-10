@@ -12,6 +12,7 @@ import { ARROW_SIZE, GROUP_RADIUS, NODE_RADIUS, PORT_RADIUS, VIEW_PAD } from "..
 import { fillForNodeKind } from "../constants/kindFill.ts";
 import { COLOR_MODE, fillForStateTone, paintsFor, type ColorMode } from "../constants/paint.ts";
 import { architectureKinds, legendMarkup, legendSize } from "./legend.ts";
+import { nodeBodyMarkup } from "./nodeBody.ts";
 import { EXPORT_FONT_FAMILY, interFontFaceCss } from "../font.ts";
 import { escapeXml, n } from "./escape.ts";
 
@@ -164,9 +165,10 @@ export function renderSvg(
       const kindFillAttr = kindFill ? ` data-kind-fill="${escapeXml(node.kind)}"` : "";
       const markerAttr = node.marker ? ` data-marker="${escapeXml(node.marker)}"` : "";
       const roleAttr = node.role ? ` data-role="${escapeXml(node.role)}"` : "";
+      const shapeAttr = node.shape ? ` data-shape="${escapeXml(node.shape)}"` : "";
       const accessible = `${isState ? "" : `${kindText} `}${node.label.lines.map((line) => line.text).join(" ")}`.trim();
-      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${kindFillAttr}${toneAttr}${markerAttr}${roleAttr} tabindex="0" role="img" aria-label="${escapeXml(accessible || node.id)}">
-  <rect x="${n(node.rect.x + ox)}" y="${n(node.rect.y + oy)}" width="${n(node.rect.width)}" height="${n(node.rect.height)}" rx="${NODE_RADIUS}" fill="${fill}" stroke="${border}" stroke-width="1"/>
+      return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${kindFillAttr}${toneAttr}${markerAttr}${roleAttr}${shapeAttr} tabindex="0" role="img" aria-label="${escapeXml(accessible || node.id)}">
+  ${nodeBodyMarkup(node, ox, oy, fill, border)}
   ${final}
   ${initial}
   ${icon}

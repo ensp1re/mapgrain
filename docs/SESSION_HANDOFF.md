@@ -4,14 +4,14 @@ This is a readable view of `docs/handoff.json`. Update decisions, rejected appro
 
 ## Current checkpoint
 
-- Task: none
+- Task: F059
 - Plan: docs/PLAN.md
-- Git: chore/stamp-f058 @ 934d6465090292cab4bc81ff8b787195b58a429e (dirty)
-- Updated: 2026-09-09T23:56:59.000Z
+- Git: feat/data-flow-shapes @ 800e1314b5fdc4dfe7f15628ed2628fc78980e16 (dirty)
+- Updated: 2026-09-10T10:50:34.812Z
 
 ### Next action
 
-Queue F059: data-flow process versus store shapes. Do not start until asked.
+Implement F059 data-flow process versus store shapes.
 
 ### Decisions
 
@@ -36,8 +36,7 @@ Queue F059: data-flow process versus store shapes. Do not start until asked.
 
 ### Evidence
 
-- https://github.com/ensp1re/mapgrain/pull/81
-- https://github.com/ensp1re/mapgrain/actions/runs/34418999279
+- none
 
 ## Resume
 

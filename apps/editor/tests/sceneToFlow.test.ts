@@ -32,6 +32,22 @@ test("sceneToFlow keeps node ids, groups, and port handles", async () => {
   assert.equal(gateway?.data.kindFill, "gateway");
 });
 
+test("data-flow cards expose process and store shapes", async () => {
+  const raw = JSON.parse(
+    await readFile(
+      fileURLToPath(new URL("../../../tests/fixtures/documents/data-flow-ingest.json", import.meta.url)),
+      "utf8",
+    ),
+  ) as unknown;
+  const scene = buildScene(raw);
+  assert.equal(scene.ok, true);
+  if (!scene.ok) return;
+  const flow = sceneToFlow(scene.scene);
+  assert.equal(flow.nodes.find((node) => node.id === "capture")?.data.shape, "process");
+  assert.equal(flow.nodes.find((node) => node.id === "records")?.data.shape, "store");
+  assert.equal(flow.nodes.find((node) => node.id === "user")?.data.shape, "entity");
+});
+
 test("workflow groups expose lane data in the editor flow", async () => {
   const raw = JSON.parse(
     await readFile(
@@ -168,4 +184,6 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /data-kind-fill="gateway"/);
   assert.match(css, /@media \(max-width: 767px\) \{[\s\S]*\.kind-legend \{[^}]*bottom: 104px/);
   assert.match(css, /\.group-frame\.is-lane/);
+  assert.match(css, /data-shape="process"/);
+  assert.match(css, /data-shape="store"/);
 });

@@ -692,6 +692,10 @@ input {
 .node-card[data-kind-fill="queue"] { background: var(--kind-queue); }
 .node-card[data-kind-fill="external"] { background: var(--kind-external); }
 
+.node-card[data-shape="process"] { border-radius: 999px; }
+.node-card[data-shape="store"] { border-radius: 50% / 20%; }
+.node-card[data-shape="entity"] { border-radius: 2px; }
+
 .kind-legend {
   position: absolute;
   left: 16px;

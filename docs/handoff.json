@@ -1,17 +1,14 @@
 {
   "schemaVersion": 1,
-  "taskId": null,
+  "taskId": "F059",
   "plan": "docs/PLAN.md",
   "git": {
     "available": true,
-    "branch": "chore/stamp-f058",
-    "revision": "934d6465090292cab4bc81ff8b787195b58a429e",
+    "branch": "feat/data-flow-shapes",
+    "revision": "800e1314b5fdc4dfe7f15628ed2628fc78980e16",
     "dirty": true
   },
-  "evidenceRefs": [
-    "https://github.com/ensp1re/mapgrain/pull/81",
-    "https://github.com/ensp1re/mapgrain/actions/runs/34418999279"
-  ],
+  "evidenceRefs": [],
   "decisions": [
     "Published npm CLI is npx mapgrain@0.2.1. Source CLI is 0.2.1. Historical npx mapgrain@0.1.0 remains architecture/workflow only. npm 0.2.0 stays published and must not be overwritten.",
     "JPEG/WebP/clipboard and story WebM are editor raster/motion paths. CLI raster is PNG; CLI video is FFmpeg MP4.",
@@ -28,6 +25,6 @@
     "Inventing AI output or user-study evidence."
   ],
   "blockers": [],
-  "nextAction": "Queue F059: data-flow process versus store shapes. Do not start until asked.",
-  "updatedAt": "2026-09-09T23:56:59.000Z"
+  "nextAction": "Implement F059 data-flow process versus store shapes.",
+  "updatedAt": "2026-09-10T10:50:34.812Z"
 }

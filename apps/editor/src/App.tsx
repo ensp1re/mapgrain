@@ -236,6 +236,7 @@ function toFlow(
             marker: node.data.marker,
             stateTone: node.data.stateTone,
             kindFill: node.data.kindFill,
+            shape: node.data.shape,
             editing: editingId === node.id,
             onStartEdit: () => onStartEdit(node.id),
             onCommitLabel: (label: string) => onCommitLabel(node.id, "component", label),

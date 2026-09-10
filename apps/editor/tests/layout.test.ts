@@ -78,6 +78,7 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
   assert.match(library, /Search kinds/);
   assert.doesNotMatch(library, /Add service/);
   assert.match(node, /from "\.\/NodeCard\.tsx"/);
+  assert.match(node, /dataShape=\{node\.shape\}/);
   assert.match(node, /from "\.\/KindLabel\.tsx"/);
   assert.match(app, /KindLegend/);
   assert.match(group, /data-lane/);
