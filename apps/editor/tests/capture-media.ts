@@ -56,7 +56,7 @@ async function reachEditor(page: Page): Promise<void> {
     () =>
       [...document.querySelectorAll("button")].some((button) => {
         const label = button.textContent?.trim();
-        return label === "Arrange" || label === "New architecture";
+        return (label ?? "").includes("Arrange") || (label ?? "").includes("New architecture");
       }),
     undefined,
     { timeout: 15_000 },

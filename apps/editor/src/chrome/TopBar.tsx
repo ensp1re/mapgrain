@@ -167,7 +167,7 @@ export function TopBar({
         type="file"
         accept="application/json,.json"
         hidden
-        aria-hidden="true"
+        aria-label="Open file"
         tabIndex={-1}
         onChange={(event) => {
           const file = event.target.files?.[0];

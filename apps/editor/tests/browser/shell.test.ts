@@ -5,6 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
+import { waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -67,15 +68,7 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     await page.goto(server.url, { waitUntil: "domcontentloaded" });
     const arrange = page.getByRole("button", { name: "Arrange" });
     const start = page.getByRole("button", { name: "New architecture" });
-    await page.waitForFunction(
-      () =>
-        [...document.querySelectorAll("button")].some((button) => {
-          const label = button.textContent?.trim();
-          return label === "Arrange" || label === "New architecture";
-        }),
-      undefined,
-      { timeout: 15_000 },
-    );
+    await waitStartOrEditor(page);
     if (await start.isVisible().catch(() => false)) {
       await start.click();
       await arrange.waitFor({ timeout: 10_000 });
@@ -84,24 +77,25 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     assert.ok(overflow <= 1, `${viewport.width}x${viewport.height} overflow ${overflow}`);
     await page.getByRole("button", { name: "Add", exact: true }).waitFor();
     assert.equal(await page.getByRole("button", { name: "Add service" }).count(), 0);
-    const arrangeBox = await page.getByRole("button", { name: "Arrange" }).boundingBox();
-    assert.ok(arrangeBox && arrangeBox.width > 8 && arrangeBox.height > 8, `${viewport.width} Arrange not hittable`);
     const more = page.getByRole("button", { name: "More" });
     if (viewport.width <= 390) {
       await more.click();
-      const undo = page.getByRole("button", { name: "Undo" }).first();
+      const arrangeItem = page.getByRole("menuitem", { name: "Arrange" });
+      await arrangeItem.waitFor();
+      const arrangeItemBox = await arrangeItem.boundingBox();
+      assert.ok(arrangeItemBox && arrangeItemBox.width > 8 && arrangeItemBox.height > 8, `${viewport.width} Arrange not hittable`);
+      const undo = page.getByRole("menuitem", { name: "Undo" }).first();
       await undo.waitFor();
       const undoBox = await undo.boundingBox();
       assert.ok(undoBox && undoBox.height > 8, `${viewport.width} More menu clipped`);
-      await page.getByRole("button", { name: "Help" }).waitFor();
+      await page.getByRole("menuitem", { name: "Help" }).waitFor();
       await page.keyboard.press("Escape");
-    }
-    if (viewport.width <= 390) {
-      await page.getByRole("group", { name: "Viewport" }).waitFor();
-      assert.equal(await page.getByRole("button", { name: "Fit all" }).isVisible(), false);
     } else {
-      await page.getByRole("button", { name: "Fit all" }).waitFor();
+      const arrangeBox = await page.getByRole("button", { name: "Arrange" }).boundingBox();
+      assert.ok(arrangeBox && arrangeBox.width > 8 && arrangeBox.height > 8, `${viewport.width} Arrange not hittable`);
     }
+    await page.getByRole("group", { name: "Viewport" }).waitFor();
+    await page.getByRole("button", { name: /Fit all/ }).waitFor();
     await context.close();
   }
 });

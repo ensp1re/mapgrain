@@ -5,6 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
+import { goNew, waitStartOrEditor } from "./helpers.ts";
 import { DIAGRAM_FONT_SIZE, READING_LABEL_SIZE } from "../../src/constants/diagram.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
@@ -55,17 +56,9 @@ test("showcase example keeps readable labels after default fit and shows zoom", 
   });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(
-    () =>
-      [...document.querySelectorAll("button")].some((button) => {
-        const label = button.textContent?.trim();
-        return label === "Arrange" || label === "New architecture";
-      }),
-    undefined,
-    { timeout: 15_000 },
-  );
+  await waitStartOrEditor(page);
   if (await page.getByRole("button", { name: "Arrange" }).isVisible().catch(() => false)) {
-    await page.getByRole("button", { name: "New", exact: true }).click();
+    await goNew(page);
   }
   await page.getByRole("button", { name: /Feedback loop/ }).click();
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
