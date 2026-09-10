@@ -13,3 +13,16 @@ export function directionLabel(direction: DiagramEdge["direction"]): string {
 export function relationCaption(document: DiagramDocument, edge: DiagramEdge): string {
   return `${nodeLabel(document, edge.source.nodeId)} ${directionLabel(edge.direction)} ${nodeLabel(document, edge.target.nodeId)}`;
 }
+
+export function relationSummary(
+  document: DiagramDocument,
+  edge: DiagramEdge,
+  fromId: string,
+): string {
+  const incoming = edge.target.nodeId === fromId;
+  const otherId = incoming ? edge.source.nodeId : edge.target.nodeId;
+  const meaning = edge.label?.trim() || edge.type;
+  return incoming
+    ? `From ${nodeLabel(document, otherId)} · ${meaning}`
+    : `To ${nodeLabel(document, otherId)} · ${meaning}`;
+}

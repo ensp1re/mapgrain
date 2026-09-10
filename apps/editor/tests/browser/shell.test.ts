@@ -66,12 +66,12 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     const page = await context.newPage();
     await page.goto(server.url, { waitUntil: "domcontentloaded" });
     const arrange = page.getByRole("button", { name: "Arrange" });
-    const start = page.getByRole("button", { name: "New blank diagram" });
+    const start = page.getByRole("button", { name: "New architecture" });
     await page.waitForFunction(
       () =>
         [...document.querySelectorAll("button")].some((button) => {
           const label = button.textContent?.trim();
-          return label === "Arrange" || label === "New blank diagram";
+          return label === "Arrange" || label === "New architecture";
         }),
       undefined,
       { timeout: 15_000 },

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { KindIcon } from "../diagram/KindIcon.tsx";
 import { shortcutLabel } from "../keyboard/shortcutLabel.ts";
-import { kindShort } from "../constants/kind.ts";
+
 import { matchesQuery } from "../outline/search.ts";
 import { outlineTree } from "../outline/tree.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
@@ -42,11 +42,15 @@ export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) 
         <kbd>{shortcutLabel("⌘K")}</kbd>
       </label>
       {rows.map((entry) => (
-        <div key={entry.node.id} className="outline-item" style={{ paddingLeft: 8 + entry.depth * 12 }}>
+        <div
+          key={entry.node.id}
+          className="outline-item"
+          style={{ paddingLeft: 8 + entry.depth * 16 }}
+        >
           {entry.node.type === "group" ? (
             <button
               type="button"
-              className="text-btn"
+              className="outline-chevron"
               aria-label={collapsed.has(entry.node.id) ? "Expand group" : "Collapse group"}
               onClick={() => {
                 const next = new Set(collapsed);
@@ -55,9 +59,11 @@ export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) 
                 setCollapsed(next);
               }}
             >
-              {collapsed.has(entry.node.id) ? "+" : "−"}
+              {collapsed.has(entry.node.id) ? "▸" : "▾"}
             </button>
-          ) : null}
+          ) : (
+            <span className="outline-chevron" />
+          )}
           <button
             type="button"
             className={[
@@ -67,15 +73,13 @@ export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) 
             ]
               .filter(Boolean)
               .join(" ")}
+            title={entry.node.data.label}
             onClick={(event) =>
               onSelect(entry.node.id, event.shiftKey || event.metaKey || event.ctrlKey)
             }
           >
             {entry.node.data.kind ? <KindIcon kind={entry.node.data.kind} /> : null}
-            <span>{entry.node.data.label}</span>
-            {entry.node.data.kind ? (
-              <span className="kind">{kindShort(entry.node.data.kind)}</span>
-            ) : null}
+            <span className="outline-label">{entry.node.data.label}</span>
           </button>
         </div>
       ))}

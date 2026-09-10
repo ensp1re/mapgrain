@@ -61,7 +61,7 @@ test("production build opens a blank diagram and every example without page erro
   const editorReady = () => page.getByRole("button", { name: "Arrange" });
 
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
-  await page.getByRole("button", { name: "New blank diagram" }).click();
+  await page.getByRole("button", { name: "New architecture" }).click();
   await editorReady().waitFor({ timeout: 10_000 });
   assert.equal(errors.join("\n"), "", "blank");
 
@@ -81,7 +81,7 @@ test("production build opens a blank diagram and every example without page erro
     await page.getByRole("button", { name: "New", exact: true }).click();
   }
 
-  await page.getByRole("button", { name: "New blank diagram" }).click();
+  await page.getByRole("button", { name: "New architecture" }).click();
   await editorReady().waitFor();
   await page.getByRole("button", { name: "Add", exact: true }).click();
   await page.getByRole("option", { name: "service" }).click();

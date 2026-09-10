@@ -174,7 +174,7 @@ test("specimen CSS covers both themes, a 390px layout, and reduced motion", asyn
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /--topbar-h: 52px/);
   assert.match(css, /\.react-flow__node-group/);
-  assert.match(css, /\.topbar-wide/);
+  assert.match(css, /\.brand-menu/);
   assert.match(css, /\.overlay-panel/);
   assert.match(css, /\.topbar \{[\s\S]*overflow: visible/);
   assert.match(css, /\.node-kind \{[^}]*overflow: visible/);

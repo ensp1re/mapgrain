@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   primary?: boolean;
@@ -6,13 +6,16 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-export function Button({ primary, ghost, className, type = "button", children, ...props }: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { primary, ghost, className, type = "button", children, ...props },
+  ref,
+) {
   const classes = ["text-btn", primary ? "primary" : "", ghost ? "ghost" : "", className ?? ""]
     .filter(Boolean)
     .join(" ");
   return (
-    <button type={type} className={classes} {...props}>
+    <button ref={ref} type={type} className={classes} {...props}>
       {children}
     </button>
   );
-}
+});

@@ -267,6 +267,7 @@ function Specimen() {
   const [arrange, setArrange] = useState<ArrangeState>({ status: "idle" });
   const [booted, setBooted] = useState(false);
   const [surface, setSurface] = useState<WorkspaceSurface>("start");
+  const [hasEditorSession, setHasEditorSession] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
   const [recents, setRecents] = useState<RecentDocument[]>([]);
   const [saveState, setSaveState] = useState<SaveState>(SAVE_STATE.SAVED);
@@ -308,6 +309,7 @@ function Specimen() {
         if (stored) {
           setHistory(createHistory(stored));
           setSurface("editor");
+          setHasEditorSession(true);
         }
         skipNextSave.current = true;
         setBooted(true);
@@ -393,6 +395,7 @@ function Specimen() {
       edgeIds: [],
     });
     setSurface("editor");
+    setHasEditorSession(true);
     setImportError(null);
   }, []);
 
@@ -1041,10 +1044,15 @@ function Specimen() {
 
   if (surface === "start") {
     return (
-      <div className="app">
+      <div className="app is-start">
         <StartSurface
           importError={importError}
           recents={recents}
+          canReturn={hasEditorSession && Boolean(documentModel)}
+          onBack={() => {
+            setImportError(null);
+            setSurface("editor");
+          }}
           onNewBlank={(kind?: DocumentKind) => {
             flushThen(() => {
               const document = blankDocument(kind);
@@ -1162,6 +1170,16 @@ function Specimen() {
         onUndo={() => runCommand(COMMAND_ID.UNDO)}
         onRedo={() => runCommand(COMMAND_ID.REDO)}
         onNew={() => runCommand(COMMAND_ID.NEW)}
+        onOpenFile={(file) => {
+          void file.text().then((text) => {
+            const result = importDocumentText(text);
+            if ("error" in result) {
+              setSaveError(result.error);
+              return;
+            }
+            openSnapshot(result.snapshot);
+          });
+        }}
         onArrange={() => runCommand(COMMAND_ID.ARRANGE)}
         onPresent={() => runCommand(COMMAND_ID.PRESENT)}
         onExport={() => setExportOpen(true)}

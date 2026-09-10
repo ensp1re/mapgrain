@@ -105,12 +105,17 @@ input {
   overflow: hidden;
 }
 
+.app.is-start {
+  grid-template-rows: 1fr;
+  overflow: auto;
+}
+
 .topbar {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
-  overflow: visible;
+  overflow: hidden;
   padding: 0 16px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-raised);
@@ -122,33 +127,6 @@ input {
   gap: 4px;
   min-width: 0;
   flex-shrink: 0;
-}
-
-.topbar-secondary {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.topbar-secondary.is-collapsed {
-  display: none;
-}
-
-.topbar-more {
-  display: none;
-}
-
-.topbar-more.is-needed {
-  display: inline-flex;
-}
-
-.topbar-measure {
-  position: absolute;
-  visibility: hidden;
-  pointer-events: none;
-  height: 0;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .overlay-layer {
@@ -164,8 +142,7 @@ input {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  min-width: 160px;
-  max-height: min(70vh, 420px);
+  min-width: 180px;
   overflow: auto;
   padding: 6px;
   border: 1px solid var(--border);
@@ -174,10 +151,98 @@ input {
   box-shadow: var(--shadow);
 }
 
-.brand {
+.menu-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-item {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 32px;
+  margin: 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible,
+.menu-item.is-active {
+  background: var(--surface-hover);
+}
+
+.menu-item[aria-selected="true"] {
+  background: var(--accent-soft);
+}
+
+.menu-item:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.menu-item.is-danger {
+  color: var(--danger);
+}
+
+.menu-icon,
+.menu-extra {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.menu-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-sep {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--border);
+}
+
+.menu-note {
+  margin: 4px 8px 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.brand,
+.brand-menu {
+  flex-shrink: 0;
   font-size: 14px;
   font-weight: 650;
   letter-spacing: -0.03em;
+}
+
+.brand-menu {
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.brand-menu:hover,
+.brand-menu:focus-visible {
+  background: var(--surface-hover);
+}
+
+.title-field {
+  flex: 1 1 140px;
+  min-width: 0;
 }
 
 .doc-title,
@@ -188,7 +253,8 @@ input {
 }
 
 .title-field input {
-  width: min(280px, 36vw);
+  width: 100%;
+  min-width: 0;
   height: 28px;
   border-top: 0;
   border-right: 0;
@@ -198,6 +264,10 @@ input {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.title-field input:focus {
+  text-overflow: clip;
 }
 
 .text-btn:disabled {
@@ -247,9 +317,31 @@ input {
 
 .spacer { flex: 1; }
 
-.save-state {
+.save-slot {
+  flex: 0 0 64px;
+  min-width: 64px;
+}
+
+.save-state,
+.save-failed {
+  display: block;
+  width: 100%;
+  overflow: hidden;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.save-failed {
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+  text-align: left;
+  cursor: pointer;
 }
 
 .save-error {
@@ -293,6 +385,19 @@ input {
   background: var(--accent);
   border-color: var(--accent);
   color: #f8f8ff;
+}
+
+.text-btn.is-danger,
+.menu-item.is-danger {
+  color: var(--danger);
+}
+
+.text-btn,
+.menu-item,
+.brand-menu,
+.save-failed,
+.ui-select-trigger {
+  transition: background-color 120ms ease, color 120ms ease, opacity 120ms ease;
 }
 
 .icon-btn:focus-visible,
@@ -370,10 +475,11 @@ input {
 
 .outline-row {
   display: flex;
+  min-width: 0;
   width: 100%;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 6px 8px;
   border: 0;
   background: transparent;
   text-align: left;
@@ -383,12 +489,21 @@ input {
 .outline-row:hover { background: var(--surface-hover); }
 .outline-row.is-selected { background: var(--accent-soft); }
 .outline-row.is-group { color: var(--muted); }
-.outline-row .kind {
-  margin-left: auto;
-  flex-shrink: 0;
-  font-size: 12px;
-  letter-spacing: 0.04em;
+.outline-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.outline-chevron {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--muted);
+  cursor: pointer;
 }
 
 .canvas {
@@ -701,19 +816,27 @@ input {
   left: 16px;
   bottom: 72px;
   z-index: 4;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 14px;
   margin: 0;
   padding: 8px 10px;
   max-width: min(420px, calc(100% - 32px));
-  list-style: none;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg-raised);
   color: var(--muted);
   font-size: 11px;
-  pointer-events: none;
+}
+
+.kind-legend summary {
+  cursor: pointer;
+}
+
+.kind-legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .kind-legend li {
@@ -922,16 +1045,19 @@ input {
   color: var(--muted);
 }
 
-.pin-field {
+.pin-field,
+.check-row {
   display: flex;
   align-items: center;
   gap: var(--space-2);
 }
 
-.pin-field input[type="checkbox"] {
+.pin-field input[type="checkbox"],
+.check-row input[type="checkbox"] {
   width: 16px;
   height: 16px;
   margin: 0;
+  accent-color: var(--accent);
 }
 
 .arrange-bar {
@@ -1061,6 +1187,48 @@ input {
   background: var(--surface) !important;
   border-bottom: 1px solid var(--border) !important;
   fill: var(--text) !important;
+}
+
+.start-page {
+  min-height: 100%;
+}
+
+.start-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+.start-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.start-inner h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+}
+
+.start-lead,
+.start-inner h2 {
+  margin: 0 0 12px;
+}
+
+.start-inner h2 {
+  margin-top: 28px;
+  font-size: 15px;
+}
+
+.start-open {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
 }
 
 .start-surface {
@@ -1224,10 +1392,60 @@ input {
 .outline-item {
   display: flex;
   align-items: center;
+  min-width: 0;
+  padding-right: 8px;
+}
+
+.recent-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recent-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+}
+
+.recent-row + .recent-row,
+.recent-rows li + li {
+  margin-top: 8px;
+}
+
+.recent-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recent-action {
+  color: var(--accent);
+}
+
+.example-kind {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: capitalize;
 }
 
 .agent-path {
   margin: 20px 0;
+}
+
+.agent-path summary {
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .agent-example {
@@ -1266,8 +1484,9 @@ input {
 
 .example-cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 10px;
+  align-items: stretch;
 }
 
 .example-card {
@@ -1490,29 +1709,16 @@ input {
     font-size: 12px;
   }
 
-  .title-field input {
-    width: 88px;
-  }
-
-  .save-state {
-    max-width: 72px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .topbar-wide,
-  .topbar-secondary {
-    display: none;
-  }
-
   .viewport-bar .fit-label {
     display: none;
   }
 
-  .topbar-more,
-  .topbar-more.is-needed {
-    display: inline-flex;
+  .kind-legend ul {
+    display: none;
+  }
+
+  .kind-legend[open] ul {
+    display: flex;
   }
 
   .export-dialog {

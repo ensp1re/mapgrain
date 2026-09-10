@@ -11,7 +11,9 @@ import {
   type NodeMarker,
   type Operation,
 } from "@mapgrain/document";
-import { directionLabel, relationCaption } from "../export/labels.ts";
+import { kindTitle } from "../constants/kind.ts";
+import { KindIcon } from "../diagram/KindIcon.tsx";
+import { directionLabel, nodeLabel, relationSummary } from "../export/labels.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
 import { Pane } from "../ui/Pane.tsx";
 import { Select } from "../ui/Select.tsx";
@@ -54,13 +56,15 @@ export function Inspector({
       <Pane className="inspector" title="Connection" onClose={onClose}>
         <dl>
           <dt>Relation</dt>
-          <dd>{relationCaption(document, edge)}</dd>
+          <dd>
+            {nodeLabel(document, edge.source.nodeId)} → {nodeLabel(document, edge.target.nodeId)}
+          </dd>
           <dt>Meaning</dt>
           <dd>
             <Select
               label="Relation type"
               value={edge.type}
-              options={edgeTypes.map((value) => ({ value, label: value }))}
+              options={edgeTypes.map((value) => ({ value, label: kindTitle(value) }))}
               onChange={(value) =>
                 onOperate({
                   kind: OPERATION_KIND.SET_EDGE_TYPE,
@@ -163,7 +167,7 @@ export function Inspector({
         </dl>
         {error ? <p className="edit-error">{error}</p> : null}
         <div className="inspector-actions">
-          <button type="button" className="text-btn" onClick={onDelete}>
+          <button type="button" className="text-btn is-danger" onClick={onDelete}>
             Delete
           </button>
         </div>
@@ -202,7 +206,11 @@ export function Inspector({
             <Select
               label="Component type"
               value={source.kind}
-              options={kinds.map((value) => ({ value, label: value }))}
+              options={kinds.map((value) => ({
+                value,
+                label: kindTitle(value),
+                icon: <KindIcon kind={value} />,
+              }))}
               onChange={(value) =>
                 onOperate({
                   kind: OPERATION_KIND.SET_NODE_KIND,
@@ -217,12 +225,12 @@ export function Inspector({
         </dd>
         {source ? (
           <>
-            <dt>Keep position</dt>
+            <dt className="visually-hidden">Keep position</dt>
             <dd>
-              <label className="pin-field">
+              <label className="check-row">
                 <input
                   type="checkbox"
-                  aria-label="Keep position"
+                  aria-label="Keep position when arranging"
                   checked={document.layoutHints.pinnedNodeIds.includes(source.id)}
                   onChange={(event) =>
                     onOperate({
@@ -232,7 +240,7 @@ export function Inspector({
                     })
                   }
                 />
-                Keep position on arrange
+                Keep position when arranging
               </label>
             </dd>
             {document.kind !== DOCUMENT_KIND.SEQUENCE ? (
@@ -297,8 +305,6 @@ export function Inspector({
               {relations.map((item) => {
                 const incoming = item.target.nodeId === node.id;
                 const otherId = incoming ? item.source.nodeId : item.target.nodeId;
-                const otherLabel =
-                  document.nodes.find((entry) => entry.id === otherId)?.label ?? otherId;
                 return (
                   <li key={item.id}>
                     <button
@@ -306,10 +312,7 @@ export function Inspector({
                       className="relation-row"
                       onClick={() => onFocusNode?.(otherId)}
                     >
-                      <span>{incoming ? "←" : "→"} {otherLabel}</span>
-                      <small>
-                        {relationCaption(document, item)} · {incoming ? "Incoming" : "Outgoing"}
-                      </small>
+                      {relationSummary(document, item, node.id)}
                     </button>
                   </li>
                 );
@@ -342,7 +345,7 @@ export function Inspector({
           </button>
         ) : null}
         {node.type === "component" ? (
-          <button type="button" className="text-btn" onClick={onDelete}>
+          <button type="button" className="text-btn is-danger" onClick={onDelete}>
             Delete
           </button>
         ) : null}

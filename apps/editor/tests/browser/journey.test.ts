@@ -65,7 +65,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
     () =>
       [...document.querySelectorAll("button")].some((button) => {
         const label = button.textContent?.trim();
-        return label === "Arrange" || label === "New blank diagram";
+        return label === "Arrange" || label === "New architecture";
       }),
     undefined,
     { timeout: 15_000 },
@@ -73,7 +73,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   if (await page.getByRole("button", { name: "Arrange" }).isVisible().catch(() => false)) {
     await page.getByRole("button", { name: "New", exact: true }).click();
   }
-  await page.getByRole("button", { name: "New blank diagram" }).click();
+  await page.getByRole("button", { name: "New architecture" }).click();
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
 
   await addKind(page, "service");

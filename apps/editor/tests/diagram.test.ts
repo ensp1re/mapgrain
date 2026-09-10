@@ -49,11 +49,14 @@ test("more menu and select lists portal outside clipped ancestors", async () => 
 });
 
 test("command, export, connect, and add surfaces trap focus", async () => {
-  const files = ["CommandMenu.tsx", "HelpOverlay.tsx", "ExportDialog.tsx", "ConnectDialog.tsx", "AddBar.tsx"];
+  const files = ["CommandMenu.tsx", "HelpOverlay.tsx", "ExportDialog.tsx", "ConnectDialog.tsx"];
   for (const name of files) {
     const source = await readFile(fileURLToPath(new URL(`../src/chrome/${name}`, import.meta.url)), "utf8");
     assert.match(source, /useFocusTrap/, name);
   }
+  const addBar = await readFile(fileURLToPath(new URL("../src/chrome/AddBar.tsx", import.meta.url)), "utf8");
+  assert.match(addBar, /pattern="menu"/);
+  assert.doesNotMatch(addBar, /useFocusTrap/);
 });
 
 test("editor nodes activate on Enter and Space", async () => {

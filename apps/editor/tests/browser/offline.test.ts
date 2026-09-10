@@ -74,13 +74,13 @@ test("production bundle stays usable after disconnect, arrange, and reload", asy
     { timeout: 20_000 },
   );
   const arrange = page.getByRole("button", { name: "Arrange" });
-  const start = page.getByRole("button", { name: "New blank diagram" });
+  const start = page.getByRole("button", { name: "New architecture" });
   async function reachEditor(): Promise<void> {
     await page.waitForFunction(
       () =>
         [...document.querySelectorAll("button")].some((button) => {
           const label = button.textContent?.trim();
-          return label === "Arrange" || label === "New blank diagram";
+          return label === "Arrange" || label === "New architecture";
         }),
       undefined,
       { timeout: 15_000 },
