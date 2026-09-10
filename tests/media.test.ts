@@ -36,7 +36,7 @@ test("capture manifest records commit, fixture, viewport, and theme", async () =
   };
   assert.match(manifest.commit ?? "", /^[0-9a-f]{40}$/);
   assert.equal(manifest.package?.name, "mapgrain");
-  assert.equal(manifest.package?.version, "0.2.1");
+  assert.equal(manifest.package?.version, "0.2.2");
   assert.equal(manifest.fixture, "skills/mapgrain/examples/ten-node.json");
   assert.match(manifest.buildCommand ?? "", /@mapgrain\/editor build/);
   const files = new Set((manifest.artifacts ?? []).map((item) => item.file));
@@ -60,7 +60,7 @@ test("README links production media, the feature table, and getting-started", as
     "docs/FEATURES.md",
     "docs/getting-started.md",
     "docs/agents.md",
-    "npx mapgrain@0.2.1",
+    "npx mapgrain@0.2.2",
   ]) {
     assert.match(readme, new RegExp(needle.replaceAll(".", "\\.")));
   }
