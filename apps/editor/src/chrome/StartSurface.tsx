@@ -82,7 +82,7 @@ export function StartSurface({
               <button
                 key={mode.kind}
                 type="button"
-                className="example-card"
+                className="example-card is-create"
                 onClick={() => onNewBlank(mode.kind)}
               >
                 <span className="example-kind">

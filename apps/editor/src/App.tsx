@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import {
   Background,
   MarkerType,
@@ -10,6 +11,7 @@ import {
   type Edge,
   type Node,
   type NodeChange,
+  type ReactFlowInstance,
   type OnSelectionChangeParams,
 } from "@xyflow/react";
 import {
@@ -42,6 +44,7 @@ import {
   presentKinds,
   presentationCssVars,
 } from "@mapgrain/scene";
+import type { Point } from "@mapgrain/scene";
 import { renderView } from "@mapgrain/viewer";
 import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json" with { type: "json" };
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
@@ -68,6 +71,7 @@ import { ALIGN_KIND } from "./constants/align.ts";
 import { COMMAND_ID, type CommandId } from "./constants/commands.ts";
 import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
 import { AddBar } from "./chrome/AddBar.tsx";
+import { CanvasEmpty } from "./chrome/CanvasEmpty.tsx";
 import { blankDocument } from "./create/blank.ts";
 import { addableKinds, makeNode } from "./create/nodes.ts";
 import { AUTOSAVE_MS, PERSIST_ERROR_CODE, SAVE_STATE } from "./constants/persist.ts";
@@ -104,6 +108,9 @@ import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
 import { EXAMPLES } from "./create/examples.ts";
 import { MODE_CHOICES } from "./create/modes.ts";
 import { importDocumentText } from "./create/importDocument.ts";
+import { freeSpotNear, groupForNewNode } from "./edit/placement.ts";
+import { kindTitle } from "./constants/kind.ts";
+import { editMessage } from "./edit/editMessage.ts";
 import { LoadFailure } from "./chrome/LoadFailure.tsx";
 import { backupBytes, snapshotFromStored } from "./persist/codec.ts";
 import { indexedDbStore } from "./persist/indexeddb.ts";
@@ -125,6 +132,7 @@ import type { ComponentNodeData, FlowNodeDraft, GroupNodeData } from "./types/fl
 const nodeTypes = { component: ComponentNode, group: GroupNode };
 const edgeTypes = { relation: RelationEdge };
 const emptySelection: EditorSelection = { nodeIds: [], edgeIds: [] };
+const PRO_OPTIONS = { hideAttribution: true } as const;
 
 function defaultStore(): PersistStore {
   const studio = readStudioConfig();
@@ -262,7 +270,7 @@ function toFlow(
 }
 
 function Editor() {
-  const { fitView, getNodes } = useReactFlow();
+  const { fitView, getNodes, screenToFlowPosition } = useReactFlow();
   const initial = useMemo(() => loadSnapshot(), []);
   const [theme, setTheme] = useState<Theme>(() =>
     globalThis.matchMedia?.("(prefers-color-scheme: light)").matches ? THEME.LIGHT : THEME.DARK,
@@ -549,7 +557,7 @@ function Editor() {
     if (isNoOp(current.document, operation)) return true;
     const result = applyOperation(current.document, operation);
     if (!result.ok) {
-      setEditError(result.errors[0]?.message ?? "Invalid edit");
+      setEditError(editMessage(result.errors[0]?.message ?? "Invalid edit"));
       return false;
     }
     setEditError(null);
@@ -585,28 +593,37 @@ function Editor() {
     return true;
   }, [presenting]);
 
+  const viewportCenter = useCallback((): Point => {
+    const canvas = globalThis.document?.querySelector(".canvas");
+    const box = canvas?.getBoundingClientRect();
+    if (!box || box.width === 0) return { x: 0, y: 0 };
+    return screenToFlowPosition({ x: box.left + box.width / 2, y: box.top + box.height / 2 });
+  }, [screenToFlowPosition]);
+
   const addNode = useCallback(
     (kind: NodeKind) => {
       const current = historyRef.current.present;
       const id = nextPrefixedId("n", usedIds(current.document));
-      const node = makeNode(id, kind, kind);
+      const groupId = groupForNewNode(current.document, selection.nodeIds[0]);
+      const node = { ...makeNode(id, kind, kindTitle(kind)), groupId };
       const positions = {
         ...current.positions,
-        [id]: { x: 40 + current.document.nodes.length * 220, y: 80 },
+        [id]: freeSpotNear(current.document, current.positions, viewportCenter()),
       };
-      applyOp({ kind: OPERATION_KIND.ADD_NODE, node }, positions);
+      if (!applyOp({ kind: OPERATION_KIND.ADD_NODE, node }, positions)) return;
+      setSelection({ nodeIds: [id], edgeIds: [] });
+      setEditingId(id);
     },
-    [applyOp],
+    [applyOp, selection.nodeIds, viewportCenter],
   );
 
   const addGroup = useCallback(() => {
     const current = historyRef.current.present;
     const id = nextPrefixedId("g", usedIds(current.document));
-    applyOp({
-      kind: OPERATION_KIND.ADD_GROUP,
-      id,
-      label: current.document.kind === DOCUMENT_KIND.WORKFLOW ? "Lane" : "Group",
-    });
+    const label = current.document.kind === DOCUMENT_KIND.WORKFLOW ? "Lane" : "Group";
+    if (!applyOp({ kind: OPERATION_KIND.ADD_GROUP, id, label })) return;
+    setSelection({ nodeIds: [id], edgeIds: [] });
+    setEditingId(id);
   }, [applyOp]);
 
   const connectSelected = useCallback(() => {
@@ -671,6 +688,32 @@ function Editor() {
       ),
     );
   }, [derivedNodes, dragging]);
+
+  const onPaneClick = useCallback((event: ReactMouseEvent) => {
+    const target = event.target;
+    if (target instanceof Element && target.closest(".node-card, .group-frame, .label-input")) return;
+    if (!presenting) setSelection(emptySelection);
+    setEditingId(null);
+  }, [presenting]);
+
+  const onNodeDoubleClick = useCallback((_event: ReactMouseEvent, node: Node) => {
+    if (!presenting) setEditingId(node.id);
+  }, [presenting]);
+
+  const onNodeMouseEnter = useCallback((event: ReactMouseEvent, node: Node) => {
+    const box = (event.currentTarget as HTMLElement).closest(".canvas")?.getBoundingClientRect();
+    setTooltip({
+      x: event.clientX - (box?.left ?? 0) + 12,
+      y: event.clientY - (box?.top ?? 0) + 12,
+      text: String(node.data.label ?? node.id),
+    });
+  }, []);
+
+  const onNodeMouseLeave = useCallback(() => setTooltip(null), []);
+
+  const onFlowInit = useCallback((instance: ReactFlowInstance) => {
+    void instance.fitView(fitAllOptions());
+  }, []);
 
   const onSelectionChange = useCallback(({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
     const next = selectionFromFlow(selectedNodes, selectedEdges);
@@ -737,7 +780,7 @@ function Editor() {
       if (!nextDoc.nodes.some((node) => node.id === nodeId)) continue;
       const result = applyOperation(nextDoc, { kind: OPERATION_KIND.DELETE_NODE, nodeId });
       if (!result.ok) {
-        setEditError(result.errors[0]?.message ?? "Invalid edit");
+        setEditError(editMessage(result.errors[0]?.message ?? "Invalid edit"));
         return;
       }
       nextDoc = result.document;
@@ -747,7 +790,7 @@ function Editor() {
       if (!nextDoc.edges.some((edge) => edge.id === edgeId)) continue;
       const result = applyOperation(nextDoc, { kind: OPERATION_KIND.DELETE_EDGE, edgeId });
       if (!result.ok) {
-        setEditError(result.errors[0]?.message ?? "Invalid edit");
+        setEditError(editMessage(result.errors[0]?.message ?? "Invalid edit"));
         return;
       }
       nextDoc = result.document;
@@ -775,7 +818,7 @@ function Editor() {
         newId,
       });
       if (!result.ok) {
-        setEditError(result.errors[0]?.message ?? "Invalid edit");
+        setEditError(editMessage(result.errors[0]?.message ?? "Invalid edit"));
         return;
       }
       nextDoc = result.document;
@@ -1076,10 +1119,11 @@ function Editor() {
     return () => window.removeEventListener("keydown", onKey);
   }, [commandsOpen, editingId, exportOpen, helpOpen, narrowPanel, pending, runCommand]);
 
+  // The scene owns geometry and this component owns selection, so only a drag comes back
+  // from React Flow. Feeding its own measurements back in made the two stores chase each
+  // other until React gave up with a maximum update depth error.
   const onNodesChange = useCallback((changes: NodeChange[]) => {
-    const structural = changes.filter((change) => change.type !== "select");
-    if (structural.length === 0) return;
-    setNodes((current) => applyNodeChanges(structural, current));
+    setNodes((current) => applyNodeChanges(changes, current));
   }, []);
 
   const onNodeDragStart = useCallback(() => setDragging(true), []);
@@ -1262,6 +1306,8 @@ function Editor() {
         onHelp={() => runCommand(COMMAND_ID.HELP)}
         onToggleOutline={() => runCommand(COMMAND_ID.TOGGLE_OUTLINE)}
         onToggleDetails={() => runCommand(COMMAND_ID.TOGGLE_INSPECTOR)}
+        onToggleTheme={() => runCommand(COMMAND_ID.TOGGLE_THEME)}
+        theme={theme}
       />
       <div className={workspaceClass}>
         {presenting || !showOutline ? null : (
@@ -1304,32 +1350,16 @@ function Editor() {
             onNodeDragStart={onNodeDragStart}
             onNodeDragStop={onNodeDragStop}
             onSelectionChange={onSelectionChange}
-            onPaneClick={(event) => {
-              const target = event.target;
-              if (target instanceof Element && target.closest(".node-card, .group-frame, .label-input")) {
-                return;
-              }
-              if (!presenting) setSelection(emptySelection);
-              setEditingId(null);
-            }}
-            onNodeDoubleClick={(_event, node) => {
-              if (!presenting) setEditingId(node.id);
-            }}
-            onNodeMouseEnter={(event, node) => {
-              const box = (event.currentTarget as HTMLElement).closest(".canvas")?.getBoundingClientRect();
-              setTooltip({
-                x: event.clientX - (box?.left ?? 0) + 12,
-                y: event.clientY - (box?.top ?? 0) + 12,
-                text: String(node.data.label ?? node.id),
-              });
-            }}
-            onNodeMouseLeave={() => setTooltip(null)}
-            onInit={(instance) => void instance.fitView(fitAllOptions())}
+            onPaneClick={onPaneClick}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onNodeMouseEnter={onNodeMouseEnter}
+            onNodeMouseLeave={onNodeMouseLeave}
+            onInit={onFlowInit}
             deleteKeyCode={null}
             nodeDragThreshold={NODE_DRAG_THRESHOLD}
             minZoom={USER_MIN_ZOOM}
             maxZoom={USER_MAX_ZOOM}
-            proOptions={{ hideAttribution: true }}
+            proOptions={PRO_OPTIONS}
           >
             <Background gap={20} size={1} />
             <LifelineLayer lifelines={flow.lifelines} fragments={flow.fragments} />
@@ -1356,8 +1386,8 @@ function Editor() {
               {selectedNode.data.label} selected · Enter to edit
             </div>
           ) : null}
-          {shellLayout === SHELL_LAYOUT.OVERLAY && !presenting ? (
-            <div className="phone-controls">
+          {shellLayout !== SHELL_LAYOUT.SPLIT && !presenting ? (
+            <div className="pane-controls">
               <button type="button" className="text-btn" onClick={() => runCommand(COMMAND_ID.TOGGLE_OUTLINE)}>
                 Outline
               </button>
@@ -1377,8 +1407,16 @@ function Editor() {
             </div>
           ) : null}
           {editError ? (
-            <div className="edit-error canvas-error" role="status">
-              {editError}
+            <div className="edit-error canvas-error" role="alert">
+              <span>{editError}</span>
+              <button
+                type="button"
+                className="text-btn ghost"
+                aria-label="Dismiss message"
+                onClick={() => setEditError(null)}
+              >
+                ×
+              </button>
             </div>
           ) : null}
           <ExportDialog
@@ -1412,6 +1450,18 @@ function Editor() {
               canConnect={selection.nodeIds.length >= 2}
             />
           )}
+          {documentModel.nodes.length === 0 && !presenting ? (
+            <CanvasEmpty
+              kindLabel={
+                MODE_CHOICES.find((choice) => choice.kind === documentModel.kind)?.title.toLowerCase() ??
+                documentModel.kind
+              }
+              onAdd={() => {
+                const first = addableKinds(documentModel.kind)[0];
+                if (first) addNode(first);
+              }}
+            />
+          ) : null}
           <ArrangeBar state={arrange} onApply={applyArrange} onDiscard={discardArrange} />
           {pending ? (
             <ConnectDialog

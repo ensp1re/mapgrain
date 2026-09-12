@@ -179,7 +179,6 @@ export function Inspector({
             </>
           ) : null}
         </dl>
-        {error ? <p className="edit-error">{error}</p> : null}
         <div className="inspector-actions">
           <button type="button" className="text-btn is-danger" onClick={onDelete}>
             Delete
@@ -213,7 +212,7 @@ export function Inspector({
         <dt>Name</dt>
         <dd>
           <input
-            aria-label={node.type === "group" ? "Group label" : "Node label"}
+            aria-label={node.type === "group" ? "Group name" : "Name"}
             defaultValue={node.data.label}
             key={`${node.id}:${node.data.label}:${error ?? ""}`}
             onBlur={(event) => {
@@ -325,7 +324,10 @@ export function Inspector({
         <dt>Connections</dt>
         <dd>
           {relations.length === 0 ? (
-            <p className="relation-empty">No relations yet.</p>
+            <p className="relation-empty">
+              No connections yet. Drag from a dot on this card to another, or shift-click a second
+              component and use Connect.
+            </p>
           ) : (
             <ul className="relation-list">
               {relations.map((item) => {
@@ -363,7 +365,6 @@ export function Inspector({
           </div>
         </div>
       ) : null}
-      {error ? <p className="edit-error">{error}</p> : null}
       <div className="inspector-actions">
         {source ? (
           <button type="button" className="text-btn" onClick={onDuplicate}>

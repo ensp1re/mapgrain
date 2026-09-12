@@ -98,3 +98,14 @@ test("the header offers no chat entry and keeps Help reachable", async () => {
   assert.match(topbar, /aria-label="More"/);
   assert.match(topbar, /Document menu/);
 });
+
+test("history keeps a bounded past", async () => {
+  const { HISTORY_LIMIT, createHistory, pushHistory, undoHistory } = await import(
+    "../src/history/stack.ts"
+  );
+  let stack = createHistory(0);
+  for (let step = 1; step <= HISTORY_LIMIT + 25; step += 1) stack = pushHistory(stack, step);
+  assert.equal(stack.past.length, HISTORY_LIMIT);
+  assert.equal(stack.present, HISTORY_LIMIT + 25);
+  assert.equal(undoHistory(stack).present, HISTORY_LIMIT + 24);
+});

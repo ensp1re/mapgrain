@@ -42,3 +42,7 @@ export function headerShowsPresent(layout: HeaderLayout): boolean {
 export function headerShowsHistory(layout: HeaderLayout): boolean {
   return layout === HEADER_LAYOUT.FULL;
 }
+
+export function headerShowsNew(layout: HeaderLayout): boolean {
+  return layout === HEADER_LAYOUT.FULL;
+}

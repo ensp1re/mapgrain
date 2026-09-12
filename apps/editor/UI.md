@@ -42,6 +42,15 @@ These rules apply to the editor chrome. They are not product claims.
 - Mode cards create diagrams. Do not offer a second unexplained blank button.
 - Open file is a real button. Recents are rows. Agent install is a disclosure with copyable commands for each documented agent.
 
+## Canvas state
+
+- React Flow's store and this app's state must agree on selection. Pass its node changes
+  straight through; withholding them leaves the two stores rewriting each other.
+- Every prop handed to React Flow keeps a stable identity across renders.
+- A new node lands in view, joins the selection's group, is selected and opens for renaming.
+- An empty canvas names the gestures that are not visible: rename, connect, arrange, commands.
+- One place shows a rejected edit, it says what to do about it, and it can be dismissed.
+
 ## Panels and canvas
 
 - Outline rows: chevron, icon, label. Truncate labels; full text stays on focus and in the inspector.
