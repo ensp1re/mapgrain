@@ -29,9 +29,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789256215326-941d8f",
-        "fingerprintBefore": "c5657fd9626eca75a083b9f9d8494d525d5c4231f7c275e42c88c4f73e966b60",
-        "fingerprintAfter": "c5657fd9626eca75a083b9f9d8494d525d5c4231f7c275e42c88c4f73e966b60",
+        "attemptId": "run-1789256721701-73b7f4",
+        "fingerprintBefore": "407e8504ee36d3c9e8aa2867503868881009d4538b81c7cec8b58067375601c8",
+        "fingerprintAfter": "407e8504ee36d3c9e8aa2867503868881009d4538b81c7cec8b58067375601c8",
         "checks": [
           {
             "id": "unit",
@@ -54,7 +54,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-12T23:38:14.154Z"
+        "verifiedAt": "2026-09-12T23:46:36.012Z"
       },
       "delivery": null
     }
