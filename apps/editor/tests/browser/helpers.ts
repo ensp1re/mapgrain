@@ -43,3 +43,8 @@ export async function useTemplate(page: Page, name: string): Promise<void> {
   await card.click();
   await page.locator(".node-card").first().waitFor({ timeout: 10_000 });
 }
+
+/** The outline lists connections after the canvas has drawn, so a click must wait for them. */
+export async function waitConnections(page: Page): Promise<void> {
+  await page.locator(".outline-row.is-connection").first().waitFor({ timeout: 15_000 });
+}

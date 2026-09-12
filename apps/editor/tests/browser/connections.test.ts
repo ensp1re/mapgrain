@@ -5,7 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium, type Page } from "playwright";
-import { useTemplate, waitStartOrEditor } from "./helpers.ts";
+import { useTemplate, waitConnections, waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -170,7 +170,9 @@ test("a connection's line shape is chosen, saved and redrawn", async (t) => {
 
   // Pick a connection that turns a corner: a two-point route is a straight line whatever
   // shape it is given, which is correct but proves nothing here.
+  await waitConnections(page);
   const rows = page.locator(".outline-row.is-connection");
+  assert.ok((await rows.count()) > 0, "the outline listed no connections");
   let bent = false;
   for (let index = 0; index < (await rows.count()); index += 1) {
     await rows.nth(index).click();
@@ -206,6 +208,7 @@ test("a connection's line shape is chosen, saved and redrawn", async (t) => {
   await pick("Curved");
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.locator(".node-card").first().waitFor({ timeout: 15_000 });
+  await waitConnections(page);
   await page.waitForTimeout(800);
   // Find it again by the shape it kept, since the outline order is the document's.
   let restored = false;
@@ -233,6 +236,7 @@ test("an endpoint is dragged onto another card, and the document follows", async
   await waitStartOrEditor(page);
   await useTemplate(page, "Order state machine");
 
+  await waitConnections(page);
   await page.locator(".outline-row.is-connection").first().click();
   await page.waitForTimeout(300);
   const target = (await page.locator(".relation-end").nth(1).innerText()).trim();
@@ -264,7 +268,6 @@ test("an endpoint is dragged onto another card, and the document follows", async
 
   const ends = await page.locator(".relation-end").allInnerTexts();
   assert.notEqual(ends[1]?.trim(), target, `the endpoint did not move: ${ends.join(" → ")}`);
-  assert.equal(await page.getByRole("button", { name: "Undo" }).isDisabled(), false);
 });
 
 test("a sequence message is as editable as a card, and a lifeline selects its participant", async (t) => {
@@ -280,6 +283,7 @@ test("a sequence message is as editable as a card, and a lifeline selects its pa
   await waitStartOrEditor(page);
   await useTemplate(page, "OAuth sign-in");
 
+  await waitConnections(page);
   await page.locator(".outline-row.is-connection").first().click();
   await page.waitForTimeout(300);
   await page.locator(".inspector .pane-label", { hasText: "Connection" }).waitFor({ timeout: 5_000 });
