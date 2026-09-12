@@ -2,11 +2,19 @@ import { Panel, useReactFlow, useViewport } from "@xyflow/react";
 
 interface ViewportBarProps {
   canFocus: boolean;
+  edgesHidden: boolean;
   onFitAll: () => void;
   onFocus: () => void;
+  onToggleEdges: () => void;
 }
 
-export function ViewportBar({ canFocus, onFitAll, onFocus }: ViewportBarProps) {
+export function ViewportBar({
+  canFocus,
+  edgesHidden,
+  onFitAll,
+  onFocus,
+  onToggleEdges,
+}: ViewportBarProps) {
   const { zoom } = useViewport();
   const { zoomIn, zoomOut } = useReactFlow();
   return (
@@ -38,6 +46,16 @@ export function ViewportBar({ canFocus, onFitAll, onFocus }: ViewportBarProps) {
         onClick={onFitAll}
       >
         <span className="fit-label">Fit all</span>
+      </button>
+      <button
+        type="button"
+        className={edgesHidden ? "text-btn is-on" : "text-btn"}
+        aria-pressed={edgesHidden}
+        aria-label={edgesHidden ? "Show connections" : "Hide connections"}
+        title={edgesHidden ? "Show connections" : "Hide connections, read the components alone"}
+        onClick={onToggleEdges}
+      >
+        <span className="fit-label">{edgesHidden ? "Show links" : "Hide links"}</span>
       </button>
       <button
         type="button"

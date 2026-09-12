@@ -1,18 +1,19 @@
 {
   "schemaVersion": 1,
-  "nextId": 70,
+  "nextId": 71,
   "tasks": [
     {
-      "id": "F069",
-      "behavior": "Editor chrome rebuild: New diagram takes the emphasized header slot and Export moves into the document menu beside Open file, the export and connect dialogs become centred modals that always fit and always close, the title field stops summoning the browser's own autofill list, the outline and the details pane coexist between 768 and 1279 so choosing a component no longer evicts the outline, a recent diagram can be removed from history, and no text-bearing rule crowds its content against its border.",
+      "id": "F070",
+      "behavior": "A diagram can be read by hiding what is not the point and watched while it runs: components, lanes and connections can be hidden without touching the document, the walkthrough plays and pauses at a chosen speed and stops at the end, and a workflow or lifecycle can be run by firing its transitions from where the reading stands, with an event log and a reset.",
       "acceptance": [
-        "New diagram is the emphasized header action and Export is reachable from the document menu.",
-        "The export dialog opens centred, scrolls when tall, and closes by its header control, the scrim and Escape.",
-        "The connect dialog is a modal, fully visible, and never under the canvas pane controls.",
-        "The document title input declares a name and disables autocomplete and spellcheck.",
-        "Selecting a component at 1024px leaves the outline mounted.",
-        "A recent diagram can be removed and stays removed after a reload, and removing the last-active one does not leave it reopening.",
-        "No stylesheet rule that carries text has less than 10px of inline padding."
+        "A component or lane can be hidden from the outline, which hides what it holds and the connections that would dangle, and everything hidden comes back in one click.",
+        "Every connection can be hidden at once without hiding a component.",
+        "Hiding never changes the document and leaves nothing to undo.",
+        "The walkthrough plays without further input, takes a speed, and stops at the last step instead of looping.",
+        "A run marks the state it stands on, offers only the transitions the document gives that state, moves when one is fired, logs what it fired and resets.",
+        "Firing a transition never writes to the document.",
+        "Walking and running clear the selection, and their step bar never sits under the viewport controls.",
+        "No card title breaks mid-word across the template set."
       ],
       "dependsOn": [],
       "state": "verified",
@@ -28,9 +29,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789248156935-bb9c59",
-        "fingerprintBefore": "1d4dc7a3a2ed7fed6b96fdf6eca529bbd9457649a6be99c7d7f182ce382a58ee",
-        "fingerprintAfter": "1d4dc7a3a2ed7fed6b96fdf6eca529bbd9457649a6be99c7d7f182ce382a58ee",
+        "attemptId": "run-1789250173341-5d1578",
+        "fingerprintBefore": "2feace235c7246209471930dda1b9bef49f565266b8f59cd1b3b820191dfed63",
+        "fingerprintAfter": "2feace235c7246209471930dda1b9bef49f565266b8f59cd1b3b820191dfed63",
         "checks": [
           {
             "id": "unit",
@@ -53,7 +54,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-12T21:23:29.915Z"
+        "verifiedAt": "2026-09-12T21:57:17.991Z"
       },
       "delivery": null
     }

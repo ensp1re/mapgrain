@@ -89,6 +89,8 @@ These rules apply to the editor chrome. They are not product claims.
 - A caption never repeats the connection type. An unlabelled connection draws no caption.
 - Card geometry lives in `nodeSize` and `ScenePresentation` together. Move one without the
   other and the text stops fitting its box.
+- Capitals run far wider than lowercase. The width table gives them their own advance, or a
+  name like `Refunded` breaks mid-word in a card the scene sized for it.
 - Handles appear on hover or selection. When a card's ports change, call `updateNodeInternals`
   or the connection into the new side is dropped.
 
@@ -108,6 +110,25 @@ These rules apply to the editor chrome. They are not product claims.
 - Fit shows the diagram. Focus shows the selection. Keep both actions. Do not fit after every keystroke.
 - Edge captions use the anchor the scene computed, which places them in one pass against the
   captions it has already placed. Re-place per edge only while a drag makes that anchor stale.
+
+## Reading a diagram
+
+- Hiding is a reading aid, never an edit. It lives in editor state, it is applied through
+  React Flow's `hidden`, and the document is untouched. Hiding a lane hides what it holds;
+  hiding a component hides the connections that would otherwise dangle.
+- A reader is always told what is hidden, and can bring all of it back in one click.
+- Any state the canvas draws from must be compared before a React Flow node or edge is reused.
+  `hidden` included — a reused object keeps the old value and the change never reaches the canvas.
+- Walking and running are readings, so both clear the selection: the inspector must not argue
+  with the step bar about what the reader is looking at.
+- A step bar owns the bottom centre of the canvas and sits above the viewport bar. On a phone
+  it takes the canvas floor and the viewport bar steps aside.
+- The walkthrough plays, pauses, and takes a speed; it stops at the last step rather than
+  looping, and `prefers-reduced-motion` turns off both the flow animation and the auto-advance.
+- A run marks where it stands, lights the moves it can make and where each one leads, and logs
+  what it fired. It reads the document and never writes to it, so there is nothing to undo.
+- Frame the state with its moves; below 720px frame the state alone and let the bar carry the
+  moves, because the canvas cannot hold both at a readable zoom.
 
 ## Motion
 

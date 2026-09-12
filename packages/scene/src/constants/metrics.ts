@@ -28,6 +28,9 @@ export const EDGE_LABEL_PAD = 4;
 export const EDGE_LABEL_CLEARANCE = 36;
 
 export const LATIN_WIDTH = 0.56;
+/** Capitals run much wider than lowercase; one Latin width for both wrapped names mid-word. */
+export const UPPER_WIDTH = 0.7;
+export const UPPER_BROAD_WIDTH = 1;
 export const SPACE_WIDTH = 0.3;
 export const WIDE_WIDTH = 0.95;
 export const NARROW_WIDTH = 0.34;

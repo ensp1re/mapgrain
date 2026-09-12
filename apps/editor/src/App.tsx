@@ -73,7 +73,11 @@ import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
 import { AddBar } from "./chrome/AddBar.tsx";
 import { CanvasEmpty } from "./chrome/CanvasEmpty.tsx";
 import { WalkBar } from "./chrome/WalkBar.tsx";
+import { RunBar } from "./chrome/RunBar.tsx";
+import { availableTransitions, canRun, fireTransition, isRunFinished, startRun } from "./walkthrough/run.ts";
+import type { RunState } from "./types/run.ts";
 import { deriveWalkthrough } from "./walkthrough/derive.ts";
+import { DEFAULT_WALK_SPEED, RUN_MOVES_IN_FRAME_WIDTH, WALK_STEP_MS } from "./constants/walkthrough.ts";
 import { blankDocument } from "./create/blank.ts";
 import { addableKinds, makeNode } from "./create/nodes.ts";
 import { AUTOSAVE_MS, PERSIST_ERROR_CODE, SAVE_STATE } from "./constants/persist.ts";
@@ -89,6 +93,7 @@ import { alignPositions } from "./geometry/align.ts";
 import { positionsFromFlow, samePositions } from "./geometry/positions.ts";
 import { createHistory, pushHistory, redoHistory, undoHistory } from "./history/stack.ts";
 import { portSignature, reuseUnchangedEdges, reuseUnchangedNodes } from "./edit/flowNodes.ts";
+import { EMPTY_VISIBILITY, isHiding, toggleHidden, visibleSet } from "./edit/visibility.ts";
 import { indexById } from "./edit/indexes.ts";
 import {
   commandAllowed,
@@ -285,6 +290,10 @@ function Editor() {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; text: string } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [walkIndex, setWalkIndex] = useState<number | null>(null);
+  const [visibility, setVisibility] = useState(EMPTY_VISIBILITY);
+  const [walkPlaying, setWalkPlaying] = useState(false);
+  const [walkSpeed, setWalkSpeed] = useState<number>(DEFAULT_WALK_SPEED);
+  const [runState, setRunState] = useState<RunState | null>(null);
   const [pending, setPending] = useState<PendingConnection | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -465,11 +474,22 @@ function Editor() {
   const [nodes, setNodes] = useState<Node[]>([]);
   const edgesRef = useRef<Edge[]>([]);
 
+  const visible = useMemo(
+    () => (documentModel ? visibleSet(documentModel, visibility) : null),
+    [documentModel, visibility],
+  );
+
   const walkSteps = useMemo(
     () => (documentModel ? deriveWalkthrough(documentModel) : []),
     [documentModel],
   );
   const walkStep = walkIndex === null ? null : (walkSteps[walkIndex] ?? null);
+
+  const runMoves = useMemo(
+    () => (documentModel && runState ? availableTransitions(documentModel, runState.activeId) : []),
+    [documentModel, runState],
+  );
+  const runMoveIds = useMemo(() => new Set(runMoves.map((move) => move.edgeId)), [runMoves]);
 
   const computedEdges = useMemo<Edge[]>(() => {
     if (!documentModel) return [];
@@ -505,10 +525,12 @@ function Editor() {
           walkStep: walkStep?.edgeId === edge.id,
           dragging,
         },
+        ...(visible && !visible.edgeIds.has(edge.id) ? { hidden: true } : {}),
         ...(walkStep?.edgeId === edge.id ? { className: "is-walk-step" } : {}),
+        ...(runMoveIds.has(edge.id) ? { className: "is-run-move" } : {}),
       };
     });
-  }, [documentModel, dragging, flow.edges, selection.edgeIds, walkStep]);
+  }, [documentModel, dragging, flow.edges, runMoveIds, selection.edgeIds, walkStep, visible]);
   const rfEdges = reuseUnchangedEdges(edgesRef.current, computedEdges);
   edgesRef.current = rfEdges;
 
@@ -691,8 +713,75 @@ function Editor() {
       return;
     }
     setEditingId(null);
+    // Reading follows the walk, so a leftover selection is not allowed to argue with it.
+    setSelection({ nodeIds: [], edgeIds: [] });
     setWalkIndex(0);
+    setWalkPlaying(true);
   }, []);
+
+  // Auto-advance while playing, and stop at the end rather than looping.
+  useEffect(() => {
+    if (!walkPlaying || walkIndex === null) return;
+    if (globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setWalkPlaying(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setWalkIndex((current) => {
+        if (current === null) return current;
+        if (current >= walkSteps.length - 1) {
+          setWalkPlaying(false);
+          return current;
+        }
+        return current + 1;
+      });
+    }, WALK_STEP_MS / walkSpeed);
+    return () => clearTimeout(timer);
+  }, [walkPlaying, walkIndex, walkSpeed, walkSteps.length]);
+
+  const startRunMode = useCallback(() => {
+    const current = historyRef.current.present.document;
+    if (!canRun(current)) {
+      setEditError("Only workflows and lifecycles can be run.");
+      return;
+    }
+    const next = startRun(current);
+    if (!next) {
+      setEditError("There is nothing to run yet. Add a component first.");
+      return;
+    }
+    setEditingId(null);
+    setWalkPlaying(false);
+    setWalkIndex(null);
+    // A run is a reading, not an edit: the inspector's leftover selection only competes with it.
+    setSelection({ nodeIds: [], edgeIds: [] });
+    setRunState(next);
+  }, []);
+
+  const fireMove = useCallback(
+    (edgeId: string) => {
+      setRunState((current) =>
+        current ? fireTransition(historyRef.current.present.document, current, edgeId) : current,
+      );
+    },
+    [],
+  );
+
+  // The run follows the reader, and where it can go next is the point, so the moves are framed
+  // alongside the state it stands on.
+  useEffect(() => {
+    if (!runState) return;
+    // A phone cannot hold the state and its moves at a readable zoom, so there it frames the
+    // state alone and the moves are read from the bar.
+    const wanted = new Set(
+      viewportWidth < RUN_MOVES_IN_FRAME_WIDTH
+        ? [runState.activeId]
+        : [runState.activeId, ...runMoves.map((move) => move.targetId)],
+    );
+    const target = getNodes().filter((node) => wanted.has(node.id));
+    if (target.length === 0) return;
+    void fitView({ ...readableFitOptions(), nodes: target, duration: 180 });
+  }, [runState, runMoves, fitView, getNodes, viewportWidth]);
 
   // Reading follows the diagram, so each step brings its node into view.
   useEffect(() => {
@@ -704,11 +793,21 @@ function Editor() {
 
   const derivedNodes = useMemo(() => {
     const built = toFlow(flow.nodes, selection.nodeIds, editingId, setEditingId, commitLabel, cancelEdit);
-    if (!walkStep) return built;
-    return built.map((node) =>
+    const shown = visible
+      ? built.map((node) => (visible.nodeIds.has(node.id) ? node : { ...node, hidden: true }))
+      : built;
+    if (runState) {
+      const targets = new Set(runMoves.map((move) => move.targetId));
+      return shown.map((node) => {
+        if (node.id === runState.activeId) return { ...node, className: "is-run-active" };
+        return targets.has(node.id) ? { ...node, className: "is-run-target" } : node;
+      });
+    }
+    if (!walkStep) return shown;
+    return shown.map((node) =>
       node.id === walkStep.nodeId ? { ...node, className: "is-walk-step" } : node,
     );
-  }, [flow.nodes, selection.nodeIds, editingId, commitLabel, cancelEdit, walkStep]);
+  }, [flow.nodes, selection.nodeIds, editingId, commitLabel, cancelEdit, runMoves, runState, walkStep, visible]);
 
   useEffect(() => {
     if (!dragging) {
@@ -1104,6 +1203,7 @@ function Editor() {
       if (id === COMMAND_ID.NEW) flushThen(() => setSurface("start"));
       if (id === COMMAND_ID.IMPORT) importFromFile();
       if (id === COMMAND_ID.WALK) startWalk();
+      if (id === COMMAND_ID.RUN) startRunMode();
       if (id === COMMAND_ID.HELP) {
         setCommandsOpen(false);
         setHelpOpen(true);
@@ -1115,13 +1215,18 @@ function Editor() {
         setConvertOpen(true);
       }
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, fitView, flushThen, getNodes, importFromFile, presenting, selection.nodeIds, shellLayout, startArrange, startWalk, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, fitView, flushThen, getNodes, importFromFile, presenting, selection.nodeIds, shellLayout, startArrange, startRunMode, startWalk, theme],
   );
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        if (runState) {
+          setRunState(null);
+          return;
+        }
         if (walkIndex !== null) {
+          setWalkPlaying(false);
           setWalkIndex(null);
           return;
         }
@@ -1190,7 +1295,7 @@ function Editor() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [commandsOpen, editingId, exportOpen, helpOpen, narrowPanel, pending, runCommand, walkIndex]);
+  }, [commandsOpen, editingId, exportOpen, helpOpen, narrowPanel, pending, runCommand, runState, walkIndex]);
 
   // The scene owns geometry and this component owns selection, so only a drag comes back
   // from React Flow. Feeding its own measurements back in made the two stores chase each
@@ -1335,7 +1440,7 @@ function Editor() {
       onReturnToLibrary={returnToLibrary}
     >
     <div
-      className={["app", presenting ? "is-presenting" : "", walkStep ? "is-walking" : ""]
+      className={["app", presenting ? "is-presenting" : "", walkStep ? "is-walking" : "", runState ? "is-running" : ""]
         .filter(Boolean)
         .join(" ")}
     >
@@ -1392,6 +1497,9 @@ function Editor() {
         }}
         onArrange={() => runCommand(COMMAND_ID.ARRANGE)}
         onPresent={() => runCommand(COMMAND_ID.PRESENT)}
+        onWalk={() => runCommand(COMMAND_ID.WALK)}
+        onRun={() => runCommand(COMMAND_ID.RUN)}
+        canRun={canRun(documentModel)}
         onExport={() => setExportOpen(true)}
         onCommand={() => {
           setHelpOpen(false);
@@ -1408,6 +1516,13 @@ function Editor() {
           <Outline
             nodes={flow.nodes}
             selectedId={selection.nodeIds[0] ?? null}
+            hiddenIds={visibility.hiddenNodeIds}
+            onToggleHidden={(id) =>
+              setVisibility((current) => ({
+                ...current,
+                hiddenNodeIds: toggleHidden(current.hiddenNodeIds, id),
+              }))
+            }
             onSelect={(id, additive) => {
               setSelection((current) => {
                 if (additive) {
@@ -1460,8 +1575,12 @@ function Editor() {
             {presenting ? null : (
               <ViewportBar
                 canFocus={selection.nodeIds.length > 0}
+                edgesHidden={visibility.allEdgesHidden}
                 onFitAll={() => runCommand(COMMAND_ID.FIT_ALL)}
                 onFocus={() => runCommand(COMMAND_ID.FOCUS)}
+                onToggleEdges={() =>
+                  setVisibility((current) => ({ ...current, allEdgesHidden: !current.allEdgesHidden }))
+                }
               />
             )}
           </ReactFlow>
@@ -1498,6 +1617,23 @@ function Editor() {
           {tooltip ? (
             <div className="tooltip" style={{ left: tooltip.x, top: tooltip.y }} role="tooltip">
               {tooltip.text}
+            </div>
+          ) : null}
+          {visible && isHiding(visibility) ? (
+            <div className="hidden-banner" role="status">
+              <span>
+                {visible.hiddenNodes > 0
+                  ? `${visible.hiddenNodes} component${visible.hiddenNodes === 1 ? "" : "s"}`
+                  : null}
+                {visible.hiddenNodes > 0 && visible.hiddenEdges > 0 ? " and " : null}
+                {visible.hiddenEdges > 0
+                  ? `${visible.hiddenEdges} connection${visible.hiddenEdges === 1 ? "" : "s"}`
+                  : null}
+                {" hidden from view"}
+              </span>
+              <button type="button" className="text-btn ghost" onClick={() => setVisibility(EMPTY_VISIBILITY)}>
+                Show all
+              </button>
             </div>
           ) : null}
           {editError ? (
@@ -1560,8 +1696,29 @@ function Editor() {
             <WalkBar
               steps={walkSteps}
               index={walkIndex ?? 0}
-              onStep={(next) => setWalkIndex(Math.min(walkSteps.length - 1, Math.max(0, next)))}
-              onExit={() => setWalkIndex(null)}
+              playing={walkPlaying}
+              speed={walkSpeed}
+              onStep={(next) => {
+                setWalkPlaying(false);
+                setWalkIndex(Math.min(walkSteps.length - 1, Math.max(0, next)));
+              }}
+              onPlaying={setWalkPlaying}
+              onSpeed={setWalkSpeed}
+              onExit={() => {
+                setWalkPlaying(false);
+                setWalkIndex(null);
+              }}
+            />
+          ) : null}
+          {runState ? (
+            <RunBar
+              document={documentModel}
+              state={runState}
+              transitions={runMoves}
+              finished={isRunFinished(documentModel, runState.activeId)}
+              onFire={fireMove}
+              onReset={() => setRunState(startRun(documentModel))}
+              onExit={() => setRunState(null)}
             />
           ) : null}
           <ArrangeBar state={arrange} onApply={applyArrange} onDiscard={discardArrange} />

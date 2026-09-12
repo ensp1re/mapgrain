@@ -71,7 +71,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   const rows = page.locator(".outline-row:not(.is-group)");
   await rows.nth(0).click();
   await rows.nth(1).click({ modifiers: ["Shift"] });
-  await page.getByRole("button", { name: "Connect" }).click();
+  await page.getByRole("button", { name: "Connect", exact: true }).click();
   await page.getByTestId("rf__edge-e1").waitFor({ state: "attached", timeout: 5_000 });
 
   await page.locator(".outline-row:not(.is-group)").first().click();

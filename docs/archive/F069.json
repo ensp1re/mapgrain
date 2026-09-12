@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F069",
+    "behavior": "Editor chrome rebuild: New diagram takes the emphasized header slot and Export moves into the document menu beside Open file, the export and connect dialogs become centred modals that always fit and always close, the title field stops summoning the browser's own autofill list, the outline and the details pane coexist between 768 and 1279 so choosing a component no longer evicts the outline, a recent diagram can be removed from history, and no text-bearing rule crowds its content against its border.",
+    "acceptance": [
+      "New diagram is the emphasized header action and Export is reachable from the document menu.",
+      "The export dialog opens centred, scrolls when tall, and closes by its header control, the scrim and Escape.",
+      "The connect dialog is a modal, fully visible, and never under the canvas pane controls.",
+      "The document title input declares a name and disables autocomplete and spellcheck.",
+      "Selecting a component at 1024px leaves the outline mounted.",
+      "A recent diagram can be removed and stays removed after a reload, and removing the last-active one does not leave it reopening.",
+      "No stylesheet rule that carries text has less than 10px of inline padding."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789248156935-bb9c59",
+      "fingerprintBefore": "1d4dc7a3a2ed7fed6b96fdf6eca529bbd9457649a6be99c7d7f182ce382a58ee",
+      "fingerprintAfter": "1d4dc7a3a2ed7fed6b96fdf6eca529bbd9457649a6be99c7d7f182ce382a58ee",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-12T21:23:29.915Z"
+    },
+    "delivery": {
+      "implementationRevision": "a06789695211aa0c57f9813bc94665ff665c906a",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/104",
+      "checkRuns": [
+        {
+          "name": "CI",
+          "revision": "a06789695211aa0c57f9813bc94665ff665c906a",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34719957125"
+        }
+      ],
+      "observedAt": "2026-09-12T21:54:03.709656Z"
+    }
+  },
+  "archivedAt": "2026-09-12T21:54:03.709771Z"
+}

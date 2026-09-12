@@ -1,5 +1,5 @@
 {
-  "commit": "1c59386516a5b9d8e0b2ed40cb035c48906cde5e",
+  "commit": "a06789695211aa0c57f9813bc94665ff665c906a",
   "package": {
     "name": "mapgrain",
     "version": "0.2.2"
@@ -12,7 +12,7 @@
     "playwright": "1.63.0"
   },
   "deviceScaleFactor": 1,
-  "capturedAt": "2026-09-10T14:22:39.770Z",
+  "capturedAt": "2026-09-12T21:55:57.120Z",
   "artifacts": [
     {
       "file": "docs/media/hero-dark.png",
@@ -87,32 +87,32 @@
   ],
   "sizes": {
     "hero-dark.png": {
-      "bytes": 131952,
-      "sha256": "dc34cb07ee349fe703c57bc9d32143cf746b722d5ce2ca066a8ec64fe6f680f0"
+      "bytes": 105919,
+      "sha256": "4527ce00d88e89343273d93a2bd7f0051a17d8310e3c15424dc70eaba6cf6933"
     },
     "hero-light.png": {
-      "bytes": 136317,
-      "sha256": "dae1f60943e637355279dd2636ecf7987922efe70157c6737ae790a485eed4be"
+      "bytes": 107127,
+      "sha256": "b013205a34dc84844acce7c72771c726c26509871f95bad26722e75aa32fee7e"
     },
     "narrow-390.png": {
-      "bytes": 35672,
-      "sha256": "5bf07395dccdf2e98e2cfc7252db25015fcd2a155dbe899477bb22d7eeed333e"
+      "bytes": 47701,
+      "sha256": "6d1bcb1f9a04cb7b07c7735ef2ab66fe970c575669b97015eb666bd227410d50"
     },
     "editing.gif": {
-      "bytes": 1788231,
-      "sha256": "0f6152af7a8b05dfc0a8e25983a991ad3760edb3bf2004926cf7381d4de42cbd"
+      "bytes": 1604314,
+      "sha256": "a9124455dcf6fe4f1b114932ff483bdba8ba5addf56b1154cac52dbea174e0d4"
     },
     "viewer.gif": {
-      "bytes": 599757,
-      "sha256": "7f89aaa0add30b508af4934cd70ead8b102715f64a5ff562e144bde5db5877e4"
+      "bytes": 601237,
+      "sha256": "4e1bb4bd8aef7a078def7d17275cd94dd7b7ff7af56431b9783bd5546470f45a"
     },
     "cli-receipts.png": {
       "bytes": 16479,
       "sha256": "d2c7052dfbd38d90ea5815259099243626c7336910d4e958b5e4d8fec006bd97"
     },
     "cli-workflow.gif": {
-      "bytes": 54117,
-      "sha256": "09e821929259fea697f363e641341badb6ec6547eb9e910cbf1c970bf5cd69e7"
+      "bytes": 79827,
+      "sha256": "0270de3080ae654eccf68c8c9e66fe3f141842f8254a706e1cf5d39b43d91a2c"
     }
   }
 }

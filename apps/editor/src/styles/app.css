@@ -2124,7 +2124,7 @@ body {
 .walk-bar {
   position: absolute;
   left: 50%;
-  bottom: 16px;
+  bottom: 62px;
   z-index: var(--z-popover);
   display: flex;
   align-items: center;
@@ -2175,11 +2175,30 @@ body {
   padding: 0 10px;
 }
 
-/* Everything outside the current step recedes rather than disappearing. */
-.app.is-walking .react-flow__node,
+/* Everything outside the current step recedes rather than disappearing. Lane frames stay,
+   because the structure is exactly what a reader needs while following a step. */
+.app.is-walking .react-flow__node:not(.react-flow__node-group),
 .app.is-walking .react-flow__edge {
   opacity: 0.22;
   transition: opacity var(--t-fast) ease;
+}
+
+.app.is-walking .react-flow__node-group {
+  opacity: 0.55;
+}
+
+/* The connection being traversed flows, so a workflow visibly runs. */
+.app.is-walking .react-flow__edge.is-walk-step .react-flow__edge-path {
+  stroke: var(--accent) !important;
+  stroke-width: 2 !important;
+  stroke-dasharray: 6 5;
+  animation: walk-flow 700ms linear infinite;
+}
+
+@keyframes walk-flow {
+  to {
+    stroke-dashoffset: -22;
+  }
 }
 
 .app.is-walking .edge-caption {
@@ -2197,6 +2216,154 @@ body {
   .app.is-walking .react-flow__node,
   .app.is-walking .react-flow__edge {
     transition: none;
+  }
+
+  .app.is-walking .react-flow__edge.is-walk-step .react-flow__edge-path {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Run
+   --------------------------------------------------------------------------- */
+
+.run-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 62px;
+  z-index: var(--z-popover);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  width: max-content;
+  max-width: min(720px, calc(100% - 32px));
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow);
+  transform: translateX(-50%);
+}
+
+.run-now {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.run-label {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.run-now strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-md);
+}
+
+.run-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.run-move {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.run-done {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.run-log {
+  flex-basis: 100%;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--r-2);
+  background: var(--bg);
+  list-style: none;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+}
+
+.run-log small {
+  color: var(--text);
+}
+
+.run-actions {
+  display: flex;
+  gap: var(--space-1);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* The state the run stands on leads; its outgoing transitions stay legible, the rest recedes. */
+.app.is-running .react-flow__node:not(.react-flow__node-group),
+.app.is-running .react-flow__edge,
+.app.is-running .edge-caption {
+  opacity: 0.28;
+  transition: opacity var(--t-fast) ease;
+}
+
+.app.is-running .react-flow__node-group {
+  opacity: 0.55;
+}
+
+.app.is-running .react-flow__node.is-run-active,
+.app.is-running .react-flow__node.is-run-target,
+.app.is-running .react-flow__edge.is-run-move {
+  opacity: 1;
+}
+
+/* Where the run can go next is readable but not yet current. */
+.app.is-running .react-flow__node.is-run-target {
+  opacity: 0.75;
+}
+
+.app.is-running .react-flow__edge.is-run-move .react-flow__edge-path {
+  stroke: var(--accent) !important;
+  stroke-width: 2 !important;
+}
+
+.app.is-running .react-flow__node.is-run-active .node-card {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app.is-running .react-flow__node,
+  .app.is-running .react-flow__edge {
+    transition: none;
+  }
+}
+
+/* On a phone the step bar is the reading, so it takes the canvas floor and the zoom controls
+   step aside rather than sitting underneath it. */
+@media (max-width: 720px) {
+  .app.is-walking .viewport-bar,
+  .app.is-running .viewport-bar {
+    display: none;
+  }
+
+  .walk-bar,
+  .run-bar {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+    transform: none;
   }
 }
 
@@ -2310,4 +2477,93 @@ body {
   gap: var(--space-2);
   margin-top: var(--space-4);
   padding: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Hide and show
+   --------------------------------------------------------------------------- */
+
+.outline-eye {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-2);
+  background: transparent;
+  color: var(--muted);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--t-fast) ease;
+}
+
+.outline-item:hover .outline-eye,
+.outline-eye:focus-visible,
+.outline-eye.is-hidden {
+  opacity: 1;
+}
+
+.outline-eye:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.outline-eye:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.outline-eye.is-hidden {
+  color: var(--accent);
+}
+
+.eye-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.outline-item:has(.outline-eye.is-hidden) .outline-label {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.hidden-banner {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  z-index: var(--z-float);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 5px 5px 5px var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  border-radius: var(--r-pill);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  transform: translateX(-50%);
+}
+
+.hidden-banner .text-btn {
+  min-height: var(--control-h-sm);
+  padding: 0 10px;
+  color: var(--accent);
+}
+
+.walk-play {
+  flex-shrink: 0;
+  min-width: var(--control-h);
+  padding: 0 10px;
+  font-size: var(--fs-sm);
+}
+
+.walk-speed {
+  min-width: 44px;
+  padding: 0 10px;
+  font-variant-numeric: tabular-nums;
 }

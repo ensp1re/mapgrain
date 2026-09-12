@@ -136,3 +136,37 @@ test("canvas captions keep the scene's placement instead of stacking on each oth
     await context.close();
   }
 });
+
+test("a card is wide enough for its own name, so no title breaks mid-word", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+
+  // Capitals run much wider than lowercase, which is where the width estimate used to fall short.
+  for (const name of ["Order state machine", "Microservices behind a gateway", "Approval swimlanes"]) {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const page = await context.newPage();
+    await page.goto(server.url, { waitUntil: "domcontentloaded" });
+    await waitStartOrEditor(page);
+    const card = page.getByRole("button", { name: `Use template ${name}` });
+    await card.scrollIntoViewIfNeeded();
+    await card.click();
+    await page.locator(".node-card").first().waitFor({ timeout: 10_000 });
+    await page.waitForFunction(() => document.fonts.status === "loaded", undefined, { timeout: 10_000 });
+    await page.waitForTimeout(500);
+    const wrapped = await page.evaluate(() =>
+      [...document.querySelectorAll(".node-title")]
+        .filter((title) => {
+          const line = parseFloat(getComputedStyle(title).lineHeight);
+          return (title as HTMLElement).offsetHeight > line * 1.5;
+        })
+        .map((title) => title.textContent ?? ""),
+    );
+    assert.deepEqual(wrapped, [], `${name} wrapped a card title`);
+    await context.close();
+  }
+});

@@ -184,7 +184,7 @@ async function main(): Promise<void> {
     await editPage.waitForTimeout(350);
     await rows.nth(0).click();
     await rows.nth(1).click({ modifiers: ["Shift"] });
-    await editPage.getByRole("button", { name: "Connect" }).click();
+    await editPage.getByRole("button", { name: "Connect", exact: true }).click();
     await editPage.waitForTimeout(400);
     await rows.nth(0).click();
     const pin = editPage.getByRole("checkbox", { name: "Keep position" });

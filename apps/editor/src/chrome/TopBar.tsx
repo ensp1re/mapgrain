@@ -33,6 +33,9 @@ interface TopBarProps {
   onOpenFile: (file: File) => void;
   onArrange: () => void;
   onPresent: () => void;
+  onWalk: () => void;
+  onRun: () => void;
+  canRun: boolean;
   onExport: () => void;
   onCommand: () => void;
   onHelp: () => void;
@@ -71,6 +74,9 @@ export function TopBar({
   onOpenFile,
   onArrange,
   onPresent,
+  onWalk,
+  onRun,
+  canRun,
   onExport,
   onCommand,
   onHelp,
@@ -361,6 +367,13 @@ export function TopBar({
               Present
             </MenuItem>
           )}
+          <MenuItem shortcut={commandShortcut(COMMAND_ID.WALK)} onClick={() => { onWalk(); setMoreOpen(false); }}>
+            Walk through
+          </MenuItem>
+          <MenuItem shortcut={commandShortcut(COMMAND_ID.RUN)} disabled={!canRun} onClick={() => { onRun(); setMoreOpen(false); }}>
+            Run transitions
+          </MenuItem>
+          <MenuSeparator />
           <MenuItem shortcut={commandShortcut(COMMAND_ID.TOGGLE_OUTLINE)} onClick={() => { onToggleOutline(); setMoreOpen(false); }}>
             Outline
           </MenuItem>

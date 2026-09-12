@@ -5,6 +5,7 @@ import {
   portSignature,
   reuseUnchangedEdges,
   reuseUnchangedNodes,
+  sameEdgeContent,
   sameNodeContent,
 } from "../src/edit/flowNodes.ts";
 import type { Edge } from "@xyflow/react";
@@ -85,4 +86,16 @@ test("a node whose ports changed is not reused, so its handles are rebuilt", () 
   assert.equal(portSignature(reused[0]?.data), portSignature(after[0]?.data));
   // The same ports still reuse the previous object.
   assert.equal(reuseUnchangedNodes(before, structuredClone(before))[0], before[0]);
+});
+
+test("hiding an item is a change, so the canvas stops drawing it", () => {
+  const shown: Node = { id: "n1", type: "component", position: { x: 0, y: 0 }, data: { label: "A" } };
+  const gone: Node = { ...shown, hidden: true };
+  assert.equal(sameNodeContent(shown, gone), false);
+  assert.equal(reuseUnchangedNodes([shown], [gone])[0]?.hidden, true);
+  assert.equal(reuseUnchangedNodes([gone], [shown])[0]?.hidden, undefined);
+
+  const edge: Edge = { id: "e1", source: "n1", target: "n2" };
+  assert.equal(sameEdgeContent(edge, { ...edge, hidden: true }), false);
+  assert.equal(reuseUnchangedEdges([edge], [{ ...edge, hidden: true }])[0]?.hidden, true);
 });
