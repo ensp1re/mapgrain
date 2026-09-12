@@ -1,56 +1,5 @@
 {
   "schemaVersion": 1,
   "nextId": 68,
-  "tasks": [
-    {
-      "id": "F067",
-      "behavior": "Canvas edge captions keep the placement the scene computed, so congested diagrams stop stacking several captions on the same point. The editor falls back to a live placement only while a node is being dragged, when the scene anchor is stale.",
-      "acceptance": [
-        "A lane-crossing, a branching and a state diagram each render with no two edge captions overlapping.",
-        "Dragging a node still moves its edge captions with the live geometry."
-      ],
-      "dependsOn": [],
-      "state": "verified",
-      "spec": null,
-      "plan": "docs/PLAN.md",
-      "verification": [
-        "unit",
-        "lint",
-        "typecheck",
-        "build",
-        "browser"
-      ],
-      "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1789242388383-0fff41",
-        "fingerprintBefore": "4469461b6fa467fd5a7c81a229e360a974f7273fb45eff5c8107794c5132b196",
-        "fingerprintAfter": "4469461b6fa467fd5a7c81a229e360a974f7273fb45eff5c8107794c5132b196",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          },
-          {
-            "id": "build",
-            "status": "passed"
-          },
-          {
-            "id": "browser",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-12T19:47:11.061Z"
-      },
-      "delivery": null
-    }
-  ]
+  "tasks": []
 }
