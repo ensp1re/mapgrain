@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextId": 66,
+  "nextId": 67,
   "tasks": [
     {
       "id": "F064",
@@ -79,6 +79,37 @@
       ],
       "dependsOn": [
         "F064"
+      ],
+      "state": "not_started",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": null,
+      "delivery": null
+    },
+    {
+      "id": "F066",
+      "behavior": "Template library and diagram walkthrough: the start surface leads with a searchable gallery of editable starter diagrams covering all five kinds, each card drawn from the real document, each use producing an independent copy; and any diagram can be read step by step from a derived order without authoring a story.",
+      "acceptance": [
+        "Every template validates, builds a scene, and has no overlapping components.",
+        "All five document kinds and all five categories are represented.",
+        "Using a template opens an independent copy with a fresh document id and the template's title, leaving the catalog entry untouched.",
+        "An invalid template reports why instead of failing silently.",
+        "Template cards are rendered from the template's own document, not from images.",
+        "Search matches title, blurb and tags.",
+        "A walkthrough derives an ordered step list for every kind, starts a lifecycle at its initial state, and covers every component.",
+        "Walking a diagram changes nothing in it, and an authored story takes priority over the derived order.",
+        "The editor imports no document from tests/fixtures."
+      ],
+      "dependsOn": [
+        "F065"
       ],
       "state": "not_started",
       "spec": null,

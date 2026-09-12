@@ -36,6 +36,21 @@ These rules apply to the editor chrome. They are not product claims.
 - Clamp overlays 8px inside the visual viewport. A menu or listbox dismisses on an outside
   pointer and lets that click through; only a modal dialog swallows it.
 
+## Templates
+
+- A template is a real document, not a screenshot, and its card is drawn from that document
+  through the export renderer so the two cannot drift.
+- Using a template copies it with a fresh document id. Two templates opened in a row are two
+  documents. An invalid template is reported, never silently dropped.
+- Templates live in `src/templates/`, never in `tests/fixtures`. Nothing the editor ships
+  imports a test fixture.
+
+## Walkthrough
+
+- Step order is derived from the diagram, so any document can be read without authoring.
+  An authored story wins where one exists.
+- Reading never writes. Everything outside the step recedes rather than disappearing.
+
 ## New page
 
 - Dedicated start layout with one vertical scroll container. Do not clip page content.

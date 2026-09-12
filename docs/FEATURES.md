@@ -11,6 +11,8 @@ Public table for the current checkout. Status values: shipped, partial, planned,
 | Lifecycle diagrams | shipped | States, initial/final markers, guarded transitions |
 | Geometry diagnostics | shipped | Overlap, containment, clipping, label clearance as warnings. Arrange slides edge labels off nodes |
 | Snapshot compare | shipped | Added/removed/changed nodes and edges via `mapgrain compare` |
+| Template library | shipped | 22 editable starter diagrams across five categories, searchable, previewed from the real document, duplicated on use |
+| Diagram walkthrough | shipped | Derived step order for every kind, prev/next with arrow keys, read-only |
 | Direct edit, arrange, save, export | shipped | Production blank→export→reimport journey; Help overlay lists COMMANDS shortcuts; switching kind previews keep/remap/drop |
 | Portable HTML viewer | shipped | Search, fit, reach, route, named views, local hashes |
 | Offline editor | shipped | Versioned precache; API and studio sessions excluded |

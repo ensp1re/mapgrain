@@ -28,7 +28,6 @@ import {
   applyPortableLayout,
   nextPrefixedId,
   portablePositions,
-  validateDocument,
   type DiagramDocument,
   type DocumentKind,
   type NodeKind,
@@ -46,7 +45,6 @@ import {
 } from "@mapgrain/scene";
 import type { Point } from "@mapgrain/scene";
 import { renderView } from "@mapgrain/viewer";
-import nestedGroups from "../../../tests/fixtures/documents/nested-groups.json" with { type: "json" };
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
 import { EXPORT_CHOICE } from "./constants/export.ts";
 import { STORY_WEBM } from "./constants/video.ts";
@@ -72,6 +70,8 @@ import { COMMAND_ID, type CommandId } from "./constants/commands.ts";
 import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
 import { AddBar } from "./chrome/AddBar.tsx";
 import { CanvasEmpty } from "./chrome/CanvasEmpty.tsx";
+import { WalkBar } from "./chrome/WalkBar.tsx";
+import { deriveWalkthrough } from "./walkthrough/derive.ts";
 import { blankDocument } from "./create/blank.ts";
 import { addableKinds, makeNode } from "./create/nodes.ts";
 import { AUTOSAVE_MS, PERSIST_ERROR_CODE, SAVE_STATE } from "./constants/persist.ts";
@@ -84,7 +84,7 @@ import { LifelineLayer } from "./diagram/LifelineLayer.tsx";
 import { RelationEdge } from "./diagram/RelationEdge.tsx";
 import { sceneToFlow } from "./diagram/sceneToFlow.ts";
 import { alignPositions } from "./geometry/align.ts";
-import { positionsFromFlow, positionsFromScene, samePositions } from "./geometry/positions.ts";
+import { positionsFromFlow, samePositions } from "./geometry/positions.ts";
 import { createHistory, pushHistory, redoHistory, undoHistory } from "./history/stack.ts";
 import { reuseUnchangedEdges, reuseUnchangedNodes } from "./edit/flowNodes.ts";
 import { indexById } from "./edit/indexes.ts";
@@ -105,14 +105,15 @@ import {
 import { commandForKeyEvent, shouldOpenCommandMenu, shouldOpenHelp } from "./keyboard/commandShortcut.ts";
 import { BrowserLayoutEngine } from "./layout/browserEngine.ts";
 import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
-import { EXAMPLES } from "./create/examples.ts";
+import { findTemplate } from "./templates/catalog.ts";
+import { snapshotFromTemplate } from "./templates/open.ts";
 import { MODE_CHOICES } from "./create/modes.ts";
 import { importDocumentText } from "./create/importDocument.ts";
 import { freeSpotNear, groupForNewNode } from "./edit/placement.ts";
 import { kindTitle } from "./constants/kind.ts";
 import { editMessage } from "./edit/editMessage.ts";
 import { LoadFailure } from "./chrome/LoadFailure.tsx";
-import { backupBytes, snapshotFromStored } from "./persist/codec.ts";
+import { backupBytes } from "./persist/codec.ts";
 import { indexedDbStore } from "./persist/indexeddb.ts";
 import { memoryStore } from "./persist/memory.ts";
 import { readStudioConfig, studioStore } from "./persist/studio.ts";
@@ -140,19 +141,11 @@ function defaultStore(): PersistStore {
   return globalThis.indexedDB ? indexedDbStore() : memoryStore();
 }
 
-function loadSnapshot(): EditorSnapshot | null {
-  const result = validateDocument(nestedGroups);
-  if (!result.ok) return null;
-  const scene = buildScene(result.document);
-  if (!scene.ok) return null;
-  const positions =
-    Object.keys(portablePositions(result.document)).length > 0
-      ? portablePositions(result.document)
-      : positionsFromScene(scene.scene.nodes);
-  return {
-    document: applyPortableLayout(result.document, positions),
-    positions,
-  };
+// Seeds the history before a stored document loads. The boot effect shows the start
+// surface until then, so this is a placeholder rather than a document anyone sees, and it
+// must not be a test fixture.
+function loadSnapshot(): EditorSnapshot {
+  return { document: blankDocument(), positions: {} };
 }
 
 function download(filename: string, bytes: Uint8Array, type: string) {
@@ -271,7 +264,7 @@ function toFlow(
 
 function Editor() {
   const { fitView, getNodes, screenToFlowPosition } = useReactFlow();
-  const initial = useMemo(() => loadSnapshot(), []);
+  const initial = useMemo(loadSnapshot, []);
   const [theme, setTheme] = useState<Theme>(() =>
     globalThis.matchMedia?.("(prefers-color-scheme: light)").matches ? THEME.LIGHT : THEME.DARK,
   );
@@ -284,6 +277,7 @@ function Editor() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; text: string } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [walkIndex, setWalkIndex] = useState<number | null>(null);
   const [pending, setPending] = useState<PendingConnection | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -306,7 +300,7 @@ function Editor() {
     neighborIds: string[];
     positions: PositionMap;
   } | null>(null);
-  const [history, setHistory] = useState(() => createHistory(initial as EditorSnapshot));
+  const [history, setHistory] = useState(() => createHistory(initial));
   const historyRef = useRef(history);
   historyRef.current = history;
   const layoutEngine = useRef<BrowserLayoutEngine | null>(null);
@@ -464,6 +458,12 @@ function Editor() {
   const [nodes, setNodes] = useState<Node[]>([]);
   const edgesRef = useRef<Edge[]>([]);
 
+  const walkSteps = useMemo(
+    () => (documentModel ? deriveWalkthrough(documentModel) : []),
+    [documentModel],
+  );
+  const walkStep = walkIndex === null ? null : (walkSteps[walkIndex] ?? null);
+
   const computedEdges = useMemo<Edge[]>(() => {
     if (!documentModel) return [];
     const selected = new Set(selection.edgeIds);
@@ -495,10 +495,12 @@ function Editor() {
           labelAnchor: edge.labelAnchor,
           labelSize: edge.labelSize,
           preserveGeometry: edge.preserveGeometry,
+          walkStep: walkStep?.edgeId === edge.id,
         },
+        ...(walkStep?.edgeId === edge.id ? { className: "is-walk-step" } : {}),
       };
     });
-  }, [documentModel, flow.edges, selection.edgeIds]);
+  }, [documentModel, flow.edges, selection.edgeIds, walkStep]);
   const rfEdges = reuseUnchangedEdges(edgesRef.current, computedEdges);
   edgesRef.current = rfEdges;
 
@@ -667,10 +669,30 @@ function Editor() {
     [applyOp],
   );
 
-  const derivedNodes = useMemo(
-    () => toFlow(flow.nodes, selection.nodeIds, editingId, setEditingId, commitLabel, cancelEdit),
-    [flow.nodes, selection.nodeIds, editingId, commitLabel, cancelEdit],
-  );
+  const startWalk = useCallback(() => {
+    if (deriveWalkthrough(historyRef.current.present.document).length === 0) {
+      setEditError("There is nothing to walk through yet. Add a component first.");
+      return;
+    }
+    setEditingId(null);
+    setWalkIndex(0);
+  }, []);
+
+  // Reading follows the diagram, so each step brings its node into view.
+  useEffect(() => {
+    if (!walkStep) return;
+    const target = getNodes().filter((node) => node.id === walkStep.nodeId);
+    if (target.length === 0) return;
+    void fitView({ ...readableFitOptions(), nodes: target, duration: 180 });
+  }, [walkStep, fitView, getNodes]);
+
+  const derivedNodes = useMemo(() => {
+    const built = toFlow(flow.nodes, selection.nodeIds, editingId, setEditingId, commitLabel, cancelEdit);
+    if (!walkStep) return built;
+    return built.map((node) =>
+      node.id === walkStep.nodeId ? { ...node, className: "is-walk-step" } : node,
+    );
+  }, [flow.nodes, selection.nodeIds, editingId, commitLabel, cancelEdit, walkStep]);
 
   useEffect(() => {
     if (!dragging) {
@@ -1035,6 +1057,7 @@ function Editor() {
       if (id === COMMAND_ID.CONNECT) connectSelected();
       if (id === COMMAND_ID.NEW) flushThen(() => setSurface("start"));
       if (id === COMMAND_ID.IMPORT) importFromFile();
+      if (id === COMMAND_ID.WALK) startWalk();
       if (id === COMMAND_ID.HELP) {
         setCommandsOpen(false);
         setHelpOpen(true);
@@ -1046,12 +1069,16 @@ function Editor() {
         setConvertOpen(true);
       }
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, fitView, flushThen, getNodes, importFromFile, presenting, selection.nodeIds, shellLayout, startArrange, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, fitView, flushThen, getNodes, importFromFile, presenting, selection.nodeIds, shellLayout, startArrange, startWalk, theme],
   );
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        if (walkIndex !== null) {
+          setWalkIndex(null);
+          return;
+        }
         if (helpOpen) {
           setHelpOpen(false);
           return;
@@ -1117,7 +1144,7 @@ function Editor() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [commandsOpen, editingId, exportOpen, helpOpen, narrowPanel, pending, runCommand]);
+  }, [commandsOpen, editingId, exportOpen, helpOpen, narrowPanel, pending, runCommand, walkIndex]);
 
   // The scene owns geometry and this component owns selection, so only a drag comes back
   // from React Flow. Feeding its own measurements back in made the two stores chase each
@@ -1172,12 +1199,20 @@ function Editor() {
               openSnapshot({ document, positions: {} });
             });
           }}
-          onOpenExample={(id) => {
+          theme={theme}
+          onUseTemplate={(id) => {
             flushThen(() => {
-              const example = EXAMPLES.find((item) => item.id === id);
-              if (!example) return;
-              const next = snapshotFromStored({ document: example.document });
-              if (next) openSnapshot(next);
+              const spec = findTemplate(id);
+              if (!spec) {
+                setImportError("That template is no longer available.");
+                return;
+              }
+              const result = snapshotFromTemplate(spec);
+              if ("error" in result) {
+                setImportError(result.error);
+                return;
+              }
+              openSnapshot(result.snapshot);
             });
           }}
           onOpenRecent={(id) => {
@@ -1244,7 +1279,11 @@ function Editor() {
       snapshot={snapshot}
       onReturnToLibrary={returnToLibrary}
     >
-    <div className={presenting ? "app is-presenting" : "app"}>
+    <div
+      className={["app", presenting ? "is-presenting" : "", walkStep ? "is-walking" : ""]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <TopBar
         title={documentModel.title}
         saveState={saveState}
@@ -1460,6 +1499,14 @@ function Editor() {
                 const first = addableKinds(documentModel.kind)[0];
                 if (first) addNode(first);
               }}
+            />
+          ) : null}
+          {walkStep ? (
+            <WalkBar
+              steps={walkSteps}
+              index={walkIndex ?? 0}
+              onStep={(next) => setWalkIndex(Math.min(walkSteps.length - 1, Math.max(0, next)))}
+              onExit={() => setWalkIndex(null)}
             />
           ) : null}
           <ArrangeBar state={arrange} onApply={applyArrange} onDiscard={discardArrange} />

@@ -37,7 +37,7 @@ export function RelationEdge({
       {caption ? (
         <EdgeLabelRenderer>
           <div
-            className="edge-caption"
+            className={`edge-caption${edge?.walkStep ? " is-walk-step" : ""}`}
             style={{
               transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
             }}

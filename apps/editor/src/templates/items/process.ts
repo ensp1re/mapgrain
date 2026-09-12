@@ -1,0 +1,162 @@
+import { DOCUMENT_KIND, NODE_KIND } from "@mapgrain/document";
+import { TEMPLATE_CATEGORY } from "../../constants/templates.ts";
+import type { TemplateSpec } from "../../types/templates.ts";
+import { template } from "../build.ts";
+
+const category = TEMPLATE_CATEGORY.PROCESS;
+const kind = DOCUMENT_KIND.WORKFLOW;
+
+// Root groups become lanes, and the lane engine owns placement, so these carry no grid.
+export const PROCESS_TEMPLATES: TemplateSpec[] = [
+  {
+    id: "approval-swimlane",
+    category,
+    title: "Approval swimlanes",
+    blurb: "A request crossing three lanes, with the decision that sends it back.",
+    tags: ["swimlane", "approval", "cross-functional"],
+    document: template({
+      id: "tpl-approval-swimlane",
+      title: "Approval swimlanes",
+      kind,
+      viewName: "Approval",
+      groups: [
+        { id: "requester", label: "Requester" },
+        { id: "manager", label: "Manager" },
+        { id: "finance", label: "Finance" },
+      ],
+      nodes: [
+        { id: "submit", kind: NODE_KIND.JOB, label: "Submit request", group: "requester" },
+        { id: "revise", kind: NODE_KIND.JOB, label: "Revise request", group: "requester" },
+        { id: "review", kind: NODE_KIND.JOB, label: "Review request", group: "manager" },
+        { id: "decide", kind: NODE_KIND.DECISION, label: "Within budget?", group: "manager" },
+        { id: "escalate", kind: NODE_KIND.JOB, label: "Escalate to finance", group: "manager" },
+        { id: "approve", kind: NODE_KIND.JOB, label: "Approve spend", group: "finance" },
+        { id: "pay", kind: NODE_KIND.JOB, label: "Release payment", group: "finance" },
+      ],
+      edges: [
+        { from: "submit", to: "review" },
+        { from: "review", to: "decide" },
+        { from: "decide", to: "pay", outcome: "within budget" },
+        { from: "decide", to: "escalate", outcome: "over budget" },
+        { from: "escalate", to: "approve" },
+        { from: "approve", to: "pay" },
+        { from: "review", to: "revise", label: "missing detail" },
+        { from: "revise", to: "review" },
+      ],
+    }),
+  },
+  {
+    id: "ci-cd",
+    category,
+    title: "CI/CD pipeline",
+    blurb: "Commit to production, with the gate that stops a bad build.",
+    tags: ["ci", "cd", "pipeline", "deploy"],
+    document: template({
+      id: "tpl-ci-cd",
+      title: "CI/CD pipeline",
+      kind,
+      viewName: "Pipeline",
+      groups: [
+        { id: "developer", label: "Developer" },
+        { id: "ci", label: "CI" },
+        { id: "delivery", label: "Delivery" },
+      ],
+      nodes: [
+        { id: "push", kind: NODE_KIND.JOB, label: "Push branch", group: "developer" },
+        { id: "fix", kind: NODE_KIND.JOB, label: "Fix and push again", group: "developer" },
+        { id: "build", kind: NODE_KIND.JOB, label: "Build", group: "ci" },
+        { id: "test", kind: NODE_KIND.JOB, label: "Test and lint", group: "ci" },
+        { id: "gate", kind: NODE_KIND.DECISION, label: "Checks green?", group: "ci" },
+        { id: "staging", kind: NODE_KIND.JOB, label: "Deploy to staging", group: "delivery" },
+        { id: "smoke", kind: NODE_KIND.JOB, label: "Smoke test", group: "delivery" },
+        { id: "prod", kind: NODE_KIND.JOB, label: "Promote to production", group: "delivery" },
+      ],
+      edges: [
+        { from: "push", to: "build" },
+        { from: "build", to: "test" },
+        { from: "test", to: "gate" },
+        { from: "gate", to: "staging", outcome: "green" },
+        { from: "gate", to: "fix", outcome: "red" },
+        { from: "fix", to: "build" },
+        { from: "staging", to: "smoke" },
+        { from: "smoke", to: "prod", label: "manual approval" },
+      ],
+    }),
+  },
+  {
+    id: "incident-runbook",
+    category,
+    title: "Incident runbook",
+    blurb: "From page to postmortem, including the call to declare an incident.",
+    tags: ["incident", "runbook", "oncall"],
+    document: template({
+      id: "tpl-incident-runbook",
+      title: "Incident runbook",
+      kind,
+      viewName: "Runbook",
+      groups: [
+        { id: "detection", label: "Detection" },
+        { id: "response", label: "Response" },
+        { id: "followup", label: "Follow-up" },
+      ],
+      nodes: [
+        { id: "alert", kind: NODE_KIND.JOB, label: "Alert fires", group: "detection" },
+        { id: "ack", kind: NODE_KIND.JOB, label: "Acknowledge page", group: "detection" },
+        { id: "triage", kind: NODE_KIND.DECISION, label: "Customer impact?", group: "detection" },
+        { id: "monitor", kind: NODE_KIND.JOB, label: "Watch and close", group: "detection" },
+        { id: "declare", kind: NODE_KIND.JOB, label: "Declare incident", group: "response" },
+        { id: "mitigate", kind: NODE_KIND.JOB, label: "Mitigate", group: "response" },
+        { id: "comms", kind: NODE_KIND.ACTOR, label: "Update status page", group: "response" },
+        { id: "postmortem", kind: NODE_KIND.JOB, label: "Write postmortem", group: "followup" },
+        { id: "actions", kind: NODE_KIND.JOB, label: "Track action items", group: "followup" },
+      ],
+      edges: [
+        { from: "alert", to: "ack" },
+        { from: "ack", to: "triage" },
+        { from: "triage", to: "declare", outcome: "customers affected" },
+        { from: "triage", to: "monitor", outcome: "internal only" },
+        { from: "declare", to: "comms" },
+        { from: "declare", to: "mitigate" },
+        { from: "mitigate", to: "postmortem", label: "service restored" },
+        { from: "postmortem", to: "actions" },
+      ],
+    }),
+  },
+  {
+    id: "onboarding",
+    category,
+    title: "User onboarding",
+    blurb: "The first session, and where a new user drops out of it.",
+    tags: ["onboarding", "user flow", "activation"],
+    document: template({
+      id: "tpl-onboarding",
+      title: "User onboarding",
+      kind,
+      viewName: "Onboarding",
+      groups: [
+        { id: "person", label: "New user" },
+        { id: "product", label: "Product" },
+      ],
+      nodes: [
+        { id: "signup", kind: NODE_KIND.JOB, label: "Sign up", group: "person" },
+        { id: "verify", kind: NODE_KIND.JOB, label: "Verify email", group: "person" },
+        { id: "invite", kind: NODE_KIND.JOB, label: "Invite a teammate", group: "person" },
+        { id: "firstvalue", kind: NODE_KIND.JOB, label: "Create first diagram", group: "person" },
+        { id: "welcome", kind: NODE_KIND.JOB, label: "Send welcome mail", group: "product" },
+        { id: "check", kind: NODE_KIND.DECISION, label: "Verified within a day?", group: "product" },
+        { id: "nudge", kind: NODE_KIND.JOB, label: "Send reminder", group: "product" },
+        { id: "activated", kind: NODE_KIND.JOB, label: "Mark activated", group: "product" },
+      ],
+      edges: [
+        { from: "signup", to: "welcome" },
+        { from: "welcome", to: "check" },
+        { from: "check", to: "verify", outcome: "yes" },
+        { from: "check", to: "nudge", outcome: "no" },
+        { from: "nudge", to: "verify" },
+        { from: "verify", to: "firstvalue" },
+        { from: "firstvalue", to: "invite" },
+        { from: "firstvalue", to: "activated" },
+      ],
+    }),
+  },
+];

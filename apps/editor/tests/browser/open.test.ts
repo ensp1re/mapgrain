@@ -44,7 +44,7 @@ async function listen(): Promise<{ url: string; close: () => Promise<void> }> {
   };
 }
 
-test("production build opens a blank diagram and every example without page errors", async (t) => {
+test("production build opens a blank diagram and a template of each kind without page errors", async (t) => {
   await stat(join(dist, "index.html"));
   const server = await listen();
   const browser = await chromium.launch({ headless: true });
@@ -67,16 +67,16 @@ test("production build opens a blank diagram and every example without page erro
   assert.equal(errors.join("\n"), "", "blank");
 
   await goNew(page);
-  const examples = [
-    "Local diagram workspace",
-    "Review workflow",
-    "Feedback loop",
-    "Checkout messages",
-    "Ingest data flow",
-    "Session lifecycle",
+  // One template per document kind, so every renderer is exercised.
+  const templates = [
+    "Use template Containers",
+    "Use template CI/CD pipeline",
+    "Use template OAuth sign-in",
+    "Use template ETL pipeline",
+    "Use template Order state machine",
   ];
-  for (const name of examples) {
-    await page.getByRole("button", { name: new RegExp(name) }).click();
+  for (const name of templates) {
+    await page.getByRole("button", { name }).click();
     await editorReady().waitFor({ timeout: 10_000 });
     assert.equal(errors.join("\n"), "", name);
     await goNew(page);

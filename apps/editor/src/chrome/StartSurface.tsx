@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
-import type { DocumentKind } from "@mapgrain/document";
+import type { DocumentKind, Theme } from "@mapgrain/document";
 import { AGENT_CHOICES, skillInstallCommand } from "../constants/agents.ts";
-import { EXAMPLES } from "../create/examples.ts";
 import { MODE_CHOICES } from "../create/modes.ts";
 import { KindIcon } from "../diagram/KindIcon.tsx";
 import { Select } from "../ui/Select.tsx";
+import { TemplateGallery } from "./TemplateGallery.tsx";
 
 interface RecentItem {
   id: string;
@@ -18,8 +18,9 @@ interface StartSurfaceProps {
   recents: RecentItem[];
   canReturn?: boolean;
   onBack?: () => void;
+  theme: Theme;
   onNewBlank: (kind?: DocumentKind) => void;
-  onOpenExample: (id: string) => void;
+  onUseTemplate: (id: string) => void;
   onOpenRecent: (id: string) => void;
   onImportFile: (file: File) => void;
 }
@@ -31,13 +32,6 @@ const MODE_ICON: Record<string, string> = {
   "data-flow": "process",
   lifecycle: "state",
 };
-
-function documentKindOf(document: unknown): string {
-  if (document && typeof document === "object" && "kind" in document && typeof document.kind === "string") {
-    return document.kind;
-  }
-  return "architecture";
-}
 
 function recentStamp(item: RecentItem): string {
   const value = item.lastOpenedAt ?? item.updatedAt;
@@ -53,7 +47,8 @@ export function StartSurface({
   canReturn = false,
   onBack,
   onNewBlank,
-  onOpenExample,
+  theme,
+  onUseTemplate,
   onOpenRecent,
   onImportFile,
 }: StartSurfaceProps) {
@@ -74,9 +69,10 @@ export function StartSurface({
           ) : null}
         </header>
         <h1>New diagram</h1>
-        <p className="start-lead">Create a diagram, open a file, or continue from a recent or example.</p>
+        <p className="start-lead">Start from a template, open a file, or continue where you left off.</p>
+        <TemplateGallery theme={theme} onUse={onUseTemplate} />
         <section className="mode-grid" aria-label="Choose a diagram mode">
-          <h2>Choose a mode</h2>
+          <h2>Or start blank</h2>
           <div className="example-cards">
             {MODE_CHOICES.map((mode) => (
               <button
@@ -135,26 +131,6 @@ export function StartSurface({
               ))}
             </ul>
           )}
-        </section>
-        <section id="examples" className="example-grid" aria-label="Examples">
-          <h2>Examples</h2>
-          <div className="example-cards">
-            {EXAMPLES.map((example) => (
-              <button
-                key={example.id}
-                type="button"
-                className="example-card"
-                onClick={() => onOpenExample(example.id)}
-              >
-                <span className="example-kind">
-                  <KindIcon kind={MODE_ICON[documentKindOf(example.document)] ?? "service"} />
-                  {documentKindOf(example.document).replace("-", " ")}
-                </span>
-                <strong>{example.title}</strong>
-                <span>{example.blurb}</span>
-              </button>
-            ))}
-          </div>
         </section>
         <details className="agent-path">
           <summary>Use with an agent</summary>

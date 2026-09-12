@@ -13,7 +13,7 @@ import {
 } from "@mapgrain/document";
 import { JOB_STAGE, JOB_STATUS, REPAIR_ACTION } from "../src/constants/create.ts";
 import { blankDocument } from "../src/create/blank.ts";
-import { EXAMPLES } from "../src/create/examples.ts";
+import { TEMPLATES } from "../src/templates/catalog.ts";
 import { makeNode } from "../src/create/nodes.ts";
 import { importDocumentText } from "../src/create/importDocument.ts";
 import { runCreateJob } from "../src/create/job.ts";
@@ -71,12 +71,13 @@ test("a blank diagram validates and can become Browser, API, Database with a gro
   assert.equal(ungrouped.document.nodes.length, 3);
 });
 
-test("start surface offers blank, file, examples, and agent path", async () => {
+test("start surface offers templates, blank modes, file, and agent path", async () => {
   const source = await readFile(new URL("../src/chrome/StartSurface.tsx", import.meta.url), "utf8");
   assert.match(source, /New diagram/);
   assert.match(source, /New \{mode\.title/);
   assert.doesNotMatch(source, /New blank diagram/);
-  assert.match(source, /Choose a mode/);
+  assert.match(source, /TemplateGallery/);
+  assert.match(source, /Or start blank/);
   assert.match(source, /MODE_CHOICES/);
   assert.match(source, /Open file/);
   assert.match(source, /Use with an agent/);
@@ -111,22 +112,18 @@ test("mode chooser names every diagram kind", async () => {
   assert.match(source, /Lifecycle/);
 });
 
-test("examples are original fixtures labelled as examples, not generated output", () => {
-  assert.equal(EXAMPLES.length, 6);
-  for (const example of EXAMPLES) {
-    assert.equal(example.kind, "example");
-    assert.equal(/generated output/i.test(`${example.title} ${example.blurb}`), false);
+test("templates are original diagrams, not generated output", () => {
+  for (const item of TEMPLATES) {
+    assert.equal(/generated output/i.test(`${item.title} ${item.blurb}`), false);
+    assert.ok(item.document.nodes.length > 0, item.id);
   }
 });
 
-test("examples load without a model provider", () => {
+test("templates load without a model provider", () => {
   assert.equal(isProviderConfigured({}), false);
-  const loaded = EXAMPLES.map((example) => importDocumentText(JSON.stringify(example.document)));
-  for (const result of loaded) {
-    assert.equal("snapshot" in result, true);
-    if ("snapshot" in result) {
-      assert.ok(result.snapshot.document.nodes.length > 0);
-    }
+  for (const item of TEMPLATES) {
+    const result = importDocumentText(JSON.stringify(item.document));
+    assert.equal("snapshot" in result, true, item.id);
   }
 });
 

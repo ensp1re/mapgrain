@@ -64,6 +64,8 @@ export interface GroupNodeData extends Record<string, unknown> {
 
 export interface RelationEdgeData extends Record<string, unknown> {
   label?: string;
+  /** True while this edge is the step a walkthrough is on. */
+  walkStep?: boolean;
   type: EdgeType;
   direction: EdgeDirection;
   points: Array<{ x: number; y: number }>;
