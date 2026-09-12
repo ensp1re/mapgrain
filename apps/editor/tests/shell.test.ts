@@ -72,9 +72,8 @@ test("inspector is omitted when nothing is selected", () => {
   assert.equal(inspectorVisible("gateway"), true);
 });
 
-test("shell CSS keeps chat as an overlay, not a third column", async () => {
+test("shell CSS keeps secondary surfaces as overlays, not extra columns", async () => {
   const css = await readFile(fileURLToPath(new URL("../src/styles/app.css", import.meta.url)), "utf8");
-  assert.match(css, /\.chat-drawer/);
   assert.match(css, /\.start-page/);
   assert.match(css, /\.example-card/);
   assert.match(css, /position: absolute/);
@@ -90,7 +89,7 @@ test("select supports Home, End, and typeahead", async () => {
   assert.match(source, /startsWith\(needle\)/);
 });
 
-test("chat is disabled until generation is usable", async () => {
+test("the header offers no chat entry and keeps Help reachable", async () => {
   const topbar = await readFile(fileURLToPath(new URL("../src/chrome/TopBar.tsx", import.meta.url)), "utf8");
   assert.doesNotMatch(topbar, /Chat is unavailable/);
   assert.doesNotMatch(topbar, />\s*Chat\s*</);

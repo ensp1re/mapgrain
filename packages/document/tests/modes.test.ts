@@ -18,16 +18,27 @@ test("sequence, data-flow, lifecycle, and decision fixtures validate", async () 
   }
 });
 
-test("a decision without two labelled outcomes is rejected", async () => {
+test("an unlabelled decision outcome is rejected", async () => {
   const raw = JSON.parse(await readFile(`${fixtures}/workflow-decision.json`, "utf8")) as {
-    nodes: Array<{ id: string; kind: string }>;
-    edges: unknown[];
+    edges: Array<{ id: string; outcome?: string }>;
   };
-  raw.edges = raw.edges.slice(0, 1);
+  const target = raw.edges.find((edge) => edge.id === "e-yes");
+  delete target?.outcome;
   const result = validateDocument(raw);
   assert.equal(result.ok, false);
   if (result.ok) return;
   assert.equal(result.errors[0]?.code, VALIDATION_ERROR_CODE.MODE_CONSTRAINT);
+});
+
+test("a decision is authorable before it has both outcomes", async () => {
+  const raw = JSON.parse(await readFile(`${fixtures}/workflow-decision.json`, "utf8")) as {
+    edges: Array<{ id: string }>;
+  };
+  for (const keep of [1, 2]) {
+    const partial = { ...raw, edges: raw.edges.slice(0, keep) };
+    const result = validateDocument(partial);
+    assert.equal(result.ok, true, `${keep} edge(s) ${JSON.stringify(result)}`);
+  }
 });
 
 test("architecture documents reject sequence node kinds", () => {

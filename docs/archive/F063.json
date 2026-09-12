@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F063",
+    "behavior": "Editor UI/UX audit phase 1: advertised keyboard shortcuts actually run their commands, arrange preview and present mode refit the viewport, phone controls stay clickable above the inspector sheet, native controls and initial theme follow the active color scheme, outline search is not clipped, congested edge labels fall back to least-overlap placement, fit zoom is capped, and the view name renders as a chip.",
+    "acceptance": [
+      "Keys A, N, P, E, J, O, I, T, F, and Shift+F run their advertised commands; single-letter shortcuts ignore editable targets and modifier chords.",
+      "Entering an arrange preview refits the viewport so the arranged nodes are visible.",
+      "At <=767px the Outline and Details buttons stay clickable while the inspector sheet is open.",
+      "Present mode hides the selection bar and kind legend and refits the diagram on entry.",
+      "Checkboxes and other native controls follow the active theme via color-scheme; the initial theme honors prefers-color-scheme.",
+      "Outline search field is not clipped at <=1279px.",
+      "When every edge-label candidate collides, placeEdgeLabel returns the least-overlapping candidate instead of ignoring obstacles.",
+      "fitView calls cap zoom at 1.25.",
+      "The canvas view name renders as a bordered chip."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789073199038-0c1e43",
+      "fingerprintBefore": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
+      "fingerprintAfter": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-10T20:47:53.075Z"
+    },
+    "delivery": {
+      "implementationRevision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
+      "remote": "https://git-manager.devin.ai/proxy/github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/95",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
+          "conclusion": "pass",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34528673792/job/103043755364"
+        }
+      ],
+      "observedAt": "2026-09-10T20:54:03.506Z"
+    }
+  },
+  "archivedAt": "2026-09-12T18:16:17.226263Z"
+}

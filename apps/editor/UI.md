@@ -14,9 +14,10 @@ These rules apply to the editor chrome. They are not product claims.
 ## Menus and selectors
 
 - One portaled overlay. Menus, listboxes, and modal dialogs are different patterns. Do not focus-trap menus.
-- Menu rows: optional icon, left label, right shortcut. No card-per-row. Hide inert Chat.
+- Menu rows: optional icon, left label, right shortcut. No card-per-row.
 - Selectors keep the trigger as a field. Options are a listbox. Arrow/typeahead highlight; Enter/click commit; Escape cancel. Show human kind names.
-- Clamp overlays 8px inside the visual viewport. Dismiss outside pointer without activating what is underneath.
+- Clamp overlays 8px inside the visual viewport. A menu or listbox dismisses on an outside
+  pointer and lets that click through; only a modal dialog swallows it.
 
 ## New page
 

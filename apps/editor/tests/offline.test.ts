@@ -21,7 +21,7 @@ import { memoryStore } from "../src/persist/memory.ts";
 const fixture = fileURLToPath(
   new URL("../../../tests/fixtures/documents/nested-groups.json", import.meta.url),
 );
-const chatSource = fileURLToPath(new URL("../src/chrome/ChatDrawer.tsx", import.meta.url));
+const createJobSource = fileURLToPath(new URL("../src/create/job.ts", import.meta.url));
 
 async function fakeDist(files: Record<string, string>): Promise<string> {
   const dir = await mkdtemp(join(tmpdir(), "mapgrain-offline-dist-"));
@@ -69,10 +69,9 @@ test("edit, persist, reload, and export keep ids and meaning", async () => {
   assert.match(svg, /<svg/);
 });
 
-test("chat does not claim generation it cannot do", async () => {
-  const source = await readFile(chatSource, "utf8");
+test("create does not claim generation it cannot do", async () => {
+  const source = await readFile(createJobSource, "utf8");
   assert.match(source, /Generation is not configured/);
-  assert.match(source, /does not\s+invent/);
   assert.equal(/here is (your )?diagram/i.test(source), false);
 });
 

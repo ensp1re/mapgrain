@@ -3,21 +3,24 @@
   "nextId": 65,
   "tasks": [
     {
-      "id": "F063",
-      "behavior": "Editor UI/UX audit phase 1: advertised keyboard shortcuts actually run their commands, arrange preview and present mode refit the viewport, phone controls stay clickable above the inspector sheet, native controls and initial theme follow the active color scheme, outline search is not clipped, congested edge labels fall back to least-overlap placement, fit zoom is capped, and the view name renders as a chip.",
+      "id": "F064",
+      "behavior": "Editor UI/UX phase 2: ordinary actions stop dead-ending. A blank document of every kind validates and builds a scene, a failed load explains itself and offers recovery, an open menu no longer swallows the next click, every kind the Add menu offers can actually be added, single-key shortcuts stay out of menus and dialogs, Import JSON works, and the chrome gets a complete token set, styled scrollbars, a visible focus ring on every field, resizable panes, and node padding that keeps titles off the card edge.",
       "acceptance": [
-        "Keys A, N, P, E, J, O, I, T, F, and Shift+F run their advertised commands; single-letter shortcuts ignore editable targets and modifier chords.",
-        "Entering an arrange preview refits the viewport so the arranged nodes are visible.",
-        "At <=767px the Outline and Details buttons stay clickable while the inspector sheet is open.",
-        "Present mode hides the selection bar and kind legend and refits the diagram on entry.",
-        "Checkboxes and other native controls follow the active theme via color-scheme; the initial theme honors prefers-color-scheme.",
-        "Outline search field is not clipped at <=1279px.",
-        "When every edge-label candidate collides, placeEdgeLabel returns the least-overlapping candidate instead of ignoring obstacles.",
-        "fitView calls cap zoom at 1.25.",
-        "The canvas view name renders as a bordered chip."
+        "blankDocument(kind) validates and builds a scene for all five document kinds.",
+        "A document that fails to load renders a recovery surface naming the failure with Return to library and Download, not a bare sentence.",
+        "An outside pointerdown closes a menu or listbox and still activates what was clicked; a modal dialog still swallows it.",
+        "Every node kind in addableKinds(kind) applies cleanly to a blank document of that kind.",
+        "commandForKeyEvent returns null inside editable targets, menus, listboxes and dialogs, on held keys, and on unintended Shift chords.",
+        "Import JSON in the command palette opens a file picker and loads the document.",
+        "Every COMMAND_ID appears in COMMANDS and is dispatched by the editor.",
+        "Radius, type-scale, z-index, motion and control-size tokens are defined once and used by the chrome.",
+        "Every scroll container uses the app's own scrollbar styling in both themes.",
+        "Every text field and select trigger shows a visible focus ring and shares one height, padding and background.",
+        "The outline and inspector panes can be resized and persist their width.",
+        "Node titles keep a padding gap from the card edge in the editor and in every export."
       ],
       "dependsOn": [],
-      "state": "passing",
+      "state": "active",
       "spec": null,
       "plan": "docs/PLAN.md",
       "verification": [
@@ -28,49 +31,8 @@
         "browser"
       ],
       "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1789073199038-0c1e43",
-        "fingerprintBefore": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
-        "fingerprintAfter": "db0a18e040a0b2d80cf2dd2076c2dd479b9a715b6ab4fe96dce0fe8dbf31f60d",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          },
-          {
-            "id": "build",
-            "status": "passed"
-          },
-          {
-            "id": "browser",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-10T20:47:53.075Z"
-      },
-      "delivery": {
-        "implementationRevision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
-        "remote": "https://git-manager.devin.ai/proxy/github.com/ensp1re/mapgrain.git",
-        "prUrl": "https://github.com/ensp1re/mapgrain/pull/95",
-        "checkRuns": [
-          {
-            "name": "verify",
-            "revision": "c2ea6dc42159e4a5fbf0066a8f212732e5f8719e",
-            "conclusion": "pass",
-            "url": "https://github.com/ensp1re/mapgrain/actions/runs/34528673792/job/103043755364"
-          }
-        ],
-        "observedAt": "2026-09-10T20:54:03.506Z"
-      }
+      "evidence": null,
+      "delivery": null
     }
   ]
 }
