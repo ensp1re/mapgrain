@@ -162,15 +162,15 @@ test("sequence flow keeps lifelines and does not remap message geometry", async 
   assert.deepEqual(message?.labelAnchor, sceneEdge?.labelAnchor);
 });
 
-test("specimen CSS covers both themes, a 390px layout, and reduced motion", async () => {
+test("chrome CSS covers both themes, a 390px layout, and reduced motion", async () => {
   const cssPath = fileURLToPath(new URL("../src/styles/app.css", import.meta.url));
-  const css = await readFile(cssPath, "utf8");
+  const tokensPath = fileURLToPath(new URL("../src/styles/tokens.css", import.meta.url));
+  const css = (await readFile(cssPath, "utf8")) + (await readFile(tokensPath, "utf8"));
   assert.match(css, /data-theme="dark"/);
   assert.match(css, /data-theme="light"/);
   assert.match(css, /max-width: 767px/);
   assert.match(css, /max-width: 390px/);
   assert.match(css, /max-width: 1023px/);
-  assert.match(css, /min-width: 1440px/);
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /--topbar-h: 52px/);
   assert.match(css, /\.react-flow__node-group/);

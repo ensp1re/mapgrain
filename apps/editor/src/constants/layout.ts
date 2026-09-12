@@ -6,14 +6,17 @@ export const BREAKPOINT = {
   WIDE: 1440,
 } as const;
 
+/** Defaults in px. These mirror --outline-w / --inspector-w in styles/tokens.css. */
 export const PANE_WIDTH = {
-  OUTLINE: 204,
-  INSPECTOR: 264,
-  OUTLINE_WIDE: 204,
-  INSPECTOR_WIDE: 264,
-  OUTLINE_LAPTOP: 160,
-  INSPECTOR_LAPTOP: 264,
+  OUTLINE: 264,
+  INSPECTOR: 300,
+  OUTLINE_LAPTOP: 220,
+  INSPECTOR_LAPTOP: 280,
 } as const;
+
+export const PANE_WIDTH_MIN = 200;
+export const PANE_WIDTH_MAX = 420;
+export const PANE_WIDTH_STEP = 16;
 
 export const SHELL_LAYOUT = {
   SPLIT: "split",

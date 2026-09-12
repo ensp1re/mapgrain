@@ -272,6 +272,7 @@ export function TopBar({
             >
               Redo
             </button>
+            <span className="history-divider" aria-hidden="true" />
           </>
         ) : null}
         {showArrange ? (
@@ -286,7 +287,7 @@ export function TopBar({
           </button>
         ) : null}
         {showPresent ? (
-          <button type="button" className="text-btn ghost" onClick={onPresent} aria-label="Present" title="Present P">
+          <button type="button" className="text-btn ghost" onClick={onPresent} aria-label="Present" title={`Present ${commandShortcut(COMMAND_ID.PRESENT)}`}>
             Present
           </button>
         ) : null}

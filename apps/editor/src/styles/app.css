@@ -1,80 +1,4 @@
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #1c1c1f;
-  --bg-raised: #222226;
-  --surface: #27272a;
-  --surface-hover: #2e2e33;
-  --border: #3f3f46;
-  --text: #f4f4f5;
-  --muted: #a1a1aa;
-  --accent: #6d72f3;
-  --accent-soft: rgba(109, 114, 243, 0.16);
-  --edge: #71717a;
-  --port: #52525b;
-  --focus: #9aa0ff;
-  --danger: #f87171;
-  --state-start: #243d38;
-  --state-active: #27352c;
-  --state-wait: #3a3426;
-  --state-fail: #3c272b;
-  --state-done: #2c2a3d;
-  --kind-actor: #2a3140;
-  --kind-system: #2c3238;
-  --kind-gateway: #2a2f3d;
-  --kind-service: #273238;
-  --kind-job: #2d2e38;
-  --kind-datastore: #243238;
-  --kind-queue: #322e26;
-  --kind-external: #32282c;
-  --shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
-}
-
-:root[data-theme="light"] {
-  color-scheme: light;
-  --bg: #f4f1ea;
-  --bg-raised: #faf7f1;
-  --surface: #fffcf7;
-  --surface-hover: #f3efe7;
-  --border: #d6d3cd;
-  --text: #27272a;
-  --muted: #71717a;
-  --accent: #4f46e5;
-  --accent-soft: rgba(79, 70, 229, 0.1);
-  --edge: #a1a1aa;
-  --port: #a1a1aa;
-  --focus: #4f46e5;
-  --danger: #b91c1c;
-  --state-start: #dceae6;
-  --state-active: #e3eee4;
-  --state-wait: #f3ead6;
-  --state-fail: #f3e0e2;
-  --state-done: #e6e4f2;
-  --kind-actor: #e4e8f2;
-  --kind-system: #e6e8ec;
-  --kind-gateway: #e4e6f3;
-  --kind-service: #dce8ea;
-  --kind-job: #e6e4f0;
-  --kind-datastore: #d7e8e6;
-  --kind-queue: #f0e8d8;
-  --kind-external: #f0e2e4;
-  --shadow: 0 10px 28px rgba(28, 25, 23, 0.12);
-}
-
-:root {
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --topbar-h: 52px;
-  --outline-w: 204px;
-  --inspector-w: 264px;
-  --panel-pad: 16px;
-  --node-radius: 8px;
-  --node-pad-x: 16px;
-  --node-pad-y: 12px;
-}
+@import "./tokens.css";
 
 * { box-sizing: border-box; }
 
@@ -95,9 +19,108 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
   color: inherit;
+}
+
+body {
+  font-size: var(--fs-base);
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbars. The app paints its own so a dark pane never gets a light gutter.
+   --------------------------------------------------------------------------- */
+
+:where(.app.is-start, .outline, .inspector, .overlay-panel, .add-menu-pop, .command-menu, .help-overlay, .agent-example) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+:where(.app.is-start, .outline, .inspector, .overlay-panel, .add-menu-pop, .command-menu, .help-overlay, .agent-example)::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+:where(.app.is-start, .outline, .inspector, .overlay-panel, .add-menu-pop, .command-menu, .help-overlay, .agent-example)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.app.is-start, .outline, .inspector, .overlay-panel, .add-menu-pop, .command-menu, .help-overlay, .agent-example)::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: var(--r-pill);
+  background-color: var(--border);
+  background-clip: content-box;
+}
+
+:where(.app.is-start, .outline, .inspector, .overlay-panel, .add-menu-pop, .command-menu, .help-overlay, .agent-example)::-webkit-scrollbar-thumb:hover {
+  background-color: var(--muted);
+}
+
+:where(.app.is-start, .outline, .inspector, .overlay-panel, .add-menu-pop, .command-menu, .help-overlay, .agent-example)::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Fields. One height, one inset, one background for every text input and select
+   trigger, and a ring on focus instead of the browser's hairline outline.
+   --------------------------------------------------------------------------- */
+
+.field,
+.inspector input:not([type="checkbox"]),
+.connect-dialog input,
+.outline-search,
+.command-menu input,
+.import-field input,
+.start-prompt textarea,
+.title-field input,
+.ui-select-trigger {
+  min-height: var(--control-h);
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-2);
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.start-prompt textarea {
+  padding: 8px 10px;
+}
+
+.field:hover,
+.inspector input:not([type="checkbox"]):hover,
+.connect-dialog input:hover,
+.outline-search:hover,
+.import-field input:hover,
+.title-field input:hover,
+.ui-select-trigger:hover {
+  border-color: var(--muted);
+}
+
+.field:focus-visible,
+.inspector input:not([type="checkbox"]):focus-visible,
+.connect-dialog input:focus-visible,
+.command-menu input:focus-visible,
+.import-field input:focus-visible,
+.start-prompt textarea:focus-visible,
+.title-field input:focus-visible,
+.ui-select-trigger:focus-visible,
+.outline-search:focus-within {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+@media (forced-colors: active) {
+  .field:focus-visible,
+  .inspector input:not([type="checkbox"]):focus-visible,
+  .ui-select-trigger:focus-visible,
+  .outline-search:focus-within {
+    outline: 2px solid CanvasText;
+    outline-offset: 1px;
+  }
 }
 
 .app {
@@ -345,10 +368,10 @@ input {
 
 .icon-btn,
 .text-btn {
-  min-height: 32px;
+  min-height: var(--control-h);
   border: 1px solid var(--border);
   background: var(--surface);
-  border-radius: 8px;
+  border-radius: var(--r-3);
   padding: 7px 12px;
   cursor: pointer;
 }
@@ -366,12 +389,32 @@ input {
 .text-btn.primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: #f8f8ff;
+  color: var(--on-accent);
+}
+
+/* The shared hover used to repaint the primary and danger buttons grey. */
+.text-btn.primary:hover {
+  background: color-mix(in srgb, var(--accent) 86%, var(--text));
+  border-color: color-mix(in srgb, var(--accent) 86%, var(--text));
 }
 
 .text-btn.is-danger,
 .menu-item.is-danger {
   color: var(--danger);
+}
+
+.text-btn.is-danger:hover,
+.menu-item.is-danger:hover {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  border-color: var(--danger-border);
+}
+
+/* History is a pair, not another mode action. */
+.topbar-actions .history-divider {
+  width: 1px;
+  height: 18px;
+  margin: 0 var(--space-1);
+  background: var(--border);
 }
 
 .text-btn,
@@ -387,20 +430,23 @@ input {
 .outline-row:focus-visible,
 .cmd-item:focus-visible,
 .node-card:focus-visible,
-.add-menu-pop input:focus-visible,
-.title-field input:focus-visible {
+.menu-item:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 1px;
 }
 
 .workspace {
   display: grid;
-  grid-template-columns: var(--outline-w) 1fr var(--inspector-w);
+  position: relative;
+  grid-template-columns:
+    minmax(var(--outline-w-min), var(--outline-w))
+    minmax(0, 1fr)
+    minmax(240px, var(--inspector-w));
   min-height: 0;
 }
 
 .workspace.is-outline-collapsed {
-  grid-template-columns: 0 1fr var(--inspector-w);
+  grid-template-columns: 0 minmax(0, 1fr) minmax(240px, var(--inspector-w));
 }
 
 .workspace.is-outline-collapsed .outline {
@@ -408,7 +454,7 @@ input {
 }
 
 .workspace.is-inspector-hidden {
-  grid-template-columns: var(--outline-w) 1fr 0;
+  grid-template-columns: minmax(var(--outline-w-min), var(--outline-w)) minmax(0, 1fr) 0;
 }
 
 .workspace.is-outline-collapsed.is-inspector-hidden {
@@ -421,13 +467,52 @@ input {
 
 .outline,
 .inspector {
+  position: relative;
   min-height: 0;
+  min-width: 0;
   overflow: auto;
   background: var(--bg-raised);
 }
 
 .outline { border-right: 1px solid var(--border); }
 .inspector { border-left: 1px solid var(--border); }
+
+/* Pane resizer: a hairline hit target over the pane's inner edge. */
+.pane-resizer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: var(--z-float);
+  width: 9px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.pane-resizer.is-right { right: -4px; }
+.pane-resizer.is-left { left: -4px; }
+
+.pane-resizer::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 4px;
+  width: 1px;
+  background: transparent;
+  transition: background-color var(--t-fast) ease;
+}
+
+.pane-resizer:hover::after,
+.pane-resizer:focus-visible::after,
+.pane-resizer.is-active::after {
+  background: var(--accent);
+}
+
+.pane-resizer:focus-visible {
+  outline: none;
+}
 
 .pane-head {
   display: flex;
@@ -624,8 +709,8 @@ input {
 
 .inspector dt {
   color: var(--muted);
-  font-size: 12px;
-  margin-top: var(--space-5);
+  font-size: var(--fs-sm);
+  margin-top: var(--space-4);
 }
 
 .inspector dt:first-child {
@@ -657,7 +742,7 @@ input {
 .command-scrim {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.32);
+  background: var(--scrim);
   display: grid;
   place-items: start center;
   padding-top: 12vh;
@@ -926,9 +1011,11 @@ input {
 }
 
 .node-title {
+  min-width: 0;
   font-size: var(--node-title-size, 14px);
   line-height: var(--node-title-line, 20px);
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
 .react-flow__node-group {
@@ -997,16 +1084,12 @@ input {
 }
 
 .relation-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
   list-style: none;
   margin: var(--space-2) 0 0;
   padding: 0;
-}
-
-.relation-row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
 }
 
 .relation-row small {
@@ -1018,12 +1101,14 @@ input {
   align-items: center;
   gap: var(--space-2);
   width: 100%;
-  padding: var(--space-2);
+  min-width: 0;
+  padding: var(--space-2) 10px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-2);
   background: var(--surface);
   color: var(--text);
   text-align: left;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 
@@ -1074,7 +1159,7 @@ input {
 }
 
 .arrange-bar.is-conflict {
-  border-color: #c45c5c;
+  border-color: var(--danger-border);
 }
 
 .arrange-actions {
@@ -1124,7 +1209,7 @@ input {
 
 .edit-error {
   margin: 0 12px 12px;
-  color: #f0a8a8;
+  color: var(--danger-soft);
   font-size: 12px;
 }
 
@@ -1423,12 +1508,7 @@ input {
   color: var(--accent);
 }
 
-.example-kind {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  text-transform: capitalize;
-}
+
 
 .agent-path {
   margin: 20px 0;
@@ -1465,12 +1545,21 @@ input {
 
 .start-failure {
   margin: 0 0 16px;
-  color: #f0a8a8;
+  color: var(--danger-soft);
 }
 
+.mode-grid,
+.recent-list,
+.example-grid {
+  display: block;
+  margin-top: var(--space-5);
+}
+
+.mode-grid h2,
+.recent-list h2,
 .example-grid h2 {
-  margin: 24px 0 8px;
-  font-size: 13px;
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-md);
 }
 
 .example-cards {
@@ -1496,8 +1585,11 @@ input {
 }
 
 .example-kind {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--accent);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -1525,30 +1617,57 @@ input {
   position: relative;
 }
 
+.select-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.select-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .ui-select-trigger,
 .ui-select-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   width: 100%;
-  height: 32px;
-  padding: 0 28px 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background-color: var(--surface);
+  min-height: var(--control-h);
   color: var(--text);
   text-align: left;
 }
 
-.ui-select-trigger {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a1a1aa' d='M3 4.5L6 8l3-3.5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
+.ui-select-option {
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--r-2);
+  background-color: transparent;
 }
 
-.ui-select-trigger:hover,
+.ui-select-trigger {
+  padding-right: 28px;
+}
+
+/* The chevron follows the theme because it is a child SVG, not a fixed-colour data URI. */
+.ui-select-caret {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
 .ui-select-option:hover {
   background-color: var(--surface-hover);
 }
 
-.ui-select-trigger:focus-visible,
 .ui-select-option:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 1px;
@@ -1577,30 +1696,16 @@ input {
   min-width: 180px;
 }
 
-.ui-select-option {
-  padding-right: 10px;
-}
-
 .ui-select-option.is-selected {
   background: var(--accent-soft);
 }
 
-@media (min-width: 1440px) {
-  :root {
-    --outline-w: 204px;
-    --inspector-w: 264px;
-  }
-}
-
+/* Breakpoints are BREAKPOINT - 1 from constants/layout.ts: 1279 = DESKTOP - 1,
+   1023 = LAPTOP - 1, 767 = TABLET - 1, 390 = PHONE. Keep the two in step. */
 @media (max-width: 1279px) {
   :root {
-    --outline-w: 160px;
-    --inspector-w: 264px;
-  }
-
-  .outline-search {
-    margin: 0 8px 16px;
-    padding: 8px 6px;
+    --outline-w: 220px;
+    --inspector-w: 280px;
   }
 
   .outline-search kbd {
@@ -1608,19 +1713,19 @@ input {
   }
 
   .workspace.is-single {
-    grid-template-columns: var(--outline-w) 1fr;
+    grid-template-columns: minmax(var(--outline-w-min), var(--outline-w)) minmax(0, 1fr);
   }
 
   .workspace.is-single.is-outline-collapsed {
-    grid-template-columns: 1fr var(--inspector-w);
+    grid-template-columns: minmax(0, 1fr) minmax(240px, var(--inspector-w));
   }
 
   .workspace.is-single.is-outline-collapsed.is-inspector-hidden {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .workspace.is-single.is-inspector-hidden {
-    grid-template-columns: var(--outline-w) 1fr;
+    grid-template-columns: minmax(var(--outline-w-min), var(--outline-w)) minmax(0, 1fr);
   }
 }
 
@@ -1632,22 +1737,28 @@ input {
 }
 
 @media (max-width: 767px) {
+  .pane-resizer {
+    display: none;
+  }
+
   .workspace,
   .workspace.is-overlay,
   .workspace.is-outline-collapsed,
   .workspace.is-inspector-hidden {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
   }
 
-  .workspace.is-overlay .outline,
-  .workspace.is-overlay .inspector {
-    position: absolute;
-    z-index: 7;
-    box-shadow: var(--shadow);
+  /* The details sheet takes a grid row rather than covering the canvas, so the
+     diagram stays whole and the canvas controls keep their own space above it. */
+  .workspace.is-overlay:has(> .inspector) {
+    grid-template-rows: minmax(0, 1fr) min(48%, 360px);
   }
 
   .workspace.is-overlay .outline {
+    position: absolute;
+    z-index: var(--z-pane);
+    box-shadow: var(--shadow);
     left: 0;
     top: 0;
     bottom: 0;
@@ -1656,13 +1767,13 @@ input {
   }
 
   .workspace.is-overlay .inspector {
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: auto;
+    position: relative;
+    z-index: var(--z-pane);
+    box-shadow: var(--shadow);
     width: 100%;
-    max-height: min(48%, 360px);
+    min-height: 0;
     overflow: auto;
+    border-left: 0;
     border-top: 1px solid var(--border);
   }
 

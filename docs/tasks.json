@@ -20,7 +20,7 @@
         "Node titles keep a padding gap from the card edge in the editor and in every export."
       ],
       "dependsOn": [],
-      "state": "active",
+      "state": "verified",
       "spec": null,
       "plan": "docs/PLAN.md",
       "verification": [
@@ -31,7 +31,35 @@
         "browser"
       ],
       "blockedReason": null,
-      "evidence": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789237752945-ceef85",
+        "fingerprintBefore": "bcf152f4b9fca7bc5aa68f952e42fe11bdcae5ba2580dced60c0586d837f1d03",
+        "fingerprintAfter": "bcf152f4b9fca7bc5aa68f952e42fe11bdcae5ba2580dced60c0586d837f1d03",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-12T18:29:45.526Z"
+      },
       "delivery": null
     }
   ]

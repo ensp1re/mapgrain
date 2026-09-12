@@ -6,6 +6,8 @@ import { matchesQuery } from "../outline/search.ts";
 import { outlineTree } from "../outline/tree.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
 import { Pane } from "../ui/Pane.tsx";
+import { PaneResizer } from "../ui/PaneResizer.tsx";
+import { PANE_WIDTH } from "../constants/layout.ts";
 
 interface OutlineProps {
   nodes: FlowNodeDraft[];
@@ -30,7 +32,22 @@ export function Outline({ nodes, selectedId, onSelect, onClose }: OutlineProps) 
   }, [collapsed, nodes, query]);
 
   return (
-    <Pane as="nav" className="outline" title="Outline" meta={count} ariaLabel="Components" onClose={onClose}>
+    <Pane
+      as="nav"
+      className="outline"
+      title="Outline"
+      meta={count}
+      ariaLabel="Components"
+      onClose={onClose}
+      edge={
+        <PaneResizer
+          property="--outline-w"
+          edge="right"
+          label="Resize outline"
+          defaultWidth={PANE_WIDTH.OUTLINE}
+        />
+      }
+    >
       <label className="outline-search">
         <span className="visually-hidden">Search components</span>
         <input

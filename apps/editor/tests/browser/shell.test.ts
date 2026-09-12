@@ -98,3 +98,55 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     await context.close();
   }
 });
+
+test("fields, focus rings, and scrollbars follow the design tokens in both themes", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+
+  for (const colorScheme of ["dark", "light"] as const) {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme });
+    const page = await context.newPage();
+    await page.goto(server.url, { waitUntil: "domcontentloaded" });
+    await waitStartOrEditor(page);
+    const example = page.getByRole("button", { name: /Local diagram workspace/ });
+    if (await example.isVisible().catch(() => false)) await example.click();
+    await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
+    await page.locator(".node-card").first().click();
+
+    const name = page.getByRole("textbox", { name: "Node label" });
+    await name.waitFor();
+    const box = await name.boundingBox();
+    assert.ok(box && box.height >= 32, `${colorScheme} name field is ${box?.height}px tall`);
+
+    // Focus paints a ring, not the browser's hairline outline.
+    await name.focus();
+    const focused = await name.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return { shadow: style.boxShadow, outline: style.outlineStyle };
+    });
+    assert.notEqual(focused.shadow, "none", `${colorScheme} focused field has no ring`);
+    assert.equal(focused.outline, "none", `${colorScheme} focused field still draws an outline`);
+
+    // Panes scroll with the app's own scrollbar, not the OS default.
+    const paneScrollbar = await page
+      .locator(".outline")
+      .evaluate((node) => getComputedStyle(node).scrollbarColor);
+    assert.notEqual(paneScrollbar, "auto", `${colorScheme} outline uses the default scrollbar`);
+
+    // The outline is wide enough for the tree it renders.
+    const outlineBox = await page.locator(".outline").boundingBox();
+    assert.ok(outlineBox && outlineBox.width >= 240, `${colorScheme} outline is ${outlineBox?.width}px wide`);
+    const rowOverflow = await page
+      .locator(".outline-label")
+      .first()
+      .evaluate((node) => node.scrollWidth - node.clientWidth);
+    assert.ok(rowOverflow <= 1, `${colorScheme} outline label truncates by ${rowOverflow}px`);
+
+    await context.close();
+  }
+});

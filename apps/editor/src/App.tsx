@@ -526,6 +526,15 @@ function Editor() {
     return () => cancelAnimationFrame(outer);
   }, [presenting, fitView]);
 
+  // Opening or closing a narrow-width pane resizes the canvas, so refit into it.
+  useEffect(() => {
+    if (shellLayout === SHELL_LAYOUT.SPLIT) return;
+    const outer = requestAnimationFrame(() => {
+      requestAnimationFrame(() => void fitView(fitAllOptions()));
+    });
+    return () => cancelAnimationFrame(outer);
+  }, [narrowPanel, shellLayout, fitView]);
+
   useEffect(() => {
     if (arrange.status !== "preview") return;
     const outer = requestAnimationFrame(() => {

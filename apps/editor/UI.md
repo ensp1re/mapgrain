@@ -2,6 +2,23 @@
 
 These rules apply to the editor chrome. They are not product claims.
 
+## Tokens
+
+- `styles/tokens.css` owns every colour, space, radius, type size, z-index, motion and control
+  size. `styles/app.css` picks from them. A raw px or hex in a chrome rule is a bug to fix.
+- Light and dark define the same token names. Never define a colour in only one theme.
+- Pane width defaults live in both `tokens.css` and `constants/layout.ts`; keep them equal.
+- Breakpoints are `BREAKPOINT - 1` from `constants/layout.ts`. Do not invent a fourth set.
+
+## Fields and scrolling
+
+- Text inputs and select triggers share one height, inset, radius and background.
+- Focus is a ring: accent border plus a soft outer shadow. No hairline browser outline, and no
+  field without a visible focus state. Forced-colors keeps a real outline.
+- Every scroll container uses the app's own scrollbar. A dark pane never gets a light gutter.
+- Panes resize from their inner edge, clamped to the floor and ceiling in `constants/layout.ts`,
+  and remember their width per viewer. Double-click resets.
+
 ## Header
 
 - Export is the emphasized action. Present is in the bar when space allows.
