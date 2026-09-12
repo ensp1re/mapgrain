@@ -1,4 +1,10 @@
-import { DEFAULT_FONT_FAMILY, DEFAULT_FONT_WEIGHT, ICON_GAP, KIND_TITLE_GAP } from "./constants/metrics.ts";
+import {
+  DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_WEIGHT,
+  DESCRIPTION_GAP,
+  ICON_GAP,
+  KIND_TITLE_GAP,
+} from "./constants/metrics.ts";
 import { iconSizeFor, kindFontFor } from "./kind.ts";
 import type { SceneOptions } from "./types/options.ts";
 import type { ScenePresentation } from "./types/scene.ts";
@@ -18,6 +24,7 @@ export function presentationFromOptions(options: SceneOptions): ScenePresentatio
     paddingX: options.padding.x,
     paddingY: options.padding.y,
     kindTitleGap: KIND_TITLE_GAP,
+    descriptionGap: DESCRIPTION_GAP,
   };
 }
 
@@ -33,5 +40,6 @@ export function presentationCssVars(presentation: ScenePresentation): Record<str
     "--node-icon-size": `${presentation.iconSize}px`,
     "--node-icon-gap": `${presentation.iconGap}px`,
     "--node-kind-title-gap": `${presentation.kindTitleGap}px`,
+    "--node-desc-gap": `${presentation.descriptionGap}px`,
   };
 }

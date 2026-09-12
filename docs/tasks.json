@@ -1,5 +1,65 @@
 {
   "schemaVersion": 1,
-  "nextId": 68,
-  "tasks": []
+  "nextId": 69,
+  "tasks": [
+    {
+      "id": "F068",
+      "behavior": "Diagrams are routed and drawn like diagrams: connections run in right angles through the channel between rows and lanes and leave on the side facing their target, lanes stop painting over the connections that cross them and share one column grid with no gap between bands, a card is an icon and a title on one row with decisions as diamonds and terminal states as pills, and a caption carries meaning instead of repeating the connection type.",
+      "acceptance": [
+        "Every routed connection is made of axis-aligned segments and at most two cross a card they do not touch across the fixture set.",
+        "Parallel connections between the same pair never share a path.",
+        "A connection starts and ends on a card boundary, on the side facing the other card.",
+        "Lane bands stack with no gap, share x and width, and a step that follows another lane's step sits in a later column.",
+        "A lane body is unfilled in the editor and in the SVG export, so a connection crossing it stays visible.",
+        "A card draws an icon and a title on one row, with a description line only when the node has one, and the kind name no longer appears on the card.",
+        "A decision draws as a diamond and a marked state as a pill, in the editor and in the SVG export.",
+        "An edge caption omits the connection type, and a connection with no label draws no caption.",
+        "Selecting or hovering a lane does not print its name a second time over the canvas.",
+        "A connection into a side a card had not used before renders, because the card's handles are rebuilt when its ports change.",
+        "A document opens at a readable zoom anchored at its start."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789246582289-641dd9",
+        "fingerprintBefore": "01c61654c177df15c0e56c3c51a2286467acd3f8c8038ed0fa288f4d1468bf93",
+        "fingerprintAfter": "01c61654c177df15c0e56c3c51a2286467acd3f8c8038ed0fa288f4d1468bf93",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-12T20:57:05.091Z"
+      },
+      "delivery": null
+    }
+  ]
 }

@@ -102,8 +102,10 @@ test("SVG captions and CSS variables match the canonical scene", async () => {
   assert.equal(result.ok, true);
   if (!result.ok) return;
   const svg = text(result.bytes);
-  assert.match(svg, /reads · get/);
-  assert.match(svg, /writes · set/);
+  assert.match(svg, />get</);
+  assert.match(svg, />set</);
+  // The edge type is carried by the line, not repeated in every caption.
+  assert.doesNotMatch(svg, /reads · get/);
   const body = svg.replace(/<style><!\[CDATA\[[\s\S]*?\]\]><\/style>/, "");
   assert.match(body, new RegExp(`class="mg-bg"[^>]*fill="${LIGHT_TOKENS.background}"`));
   assert.match(body, new RegExp(`fill="${LIGHT_TOKENS.text}"`));
@@ -280,11 +282,15 @@ test("workflow SVG draws equal-width lanes from groups", async () => {
   assert.match(svg, /data-kind="lane"/);
   assert.match(svg, /data-id="author-lane"/);
   assert.match(svg, /data-id="review-lane"/);
-  const widths = [...svg.matchAll(/data-kind="lane"[^>]*>\s*<rect[^>]*width="([^"]+)"/g)].map(
+  const widths = [...svg.matchAll(/data-kind="lane"[\s\S]*?<rect[^>]*width="([^"]+)"/g)].map(
     (match) => match[1],
   );
   assert.equal(widths.length, 2);
   assert.equal(widths[0], widths[1]);
+  // The lane body stays unfilled so a connection crossing it is not painted over; only the
+  // header band is tinted.
+  assert.match(svg, /data-kind="lane"[^>]*>\s*<path d="M[^"]+" fill="#/);
+  assert.match(svg, /data-kind="lane"[^>]*>\s*<path[^>]*>\s*<rect[^>]*fill="none"/);
 });
 
 test("architecture SVG keeps nested groups and omits lanes", async () => {

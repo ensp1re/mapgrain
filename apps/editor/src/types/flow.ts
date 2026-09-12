@@ -40,6 +40,7 @@ export interface FlowEdgeDraft {
 export interface ComponentNodeData extends Record<string, unknown> {
   kind: string;
   kindLabel: string;
+  description?: string;
   label: string;
   lines: string[];
   ports: Array<{ id: string; side: PortSide; asSource: boolean; asTarget: boolean }>;

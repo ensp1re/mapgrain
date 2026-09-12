@@ -7,9 +7,11 @@ import {
   type DiagramDocument,
   type PortSide,
 } from "@mapgrain/document";
-import { ICON_GAP, KIND_TITLE_GAP, PARALLEL_EDGE_OFFSET } from "./constants/metrics.ts";
+import { DESCRIPTION_GAP, ICON_GAP } from "./constants/metrics.ts";
+import { DECISION_SCALE_X, DECISION_SCALE_Y } from "./constants/shape.ts";
 import { edgeCaption } from "./caption.ts";
-import { expandTop, inflate, midpoint, normalize, unionRects } from "./geometry.ts";
+import { expandTop, inflate, unionRects } from "./geometry.ts";
+import { routeOrthogonal } from "./route/orthogonal.ts";
 import { applyWorkflowLanes } from "./lanes.ts";
 import { shapeForNode } from "./shape.ts";
 import { iconSizeFor, kindDisplayText, kindFontFor } from "./kind.ts";
@@ -102,28 +104,27 @@ function buildFragments(
   });
 }
 
+/**
+ * A card is an icon and a title on one row, with the description below it when there is one.
+ *
+ * The kind used to occupy a full-width row of grey capitals above the title, which made every
+ * card the same shape and spent a line on information the icon already carries. The kind name
+ * now lives in the inspector and the legend.
+ */
 function nodeSize(
   label: { width: number; height: number },
-  kind: { width: number; height: number },
+  description: { width: number; height: number } | null,
   iconSize: number,
   options: SceneOptions,
-  hideKindRow: boolean,
+  showIcon: boolean,
 ): { width: number; height: number } {
-  if (hideKindRow) {
-    return {
-      width: Math.max(options.minNodeWidth, label.width + options.padding.x * 2),
-      height: Math.max(options.minNodeHeight, label.height + options.padding.y * 2),
-    };
-  }
-  const kindRow = Math.max(iconSize, kind.height);
-  const headerWidth = iconSize + ICON_GAP + kind.width;
-  const contentWidth = Math.max(label.width, headerWidth);
+  const lead = showIcon ? iconSize + ICON_GAP : 0;
+  const contentWidth = Math.max(label.width, description?.width ?? 0);
+  const firstRow = showIcon ? Math.max(iconSize, label.height) : label.height;
+  const rows = firstRow + (description ? DESCRIPTION_GAP + description.height : 0);
   return {
-    width: Math.max(options.minNodeWidth, contentWidth + options.padding.x * 2),
-    height: Math.max(
-      options.minNodeHeight,
-      kindRow + KIND_TITLE_GAP + label.height + options.padding.y * 2,
-    ),
+    width: Math.max(options.minNodeWidth, lead + contentWidth + options.padding.x * 2),
+    height: Math.max(options.minNodeHeight, rows + options.padding.y * 2),
   };
 }
 
@@ -170,32 +171,23 @@ function ensurePort(node: SceneNode, side: PortSide): ScenePort {
   return created;
 }
 
+/**
+ * Ports in most documents are boilerplate `in` on the west and `out` on the east. Honouring
+ * that literally forced every edge to leave eastward even when its target sat below, which is
+ * what made cross-lane connections diagonal. The authored port is used when its side already
+ * faces the other node; otherwise a port is synthesized on the facing side.
+ */
 function resolvePort(
   node: SceneNode,
   portId: string | undefined,
   toward: Rect,
 ): ScenePort {
+  const facing = facingSide(node.rect, toward);
   if (portId) {
     const listed = node.ports.find((port) => port.id === portId);
-    if (listed) return listed;
+    if (listed && listed.side === facing) return listed;
   }
-  return ensurePort(node, facingSide(node.rect, toward));
-}
-
-function offsetEdge(start: Point, end: Point, index: number, count: number): Point[] {
-  if (count <= 1) return [start, end];
-  const mid = midpoint(start, end);
-  const along = normalize({ x: end.x - start.x, y: end.y - start.y });
-  const normal = { x: -along.y, y: along.x };
-  const t = index - (count - 1) / 2;
-  return [
-    start,
-    {
-      x: mid.x + normal.x * t * PARALLEL_EDGE_OFFSET,
-      y: mid.y + normal.y * t * PARALLEL_EDGE_OFFSET,
-    },
-    end,
-  ];
+  return ensurePort(node, facing);
 }
 
 function pairKey(source: string, target: string): string {
@@ -272,6 +264,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   const sizes = new Map<string, { width: number; height: number }>();
   const labels = new Map<string, ReturnType<typeof measureText>>();
   const kinds = new Map<string, ReturnType<typeof measureText>>();
+  const descriptions = new Map<string, ReturnType<typeof measureText>>();
   const kindFont = kindFontFor(options.font);
   const iconSize = iconSizeFor(options.font);
   const presentation = presentationFromOptions(options);
@@ -283,9 +276,22 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       options.maxLabelWidth,
       options.measurer,
     );
+    const description = node.description
+      ? measureText(node.description, kindFont, options.maxLabelWidth, options.measurer)
+      : null;
     labels.set(node.id, label);
     kinds.set(node.id, kind);
-    sizes.set(node.id, nodeSize(label, kind, iconSize, options, node.kind === NODE_KIND.STATE));
+    if (description) descriptions.set(node.id, description);
+    const base = nodeSize(label, description, iconSize, options, node.kind !== NODE_KIND.STATE);
+    sizes.set(
+      node.id,
+      node.kind === NODE_KIND.DECISION
+        ? {
+            width: Math.round(base.width * DECISION_SCALE_X),
+            height: Math.round(base.height * DECISION_SCALE_Y),
+          }
+        : base,
+    );
   }
 
   const positions = isSequenceDocument(document)
@@ -313,7 +319,8 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       groupId: node.groupId,
       marker: node.marker,
       role: node.role,
-      shape: shapeForNode(document.kind, node.kind),
+      shape: shapeForNode(document.kind, node.kind, node.marker),
+      description: descriptions.get(node.id),
       iconSize,
       ports: placePortsOnRect(node.id, rect, node.ports),
     };
@@ -358,12 +365,15 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     const points =
       document.kind === DOCUMENT_KIND.SEQUENCE
         ? sequenceMessagePoints(sourceNode, targetNode, edge.order ?? index + 1, headerBottom)
-        : offsetEdge(
-            { x: sourcePort.x, y: sourcePort.y },
-            { x: targetPort.x, y: targetPort.y },
+        : routeOrthogonal({
+            source: { rect: sourceNode.rect, point: { x: sourcePort.x, y: sourcePort.y }, side: sourcePort.side },
+            target: { rect: targetNode.rect, point: { x: targetPort.x, y: targetPort.y }, side: targetPort.side },
+            obstacles: nodes
+              .filter((item) => item.id !== sourceNode.id && item.id !== targetNode.id)
+              .map((item) => item.rect),
             index,
             count,
-          );
+          });
     const extra =
       edge.outcome ?? edge.guard ?? (edge.order !== undefined ? String(edge.order) : undefined);
     const caption = edgeCaption(edge.type, edge.label, extra);

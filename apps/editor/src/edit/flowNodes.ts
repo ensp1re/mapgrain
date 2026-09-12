@@ -5,6 +5,22 @@ function dataField(data: unknown, key: string): unknown {
   return (data as Record<string, unknown>)[key];
 }
 
+/**
+ * Ports decide which handles a card renders, and a connection is dropped when its handle is
+ * missing. Reusing a node whose ports changed left the old handles in place, so a new
+ * connection into a side the card had never used before never drew.
+ */
+export function portSignature(data: unknown): string {
+  const ports = dataField(data, "ports");
+  if (!Array.isArray(ports)) return "";
+  return ports
+    .map((port) => {
+      const item = port as { id?: string; side?: string; asSource?: boolean; asTarget?: boolean };
+      return `${item.id}:${item.side}:${item.asSource ? 1 : 0}${item.asTarget ? 1 : 0}`;
+    })
+    .join("|");
+}
+
 export function sameNodeContent(left: Node, right: Node): boolean {
   return (
     left.id === right.id &&
@@ -23,7 +39,8 @@ export function sameNodeContent(left: Node, right: Node): boolean {
     dataField(left.data, "shape") === dataField(right.data, "shape") &&
     dataField(left.data, "marker") === dataField(right.data, "marker") &&
     dataField(left.data, "stateTone") === dataField(right.data, "stateTone") &&
-    dataField(left.data, "lane") === dataField(right.data, "lane")
+    dataField(left.data, "lane") === dataField(right.data, "lane") &&
+    portSignature(left.data) === portSignature(right.data)
   );
 }
 

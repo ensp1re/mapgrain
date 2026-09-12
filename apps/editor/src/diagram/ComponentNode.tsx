@@ -2,7 +2,7 @@ import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { NODE_KIND, NODE_MARKER, PORT_SIDE } from "@mapgrain/document";
 import { useEffect, useState } from "react";
 import type { ComponentNodeData } from "../types/flow.ts";
-import { KindLabel } from "./KindLabel.tsx";
+import { KindIcon } from "./KindIcon.tsx";
 import { NodeCard } from "./NodeCard.tsx";
 import { handlePosition } from "./sceneToFlow.ts";
 
@@ -71,9 +71,8 @@ export function ComponentNode({ data, selected }: NodeProps) {
         <span className="state-initial" aria-hidden="true" />
       ) : null}
       <div className="node-card-body">
-      {node.kind === NODE_KIND.STATE ? null : (
-        <KindLabel kind={node.kind} label={node.kindLabel} />
-      )}
+      {node.kind === NODE_KIND.STATE ? null : <KindIcon kind={node.kind} />}
+      <div className="node-text">
       {node.editing ? (
         <input
           className="label-input"
@@ -96,6 +95,8 @@ export function ComponentNode({ data, selected }: NodeProps) {
           ))}
         </div>
       )}
+      {node.description ? <div className="node-desc">{node.description}</div> : null}
+      </div>
       </div>
     </NodeCard>
   );

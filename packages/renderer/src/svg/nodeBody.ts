@@ -17,7 +17,20 @@ export function nodeBodyMarkup(node: SceneNode, ox: number, oy: number, fill: st
   const width = node.rect.width;
   const height = node.rect.height;
   if (node.shape === NODE_SHAPE.STORE) return storeCylinder(x, y, width, height, fill, border);
+  if (node.shape === NODE_SHAPE.DECISION) {
+    const points = [
+      `${n(x + width / 2)},${n(y)}`,
+      `${n(x + width)},${n(y + height / 2)}`,
+      `${n(x + width / 2)},${n(y + height)}`,
+      `${n(x)},${n(y + height / 2)}`,
+    ].join(" ");
+    return `<polygon points="${points}" fill="${fill}" stroke="${border}" stroke-width="1"/>`;
+  }
   const rx =
-    node.shape === NODE_SHAPE.PROCESS ? Math.min(width, height) / 2 : node.shape === NODE_SHAPE.ENTITY ? 2 : NODE_RADIUS;
+    node.shape === NODE_SHAPE.PROCESS || node.shape === NODE_SHAPE.TERMINAL
+      ? Math.min(width, height) / 2
+      : node.shape === NODE_SHAPE.ENTITY
+        ? 2
+        : NODE_RADIUS;
   return `<rect x="${n(x)}" y="${n(y)}" width="${n(width)}" height="${n(height)}" rx="${n(rx)}" fill="${fill}" stroke="${border}" stroke-width="1"/>`;
 }

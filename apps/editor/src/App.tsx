@@ -6,7 +6,9 @@ import {
   ReactFlow,
   ReactFlowProvider,
   applyNodeChanges,
+  getNodesBounds,
   useReactFlow,
+  useUpdateNodeInternals,
   type Connection,
   type Edge,
   type Node,
@@ -86,7 +88,7 @@ import { sceneToFlow } from "./diagram/sceneToFlow.ts";
 import { alignPositions } from "./geometry/align.ts";
 import { positionsFromFlow, samePositions } from "./geometry/positions.ts";
 import { createHistory, pushHistory, redoHistory, undoHistory } from "./history/stack.ts";
-import { reuseUnchangedEdges, reuseUnchangedNodes } from "./edit/flowNodes.ts";
+import { portSignature, reuseUnchangedEdges, reuseUnchangedNodes } from "./edit/flowNodes.ts";
 import { indexById } from "./edit/indexes.ts";
 import {
   commandAllowed,
@@ -134,6 +136,8 @@ const nodeTypes = { component: ComponentNode, group: GroupNode };
 const edgeTypes = { relation: RelationEdge };
 const emptySelection: EditorSelection = { nodeIds: [], edgeIds: [] };
 const PRO_OPTIONS = { hideAttribution: true } as const;
+/** Margin between the canvas edge and the diagram when a document opens. */
+const OPEN_INSET = 48;
 
 function defaultStore(): PersistStore {
   const studio = readStudioConfig();
@@ -264,6 +268,8 @@ function toFlow(
 
 function Editor() {
   const { fitView, getNodes, screenToFlowPosition } = useReactFlow();
+  const updateNodeInternals = useUpdateNodeInternals();
+  const portSignatures = useRef(new Map<string, string>());
   const initial = useMemo(loadSnapshot, []);
   const [theme, setTheme] = useState<Theme>(() =>
     globalThis.matchMedia?.("(prefers-color-scheme: light)").matches ? THEME.LIGHT : THEME.DARK,
@@ -712,6 +718,20 @@ function Editor() {
     );
   }, [derivedNodes, dragging]);
 
+  // React Flow caches each node's handle bounds. A connection into a side the card had not
+  // used before adds a handle, and without this the edge is dropped as having no handle.
+  useEffect(() => {
+    const changed: string[] = [];
+    const next = new Map<string, string>();
+    for (const node of derivedNodes) {
+      const signature = portSignature(node.data);
+      next.set(node.id, signature);
+      if (portSignatures.current.get(node.id) !== signature) changed.push(node.id);
+    }
+    portSignatures.current = next;
+    if (changed.length > 0) updateNodeInternals(changed);
+  }, [derivedNodes, updateNodeInternals]);
+
   const onPaneClick = useCallback((event: ReactMouseEvent) => {
     const target = event.target;
     if (target instanceof Element && target.closest(".node-card, .group-frame, .label-input")) return;
@@ -734,8 +754,20 @@ function Editor() {
 
   const onNodeMouseLeave = useCallback(() => setTooltip(null), []);
 
+  // A wide diagram fitted whole opens at a zoom where no label can be read, and fitting
+  // centres it so the reader lands in the middle of a process. Open readable, anchored at
+  // the beginning; Fit all is one click away when the shape matters more than the labels.
   const onFlowInit = useCallback((instance: ReactFlowInstance) => {
-    void instance.fitView(fitAllOptions());
+    void instance.fitView(readableFitOptions()).then(() => {
+      const { zoom } = instance.getViewport();
+      const bounds = getNodesBounds(instance.getNodes());
+      if (bounds.width * zoom <= 0) return;
+      instance.setViewport({
+        x: OPEN_INSET - bounds.x * zoom,
+        y: OPEN_INSET - bounds.y * zoom,
+        zoom,
+      });
+    });
   }, []);
 
   const onSelectionChange = useCallback(({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
@@ -1421,7 +1453,7 @@ function Editor() {
                 "Overview"}
             </div>
           )}
-          {selectedNode && !presenting ? (
+          {selectedNode && selectedNode.type !== "group" && !presenting ? (
             <div className="selection-bar">
               {selectedNode.data.label} selected · Enter to edit
             </div>

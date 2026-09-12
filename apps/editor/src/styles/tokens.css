@@ -22,14 +22,14 @@
   --state-wait: #3a3426;
   --state-fail: #3c272b;
   --state-done: #2c2a3d;
-  --kind-actor: #2a3140;
-  --kind-system: #2c3238;
-  --kind-gateway: #2a2f3d;
-  --kind-service: #273238;
-  --kind-job: #2d2e38;
-  --kind-datastore: #243238;
-  --kind-queue: #322e26;
-  --kind-external: #32282c;
+  --kind-actor: #27314a;
+  --kind-system: #2c3138;
+  --kind-gateway: #2e2a48;
+  --kind-service: #1f3740;
+  --kind-job: #343043;
+  --kind-datastore: #1d3a35;
+  --kind-queue: #3b3220;
+  --kind-external: #3d2830;
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
 }
 
@@ -57,14 +57,14 @@
   --state-wait: #f3ead6;
   --state-fail: #f3e0e2;
   --state-done: #e6e4f2;
-  --kind-actor: #e4e8f2;
-  --kind-system: #e6e8ec;
-  --kind-gateway: #e4e6f3;
-  --kind-service: #dce8ea;
-  --kind-job: #e6e4f0;
-  --kind-datastore: #d7e8e6;
-  --kind-queue: #f0e8d8;
-  --kind-external: #f0e2e4;
+  --kind-actor: #dde5f7;
+  --kind-system: #e8eaee;
+  --kind-gateway: #e6e2fa;
+  --kind-service: #d5eaef;
+  --kind-job: #eae4f6;
+  --kind-datastore: #d2ece4;
+  --kind-queue: #f7ecd5;
+  --kind-external: #f9dfe3;
   --shadow: 0 10px 28px rgba(28, 25, 23, 0.12);
 }
 
