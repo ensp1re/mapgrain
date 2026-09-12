@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F065",
+    "behavior": "Editor UI/UX phase 3: editing is predictable and the interface says where to click. React Flow's node changes pass through so its store and the editor agree on selection, a new node lands in view with the selection's group and opens for renaming, a rejected edit has one dismissible home that says what to do, an empty canvas names its gestures, and New, the theme and the panes are reachable without opening a menu first.",
+    "acceptance": [
+      "Clicking a node card selects it, and renaming through the inspector keeps that selection.",
+      "Five components added in a row all land inside the canvas viewport and none overlaps another.",
+      "A new node joins the group of the current selection and opens its label editor.",
+      "Every prop passed to React Flow keeps a stable identity across renders.",
+      "A rejected edit appears once, carries guidance for the rule it broke, and can be dismissed.",
+      "An empty canvas names rename, connect, arrange and the command menu.",
+      "New has a visible control at full header width and the theme can be switched without the command menu.",
+      "The Outline and Details controls are reachable at every shell layout below split.",
+      "Advertised shortcut glyphs come from COMMANDS in every surface that shows them.",
+      "The undo stack is bounded."
+    ],
+    "dependsOn": [
+      "F064"
+    ],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789241799886-84806c",
+      "fingerprintBefore": "9ab92642a78727744dbe878f448d77f66213c8c34a9d195e3bec9556c6380317",
+      "fingerprintAfter": "9ab92642a78727744dbe878f448d77f66213c8c34a9d195e3bec9556c6380317",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-12T19:37:17.844Z"
+    },
+    "delivery": {
+      "implementationRevision": "2c5e058b24df2e166923099595b6c7e4ab696ee9",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/98",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "2c5e058b24df2e166923099595b6c7e4ab696ee9",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34714446941"
+        }
+      ],
+      "observedAt": "2026-09-12T19:37:26.478690Z"
+    }
+  },
+  "archivedAt": "2026-09-12T19:37:26.644Z"
+}

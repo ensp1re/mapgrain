@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F064",
+    "behavior": "Editor UI/UX phase 2: ordinary actions stop dead-ending. A blank document of every kind validates and builds a scene, a failed load explains itself and offers recovery, an open menu no longer swallows the next click, every kind the Add menu offers can actually be added, single-key shortcuts stay out of menus and dialogs, Import JSON works, and the chrome gets a complete token set, styled scrollbars, a visible focus ring on every field, resizable panes, and node padding that keeps titles off the card edge.",
+    "acceptance": [
+      "blankDocument(kind) validates and builds a scene for all five document kinds.",
+      "A document that fails to load renders a recovery surface naming the failure with Return to library and Download, not a bare sentence.",
+      "An outside pointerdown closes a menu or listbox and still activates what was clicked; a modal dialog still swallows it.",
+      "Every node kind in addableKinds(kind) applies cleanly to a blank document of that kind.",
+      "commandForKeyEvent returns null inside editable targets, menus, listboxes and dialogs, on held keys, and on unintended Shift chords.",
+      "Import JSON in the command palette opens a file picker and loads the document.",
+      "Every COMMAND_ID appears in COMMANDS and is dispatched by the editor.",
+      "Radius, type-scale, z-index, motion and control-size tokens are defined once and used by the chrome.",
+      "Every scroll container uses the app's own scrollbar styling in both themes.",
+      "Every text field and select trigger shows a visible focus ring and shares one height, padding and background.",
+      "The outline and inspector panes can be resized and persist their width.",
+      "Node titles keep a padding gap from the card edge in the editor and in every export."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789241749222-fd927e",
+      "fingerprintBefore": "3723388bd78de2ac8c34f968a26fa9192826d45e93d90d8ecde35313000d55a4",
+      "fingerprintAfter": "3723388bd78de2ac8c34f968a26fa9192826d45e93d90d8ecde35313000d55a4",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-12T19:36:27.612Z"
+    },
+    "delivery": {
+      "implementationRevision": "5d74fcf41a90728dbf707e9c0367b28d585026f0",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/97",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "5d74fcf41a90728dbf707e9c0367b28d585026f0",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34714291984"
+        }
+      ],
+      "observedAt": "2026-09-12T19:36:34.961550Z"
+    }
+  },
+  "archivedAt": "2026-09-12T19:36:35.104Z"
+}

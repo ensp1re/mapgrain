@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F066",
+    "behavior": "Template library and diagram walkthrough: the start surface leads with a searchable gallery of editable starter diagrams covering all five kinds, each card drawn from the real document, each use producing an independent copy; and any diagram can be read step by step from a derived order without authoring a story.",
+    "acceptance": [
+      "Every template validates, builds a scene, and has no overlapping components.",
+      "All five document kinds and all five categories are represented.",
+      "Using a template opens an independent copy with a fresh document id and the template's title, leaving the catalog entry untouched.",
+      "An invalid template reports why instead of failing silently.",
+      "Template cards are rendered from the template's own document, not from images.",
+      "Search matches title, blurb and tags.",
+      "A walkthrough derives an ordered step list for every kind, starts a lifecycle at its initial state, and covers every component.",
+      "Walking a diagram changes nothing in it, and an authored story takes priority over the derived order.",
+      "The editor imports no document from tests/fixtures."
+    ],
+    "dependsOn": [
+      "F065"
+    ],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789241846806-1e51d2",
+      "fingerprintBefore": "ee79eb81d1ac91afd048ff1eface4fe072c2398ab7df35dd68771049d5ce4c5e",
+      "fingerprintAfter": "ee79eb81d1ac91afd048ff1eface4fe072c2398ab7df35dd68771049d5ce4c5e",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-12T19:38:04.935Z"
+    },
+    "delivery": {
+      "implementationRevision": "82af0b51f1e4755e9118ba78c514412de9949eae",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/99",
+      "checkRuns": [
+        {
+          "name": "verify",
+          "revision": "82af0b51f1e4755e9118ba78c514412de9949eae",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34714607627"
+        }
+      ],
+      "observedAt": "2026-09-12T19:38:16.461336Z"
+    }
+  },
+  "archivedAt": "2026-09-12T19:38:16.593Z"
+}
