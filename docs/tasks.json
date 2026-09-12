@@ -16,7 +16,7 @@
         "Every connection is reachable from the outline, not only by hitting the line."
       ],
       "dependsOn": [],
-      "state": "active",
+      "state": "verified",
       "spec": null,
       "plan": "docs/PLAN.md",
       "verification": [
@@ -28,14 +28,10 @@
       ],
       "blockedReason": null,
       "evidence": {
-        "status": "failed",
-        "attemptId": "run-1789257036192-697f05",
-        "failure": {
-          "classification": "check_failed",
-          "failedChecks": [
-            "browser"
-          ]
-        },
+        "status": "passed",
+        "attemptId": "run-1789257185164-c72746",
+        "fingerprintBefore": "82000dad57fec663afb3b3f526cbc2e2850e6f8edc47e719a045b3ceffba867a",
+        "fingerprintAfter": "82000dad57fec663afb3b3f526cbc2e2850e6f8edc47e719a045b3ceffba867a",
         "checks": [
           {
             "id": "unit",
@@ -55,9 +51,10 @@
           },
           {
             "id": "browser",
-            "status": "failed"
+            "status": "passed"
           }
-        ]
+        ],
+        "verifiedAt": "2026-09-12T23:54:18.177Z"
       },
       "delivery": null
     }
