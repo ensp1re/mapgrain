@@ -3,6 +3,7 @@ import { edgeCaption, mapScenePolyline, placeEdgeLabel, roundedPolylinePath } fr
 import type { RelationEdgeData } from "../types/flow.ts";
 import { captionLabelSize, flowComponentObstacles } from "./edgeObstacles.ts";
 
+
 export function RelationEdge({
   id,
   sourceX,
@@ -23,13 +24,16 @@ export function RelationEdge({
     { x: targetX, y: targetY },
   ]);
   const caption = edge?.caption || edgeCaption(edge?.type ?? "", edge?.label);
-  const placed = placeEdgeLabel(
-    mapped,
-    captionLabelSize(caption, edge?.labelSize),
-    flowComponentObstacles(nodes),
-  );
-  const labelX = edge?.preserveGeometry && edge.labelAnchor ? edge.labelAnchor.x : placed.anchor.x;
-  const labelY = edge?.preserveGeometry && edge.labelAnchor ? edge.labelAnchor.y : placed.anchor.y;
+  // The scene places every caption in one pass, treating the captions it has already placed
+  // as obstacles. Recomputing per edge here loses that, and congested diagrams stacked
+  // several captions on the same point. Keep the scene's anchor unless a drag has actually
+  // moved this edge, and only then fall back to a live placement against the node rects.
+  const anchored = edge?.labelAnchor !== undefined && !edge.dragging;
+  const placed = anchored
+    ? null
+    : placeEdgeLabel(mapped, captionLabelSize(caption, edge?.labelSize), flowComponentObstacles(nodes));
+  const labelX = placed ? placed.anchor.x : (edge?.labelAnchor?.x ?? 0);
+  const labelY = placed ? placed.anchor.y : (edge?.labelAnchor?.y ?? 0);
   return (
     <>
       <path d={path} className="edge-hit" fill="none" />

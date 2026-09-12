@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-12T19:37:51.261Z",
+  "measuredAt": "2026-09-12T19:45:28.949Z",
   "paint": "next-paint",
   "runtime": {
     "node": "26.5.0",
@@ -17,18 +17,18 @@
       "name": "branching.json",
       "nodes": 10,
       "cold": {
-        "selectMs": 29.400000005960464,
-        "typeMs": 16.19999998807907
+        "selectMs": 24.599999994039536,
+        "typeMs": 16
       },
       "warm": {
         "reps": 12,
         "p50": {
           "selectMs": 32.400000005960464,
-          "typeMs": 33.30000001192093
+          "typeMs": 33.19999998807907
         },
         "p95": {
-          "selectMs": 32.900000005960464,
-          "typeMs": 34.19999998807907
+          "selectMs": 32.69999998807907,
+          "typeMs": 33.69999998807907
         }
       }
     },
@@ -36,8 +36,8 @@
       "name": "hundred-nodes.json",
       "nodes": 100,
       "cold": {
-        "selectMs": 19.899999976158142,
-        "typeMs": 21.900000005960464
+        "selectMs": 20.700000017881393,
+        "typeMs": 18
       },
       "warm": {
         "reps": 12,
@@ -47,7 +47,7 @@
         },
         "p95": {
           "selectMs": 33.29999998211861,
-          "typeMs": 34.29999998211861
+          "typeMs": 34
         }
       }
     }
