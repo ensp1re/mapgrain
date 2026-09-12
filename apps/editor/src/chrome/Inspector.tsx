@@ -16,6 +16,8 @@ import { KindIcon } from "../diagram/KindIcon.tsx";
 import { directionLabel, nodeLabel, relationSummary } from "../export/labels.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
 import { Pane } from "../ui/Pane.tsx";
+import { PaneResizer } from "../ui/PaneResizer.tsx";
+import { PANE_WIDTH } from "../constants/layout.ts";
 import { Select } from "../ui/Select.tsx";
 
 interface InspectorProps {
@@ -53,7 +55,19 @@ export function Inspector({
 
   if (edge) {
     return (
-      <Pane className="inspector" title="Connection" onClose={onClose}>
+      <Pane
+      className="inspector"
+      title="Connection"
+      onClose={onClose}
+      edge={
+        <PaneResizer
+          property="--inspector-w"
+          edge="left"
+          label="Resize details"
+          defaultWidth={PANE_WIDTH.INSPECTOR}
+        />
+      }
+    >
         <dl>
           <dt>Relation</dt>
           <dd>
@@ -182,7 +196,19 @@ export function Inspector({
   );
 
   return (
-    <Pane className="inspector" title="Component" onClose={onClose}>
+    <Pane
+      className="inspector"
+      title="Component"
+      onClose={onClose}
+      edge={
+        <PaneResizer
+          property="--inspector-w"
+          edge="left"
+          label="Resize details"
+          defaultWidth={PANE_WIDTH.INSPECTOR}
+        />
+      }
+    >
       <dl>
         <dt>Name</dt>
         <dd>

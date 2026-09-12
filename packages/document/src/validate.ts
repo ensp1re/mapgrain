@@ -341,19 +341,13 @@ function semanticErrors(document: DiagramDocument): ValidationIssue[] {
   });
 
   if (document.kind === DOCUMENT_KIND.WORKFLOW) {
-    document.nodes.forEach((node, index) => {
+    // A decision with fewer than two outcomes is unfinished, not invalid. Rejecting it here
+    // made decisions unauthorable: every path to a complete decision passes through a
+    // document with zero and then one outgoing edge.
+    // ponytail: completeness belongs in `mapgrain diagnose`, not in validation. TD-003.
+    document.nodes.forEach((node) => {
       if (node.kind !== NODE_KIND.DECISION) return;
       const outgoing = document.edges.filter((edge) => edge.source.nodeId === node.id);
-      if (outgoing.length < 2) {
-        errors.push(
-          issue(
-            VALIDATION_ERROR_CODE.MODE_CONSTRAINT,
-            `decision "${node.id}" needs at least two labelled outcomes`,
-            `/nodes/${index}/id`,
-            node.id,
-          ),
-        );
-      }
       for (const edge of outgoing) {
         if (edge.outcome ?? edge.label) continue;
         errors.push(

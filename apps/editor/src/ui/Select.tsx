@@ -56,7 +56,17 @@ export function Select({ label, value, options, onChange }: SelectProps) {
         }}
       >
         {current?.icon ? <span className="select-icon">{current.icon}</span> : null}
-        {currentLabel}
+        <span className="select-value">{currentLabel}</span>
+        <svg className="ui-select-caret" viewBox="0 0 12 12" aria-hidden="true">
+          <path
+            d="M3 4.5 6 8l3-3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </button>
       <Overlay
         open={open}

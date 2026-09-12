@@ -407,13 +407,13 @@ test("CLI export JSON preserves portable layout positions", async () => {
   document.layout = {
     version: 1,
     revision: 1,
-    positions: { gateway: { x: -90, y: 30 } },
+    positions: { gateway: { x: -260, y: 30 } },
   };
   const io = memoryIo({ "laid-out.json": JSON.stringify(document) });
   const code = await runCli(["export", "laid-out.json", "--format", "json"], io);
-  assert.equal(code, EXIT_CODE.OK);
+  assert.equal(code, EXIT_CODE.OK, text(io.stderrChunks));
   const exported = JSON.parse(text(io.stdoutChunks)) as { layout?: { positions?: { gateway?: { x: number } } } };
-  assert.equal(exported.layout?.positions?.gateway?.x, -90);
+  assert.equal(exported.layout?.positions?.gateway?.x, -260);
 });
 
 test("view writes read-only HTML from the canonical scene", async () => {

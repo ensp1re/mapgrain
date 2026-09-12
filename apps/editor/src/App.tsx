@@ -104,6 +104,7 @@ import { mergePositions, pinsFromDocument } from "./layout/pins.ts";
 import { EXAMPLES } from "./create/examples.ts";
 import { MODE_CHOICES } from "./create/modes.ts";
 import { importDocumentText } from "./create/importDocument.ts";
+import { LoadFailure } from "./chrome/LoadFailure.tsx";
 import { backupBytes, snapshotFromStored } from "./persist/codec.ts";
 import { indexedDbStore } from "./persist/indexeddb.ts";
 import { memoryStore } from "./persist/memory.ts";
@@ -154,6 +155,17 @@ function download(filename: string, bytes: Uint8Array, type: string) {
   link.download = filename;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+function pickJsonFile(): Promise<File | null> {
+  return new Promise((resolve) => {
+    const input = globalThis.document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json,.json";
+    input.onchange = () => resolve(input.files?.[0] ?? null);
+    input.oncancel = () => resolve(null);
+    input.click();
+  });
 }
 
 function usedIds(document: DiagramDocument): string[] {
@@ -249,7 +261,7 @@ function toFlow(
   }));
 }
 
-function Specimen() {
+function Editor() {
   const { fitView, getNodes } = useReactFlow();
   const initial = useMemo(() => loadSnapshot(), []);
   const [theme, setTheme] = useState<Theme>(() =>
@@ -402,12 +414,34 @@ function Specimen() {
     setImportError(null);
   }, []);
 
+  const returnToLibrary = useCallback(() => {
+    flushThen(() => {
+      setSurface("start");
+      setEditingId(null);
+      setArrange({ status: "idle" });
+    }, true);
+  }, [flushThen]);
+
+  const importFromFile = useCallback(() => {
+    void pickJsonFile().then(async (file) => {
+      if (!file) return;
+      const result = importDocumentText(await file.text());
+      if ("error" in result) {
+        setEditError(result.error);
+        return;
+      }
+      flushThen(() => openSnapshot(result.snapshot));
+    });
+  }, [flushThen, openSnapshot]);
+
   useEffect(() => {
     void persistStore.current.list().then(setRecents);
   }, [booted, surface, documentModel?.id, documentModel?.title, saveState]);
 
-  const displayPositions =
-    arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {});
+  const displayPositions = useMemo(
+    () => (arrange.status === "preview" ? arrange.positions : (snapshot?.positions ?? {})),
+    [arrange, snapshot],
+  );
 
   const scene = useMemo(
     () => (documentModel ? buildScene(documentModel, { positions: displayPositions }) : null),
@@ -491,6 +525,15 @@ function Specimen() {
     });
     return () => cancelAnimationFrame(outer);
   }, [presenting, fitView]);
+
+  // Opening or closing a narrow-width pane resizes the canvas, so refit into it.
+  useEffect(() => {
+    if (shellLayout === SHELL_LAYOUT.SPLIT) return;
+    const outer = requestAnimationFrame(() => {
+      requestAnimationFrame(() => void fitView(fitAllOptions()));
+    });
+    return () => cancelAnimationFrame(outer);
+  }, [narrowPanel, shellLayout, fitView]);
 
   useEffect(() => {
     if (arrange.status !== "preview") return;
@@ -641,7 +684,7 @@ function Specimen() {
     const current = historyRef.current.present;
     if (samePositions(current.positions, positions)) return;
     applyOp({ kind: OPERATION_KIND.SET_LAYOUT, positions }, positions);
-  }, []);
+  }, [applyOp]);
 
   const startArrange = useCallback(async () => {
     if (presenting) return;
@@ -925,7 +968,7 @@ function Specimen() {
       if (id === COMMAND_ID.UNDO) setHistory((stack) => undoHistory(stack));
       if (id === COMMAND_ID.REDO) setHistory((stack) => redoHistory(stack));
       if (id === COMMAND_ID.PRESENT) setPresenting((value) => !value);
-      if (id === COMMAND_ID.FIT || id === COMMAND_ID.FIT_ALL) void fitView(fitAllOptions());
+      if (id === COMMAND_ID.FIT_ALL) void fitView(fitAllOptions());
       if (id === COMMAND_ID.FOCUS) {
         const selected = getNodes().filter((node) => selection.nodeIds.includes(node.id));
         void fitView(
@@ -948,6 +991,7 @@ function Specimen() {
       if (id === COMMAND_ID.ARRANGE) void startArrange();
       if (id === COMMAND_ID.CONNECT) connectSelected();
       if (id === COMMAND_ID.NEW) flushThen(() => setSurface("start"));
+      if (id === COMMAND_ID.IMPORT) importFromFile();
       if (id === COMMAND_ID.HELP) {
         setCommandsOpen(false);
         setHelpOpen(true);
@@ -959,7 +1003,7 @@ function Specimen() {
         setConvertOpen(true);
       }
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, exportFormat, fitView, flushThen, getNodes, presenting, selection.nodeIds, shellLayout, startArrange, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, fitView, flushThen, getNodes, importFromFile, presenting, selection.nodeIds, shellLayout, startArrange, theme],
   );
 
   useEffect(() => {
@@ -1129,7 +1173,16 @@ function Specimen() {
   }
 
   if (!documentModel || !scene?.ok || !snapshot) {
-    return <p>Could not build the specimen diagram.</p>;
+    return (
+      <LoadFailure
+        issues={scene && !scene.ok ? scene.errors : []}
+        snapshot={snapshot}
+        onReturnToLibrary={returnToLibrary}
+        onDownload={() => {
+          if (snapshot) download("diagram.json", backupBytes(snapshot), "application/json");
+        }}
+      />
+    );
   }
 
   const workspaceClass = [
@@ -1145,13 +1198,7 @@ function Specimen() {
   return (
     <EditorErrorBoundary
       snapshot={snapshot}
-      onReturnToLibrary={() => {
-        flushThen(() => {
-          setSurface("start");
-          setEditingId(null);
-          setArrange({ status: "idle" });
-        }, true);
-      }}
+      onReturnToLibrary={returnToLibrary}
     >
     <div className={presenting ? "app is-presenting" : "app"}>
       <TopBar
@@ -1428,7 +1475,7 @@ function Specimen() {
 export function App() {
   return (
     <ReactFlowProvider>
-      <Specimen />
+      <Editor />
     </ReactFlowProvider>
   );
 }

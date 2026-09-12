@@ -29,8 +29,8 @@ test("node inspector forwards onClose to Pane", async () => {
     fileURLToPath(new URL("../src/chrome/Inspector.tsx", import.meta.url)),
     "utf8",
   );
-  assert.match(source, /title="Component" onClose=\{onClose\}/);
-  assert.match(source, /title="Connection" onClose=\{onClose\}/);
+  assert.match(source, /title="Component"[\s\S]{0,80}onClose=\{onClose\}/);
+  assert.match(source, /title="Connection"[\s\S]{0,80}onClose=\{onClose\}/);
 });
 
 test("export dialog offers PNG scale without a native select", async () => {

@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -26,6 +27,7 @@ export default tseslint.config(
   {
     files: ["apps/**/*.{ts,tsx}"],
     ignores: ["apps/editor/vite.config.ts", "apps/editor/tests/**"],
+    plugins: { "react-hooks": reactHooks },
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -42,6 +44,8 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
       ],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "error",
     },
   },
   {

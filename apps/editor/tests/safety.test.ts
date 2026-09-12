@@ -55,7 +55,7 @@ test("presentation mode blocks mutating commands", () => {
   assert.equal(commandAllowed(true, COMMAND_ID.UNDO), false);
   assert.equal(commandAllowed(true, COMMAND_ID.ARRANGE), false);
   assert.equal(commandAllowed(true, COMMAND_ID.CONVERT_KIND), false);
-  assert.equal(commandAllowed(true, COMMAND_ID.FIT), true);
+  assert.equal(commandAllowed(true, COMMAND_ID.FIT_ALL), true);
   assert.equal(commandAllowed(true, COMMAND_ID.PRESENT), true);
   assert.equal(commandAllowed(true, COMMAND_ID.HELP), true);
   assert.equal(commandAllowed(false, COMMAND_ID.DELETE), true);

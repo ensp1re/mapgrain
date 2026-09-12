@@ -6,6 +6,8 @@ import {
   DEFAULT_FONT_WEIGHT,
   DEFAULT_LINE_HEIGHT,
   LATIN_WIDTH,
+  MEASURE_SAFETY_PAD,
+  MEASURE_SAFETY_SCALE,
   NARROW_WIDTH,
   SPACE_WIDTH,
   WIDE_WIDTH,
@@ -42,7 +44,9 @@ export const fontTextMeasurer: TextMeasurer = {
     for (const char of text) {
       width += font.size * unitWidth(char.codePointAt(0) ?? 0);
     }
-    return { width: trackedWidth(text, font, width), height: font.lineHeight };
+    if (text.length === 0) return { width: 0, height: font.lineHeight };
+    const safe = Math.ceil(trackedWidth(text, font, width) * MEASURE_SAFETY_SCALE) + MEASURE_SAFETY_PAD;
+    return { width: safe, height: font.lineHeight };
   },
 };
 

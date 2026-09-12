@@ -126,13 +126,17 @@ export function Overlay({
       const target = event.target as Node;
       if (panelRef.current?.contains(target)) return;
       if (anchorRef.current?.contains(target)) return;
-      event.preventDefault();
-      event.stopPropagation();
+      // A menu or listbox closes and lets the click through. Swallowing it made the first
+      // click after opening any menu a no-op. A modal dialog still blocks the click.
+      if (trap) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       onClose();
     };
     window.addEventListener("pointerdown", onDown, true);
     return () => window.removeEventListener("pointerdown", onDown, true);
-  }, [anchorRef, onClose, open]);
+  }, [anchorRef, onClose, open, trap]);
 
   if (!open || typeof document === "undefined") return null;
   const resolvedRole = role ?? (pattern === "listbox" ? "listbox" : pattern === "dialog" ? "dialog" : "menu");

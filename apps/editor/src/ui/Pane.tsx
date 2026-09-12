@@ -8,6 +8,8 @@ interface PaneProps {
   className: string;
   role?: string;
   onClose?: () => void;
+  /** Rendered as a direct child of the pane so it can position against its edge. */
+  edge?: ReactNode;
   children: ReactNode;
 }
 
@@ -19,6 +21,7 @@ export function Pane({
   className,
   role,
   onClose,
+  edge,
   children,
 }: PaneProps) {
   return (
@@ -35,6 +38,7 @@ export function Pane({
         ) : null}
       </div>
       {children}
+      {edge}
     </Tag>
   );
 }

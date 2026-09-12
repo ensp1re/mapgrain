@@ -7,6 +7,17 @@ export function isEditableTarget(target: EventTarget | null): boolean {
   return "isContentEditable" in target && Boolean(target.isContentEditable);
 }
 
+const OVERLAY_ROLES = '[role="menu"], [role="listbox"], [role="dialog"]';
+
+// Menu items and dialog buttons are focusable but not editable, so a bare letter typed
+// inside an open menu used to run a global command as well as the menu's own typeahead.
+export function isInsideOverlay(target: EventTarget | null): boolean {
+  if (!target || typeof target !== "object" || !("closest" in target)) return false;
+  const closest = (target as Element).closest;
+  if (typeof closest !== "function") return false;
+  return Boolean(closest.call(target as Element, OVERLAY_ROLES));
+}
+
 export function shouldOpenCommandMenu(event: {
   metaKey: boolean;
   ctrlKey: boolean;
@@ -46,11 +57,16 @@ export function commandForKeyEvent(event: {
   metaKey: boolean;
   ctrlKey: boolean;
   altKey: boolean;
+  shiftKey?: boolean;
+  repeat?: boolean;
   key: string;
   target: EventTarget | null;
 }): CommandId | null {
   if (isEditableTarget(event.target)) return null;
+  if (isInsideOverlay(event.target)) return null;
   if (event.metaKey || event.ctrlKey || event.altKey) return null;
+  if (event.repeat) return null;
   if (event.key === "F") return COMMAND_ID.FOCUS;
+  if (event.shiftKey) return null;
   return KEY_COMMANDS[event.key.toLowerCase()] ?? null;
 }

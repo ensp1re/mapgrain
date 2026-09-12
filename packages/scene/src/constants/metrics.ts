@@ -3,8 +3,15 @@ export const DEFAULT_LINE_HEIGHT = 20;
 export const DEFAULT_FONT_WEIGHT = 500;
 export const DEFAULT_FONT_FAMILY = "Inter";
 
-export const DEFAULT_NODE_PADDING_X = 16;
-export const DEFAULT_NODE_PADDING_Y = 12;
+export const DEFAULT_NODE_PADDING_X = 18;
+export const DEFAULT_NODE_PADDING_Y = 14;
+
+/** The per-codepoint table below under-measures real Inter, which put titles against the
+ *  card edge. Widen every measurement rather than padding one caller, so the editor and
+ *  every export keep the same geometry. Rounding up also keeps widths integral, which
+ *  keeps derived port and group coordinates free of float drift. */
+export const MEASURE_SAFETY_SCALE = 1.03;
+export const MEASURE_SAFETY_PAD = 2;
 export const DEFAULT_MIN_NODE_WIDTH = 72;
 export const DEFAULT_MIN_NODE_HEIGHT = 36;
 export const DEFAULT_MAX_LABEL_WIDTH = 240;

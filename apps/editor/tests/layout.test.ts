@@ -2,7 +2,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { BREAKPOINT, PANE_WIDTH, SHELL_LAYOUT } from "../src/constants/layout.ts";
+import {
+  BREAKPOINT,
+  PANE_WIDTH,
+  PANE_WIDTH_MAX,
+  PANE_WIDTH_MIN,
+  SHELL_LAYOUT,
+} from "../src/constants/layout.ts";
 import { shellLayoutForWidth } from "../src/chrome/viewport.ts";
 
 test("layout spec names the 390/768/1024/1280/1440 breakpoints", () => {
@@ -13,9 +19,9 @@ test("layout spec names the 390/768/1024/1280/1440 breakpoints", () => {
     DESKTOP: 1280,
     WIDE: 1440,
   });
-  assert.equal(PANE_WIDTH.OUTLINE, 204);
-  assert.equal(PANE_WIDTH.INSPECTOR, 264);
-  assert.equal(PANE_WIDTH.INSPECTOR_WIDE, 264);
+  assert.equal(PANE_WIDTH.OUTLINE, 264);
+  assert.equal(PANE_WIDTH.INSPECTOR, 300);
+  assert.equal(PANE_WIDTH.OUTLINE_LAPTOP, 220);
 });
 
 test("shell layout is split at 1280, one panel at 768, overlay below", () => {
@@ -29,23 +35,30 @@ test("shell layout is split at 1280, one panel at 768, overlay below", () => {
 
 test("chrome CSS implements the layout spec at each breakpoint", async () => {
   const css = await readFile(fileURLToPath(new URL("../src/styles/app.css", import.meta.url)), "utf8");
+  const tokens = await readFile(fileURLToPath(new URL("../src/styles/tokens.css", import.meta.url)), "utf8");
   assert.match(css, /max-width: 390px/);
   assert.match(css, /max-width: 767px/);
   assert.match(css, /max-width: 1023px/);
   assert.match(css, /max-width: 1279px/);
-  assert.match(css, /min-width: 1440px/);
-  assert.match(css, /--outline-w: 204px/);
-  assert.match(css, /--inspector-w: 264px/);
-  assert.match(css, /--outline-w: 160px/);
-  assert.match(css, /--topbar-h: 52px/);
+  assert.match(tokens, new RegExp(`--outline-w: ${PANE_WIDTH.OUTLINE}px`));
+  assert.match(tokens, new RegExp(`--inspector-w: ${PANE_WIDTH.INSPECTOR}px`));
+  assert.match(css, new RegExp(`--outline-w: ${PANE_WIDTH.OUTLINE_LAPTOP}px`));
+  assert.match(tokens, /--topbar-h: 52px/);
   assert.match(css, /\.text-btn\.ghost/);
   assert.match(css, /\.canvas-status/);
   assert.match(css, /\.outline-search/);
   assert.match(css, /grid-template-rows: 1fr/);
   assert.match(css, /\.add-bar/);
   assert.match(css, /\.export-dialog/);
-  assert.match(css, /--node-radius/);
-  assert.match(css, /--space-4: 16px/);
+  assert.match(tokens, /--node-radius/);
+  assert.match(tokens, /--space-4: 16px/);
+});
+
+test("panes are resizable between a floor and a ceiling, and the shell grid respects them", async () => {
+  const css = await readFile(fileURLToPath(new URL("../src/styles/app.css", import.meta.url)), "utf8");
+  assert.ok(PANE_WIDTH_MIN < PANE_WIDTH.OUTLINE && PANE_WIDTH.INSPECTOR < PANE_WIDTH_MAX);
+  assert.match(css, /minmax\(var\(--outline-w-min\), var\(--outline-w\)\)/);
+  assert.match(css, /\.pane-resizer/);
 });
 
 test("outline, inspector, and export share Pane; library uses Button", async () => {

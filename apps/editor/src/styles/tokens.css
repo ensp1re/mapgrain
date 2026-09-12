@@ -1,0 +1,119 @@
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1c1c1f;
+  --bg-raised: #222226;
+  --surface: #27272a;
+  --surface-hover: #2e2e33;
+  --border: #3f3f46;
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --accent: #6d72f3;
+  --accent-soft: rgba(109, 114, 243, 0.16);
+  --edge: #71717a;
+  --port: #52525b;
+  --focus: #9aa0ff;
+  --danger: #f87171;
+  --danger-soft: #f0a8a8;
+  --danger-border: #c45c5c;
+  --on-accent: #f8f8ff;
+  --scrim: rgba(0, 0, 0, 0.44);
+  --state-start: #243d38;
+  --state-active: #27352c;
+  --state-wait: #3a3426;
+  --state-fail: #3c272b;
+  --state-done: #2c2a3d;
+  --kind-actor: #2a3140;
+  --kind-system: #2c3238;
+  --kind-gateway: #2a2f3d;
+  --kind-service: #273238;
+  --kind-job: #2d2e38;
+  --kind-datastore: #243238;
+  --kind-queue: #322e26;
+  --kind-external: #32282c;
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f1ea;
+  --bg-raised: #faf7f1;
+  --surface: #fffcf7;
+  --surface-hover: #f3efe7;
+  --border: #d6d3cd;
+  --text: #27272a;
+  --muted: #71717a;
+  --accent: #4f46e5;
+  --accent-soft: rgba(79, 70, 229, 0.1);
+  --edge: #a1a1aa;
+  --port: #a1a1aa;
+  --focus: #4f46e5;
+  --danger: #b91c1c;
+  --danger-soft: #b91c1c;
+  --danger-border: #b91c1c;
+  --on-accent: #ffffff;
+  --scrim: rgba(28, 25, 23, 0.28);
+  --state-start: #dceae6;
+  --state-active: #e3eee4;
+  --state-wait: #f3ead6;
+  --state-fail: #f3e0e2;
+  --state-done: #e6e4f2;
+  --kind-actor: #e4e8f2;
+  --kind-system: #e6e8ec;
+  --kind-gateway: #e4e6f3;
+  --kind-service: #dce8ea;
+  --kind-job: #e6e4f0;
+  --kind-datastore: #d7e8e6;
+  --kind-queue: #f0e8d8;
+  --kind-external: #f0e2e4;
+  --shadow: 0 10px 28px rgba(28, 25, 23, 0.12);
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --topbar-h: 52px;
+  --outline-w: 264px;
+  --inspector-w: 300px;
+  --panel-pad: 16px;
+  --node-radius: 8px;
+  --node-pad-x: 16px;
+  --node-pad-y: 12px;
+}
+
+/* Scales. Every chrome rule picks from these; raw px in a rule is a bug to fix, not a style. */
+:root {
+  --r-1: 4px;
+  --r-2: 6px;
+  --r-3: 8px;
+  --r-pill: 999px;
+
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-base: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 20px;
+  --fs-2xl: 28px;
+
+  --control-h: 32px;
+  --control-h-sm: 28px;
+  --touch-h: 44px;
+
+  --t-fast: 120ms;
+  --t-panel: 200ms;
+
+  --z-canvas: 4;
+  --z-float: 6;
+  --z-pane: 7;
+  --z-popover: 8;
+  --z-overlay: 20;
+  --z-overlay-panel: 21;
+  --z-scrim: 30;
+
+  --outline-w-min: 200px;
+  --pane-w-max: 420px;
+}
