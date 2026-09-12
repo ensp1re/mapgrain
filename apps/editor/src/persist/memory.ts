@@ -55,6 +55,10 @@ export function memoryStore(initial: unknown = null): PersistStore {
           : [];
       });
     },
+    async remove(id: string) {
+      files.delete(id);
+      if (lastActiveId === id) lastActiveId = null;
+    },
   };
 }
 

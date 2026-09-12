@@ -6,7 +6,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
-import { addKind, goNew, waitStartOrEditor } from "./helpers.ts";
+import { addKind, goNew, openExport, waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -101,7 +101,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   await page.locator(".outline-row:not(.is-group)").filter({ hasText: "API" }).click();
   assert.equal(await page.getByRole("textbox", { name: "Name", exact: true }).inputValue(), "API");
 
-  await page.getByRole("button", { name: "Export" }).click();
+  await openExport(page);
   await page.getByRole("button", { name: "Story WebM" }).waitFor();
   const formats = [
     { name: "JSON", file: "diagram.json" },
@@ -130,7 +130,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   assert.match(html, /Read-only view/);
   assert.match(html, /API/);
 
-  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("button", { name: "Close Export" }).click();
   await goNew(page);
   await page.locator('input[type="file"][aria-label="Open file"]').setInputFiles(saved.JSON);
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });

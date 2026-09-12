@@ -21,9 +21,14 @@ These rules apply to the editor chrome. They are not product claims.
 
 ## Header
 
-- Export is the emphasized action. Present is in the bar when space allows.
+- New diagram is the emphasized action. Export lives in the document menu beside Open file,
+  because exporting is the end of a session and starting one is the beginning.
+- Present is in the bar when space allows.
 - More holds Outline, Details, Commands, Help, and any action the current layout hid.
-- New diagram and Open file live in the document menu, with a visible Back to diagram on the New page when an editor session exists.
+- The document menu holds New diagram, Export and Open file, with a visible Back to diagram on
+  the New page when an editor session exists.
+- The title field declares a name and turns off autocomplete, or the browser offers its own
+  suggestion list over the header.
 - The title field has `min-width: 0`, flexes, and truncates. The full title is editable on focus.
 - Save status uses a fixed-width slot so Saved / Saving… does not shift actions. Failures open a recovery menu.
 - Layouts are a few width buckets of the header itself, with hysteresis. Do not scale the header or scroll it horizontally.
@@ -51,7 +56,21 @@ These rules apply to the editor chrome. They are not product claims.
   An authored story wins where one exists.
 - Reading never writes. Everything outside the step recedes rather than disappearing.
 
+## Dialogs
+
+- A dialog is a centred modal over a scrim, with a header close, Escape, an outside click, and
+  a height that always fits. A corner-pinned box with no height limit can push its own close
+  button outside the clipped canvas, where nothing can reach it.
+- Grouped choices beat a pile of equal chips, and a dismiss control never looks like a choice.
+
+## Panes
+
+- Above 768px the outline and the details pane coexist. Choosing a component must never be the
+  reason the outline disappears. Only the overlay shell picks one pane at a time.
+
 ## New page
+
+- A recent row can be removed. Removing the last-active document must not leave it reopening.
 
 - Dedicated start layout with one vertical scroll container. Do not clip page content.
 - Mode cards create diagrams. Do not offer a second unexplained blank button.

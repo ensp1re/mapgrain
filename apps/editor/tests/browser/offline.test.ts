@@ -5,7 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
-import { waitStartOrEditor } from "./helpers.ts";
+import { openExport, waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -88,7 +88,7 @@ test("production bundle stays usable after disconnect, arrange, and reload", asy
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
   await reachEditor();
   await arrange.click();
-  await page.getByRole("button", { name: "Export" }).click();
+  await openExport(page);
   await page.getByRole("button", { name: "JSON" }).click();
   await page.goto(server.url, { waitUntil: "domcontentloaded" });
   await reachEditor();

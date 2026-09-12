@@ -137,5 +137,23 @@ export function indexedDbStore(): PersistStore {
         db.close();
       }
     },
+    async remove(id: string) {
+      const db = await openDb();
+      try {
+        const tx = db.transaction([STORE_NAME, META_STORE], "readwrite");
+        tx.objectStore(STORE_NAME).delete(id);
+        const meta = tx.objectStore(META_STORE);
+        const active = await requestToPromise(meta.get(LAST_ACTIVE_KEY));
+        // The removed document must not stay the one that reopens.
+        if (active === id) meta.delete(LAST_ACTIVE_KEY);
+        await new Promise<void>((resolve, reject) => {
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error ?? new Error("IndexedDB delete failed"));
+          tx.onabort = () => reject(tx.error ?? new Error("IndexedDB delete aborted"));
+        });
+      } finally {
+        db.close();
+      }
+    },
   };
 }

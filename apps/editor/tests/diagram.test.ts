@@ -49,10 +49,18 @@ test("more menu and select lists portal outside clipped ancestors", async () => 
 });
 
 test("command, export, connect, and add surfaces trap focus", async () => {
-  const files = ["CommandMenu.tsx", "HelpOverlay.tsx", "ExportDialog.tsx", "ConnectDialog.tsx"];
-  for (const name of files) {
+  for (const name of ["CommandMenu.tsx", "HelpOverlay.tsx"]) {
     const source = await readFile(fileURLToPath(new URL(`../src/chrome/${name}`, import.meta.url)), "utf8");
     assert.match(source, /useFocusTrap/, name);
+  }
+  // Export and Connect are modals now; Modal owns the trap, the scrim and Escape.
+  const modal = await readFile(fileURLToPath(new URL("../src/ui/Modal.tsx", import.meta.url)), "utf8");
+  assert.match(modal, /useFocusTrap/);
+  assert.match(modal, /aria-modal="true"/);
+  assert.match(modal, /Escape/);
+  for (const name of ["ExportDialog.tsx", "ConnectDialog.tsx"]) {
+    const source = await readFile(fileURLToPath(new URL(`../src/chrome/${name}`, import.meta.url)), "utf8");
+    assert.match(source, /<Modal/, name);
   }
   const addBar = await readFile(fileURLToPath(new URL("../src/chrome/AddBar.tsx", import.meta.url)), "utf8");
   assert.match(addBar, /pattern="menu"/);

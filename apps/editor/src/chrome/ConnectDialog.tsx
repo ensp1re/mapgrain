@@ -5,11 +5,11 @@ import {
   type EdgeDirection,
   type EdgeType,
 } from "@mapgrain/document";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { directionLabel } from "../export/labels.ts";
 import type { ConnectionDraft, PendingConnection } from "../types/editor.ts";
+import { Modal } from "../ui/Modal.tsx";
 import { Select } from "../ui/Select.tsx";
-import { useFocusTrap } from "./focusTrap.ts";
 
 interface ConnectDialogProps {
   pending: PendingConnection;
@@ -29,22 +29,16 @@ export function ConnectDialog({
   const [type, setType] = useState<EdgeType>(defaultEdgeType(documentKind));
   const [direction, setDirection] = useState<EdgeDirection>(EDGE_DIRECTION.FORWARD);
   const [label, setLabel] = useState("");
-  const dialogRef = useRef<HTMLFormElement>(null);
-  useFocusTrap(dialogRef, true, onCancel);
 
   return (
+    <Modal open title="New connection" onClose={onCancel}>
     <form
-      ref={dialogRef}
       className="connect-dialog"
-      role="dialog"
-      aria-modal="true"
-      aria-label="New connection"
       onSubmit={(event) => {
         event.preventDefault();
         onConfirm({ type, direction, label: label.trim() });
       }}
     >
-      <div className="pane-label">New connection</div>
       <p>
         {pending.source} → {pending.target}
       </p>
@@ -86,5 +80,6 @@ export function ConnectDialog({
         </button>
       </div>
     </form>
+    </Modal>
   );
 }

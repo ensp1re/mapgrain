@@ -278,6 +278,7 @@ function Editor() {
   const [outlineOpen, setOutlineOpen] = useState(true);
   const [inspectorOpen, setInspectorOpen] = useState(true);
   const [narrowPanel, setNarrowPanel] = useState<"outline" | "inspector" | "none">("none");
+  const [singleOutline, setSingleOutline] = useState(true);
   const [presenting, setPresenting] = useState(false);
   const [commandsOpen, setCommandsOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
@@ -519,10 +520,18 @@ function Editor() {
   const shellLayout = shellLayoutForWidth(viewportWidth);
   const showOutline =
     !presenting &&
-    (shellLayout === SHELL_LAYOUT.SPLIT ? outlineOpen : narrowPanel === "outline");
+    (shellLayout === SHELL_LAYOUT.SPLIT
+      ? outlineOpen
+      : shellLayout === SHELL_LAYOUT.SINGLE
+        ? singleOutline
+        : narrowPanel === "outline");
   const showInspector =
     inspectorWanted &&
-    (shellLayout === SHELL_LAYOUT.SPLIT ? inspectorOpen : narrowPanel === "inspector");
+    (shellLayout === SHELL_LAYOUT.SPLIT
+      ? inspectorOpen
+      : shellLayout === SHELL_LAYOUT.SINGLE
+        ? inspectorOpen
+        : narrowPanel === "inspector");
 
   useEffect(() => {
     if (shellLayout === SHELL_LAYOUT.SPLIT) return;
@@ -773,7 +782,7 @@ function Editor() {
   const onSelectionChange = useCallback(({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
     const next = selectionFromFlow(selectedNodes, selectedEdges);
     setSelection((current) => retainFlowSelection(current, next));
-    if (shellLayout !== SHELL_LAYOUT.SPLIT && (next.nodeIds.length > 0 || next.edgeIds.length > 0)) {
+    if (shellLayout === SHELL_LAYOUT.OVERLAY && (next.nodeIds.length > 0 || next.edgeIds.length > 0)) {
       setNarrowPanel("inspector");
     }
   }, [shellLayout]);
@@ -1061,6 +1070,7 @@ function Editor() {
       }
       if (id === COMMAND_ID.TOGGLE_OUTLINE) {
         if (shellLayout === SHELL_LAYOUT.SPLIT) setOutlineOpen((value) => !value);
+        else if (shellLayout === SHELL_LAYOUT.SINGLE) setSingleOutline((value) => !value);
         else setNarrowPanel((value) => (value === "outline" ? "none" : "outline"));
       }
       if (id === COMMAND_ID.UNDO) setHistory((stack) => undoHistory(stack));
@@ -1074,8 +1084,11 @@ function Editor() {
         );
       }
       if (id === COMMAND_ID.TOGGLE_INSPECTOR) {
-        if (shellLayout === SHELL_LAYOUT.SPLIT) setInspectorOpen((value) => !value);
-        else setNarrowPanel((value) => (value === "inspector" ? "none" : "inspector"));
+        if (shellLayout === SHELL_LAYOUT.OVERLAY) {
+          setNarrowPanel((value) => (value === "inspector" ? "none" : "inspector"));
+        } else {
+          setInspectorOpen((value) => !value);
+        }
       }
       if (id === COMMAND_ID.EXPORT || id === COMMAND_ID.EXPORT_SVG || id === COMMAND_ID.EXPORT_JSON) {
         setExportOpen(true);
@@ -1248,6 +1261,15 @@ function Editor() {
               openSnapshot(result.snapshot);
             });
           }}
+          onForgetRecent={(id) => {
+            const store = persistStore.current;
+            if (!store.remove) return;
+            void store
+              .remove(id)
+              .then(() => store.list())
+              .then(setRecents)
+              .catch(() => setImportError("That diagram could not be removed."));
+          }}
           onOpenRecent={(id) => {
             flushThen(() => {
               void persistStore.current
@@ -1397,7 +1419,7 @@ function Editor() {
                 }
                 return { nodeIds: [id], edgeIds: [] };
               });
-              if (shellLayout !== SHELL_LAYOUT.SPLIT) setNarrowPanel("inspector");
+              if (shellLayout === SHELL_LAYOUT.OVERLAY) setNarrowPanel("inspector");
             }}
             onClose={
               shellLayout === SHELL_LAYOUT.SPLIT

@@ -11,7 +11,6 @@ import {
   HEADER_LAYOUT,
   headerShowsArrange,
   headerShowsHistory,
-  headerShowsNew,
   headerShowsPresent,
   stabilizeHeaderLayout,
   type HeaderLayout,
@@ -137,7 +136,6 @@ export function TopBar({
   const showArrange = headerShowsArrange(layout);
   const showPresent = headerShowsPresent(layout);
   const showHistory = headerShowsHistory(layout);
-  const showNew = headerShowsNew(layout);
 
   return (
     <header className="topbar" ref={barRef} data-layout={layout}>
@@ -172,6 +170,15 @@ export function TopBar({
           New diagram
         </MenuItem>
         <MenuItem
+          shortcut={commandShortcut(COMMAND_ID.EXPORT)}
+          onClick={() => {
+            setDocOpen(false);
+            onExport();
+          }}
+        >
+          Export
+        </MenuItem>
+        <MenuItem
           onClick={() => {
             setDocOpen(false);
             fileRef.current?.click();
@@ -197,10 +204,12 @@ export function TopBar({
         <span className="visually-hidden">Document title</span>
         <input
           aria-label="Document title"
+          name="mapgrain-document-title"
+          autoComplete="off"
+          spellCheck={false}
           title={title}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
-          onFocus={(event) => event.currentTarget.select()}
           onBlur={commitTitle}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
@@ -268,17 +277,6 @@ export function TopBar({
       ) : null}
       <div className="spacer" />
       <div className="topbar-actions">
-        {showNew ? (
-          <button
-            type="button"
-            className="text-btn ghost"
-            onClick={onNew}
-            aria-label="New diagram"
-            title={`New diagram ${commandShortcut(COMMAND_ID.NEW)}`}
-          >
-            New
-          </button>
-        ) : null}
         {showHistory ? (
           <>
             <button
@@ -323,11 +321,11 @@ export function TopBar({
         <button
           type="button"
           className="text-btn primary"
-          onClick={onExport}
-          aria-label="Export"
-          title={`Export ${commandShortcut(COMMAND_ID.EXPORT)}`}
+          onClick={onNew}
+          aria-label="New diagram"
+          title={`New diagram ${commandShortcut(COMMAND_ID.NEW)}`}
         >
-          Export
+          New diagram
         </button>
         <button
           ref={moreRef}

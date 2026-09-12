@@ -261,7 +261,7 @@ test("added components stay in view, selection survives editing, and shortcuts a
   await waitStartOrEditor(page);
   await goNew(page);
   await page.getByRole("button", { name: "New architecture" }).click();
-  await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
+  await waitEditor(page);
 
   // A blank canvas says what to do.
   await page.getByText("Add your first component").waitFor();
@@ -342,7 +342,7 @@ test("a template opens as an editable copy and walks through step by step", asyn
   await card.waitFor();
   assert.equal(await page.locator(".template-card").count(), 1, "search did not narrow the gallery");
   await card.click();
-  await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
+  await waitEditor(page);
   assert.equal(
     await page.getByRole("textbox", { name: "Document title" }).inputValue(),
     "OAuth sign-in",
