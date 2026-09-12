@@ -35,3 +35,11 @@ export async function openExport(page: Page): Promise<void> {
   await page.getByRole("menuitem", { name: "Export" }).click();
   await page.getByRole("dialog", { name: "Export" }).waitFor({ timeout: 10_000 });
 }
+
+/** Opens a template from the start screen by its card label. */
+export async function useTemplate(page: Page, name: string): Promise<void> {
+  const card = page.getByRole("button", { name: `Use template ${name}` });
+  await card.scrollIntoViewIfNeeded();
+  await card.click();
+  await page.locator(".node-card").first().waitFor({ timeout: 10_000 });
+}

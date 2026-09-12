@@ -10,6 +10,8 @@ import {
   MEASURE_SAFETY_SCALE,
   NARROW_WIDTH,
   SPACE_WIDTH,
+  UPPER_BROAD_WIDTH,
+  UPPER_WIDTH,
   WIDE_WIDTH,
 } from "./constants/metrics.ts";
 import type { FontSpec, TextMeasurer } from "./types/options.ts";
@@ -20,7 +22,10 @@ function unitWidth(code: number): number {
   if (code === 105 || code === 108 || code === 116 || code === 102 || code === 106 || code === 73 || code === 49) {
     return NARROW_WIDTH;
   }
-  if (code === 109 || code === 119 || code === 77 || code === 87) return BROAD_WIDTH;
+  if (code === 109 || code === 119) return BROAD_WIDTH;
+  if (code >= 65 && code <= 90) {
+    return code === 77 || code === 87 ? UPPER_BROAD_WIDTH : UPPER_WIDTH;
+  }
   if (code < 127) return LATIN_WIDTH;
   if (code >= 0x400 && code <= 0x4ff) return CYRILLIC_WIDTH;
   if (

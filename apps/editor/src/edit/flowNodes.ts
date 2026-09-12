@@ -26,6 +26,7 @@ export function sameNodeContent(left: Node, right: Node): boolean {
     left.id === right.id &&
     left.type === right.type &&
     left.className === right.className &&
+    left.hidden === right.hidden &&
     left.parentId === right.parentId &&
     left.selected === right.selected &&
     left.position.x === right.position.x &&
@@ -49,6 +50,7 @@ export function sameEdgeContent(left: Edge, right: Edge): boolean {
     left.id === right.id &&
     left.source === right.source &&
     left.className === right.className &&
+    left.hidden === right.hidden &&
     left.target === right.target &&
     left.selected === right.selected &&
     left.sourceHandle === right.sourceHandle &&
@@ -91,6 +93,7 @@ export function reuseUnchangedNodes(previous: Node[], next: Node[]): Node[] {
       ...existing,
       type: node.type,
       className: node.className,
+      hidden: node.hidden,
       parentId: node.parentId,
       extent: node.extent,
       position: node.position,
