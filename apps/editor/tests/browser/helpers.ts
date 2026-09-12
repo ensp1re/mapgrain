@@ -23,3 +23,15 @@ export async function addKind(page: Page, kind: string): Promise<void> {
   await page.getByRole("button", { name: "Add", exact: true }).click();
   await page.getByRole("menuitem", { name: new RegExp(kind, "i") }).click();
 }
+
+/** The editor is ready once the canvas library is mounted. */
+export async function waitEditor(page: Page): Promise<void> {
+  await page.getByRole("button", { name: "Add", exact: true }).waitFor({ timeout: 15_000 });
+}
+
+/** Export moved into the document menu, beside Open file. */
+export async function openExport(page: Page): Promise<void> {
+  await page.getByRole("button", { name: "Document menu" }).click();
+  await page.getByRole("menuitem", { name: "Export" }).click();
+  await page.getByRole("dialog", { name: "Export" }).waitFor({ timeout: 10_000 });
+}

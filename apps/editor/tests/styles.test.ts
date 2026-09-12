@@ -57,3 +57,39 @@ test("the chrome keeps no raw hex colours outside the token sheet", async () => 
   const hex = [...app.matchAll(/#[0-9a-f]{3,8}\b/gi)].map((match) => match[0]);
   assert.deepEqual(hex, [], "move these into tokens.css");
 });
+
+test("no text-bearing rule crowds its content against the border", async () => {
+  const { app } = await sheets();
+  const space: Record<string, number> = {
+    "--space-1": 4,
+    "--space-2": 8,
+    "--space-3": 12,
+    "--space-4": 16,
+    "--space-5": 24,
+    "--space-6": 32,
+  };
+  const px = (value: string): number | null => {
+    const token = /^var\((--[a-z0-9-]+)\)$/.exec(value.trim());
+    if (token) return space[token[1] ?? ""] ?? null;
+    const raw = /^(\d+(?:\.\d+)?)px$/.exec(value.trim());
+    return raw ? Number(raw[1]) : null;
+  };
+  // Rules whose content is an icon, a chevron or a hit target, not a line of text.
+  const EXEMPT =
+    /\.kind-icon|\.outline-chevron|\.pane-resizer|\.react-flow|\.label-input|\.node-card\b|\.modal-close|\.recent-forget|\.canvas-error \.text-btn|\.walk-actions|\.icon-btn|\.brand-caret|\.ui-select-caret|\.template-tab|\.viewport-bar|\.zoom-readout|\.template-preview|\.canvas-empty-hints dt/;
+  const offenders: string[] = [];
+  for (const match of app.matchAll(/(^|\n)([^{@}\n][^{}]*)\{([^}]*)\}/g)) {
+    const selector = (match[2] ?? "").trim().replaceAll(/\s+/g, " ");
+    const body = match[3] ?? "";
+    if (EXEMPT.test(selector)) continue;
+    if (!/font-size|color:|content:/.test(body)) continue;
+    const padding = /(?:^|;|\n)\s*padding:\s*([^;]+);/.exec(body)?.[1];
+    if (!padding) continue;
+    const parts = padding.trim().split(/\s+(?![^(]*\))/);
+    if (parts.length === 0) continue;
+    const inline = parts.length === 1 ? parts[0] : parts.length === 2 ? parts[1] : (parts[3] ?? parts[1]);
+    const value = px(inline ?? "");
+    if (value !== null && value < 10) offenders.push(`${selector} -> ${padding.trim()}`);
+  }
+  assert.deepEqual(offenders, [], "text sits too close to its border");
+});

@@ -22,6 +22,7 @@ interface StartSurfaceProps {
   onNewBlank: (kind?: DocumentKind) => void;
   onUseTemplate: (id: string) => void;
   onOpenRecent: (id: string) => void;
+  onForgetRecent?: (id: string) => void;
   onImportFile: (file: File) => void;
 }
 
@@ -50,6 +51,7 @@ export function StartSurface({
   theme,
   onUseTemplate,
   onOpenRecent,
+  onForgetRecent,
   onImportFile,
 }: StartSurfaceProps) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -127,6 +129,17 @@ export function StartSurface({
                     <span className="recent-time">{recentStamp(item)}</span>
                     <span className="recent-action">Open</span>
                   </button>
+                  {onForgetRecent ? (
+                    <button
+                      type="button"
+                      className="text-btn ghost recent-forget"
+                      aria-label={`Remove ${item.title} from recents`}
+                      title="Remove from recents"
+                      onClick={() => onForgetRecent(item.id)}
+                    >
+                      ×
+                    </button>
+                  ) : null}
                 </li>
               ))}
             </ul>

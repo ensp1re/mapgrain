@@ -38,8 +38,9 @@ test("chrome CSS implements the layout spec at each breakpoint", async () => {
   const tokens = await readFile(fileURLToPath(new URL("../src/styles/tokens.css", import.meta.url)), "utf8");
   assert.match(css, /max-width: 390px/);
   assert.match(css, /max-width: 767px/);
-  assert.match(css, /max-width: 1023px/);
   assert.match(css, /max-width: 1279px/);
+  // 1023 (LAPTOP - 1) currently needs no rule of its own; the bucket lives in
+  // constants/layout.ts and shellLayoutForWidth, which the tests above cover.
   assert.match(tokens, new RegExp(`--outline-w: ${PANE_WIDTH.OUTLINE}px`));
   assert.match(tokens, new RegExp(`--inspector-w: ${PANE_WIDTH.INSPECTOR}px`));
   assert.match(css, new RegExp(`--outline-w: ${PANE_WIDTH.OUTLINE_LAPTOP}px`));
@@ -49,7 +50,8 @@ test("chrome CSS implements the layout spec at each breakpoint", async () => {
   assert.match(css, /\.outline-search/);
   assert.match(css, /grid-template-rows: 1fr/);
   assert.match(css, /\.add-bar/);
-  assert.match(css, /\.export-dialog/);
+  assert.match(css, /\.modal-scrim/);
+  assert.match(css, /\.modal-body/);
   assert.match(tokens, /--node-radius/);
   assert.match(tokens, /--space-4: 16px/);
 });
@@ -61,7 +63,7 @@ test("panes are resizable between a floor and a ceiling, and the shell grid resp
   assert.match(css, /\.pane-resizer/);
 });
 
-test("outline, inspector, and export share Pane; library uses Button", async () => {
+test("outline and inspector share Pane, dialogs share Modal, library uses Button", async () => {
   const outline = await readFile(fileURLToPath(new URL("../src/chrome/Outline.tsx", import.meta.url)), "utf8");
   const inspector = await readFile(
     fileURLToPath(new URL("../src/chrome/Inspector.tsx", import.meta.url)),
@@ -82,7 +84,7 @@ test("outline, inspector, and export share Pane; library uses Button", async () 
   assert.match(outline, /placeholder="Search components"/);
   assert.match(outline, /meta=\{count\}/);
   assert.match(inspector, /from "\.\.\/ui\/Pane\.tsx"/);
-  assert.match(exported, /from "\.\.\/ui\/Pane\.tsx"/);
+  assert.match(exported, /from "\.\.\/ui\/Modal\.tsx"/);
   assert.match(library, /from "\.\.\/ui\/Button\.tsx"/);
   assert.match(library, /aria-label="Library"/);
   assert.match(library, /aria-label="Add"/);

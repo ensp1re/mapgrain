@@ -5,7 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium } from "playwright";
-import { waitStartOrEditor } from "./helpers.ts";
+import { goNew, openExport, waitEditor, waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -70,7 +70,7 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     await waitStartOrEditor(page);
     if (await start.isVisible().catch(() => false)) {
       await start.click();
-      await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
+      await waitEditor(page);
     }
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     assert.ok(overflow <= 1, `${viewport.width}x${viewport.height} overflow ${overflow}`);
@@ -115,7 +115,7 @@ test("fields, focus rings, and scrollbars follow the design tokens in both theme
     await waitStartOrEditor(page);
     const example = page.getByRole("button", { name: "Use template Containers" });
     if (await example.isVisible().catch(() => false)) await example.click();
-    await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
+    await waitEditor(page);
     await page.locator(".node-card").first().click();
 
     const name = page.getByRole("textbox", { name: "Name", exact: true });
@@ -149,4 +149,72 @@ test("fields, focus rings, and scrollbars follow the design tokens in both theme
 
     await context.close();
   }
+});
+
+test("the chrome holds together: panes coexist, dialogs close, recents can be forgotten", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+
+  // 1024 keeps the outline when a component is chosen; it used to be evicted.
+  const narrow = await browser.newContext({ viewport: { width: 1024, height: 768 } });
+  const laptop = await narrow.newPage();
+  await laptop.goto(server.url, { waitUntil: "domcontentloaded" });
+  await waitStartOrEditor(laptop);
+  const template = laptop.getByRole("button", { name: "Use template Incident runbook" });
+  await template.scrollIntoViewIfNeeded();
+  await template.click();
+  await laptop.locator(".node-card").first().waitFor({ timeout: 10_000 });
+  assert.equal(await laptop.locator(".outline").count(), 1, "outline missing before selecting");
+  await laptop.locator(".node-card").first().click();
+  await laptop.waitForTimeout(500);
+  assert.equal(await laptop.locator(".outline").count(), 1, "selecting a component evicted the outline");
+  assert.equal(await laptop.locator(".inspector").count(), 1, "details did not open");
+  await narrow.close();
+
+  const context = await browser.newContext({ viewport: { width: 912, height: 576 } });
+  const page = await context.newPage();
+  await page.goto(server.url, { waitUntil: "domcontentloaded" });
+  await waitStartOrEditor(page);
+
+  // A recent can be forgotten, and it stays forgotten.
+  const first = page.getByRole("button", { name: "Use template Order state machine" });
+  await first.scrollIntoViewIfNeeded();
+  await first.click();
+  await waitEditor(page);
+  await page.getByText("Saved", { exact: true }).waitFor({ timeout: 10_000 });
+  await goNew(page);
+  const recents = page.locator(".recent-rows li");
+  await recents.first().waitFor({ timeout: 10_000 });
+  const before = await recents.count();
+  assert.ok(before >= 1, "no recent to remove");
+  await page.getByRole("button", { name: /^Remove .* from recents$/ }).first().click();
+  await page.waitForTimeout(400);
+  assert.equal(await recents.count(), before - 1, "the recent was not removed");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await waitStartOrEditor(page);
+  await page.waitForTimeout(600);
+  assert.equal(await page.locator(".recent-rows li").count(), before - 1, "the recent came back after reload");
+
+  // The export modal fits, and closes by its own control, by Escape and by the scrim.
+  const template2 = page.getByRole("button", { name: "Use template ETL pipeline" });
+  await template2.scrollIntoViewIfNeeded();
+  await template2.click();
+  await waitEditor(page);
+  for (const dismiss of ["close", "escape", "scrim"] as const) {
+    await openExport(page);
+    const box = await page.locator(".modal").boundingBox();
+    assert.ok(box, "modal has no box");
+    assert.ok(box.y >= 0 && box.y + box.height <= 576, `modal does not fit: ${JSON.stringify(box)}`);
+    if (dismiss === "close") await page.getByRole("button", { name: "Close Export" }).click();
+    if (dismiss === "escape") await page.keyboard.press("Escape");
+    if (dismiss === "scrim") await page.locator(".modal-scrim").click({ position: { x: 6, y: 6 } });
+    await page.waitForTimeout(250);
+    assert.equal(await page.locator(".modal").count(), 0, `${dismiss} did not close the dialog`);
+  }
+  await context.close();
 });

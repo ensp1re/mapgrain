@@ -16,6 +16,8 @@ export interface PersistStore {
   load(id?: string): Promise<EditorSnapshot | null>;
   save(snapshot: EditorSnapshot): Promise<void>;
   list(): Promise<RecentDocument[]>;
+  /** Forgets one document. Absent where the store holds a single file it does not own. */
+  remove?(id: string): Promise<void>;
 }
 
 export interface StoredWorkspace {
