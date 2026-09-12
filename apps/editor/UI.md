@@ -57,6 +57,22 @@ These rules apply to the editor chrome. They are not product claims.
 - Mode cards create diagrams. Do not offer a second unexplained blank button.
 - Open file is a real button. Recents are rows. Agent install is a disclosure with copyable commands for each documented agent.
 
+## Diagrams
+
+- Connections run in right angles, leave on the side that faces the target, and turn in the
+  channel between rows and lanes. Routing lives in `packages/scene` so the canvas and every
+  export draw the same geometry.
+- A lane body is never filled. A filled band paints over the connections crossing it.
+- Lanes share one column grid, so a handoff between lanes moves forward, not sideways.
+- A card is an icon and a title on one row. The kind is carried by the icon; its name belongs
+  in the inspector and the legend, not on every card.
+- A branch is a diamond and a terminal state is a pill. Shape is the fastest thing to read.
+- A caption never repeats the connection type. An unlabelled connection draws no caption.
+- Card geometry lives in `nodeSize` and `ScenePresentation` together. Move one without the
+  other and the text stops fitting its box.
+- Handles appear on hover or selection. When a card's ports change, call `updateNodeInternals`
+  or the connection into the new side is dropped.
+
 ## Canvas state
 
 - React Flow's store and this app's state must agree on selection. Pass its node changes

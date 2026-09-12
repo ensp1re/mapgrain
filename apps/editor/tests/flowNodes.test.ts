@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { Node } from "@xyflow/react";
-import { reuseUnchangedEdges, reuseUnchangedNodes, sameNodeContent } from "../src/edit/flowNodes.ts";
+import {
+  portSignature,
+  reuseUnchangedEdges,
+  reuseUnchangedNodes,
+  sameNodeContent,
+} from "../src/edit/flowNodes.ts";
 import type { Edge } from "@xyflow/react";
 
 function node(id: string, extra: Partial<Node> = {}): Node {
@@ -59,4 +64,25 @@ test("reuseUnchangedEdges keeps the previous object when content is equal", () =
   const reused = reuseUnchangedEdges(first, second);
   assert.equal(reused, first);
   assert.equal(reused[0], first[0]);
+});
+
+test("a node whose ports changed is not reused, so its handles are rebuilt", () => {
+  const ports = (ids: string[]) =>
+    ids.map((id) => ({ id, side: "east", asSource: true, asTarget: false }));
+  const before = [
+    { id: "n1", type: "component", position: { x: 0, y: 0 }, data: { label: "A", ports: ports(["out"]) } },
+  ] as unknown as Node[];
+  const after = [
+    {
+      id: "n1",
+      type: "component",
+      position: { x: 0, y: 0 },
+      data: { label: "A", ports: ports(["out", "n1:south"]) },
+    },
+  ] as unknown as Node[];
+  const reused = reuseUnchangedNodes(before, after);
+  assert.notEqual(reused[0], before[0], "a new port must produce a new node object");
+  assert.equal(portSignature(reused[0]?.data), portSignature(after[0]?.data));
+  // The same ports still reuse the previous object.
+  assert.equal(reuseUnchangedNodes(before, structuredClone(before))[0], before[0]);
 });

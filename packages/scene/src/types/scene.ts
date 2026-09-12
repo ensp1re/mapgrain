@@ -43,6 +43,7 @@ export interface ScenePresentation {
   paddingX: number;
   paddingY: number;
   kindTitleGap: number;
+  descriptionGap: number;
 }
 
 export interface SceneNode {
@@ -56,6 +57,8 @@ export interface SceneNode {
   marker?: NodeMarker;
   role?: string;
   shape?: NodeShape;
+  /** Measured second line, present only when the node carries a description. */
+  description?: MeasuredText;
   iconSize: number;
 }
 

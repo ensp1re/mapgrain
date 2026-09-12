@@ -39,3 +39,11 @@ export const KIND_LETTER_SPACING_EM = 0.05;
 export const ICON_SIZE = 16;
 export const ICON_GAP = 8;
 export const KIND_TITLE_GAP = 4;
+/** Gap between a card's title and its description line. */
+export const DESCRIPTION_GAP = 3;
+
+/** Orthogonal routing. A stub leaves the card before the route turns. */
+export const EDGE_STUB = 20;
+export const ROUTE_CHANNEL_STEP = 18;
+export const ROUTE_CHANNEL_TRIES = 8;
+export const ROUTE_CLEARANCE = 6;

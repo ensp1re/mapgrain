@@ -70,6 +70,7 @@ export function sceneToFlow(scene: Scene): {
     data: {
       kind: node.kind,
       kindLabel: node.kindLabel.lines[0]?.text ?? node.kind.toUpperCase(),
+      description: node.description?.lines.map((line) => line.text).join(" "),
       label: node.label.lines.map((line) => line.text).join(" "),
       lines: node.label.lines.map((line) => line.text),
       marker: node.marker,

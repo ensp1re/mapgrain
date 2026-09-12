@@ -865,12 +865,26 @@ body {
 
 .node-card-body {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: var(--node-kind-title-gap, 4px);
+  align-items: flex-start;
+  gap: var(--node-icon-gap, 8px);
   min-width: 0;
   height: 100%;
   padding: var(--node-pad-y) var(--node-pad-x);
+}
+
+.node-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--node-desc-gap, 3px);
+  min-width: 0;
+  flex: 1;
+}
+
+.node-desc {
+  color: var(--muted);
+  font-size: var(--node-kind-size, 11px);
+  line-height: var(--node-kind-line, 14px);
+  overflow-wrap: anywhere;
 }
 
 .node-card.is-selected {
@@ -892,9 +906,28 @@ body {
 .node-card[data-kind-fill="queue"] { background: var(--kind-queue); }
 .node-card[data-kind-fill="external"] { background: var(--kind-external); }
 
-.node-card[data-shape="process"] { border-radius: 999px; }
+.node-card[data-shape="process"] { border-radius: var(--r-pill); }
 .node-card[data-shape="store"] { border-radius: 50% / 20%; }
 .node-card[data-shape="entity"] { border-radius: 2px; }
+.node-card[data-shape="terminal"] { border-radius: var(--r-pill); }
+
+/* A branch is a diamond, so it never reads as another step in the row. */
+.node-card[data-shape="decision"] {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border-radius: 0;
+  box-shadow: none;
+  background-image: linear-gradient(var(--border), var(--border));
+}
+
+.node-card[data-shape="decision"] .node-card-body {
+  justify-content: center;
+  padding-inline: calc(var(--node-pad-x) * 2);
+}
+
+.node-card.is-selected[data-shape="decision"] {
+  box-shadow: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+}
 
 .kind-legend {
   position: absolute;
@@ -990,12 +1023,9 @@ body {
   overflow: visible;
 }
 
-.node-head {
-  display: flex;
-  align-items: center;
-  gap: var(--node-icon-gap, 8px);
-  color: var(--muted);
+.node-card-body > .kind-icon {
   flex-shrink: 0;
+  height: var(--node-title-line, 20px);
 }
 
 .kind-icon {
@@ -1043,18 +1073,38 @@ body {
 
 .group-frame.is-selected { border-color: var(--accent); }
 
+/* A lane body stays unfilled so a connection crossing it is not painted over; only the
+   header band is tinted. */
 .group-frame.is-lane {
   border-style: solid;
-  border-radius: 4px;
+  border-radius: var(--r-1);
+  background: transparent;
+}
+
+.group-frame.is-lane::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 26px;
+  border-radius: var(--r-1) var(--r-1) 0 0;
   background: var(--bg-raised);
+  pointer-events: none;
+}
+
+.group-frame {
+  position: relative;
 }
 
 .group-label {
   position: absolute;
-  top: 8px;
+  top: 6px;
   left: 12px;
+  padding: 0 2px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.01em;
 }
 
 .label-input {
@@ -1258,12 +1308,22 @@ body {
 }
 
 .react-flow__handle {
-  width: 8px;
-  height: 8px;
-  border: 1px solid var(--border);
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--bg);
   background: var(--port);
+  opacity: 0;
+  transition: opacity var(--t-fast) ease;
   z-index: 5;
   pointer-events: all;
+}
+
+.react-flow__node:hover .react-flow__handle,
+.react-flow__node.selected .react-flow__handle,
+.react-flow__handle:focus-visible,
+.react-flow__handle.connecting,
+.react-flow__handle.connectionindicator:hover {
+  opacity: 1;
 }
 
 .react-flow__nodes {

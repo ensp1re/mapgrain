@@ -8,7 +8,14 @@ import {
   type Point,
   type Scene,
 } from "@mapgrain/scene";
-import { ARROW_SIZE, GROUP_RADIUS, NODE_RADIUS, PORT_RADIUS, VIEW_PAD } from "../constants/export.ts";
+import {
+  ARROW_SIZE,
+  GROUP_HEADER_BAND,
+  GROUP_RADIUS,
+  NODE_RADIUS,
+  PORT_RADIUS,
+  VIEW_PAD,
+} from "../constants/export.ts";
 import { fillForNodeKind } from "../constants/kindFill.ts";
 import { COLOR_MODE, fillForStateTone, paintsFor, type ColorMode } from "../constants/paint.ts";
 import { architectureKinds, legendMarkup, legendSize } from "./legend.ts";
@@ -63,11 +70,17 @@ export function renderSvg(
   const groups = scene.groups
     .map((group) => {
       const lane = group.role === "lane";
-      const fill = lane ? raised : "none";
       const rx = lane ? 4 : GROUP_RADIUS;
-      return `<g data-kind="${lane ? "lane" : "group"}" data-id="${escapeXml(group.id)}">
-  <rect x="${n(group.rect.x + ox)}" y="${n(group.rect.y + oy)}" width="${n(group.rect.width)}" height="${n(group.rect.height)}" rx="${rx}" fill="${fill}" stroke="${groupColor}" stroke-width="1"/>
-  <text x="${n(group.rect.x + ox + 12)}" y="${n(group.rect.y + oy + 16)}" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="12">${escapeXml(group.label.lines[0]?.text ?? group.id)}</text>
+      const x = group.rect.x + ox;
+      const y = group.rect.y + oy;
+      // A lane body stays unfilled so connections crossing it remain visible; only the
+      // header band is painted.
+      const band = lane
+        ? `\n  <path d="M${n(x)} ${n(y + GROUP_HEADER_BAND)}V${n(y + rx)}a${rx} ${rx} 0 0 1 ${rx} -${rx}h${n(group.rect.width - rx * 2)}a${rx} ${rx} 0 0 1 ${rx} ${rx}v${n(GROUP_HEADER_BAND - rx)}Z" fill="${raised}" stroke="none"/>`
+        : "";
+      return `<g data-kind="${lane ? "lane" : "group"}" data-id="${escapeXml(group.id)}">${band}
+  <rect x="${n(x)}" y="${n(y)}" width="${n(group.rect.width)}" height="${n(group.rect.height)}" rx="${rx}" fill="none" stroke="${groupColor}" stroke-width="1"/>
+  <text x="${n(x + 12)}" y="${n(y + 16)}" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="12">${escapeXml(group.label.lines[0]?.text ?? group.id)}</text>
 </g>`;
     })
     .join("\n");
@@ -123,20 +136,25 @@ export function renderSvg(
       const originX = node.rect.x + ox + padX;
       const originY = node.rect.y + oy + padY;
       const isState = node.kind === NODE_KIND.STATE;
-      const kindRow = Math.max(node.iconSize, node.kindLabel.height);
-      const iconY = originY + (kindRow - node.iconSize) / 2;
-      const kindText = node.kindLabel.lines[0]?.text ?? node.kind.toUpperCase();
-      const kindX = originX + node.iconSize + presentation.iconGap;
-      const kindY = originY + (kindRow - node.kindLabel.height) / 2;
-      const titleY = isState ? originY : originY + kindRow + presentation.kindTitleGap;
+      // Icon and title share the first row; the kind name lives in the inspector and legend.
+      const lead = isState ? 0 : node.iconSize + presentation.iconGap;
+      const textX = originX + lead;
+      const firstRow = isState
+        ? node.label.height
+        : Math.max(node.iconSize, presentation.titleLineHeight);
+      const iconY = originY + (firstRow - node.iconSize) / 2;
       const icon = isState ? "" : iconGroup(node.kind, originX, iconY, node.iconSize, muted);
-      const kind = isState
-        ? ""
-        : `<text x="${n(kindX)}" y="${n(kindY)}" dominant-baseline="hanging" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${presentation.kindSize}" letter-spacing="${n(presentation.kindSize * presentation.kindTrackingEm)}">${escapeXml(kindText)}</text>`;
       const lines = node.label.lines
         .map(
           (line, index) =>
-            `<text x="${n(originX)}" y="${n(titleY + index * line.height)}" dominant-baseline="hanging" fill="${text}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${presentation.titleWeight}" font-size="${presentation.titleSize}">${escapeXml(line.text)}</text>`,
+            `<text x="${n(textX)}" y="${n(originY + index * line.height)}" dominant-baseline="hanging" fill="${text}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${presentation.titleWeight}" font-size="${presentation.titleSize}">${escapeXml(line.text)}</text>`,
+        )
+        .join("\n  ");
+      const descriptionY = originY + node.label.height + presentation.descriptionGap;
+      const description = (node.description?.lines ?? [])
+        .map(
+          (line, index) =>
+            `<text x="${n(textX)}" y="${n(descriptionY + index * line.height)}" dominant-baseline="hanging" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${presentation.kindSize}">${escapeXml(line.text)}</text>`,
         )
         .join("\n  ");
       const ports = node.ports
@@ -166,14 +184,15 @@ export function renderSvg(
       const markerAttr = node.marker ? ` data-marker="${escapeXml(node.marker)}"` : "";
       const roleAttr = node.role ? ` data-role="${escapeXml(node.role)}"` : "";
       const shapeAttr = node.shape ? ` data-shape="${escapeXml(node.shape)}"` : "";
+      const kindText = node.kindLabel.lines[0]?.text ?? node.kind.toUpperCase();
       const accessible = `${isState ? "" : `${kindText} `}${node.label.lines.map((line) => line.text).join(" ")}`.trim();
       return `<g data-kind="node" data-id="${escapeXml(node.id)}" data-node-kind="${escapeXml(node.kind)}"${kindFillAttr}${toneAttr}${markerAttr}${roleAttr}${shapeAttr} tabindex="0" role="img" aria-label="${escapeXml(accessible || node.id)}">
   ${nodeBodyMarkup(node, ox, oy, fill, border)}
   ${final}
   ${initial}
   ${icon}
-  ${kind}
   ${lines}
+  ${description}
   ${ports}
 </g>`;
     })
