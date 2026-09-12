@@ -160,11 +160,18 @@ test("a connection's line shape is chosen, saved and redrawn", async (t) => {
 
   // Pick a connection that actually turns a corner, so straight and curved differ from it.
   const rows = page.locator(".outline-row.is-connection");
+  const selectedPath = page.locator(".react-flow__edge.selected .react-flow__edge-path");
   let elbow: string | null = null;
   for (let index = 0; index < (await rows.count()); index += 1) {
     await rows.nth(index).click();
-    await page.waitForTimeout(250);
-    const d = await page.locator(".react-flow__edge.selected .react-flow__edge-path").getAttribute("d");
+    // Wait for the selection to reach the canvas instead of for a fixed delay, and keep the
+    // timeout short so a slow row moves on rather than stalling the whole test.
+    const drawn = await selectedPath
+      .waitFor({ timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (!drawn) continue;
+    const d = await selectedPath.getAttribute("d");
     if (d?.includes("Q")) {
       elbow = d;
       break;
