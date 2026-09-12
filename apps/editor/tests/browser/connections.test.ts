@@ -158,46 +158,66 @@ test("a connection's line shape is chosen, saved and redrawn", async (t) => {
   await waitStartOrEditor(page);
   await useTemplate(page, "Order state machine");
 
-  // Pick a connection that actually turns a corner, so straight and curved differ from it.
+  // An SVG path with no fill has no box, so Playwright calls it hidden. Read the attribute
+  // straight off the DOM instead of waiting for visibility.
+  const drawnPath = () =>
+    page.evaluate(
+      () =>
+        document
+          .querySelector(".react-flow__edge.selected .react-flow__edge-path")
+          ?.getAttribute("d") ?? "",
+    );
+
+  // Pick a connection that turns a corner: a two-point route is a straight line whatever
+  // shape it is given, which is correct but proves nothing here.
   const rows = page.locator(".outline-row.is-connection");
-  const selectedPath = page.locator(".react-flow__edge.selected .react-flow__edge-path");
-  let elbow: string | null = null;
+  let bent = false;
   for (let index = 0; index < (await rows.count()); index += 1) {
     await rows.nth(index).click();
-    // Wait for the selection to reach the canvas instead of for a fixed delay, and keep the
-    // timeout short so a slow row moves on rather than stalling the whole test.
-    const drawn = await selectedPath
-      .waitFor({ timeout: 5_000 })
-      .then(() => true)
-      .catch(() => false);
-    if (!drawn) continue;
-    const d = await selectedPath.getAttribute("d");
-    if (d?.includes("Q")) {
-      elbow = d;
+    await page.waitForTimeout(300);
+    if ((await drawnPath()).includes("Q")) {
+      bent = true;
       break;
     }
   }
-  assert.ok(elbow, "no connection in this template turns a corner");
+  assert.ok(bent, "no connection in this template turns a corner");
   await page.locator(".inspector .pane-label", { hasText: "Connection" }).waitFor({ timeout: 5_000 });
+  const line = page.getByRole("button", { name: /^Line shape/ });
 
-  const pathOf = () =>
-    page.locator(".react-flow__edge.selected .react-flow__edge-path").getAttribute("d");
+  const pick = async (shape: string) => {
+    await line.click();
+    await page.getByRole("option", { name: shape }).click();
+    await page.waitForTimeout(500);
+    return drawnPath();
+  };
 
-  await page.getByRole("button", { name: /^Line shape/ }).click();
-  await page.getByRole("option", { name: "Curved" }).click();
-  await page.waitForTimeout(500);
-  const curved = await pathOf();
-  assert.notEqual(curved, elbow, "choosing curved did not redraw the line");
-  assert.ok(curved?.includes("C"), `a curve is cubic: ${curved}`);
+  // A straight connection is exactly the line between its two ends: no corners, no curve.
+  const straight = await pick("Straight");
+  assert.match(straight, /^M[\d.-]+ [\d.-]+ L[\d.-]+ [\d.-]+$/, straight);
 
-  // It is saved in the document, so a reload still draws a curve.
+  const curved = await pick("Curved");
+  assert.notEqual(curved, straight, "curved drew the straight line");
+  assert.ok(curved.includes("C"), `a curve is cubic: ${curved}`);
+
+  const elbow = await pick("Elbow");
+  assert.equal(elbow.includes("C"), false, elbow);
+
+  // The choice is a document field, so it survives a reload.
+  await pick("Curved");
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.locator(".node-card").first().waitFor({ timeout: 15_000 });
   await page.waitForTimeout(800);
-  const paths = await page.locator(".react-flow__edge-path").evaluateAll((nodes) =>
-    nodes.map((node) => node.getAttribute("d") ?? ""),
-  );
-  assert.ok(paths.some((d) => d.includes("C")), "the curve did not survive a reload");
+  // Find it again by the shape it kept, since the outline order is the document's.
+  let restored = false;
+  for (let index = 0; index < (await rows.count()); index += 1) {
+    await rows.nth(index).click();
+    await page.waitForTimeout(300);
+    if ((await line.innerText()).trim().includes("Curved")) {
+      restored = true;
+      break;
+    }
+  }
+  assert.ok(restored, "the chosen line shape did not survive a reload");
 });
 
 test("an endpoint is dragged onto another card, and the document follows", async (t) => {
