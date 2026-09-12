@@ -2,6 +2,7 @@ import type { Static } from "@sinclair/typebox";
 import type {
   DOCUMENT_KIND,
   EDGE_DIRECTION,
+  EDGE_SHAPE,
   EDGE_TYPE,
   EVIDENCE_STATE,
   EVIDENCE_TARGET_KIND,
@@ -37,6 +38,7 @@ export type NodeKind = (typeof NODE_KIND)[keyof typeof NODE_KIND];
 export type NodeMarker = (typeof NODE_MARKER)[keyof typeof NODE_MARKER];
 export type EdgeType = (typeof EDGE_TYPE)[keyof typeof EDGE_TYPE];
 export type EdgeDirection = (typeof EDGE_DIRECTION)[keyof typeof EDGE_DIRECTION];
+export type EdgeShape = (typeof EDGE_SHAPE)[keyof typeof EDGE_SHAPE];
 export type PortSide = (typeof PORT_SIDE)[keyof typeof PORT_SIDE];
 export type ViewKind = (typeof VIEW_KIND)[keyof typeof VIEW_KIND];
 export type LayoutDirection = (typeof LAYOUT_DIRECTION)[keyof typeof LAYOUT_DIRECTION];

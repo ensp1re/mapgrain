@@ -3,7 +3,7 @@ import {
   ICON_VIEWBOX,
   defaultFont,
   iconShapesFor,
-  roundedPolylinePath,
+  edgePath,
   stateTone,
   type Point,
   type Scene,
@@ -105,7 +105,7 @@ export function renderSvg(
   const edges = scene.edges
     .map((edge) => {
       const shifted = edge.points.map((point) => ({ x: point.x + ox, y: point.y + oy }));
-      const d = roundedPolylinePath(shifted);
+      const d = edgePath(shifted, edge.shape);
       const from = shifted.at(-2);
       const to = shifted.at(-1);
       const start = shifted.at(0);

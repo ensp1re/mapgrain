@@ -101,6 +101,7 @@ export function sceneToFlow(scene: Scene): {
     sourceHandle: edge.source.portId,
     targetHandle: edge.target.portId,
     points: edge.points,
+    shape: edge.shape,
     direction: edge.direction,
     caption: edge.caption,
     labelAnchor: edge.labelAnchor,

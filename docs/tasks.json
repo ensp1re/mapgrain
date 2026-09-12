@@ -1,5 +1,62 @@
 {
   "schemaVersion": 1,
-  "nextId": 71,
-  "tasks": []
+  "nextId": 72,
+  "tasks": [
+    {
+      "id": "F071",
+      "behavior": "A connection is something the reader can edit: it can be clicked to see which components it joins, its caption typed on the canvas, its meaning, direction and line shape chosen, either end dragged onto another card, and it can be deleted — on every diagram kind including sequence, with the chosen line saved in the document and drawn the same way by every export.",
+      "acceptance": [
+        "Clicking a connection selects it, and selecting one never leaves a component selected as well.",
+        "The connection inspector names both ends and each end selects its component.",
+        "A caption is typed on the canvas, empty text removes it, and the change is undoable.",
+        "Dragging an endpoint onto another card moves that end of the connection in the document.",
+        "A connection's line shape is elbow, straight or curved, is saved, and survives a reload.",
+        "The editor and the SVG export build a connection's path through the same function.",
+        "A sequence message is as editable as any other connection, and clicking a lifeline selects its participant.",
+        "Every connection is reachable from the outline, not only by hitting the line."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789255193268-c65cfd",
+        "fingerprintBefore": "9cf07aa9b5e6a30789d9b6fff455b967fae5ec9c348b043bb59e55ca286946a5",
+        "fingerprintAfter": "9cf07aa9b5e6a30789d9b6fff455b967fae5ec9c348b043bb59e55ca286946a5",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-12T23:21:26.002Z"
+      },
+      "delivery": null
+    }
+  ]
 }

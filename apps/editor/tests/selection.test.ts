@@ -40,3 +40,20 @@ test("sameSelection treats empty and group selections as first-class", () => {
     false,
   );
 });
+
+test("React Flow's late node echo does not resurrect a card over a selected connection", () => {
+  const withEdge = { nodeIds: [], edgeIds: ["e1"] };
+  // The outline or a canvas click selected the connection; React Flow still reports the card
+  // it had selected a render ago, with no edges of its own.
+  assert.equal(retainFlowSelection(withEdge, { nodeIds: ["n1"], edgeIds: [] }), withEdge);
+  // Once the connection is genuinely deselected, a card click lands normally.
+  assert.deepEqual(retainFlowSelection({ nodeIds: [], edgeIds: [] }, { nodeIds: ["n1"], edgeIds: [] }), {
+    nodeIds: ["n1"],
+    edgeIds: [],
+  });
+  // And React Flow may still move the selection to another connection.
+  assert.deepEqual(retainFlowSelection(withEdge, { nodeIds: [], edgeIds: ["e2"] }), {
+    nodeIds: [],
+    edgeIds: ["e2"],
+  });
+});

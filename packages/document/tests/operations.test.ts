@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import {
   DOCUMENT_KIND,
   EDGE_DIRECTION,
+  EDGE_SHAPE,
   EDGE_TYPE,
   NODE_KIND,
   OPERATION_KIND,
@@ -217,4 +218,79 @@ test("set_document_kind converts to workflow and inverse restores dropped nodes"
     undone.document.nodes.map((node) => node.id).sort(),
     document.nodes.map((node) => node.id).sort(),
   );
+});
+
+test("set_edge_endpoint moves one end, keeps the id, and inverts", async () => {
+  const document = await load();
+  const edge = document.edges[0];
+  assert.ok(edge);
+  const other = document.nodes.find(
+    (node) => node.id !== edge.source.nodeId && node.id !== edge.target.nodeId,
+  );
+  assert.ok(other);
+  const result = applyOperation(document, {
+    kind: OPERATION_KIND.SET_EDGE_ENDPOINT,
+    edgeId: edge.id,
+    end: "target",
+    nodeId: other.id,
+  });
+  assert.equal(result.ok, true, JSON.stringify(result));
+  if (!result.ok) return;
+  const moved = result.document.edges.find((item) => item.id === edge.id);
+  assert.equal(moved?.target.nodeId, other.id);
+  assert.equal(moved?.source.nodeId, edge.source.nodeId);
+  // The port belonged to the old card's geometry, so it does not travel with the end.
+  assert.equal(moved?.target.portId, undefined);
+  assert.equal(result.document.edges.length, document.edges.length);
+
+  const undone = applyOperation(result.document, result.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(
+    undone.document.edges.find((item) => item.id === edge.id)?.target.nodeId,
+    edge.target.nodeId,
+  );
+});
+
+test("set_edge_endpoint refuses a missing card and refuses a self-loop", async () => {
+  const document = await load();
+  const edge = document.edges[0];
+  assert.ok(edge);
+  const missing = applyOperation(document, {
+    kind: OPERATION_KIND.SET_EDGE_ENDPOINT,
+    edgeId: edge.id,
+    end: "target",
+    nodeId: "no-such-node",
+  });
+  assert.equal(missing.ok, false);
+  assert.deepEqual(missing.document, document);
+
+  const loop = applyOperation(document, {
+    kind: OPERATION_KIND.SET_EDGE_ENDPOINT,
+    edgeId: edge.id,
+    end: "target",
+    nodeId: edge.source.nodeId,
+  });
+  assert.equal(loop.ok, false);
+  assert.deepEqual(loop.document, document);
+});
+
+test("set_edge_shape stores the line a reader picked, and clearing it inverts", async () => {
+  const document = await load();
+  const edge = document.edges[0];
+  assert.ok(edge);
+  assert.equal(edge.shape, undefined);
+  const curved = applyOperation(document, {
+    kind: OPERATION_KIND.SET_EDGE_SHAPE,
+    edgeId: edge.id,
+    shape: EDGE_SHAPE.CURVED,
+  });
+  assert.equal(curved.ok, true, JSON.stringify(curved));
+  if (!curved.ok) return;
+  assert.equal(curved.document.edges.find((item) => item.id === edge.id)?.shape, "curved");
+
+  const undone = applyOperation(curved.document, curved.inverse);
+  assert.equal(undone.ok, true);
+  if (!undone.ok) return;
+  assert.equal(undone.document.edges.find((item) => item.id === edge.id)?.shape, undefined);
 });

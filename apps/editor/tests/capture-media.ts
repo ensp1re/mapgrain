@@ -174,7 +174,7 @@ async function main(): Promise<void> {
     await editPage.goto(server.url, { waitUntil: "domcontentloaded" });
     await openFixture(editPage);
     await editPage.waitForTimeout(400);
-    const rows = editPage.locator(".outline-row:not(.is-group)");
+    const rows = editPage.locator(".outline-row:not(.is-group):not(.is-connection)");
     await rows.nth(0).click();
     await editPage.waitForTimeout(250);
     const label = editPage.getByRole("textbox", { name: "Name", exact: true });

@@ -1,4 +1,5 @@
 import { VALIDATION_ERROR_CODE } from "../constants/errors.ts";
+import { DOCUMENT_KIND } from "../constants/document.ts";
 import { OPERATION_KIND } from "../constants/operations.ts";
 import type { DiagramDocument, DiagramEdge, DiagramNode } from "../types/document.ts";
 import type { ApplyResult, Operation } from "../types/operation.ts";
@@ -36,6 +37,11 @@ function findNode(document: DiagramDocument, nodeId: string): DiagramNode | unde
 
 function findEdge(document: DiagramDocument, edgeId: string): DiagramEdge | undefined {
   return document.edges.find((edge) => edge.id === edgeId);
+}
+
+/** Only a sequence participant may message itself. */
+function allowsSelfEdge(document: DiagramDocument): boolean {
+  return document.kind === DOCUMENT_KIND.SEQUENCE;
 }
 
 function removeNodeRefs(document: DiagramDocument, nodeId: string): void {
@@ -173,6 +179,41 @@ export function applyOperation(document: DiagramDocument, operation: Operation):
       };
       if (operation.outcome) edge.outcome = operation.outcome;
       else delete edge.outcome;
+      return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_EDGE_SHAPE: {
+      const edge = findEdge(next, operation.edgeId);
+      if (!edge) return fail(document, `unknown edge ${operation.edgeId}`, "/edges", operation.edgeId);
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_EDGE_SHAPE,
+        edgeId: edge.id,
+        shape: edge.shape ?? null,
+      };
+      if (operation.shape) edge.shape = operation.shape;
+      else delete edge.shape;
+      return commit(next, inverse, document);
+    }
+    case OPERATION_KIND.SET_EDGE_ENDPOINT: {
+      const edge = findEdge(next, operation.edgeId);
+      if (!edge) return fail(document, `unknown edge ${operation.edgeId}`, "/edges", operation.edgeId);
+      if (!findNode(next, operation.nodeId)) {
+        return fail(document, `unknown node ${operation.nodeId}`, "/nodes", operation.nodeId);
+      }
+      const moving = operation.end === "source" ? edge.source : edge.target;
+      const inverse: Operation = {
+        kind: OPERATION_KIND.SET_EDGE_ENDPOINT,
+        edgeId: edge.id,
+        end: operation.end,
+        nodeId: moving.nodeId,
+      };
+      const other = operation.end === "source" ? edge.target : edge.source;
+      if (other.nodeId === operation.nodeId && !allowsSelfEdge(next)) {
+        return fail(document, "a connection needs two different components", "/edges", edge.id);
+      }
+      // The port was chosen for the old card's geometry, so it cannot survive the move.
+      const moved = { nodeId: operation.nodeId };
+      if (operation.end === "source") edge.source = moved;
+      else edge.target = moved;
       return commit(next, inverse, document);
     }
     case OPERATION_KIND.SET_NODE_KIND: {

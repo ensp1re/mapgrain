@@ -37,6 +37,7 @@ export {
   pointAlongPolyline,
   polylineLength,
   polylinePath,
+  edgePath,
   roundedPolylinePath,
 } from "./routes.ts";
 export {

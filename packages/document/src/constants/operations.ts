@@ -8,6 +8,8 @@ export const OPERATION_KIND = {
   SET_EDGE_ORDER: "set_edge_order",
   SET_EDGE_GUARD: "set_edge_guard",
   SET_EDGE_OUTCOME: "set_edge_outcome",
+  SET_EDGE_SHAPE: "set_edge_shape",
+  SET_EDGE_ENDPOINT: "set_edge_endpoint",
   SET_NODE_KIND: "set_node_kind",
   SET_NODE_MARKER: "set_node_marker",
   ADD_NODE: "add_node",

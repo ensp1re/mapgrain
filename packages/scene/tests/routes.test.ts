@@ -7,8 +7,10 @@ import {
   polylineLength,
   polylinePath,
   rectsOverlap,
+  edgePath,
   roundedPolylinePath,
 } from "../src/index.ts";
+import { EDGE_SHAPE } from "@mapgrain/document";
 
 test("canonical polyline path is built from scene points", () => {
   const path = polylinePath([
@@ -82,4 +84,36 @@ test("rounded orthogonal paths use quadratic corners capped by segment length", 
     8,
   );
   assert.match(short, /Q6 0 6 3/);
+});
+
+test("every line shape draws a path through the points the scene routed", () => {
+  const points = [
+    { x: 0, y: 0 },
+    { x: 40, y: 0 },
+    { x: 40, y: 60 },
+    { x: 90, y: 60 },
+  ];
+  const elbow = edgePath(points, EDGE_SHAPE.ELBOW);
+  const straight = edgePath(points, EDGE_SHAPE.STRAIGHT);
+  const curved = edgePath(points, EDGE_SHAPE.CURVED);
+
+  for (const path of [elbow, straight, curved]) {
+    assert.match(path, /^M0 0/, path);
+    assert.ok(path.includes("90"), `${path} must reach the target`);
+  }
+  // A straight line is two points; the others keep the detour the router found.
+  assert.equal(straight, "M0 0 L90 60");
+  assert.ok(curved.startsWith("M0 0 C"), curved);
+  assert.equal(curved.includes("L"), false, "a curve has no straight segments");
+  assert.ok(elbow.includes("Q"), elbow);
+  assert.equal(edgePath(points), elbow, "elbow is the default");
+});
+
+test("a curve with fewer than three points is just the line between them", () => {
+  const two = [
+    { x: 0, y: 0 },
+    { x: 10, y: 10 },
+  ];
+  assert.equal(edgePath(two, EDGE_SHAPE.CURVED), "M0 0 L10 10");
+  assert.equal(edgePath([], EDGE_SHAPE.CURVED), "");
 });
