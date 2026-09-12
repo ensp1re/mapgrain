@@ -82,7 +82,7 @@ async function openImported(page: Page, file: string): Promise<void> {
 
 async function nodeLabels(page: Page): Promise<string[]> {
   return page.evaluate(() =>
-    [...document.querySelectorAll(".outline-row:not(.is-group)")].map((row) => row.textContent ?? "").filter(Boolean),
+    [...document.querySelectorAll(".outline-row:not(.is-group):not(.is-connection)")].map((row) => row.textContent ?? "").filter(Boolean),
   );
 }
 
@@ -95,7 +95,7 @@ async function measureSelection(page: Page, reps: number): Promise<number[]> {
   for (let i = 0; i < reps; i += 1) {
     const label = i % 2 === 0 ? first : second;
     const ms = await page.evaluate(async (targetLabel) => {
-      const buttons = [...document.querySelectorAll<HTMLButtonElement>(".outline-row:not(.is-group)")];
+      const buttons = [...document.querySelectorAll<HTMLButtonElement>(".outline-row:not(.is-group):not(.is-connection)")];
       const target = buttons.find((button) => (button.textContent ?? "").includes(targetLabel));
       if (!target) throw new Error(`missing ${targetLabel}`);
       const start = performance.now();

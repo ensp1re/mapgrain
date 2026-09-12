@@ -5,12 +5,14 @@ import {
   MarkerType,
   ReactFlow,
   ReactFlowProvider,
+  ConnectionMode,
   applyNodeChanges,
   getNodesBounds,
   useReactFlow,
   useUpdateNodeInternals,
   type Connection,
   type Edge,
+  type EdgeChange,
   type Node,
   type NodeChange,
   type ReactFlowInstance,
@@ -50,6 +52,7 @@ import { renderView } from "@mapgrain/viewer";
 import { ExportDialog } from "./chrome/ExportDialog.tsx";
 import { EXPORT_CHOICE } from "./constants/export.ts";
 import { STORY_WEBM } from "./constants/video.ts";
+import { nodeLabel } from "./export/labels.ts";
 import { copyPngToClipboard, RASTER_TYPE, rasterSvgToPng } from "./export/png.ts";
 import { storyExportFrames } from "./export/storyFrames.ts";
 import { encodeStoryWebm, STORY_WEBM_CANCELLED, STORY_WEBM_NO_STORY } from "./export/webm.ts";
@@ -69,7 +72,7 @@ import { Outline } from "./chrome/Outline.tsx";
 import { TopBar } from "./chrome/TopBar.tsx";
 import { ALIGN_KIND } from "./constants/align.ts";
 import { COMMAND_ID, type CommandId } from "./constants/commands.ts";
-import { DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
+import { CONNECT_SNAP_RADIUS, DUPLICATE_OFFSET, NODE_DRAG_THRESHOLD } from "./constants/edit.ts";
 import { AddBar } from "./chrome/AddBar.tsx";
 import { CanvasEmpty } from "./chrome/CanvasEmpty.tsx";
 import { WalkBar } from "./chrome/WalkBar.tsx";
@@ -101,7 +104,7 @@ import {
   layoutTokenMatches,
   selectionFromFlow,
 } from "./edit/safety.ts";
-import { retainFlowSelection } from "./edit/selection.ts";
+import { retainFlowSelection, sameIdSet } from "./edit/selection.ts";
 import { EditorErrorBoundary } from "./chrome/ErrorBoundary.tsx";
 import {
   isDeleteEvent,
@@ -471,6 +474,12 @@ function Editor() {
   }, [scene]);
 
   const cancelEdit = useCallback(() => setEditingId(null), []);
+
+  // The canvas edges are derived above where applyOp is defined, so the commit goes through a
+  // ref. Typing an empty caption removes it, the way clearing any optional field does.
+  const commitEdgeRef = useRef<(id: string, label: string) => void>(() => {});
+  const commitEdgeLabel = useCallback((id: string, label: string) => commitEdgeRef.current(id, label), []);
+
   const [nodes, setNodes] = useState<Node[]>([]);
   const edgesRef = useRef<Edge[]>([]);
 
@@ -490,6 +499,17 @@ function Editor() {
     [documentModel, runState],
   );
   const runMoveIds = useMemo(() => new Set(runMoves.map((move) => move.edgeId)), [runMoves]);
+
+  const outlineConnections = useMemo(() => {
+    if (!documentModel) return [];
+    const labels = new Map(documentModel.nodes.map((node) => [node.id, node.label]));
+    return documentModel.edges.map((edge) => ({
+      id: edge.id,
+      source: labels.get(edge.source.nodeId) ?? edge.source.nodeId,
+      target: labels.get(edge.target.nodeId) ?? edge.target.nodeId,
+      label: edge.label ?? edge.outcome ?? edge.guard ?? "",
+    }));
+  }, [documentModel]);
 
   const computedEdges = useMemo<Edge[]>(() => {
     if (!documentModel) return [];
@@ -518,19 +538,24 @@ function Editor() {
           type: meaning?.type ?? EDGE_TYPE.CALLS,
           direction: edge.direction,
           points: edge.points,
+          shape: edge.shape,
           caption: edge.caption,
           labelAnchor: edge.labelAnchor,
           labelSize: edge.labelSize,
           preserveGeometry: edge.preserveGeometry,
           walkStep: walkStep?.edgeId === edge.id,
           dragging,
+          editing: editingId === edge.id,
+          onStartEdit: () => setEditingId(edge.id),
+          onCommitLabel: (next: string) => commitEdgeLabel(edge.id, next),
+          onCancelEdit: cancelEdit,
         },
         ...(visible && !visible.edgeIds.has(edge.id) ? { hidden: true } : {}),
         ...(walkStep?.edgeId === edge.id ? { className: "is-walk-step" } : {}),
         ...(runMoveIds.has(edge.id) ? { className: "is-run-move" } : {}),
       };
     });
-  }, [documentModel, dragging, flow.edges, runMoveIds, selection.edgeIds, walkStep, visible]);
+  }, [cancelEdit, commitEdgeLabel, documentModel, dragging, editingId, flow.edges, runMoveIds, selection.edgeIds, walkStep, visible]);
   const rfEdges = reuseUnchangedEdges(edgesRef.current, computedEdges);
   edgesRef.current = rfEdges;
 
@@ -796,6 +821,10 @@ function Editor() {
     const shown = visible
       ? built.map((node) => (visible.nodeIds.has(node.id) ? node : { ...node, hidden: true }))
       : built;
+    if (selectedEdge) {
+      const ends = new Set([selectedEdge.source.nodeId, selectedEdge.target.nodeId]);
+      return shown.map((node) => (ends.has(node.id) ? { ...node, className: "is-relation-end" } : node));
+    }
     if (runState) {
       const targets = new Set(runMoves.map((move) => move.targetId));
       return shown.map((node) => {
@@ -807,7 +836,7 @@ function Editor() {
     return shown.map((node) =>
       node.id === walkStep.nodeId ? { ...node, className: "is-walk-step" } : node,
     );
-  }, [flow.nodes, selection.nodeIds, editingId, commitLabel, cancelEdit, runMoves, runState, walkStep, visible]);
+  }, [flow.nodes, selection.nodeIds, editingId, commitLabel, cancelEdit, runMoves, runState, selectedEdge, walkStep, visible]);
 
   useEffect(() => {
     if (!dragging) {
@@ -839,6 +868,13 @@ function Editor() {
     portSignatures.current = next;
     if (changed.length > 0) updateNodeInternals(changed);
   }, [derivedNodes, updateNodeInternals]);
+
+  const onEdgeDoubleClick = useCallback((event: ReactMouseEvent, edge: Edge) => {
+    if (presenting) return;
+    event.stopPropagation();
+    setSelection({ nodeIds: [], edgeIds: [edge.id] });
+    setEditingId(edge.id);
+  }, [presenting]);
 
   const onPaneClick = useCallback((event: ReactMouseEvent) => {
     const target = event.target;
@@ -885,6 +921,11 @@ function Editor() {
       setNarrowPanel("inspector");
     }
   }, [shellLayout]);
+
+  commitEdgeRef.current = (id: string, label: string) => {
+    setEditingId(null);
+    applyOp({ kind: OPERATION_KIND.SET_EDGE_LABEL, edgeId: id, label: label.trim() });
+  };
 
   const pushPositions = useCallback((positions: PositionMap) => {
     const current = historyRef.current.present;
@@ -1304,12 +1345,60 @@ function Editor() {
     setNodes((current) => applyNodeChanges(changes, current));
   }, []);
 
+  /**
+   * React Flow is fully controlled here, so without this handler it drops every edge change it
+   * makes — including the selection change a click produces. That is why a connection could not
+   * be clicked, and therefore why none of the inspector's connection fields were reachable.
+   */
+  const onEdgesChange = useCallback((changes: EdgeChange[]) => {
+    const picked = changes.filter((change) => change.type === "select");
+    if (picked.length === 0) return;
+    setSelection((current) => {
+      const next = new Set(current.edgeIds);
+      for (const change of picked) {
+        if (change.selected) next.add(change.id);
+        else next.delete(change.id);
+      }
+      const edgeIds = [...next];
+      if (sameIdSet(edgeIds, current.edgeIds)) return current;
+      // A connection and a component are never selected together: the inspector shows one thing.
+      return { nodeIds: edgeIds.length > 0 ? [] : current.nodeIds, edgeIds };
+    });
+    if (picked.some((change) => change.selected)) {
+      setEditingId(null);
+      if (shellLayout === SHELL_LAYOUT.OVERLAY) setNarrowPanel("inspector");
+    }
+  }, [shellLayout]);
+
   const onNodeDragStart = useCallback(() => setDragging(true), []);
 
   const onNodeDragStop = useCallback(() => {
     setDragging(false);
     pushPositions(positionsFromFlow(getNodes(), historyRef.current.present.positions));
   }, [getNodes, pushPositions]);
+
+  /**
+   * Dragging an endpoint onto another card moves that end. React Flow renders no endpoint
+   * anchors at all until this handler exists, which is why a connection could not be
+   * reattached before.
+   */
+  const onReconnect = useCallback((previous: Edge, connection: Connection) => {
+    if (presenting) return;
+    const moved =
+      connection.source !== previous.source
+        ? { end: "source" as const, nodeId: connection.source }
+        : connection.target !== previous.target
+          ? { end: "target" as const, nodeId: connection.target }
+          : null;
+    if (!moved?.nodeId) return;
+    const ok = applyOp({
+      kind: OPERATION_KIND.SET_EDGE_ENDPOINT,
+      edgeId: previous.id,
+      end: moved.end,
+      nodeId: moved.nodeId,
+    });
+    if (ok) setSelection({ nodeIds: [], edgeIds: [previous.id] });
+  }, [applyOp, presenting]);
 
   const onConnect = useCallback((connection: Connection) => {
     if (presenting) return;
@@ -1515,14 +1604,21 @@ function Editor() {
         {presenting || !showOutline ? null : (
           <Outline
             nodes={flow.nodes}
-            selectedId={selection.nodeIds[0] ?? null}
-            hiddenIds={visibility.hiddenNodeIds}
+            edges={outlineConnections}
+            selectedId={selection.edgeIds.length > 0 ? null : (selection.nodeIds[0] ?? null)}
+            selectedEdgeId={selection.edgeIds[0] ?? null}
+            hiddenIds={[...visibility.hiddenNodeIds, ...visibility.hiddenEdgeIds]}
             onToggleHidden={(id) =>
-              setVisibility((current) => ({
-                ...current,
-                hiddenNodeIds: toggleHidden(current.hiddenNodeIds, id),
-              }))
+              setVisibility((current) =>
+                documentModel.edges.some((edge) => edge.id === id)
+                  ? { ...current, hiddenEdgeIds: toggleHidden(current.hiddenEdgeIds, id) }
+                  : { ...current, hiddenNodeIds: toggleHidden(current.hiddenNodeIds, id) },
+              )
             }
+            onSelectEdge={(id) => {
+              setSelection({ nodeIds: [], edgeIds: [id] });
+              if (shellLayout === SHELL_LAYOUT.OVERLAY) setNarrowPanel("inspector");
+            }}
             onSelect={(id, additive) => {
               setSelection((current) => {
                 if (additive) {
@@ -1547,12 +1643,17 @@ function Editor() {
           className={arrange.status === "preview" ? "canvas is-previewing" : "canvas"}
           style={presentationCssVars(scene.scene.presentation)}
         >
+          {/* Loose mode with a generous radius: a reader drops a connection on a card, not on
+              a 9px handle, and the nearest port takes it. */}
           <ReactFlow
             nodes={nodes}
             edges={rfEdges}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onReconnect={onReconnect}
+            edgesReconnectable={arrange.status === "idle" && !presenting}
             onConnect={onConnect}
             nodesDraggable={arrange.status === "idle" && !presenting}
             nodesConnectable={arrange.status === "idle" && !presenting}
@@ -1561,17 +1662,25 @@ function Editor() {
             onSelectionChange={onSelectionChange}
             onPaneClick={onPaneClick}
             onNodeDoubleClick={onNodeDoubleClick}
+            onEdgeDoubleClick={onEdgeDoubleClick}
             onNodeMouseEnter={onNodeMouseEnter}
             onNodeMouseLeave={onNodeMouseLeave}
             onInit={onFlowInit}
             deleteKeyCode={null}
+            connectionMode={ConnectionMode.Loose}
+            connectionRadius={CONNECT_SNAP_RADIUS}
             nodeDragThreshold={NODE_DRAG_THRESHOLD}
             minZoom={USER_MIN_ZOOM}
             maxZoom={USER_MAX_ZOOM}
             proOptions={PRO_OPTIONS}
           >
             <Background gap={20} size={1} />
-            <LifelineLayer lifelines={flow.lifelines} fragments={flow.fragments} />
+            <LifelineLayer
+              lifelines={flow.lifelines}
+              fragments={flow.fragments}
+              selectedId={selection.nodeIds[0] ?? null}
+              onSelectNode={(id) => setSelection({ nodeIds: [id], edgeIds: [] })}
+            />
             {presenting ? null : (
               <ViewportBar
                 canFocus={selection.nodeIds.length > 0}
@@ -1594,7 +1703,13 @@ function Editor() {
                 "Overview"}
             </div>
           )}
-          {selectedNode && selectedNode.type !== "group" && !presenting ? (
+          {selectedEdge && !presenting ? (
+            <div className="selection-bar">
+              {nodeLabel(documentModel, selectedEdge.source.nodeId)} →{" "}
+              {nodeLabel(documentModel, selectedEdge.target.nodeId)} selected · double-click the
+              label to rename
+            </div>
+          ) : selectedNode && selectedNode.type !== "group" && !presenting ? (
             <div className="selection-bar">
               {selectedNode.data.label} selected · Enter to edit
             </div>

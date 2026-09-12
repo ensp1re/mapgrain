@@ -2,6 +2,7 @@ export { compareDocuments } from "./compare.ts";
 export {
   DOCUMENT_KIND,
   EDGE_DIRECTION,
+  EDGE_SHAPE,
   EDGE_TYPE,
   EVIDENCE_STATE,
   EVIDENCE_TARGET_KIND,
@@ -41,6 +42,7 @@ export type {
   SequenceFragmentKind,
   DocumentKind,
   EdgeDirection,
+  EdgeShape,
   EdgeType,
   EvidenceState,
   LayoutDirection,

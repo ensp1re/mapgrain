@@ -377,6 +377,22 @@
           "outcome": {
             "maxLength": 200,
             "type": "string"
+          },
+          "shape": {
+            "anyOf": [
+              {
+                "const": "elbow",
+                "type": "string"
+              },
+              {
+                "const": "straight",
+                "type": "string"
+              },
+              {
+                "const": "curved",
+                "type": "string"
+              }
+            ]
           }
         }
       }

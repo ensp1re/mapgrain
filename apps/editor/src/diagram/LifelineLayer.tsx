@@ -4,9 +4,17 @@ import type { SceneFragment, SceneLifeline } from "@mapgrain/scene";
 interface LifelineLayerProps {
   lifelines: SceneLifeline[];
   fragments?: SceneFragment[];
+  /** Clicking a lifeline selects its participant, so a sequence reads like any other diagram. */
+  onSelectNode?: (nodeId: string) => void;
+  selectedId?: string | null;
 }
 
-export function LifelineLayer({ lifelines, fragments = [] }: LifelineLayerProps) {
+export function LifelineLayer({
+  lifelines,
+  fragments = [],
+  onSelectNode,
+  selectedId = null,
+}: LifelineLayerProps) {
   const { x, y, zoom } = useViewport();
   if (lifelines.length === 0 && fragments.length === 0) return null;
   return (
@@ -41,15 +49,25 @@ export function LifelineLayer({ lifelines, fragments = [] }: LifelineLayerProps)
         </g>
       ))}
       {lifelines.map((line) => (
-        <line
-          key={line.nodeId}
-          data-kind="lifeline"
-          data-id={line.nodeId}
-          x1={line.x}
-          y1={line.y1}
-          x2={line.x}
-          y2={line.y2}
-        />
+        <g key={line.nodeId} data-kind="lifeline" data-id={line.nodeId}>
+          <line
+            className={selectedId === line.nodeId ? "lifeline is-selected" : "lifeline"}
+            x1={line.x}
+            y1={line.y1}
+            x2={line.x}
+            y2={line.y2}
+          />
+          {onSelectNode ? (
+            <line
+              className="lifeline-hit"
+              x1={line.x}
+              y1={line.y1}
+              x2={line.x}
+              y2={line.y2}
+              onClick={() => onSelectNode(line.nodeId)}
+            />
+          ) : null}
+        </g>
       ))}
     </svg>
   );

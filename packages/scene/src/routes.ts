@@ -1,3 +1,4 @@
+import { EDGE_SHAPE, type EdgeShape } from "@mapgrain/document";
 import { CORNER_RADIUS, EDGE_LABEL_CLEARANCE, EDGE_LABEL_PAD } from "./constants/metrics.ts";
 import { rectsOverlap } from "./geometry.ts";
 import type { Point, Rect } from "./types/geometry.ts";
@@ -127,6 +128,44 @@ export function placeEdgeLabel(
     }
   }
   return best ?? labelBoxAt(points, size, clamp(total * 0.5), "above");
+}
+
+/**
+ * One place decides how a connection is drawn, so the canvas and every export agree — the
+ * scene invariant in docs/ARCHITECTURE.md.
+ */
+export function edgePath(points: Point[], shape: EdgeShape = EDGE_SHAPE.ELBOW): string {
+  if (shape === EDGE_SHAPE.STRAIGHT) return straightPath(points);
+  if (shape === EDGE_SHAPE.CURVED) return curvedPath(points);
+  return roundedPolylinePath(points);
+}
+
+function straightPath(points: Point[]): string {
+  const first = points[0];
+  const last = points.at(-1);
+  if (!first || !last) return "";
+  return `M${first.x} ${first.y} L${last.x} ${last.y}`;
+}
+
+/**
+ * A Catmull-Rom spline through the routed points, emitted as cubics. The curve keeps the
+ * detours the router found instead of cutting through whatever they avoided.
+ */
+function curvedPath(points: Point[]): string {
+  const first = points[0];
+  if (!first) return "";
+  if (points.length < 3) return straightPath(points);
+  const parts = [`M${first.x} ${first.y}`];
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p0 = points[Math.max(0, i - 1)] ?? first;
+    const p1 = points[i] ?? first;
+    const p2 = points[i + 1] ?? first;
+    const p3 = points[Math.min(points.length - 1, i + 2)] ?? p2;
+    const c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
+    const c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
+    parts.push(`C${c1.x} ${c1.y} ${c2.x} ${c2.y} ${p2.x} ${p2.y}`);
+  }
+  return parts.join(" ");
 }
 
 export function roundedPolylinePath(points: Point[], radius = CORNER_RADIUS): string {
