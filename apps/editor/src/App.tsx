@@ -496,11 +496,12 @@ function Editor() {
           labelSize: edge.labelSize,
           preserveGeometry: edge.preserveGeometry,
           walkStep: walkStep?.edgeId === edge.id,
+          dragging,
         },
         ...(walkStep?.edgeId === edge.id ? { className: "is-walk-step" } : {}),
       };
     });
-  }, [documentModel, flow.edges, selection.edgeIds, walkStep]);
+  }, [documentModel, dragging, flow.edges, selection.edgeIds, walkStep]);
   const rfEdges = reuseUnchangedEdges(edgesRef.current, computedEdges);
   edgesRef.current = rfEdges;
 

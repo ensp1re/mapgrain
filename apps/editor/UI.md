@@ -71,6 +71,8 @@ These rules apply to the editor chrome. They are not product claims.
 - Outline rows: chevron, icon, label. Truncate labels; full text stays on focus and in the inspector.
 - Inspector uses one inset, a single keep-position checkbox, and short connection lines (`From X · calls`).
 - Fit shows the diagram. Focus shows the selection. Keep both actions. Do not fit after every keystroke.
+- Edge captions use the anchor the scene computed, which places them in one pass against the
+  captions it has already placed. Re-place per edge only while a drag makes that anchor stale.
 
 ## Motion
 

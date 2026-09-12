@@ -66,6 +66,8 @@ export interface RelationEdgeData extends Record<string, unknown> {
   label?: string;
   /** True while this edge is the step a walkthrough is on. */
   walkStep?: boolean;
+  /** True while a node is being dragged, when the scene anchor is stale. */
+  dragging?: boolean;
   type: EdgeType;
   direction: EdgeDirection;
   points: Array<{ x: number; y: number }>;

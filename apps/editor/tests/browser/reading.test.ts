@@ -93,3 +93,46 @@ test("a template keeps readable labels after default fit and shows zoom", async 
   await page.keyboard.press("Escape");
   await help.waitFor({ state: "hidden" });
 });
+
+test("canvas captions keep the scene's placement instead of stacking on each other", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+
+  // Lane-crossing and branching diagrams are where captions used to pile up.
+  for (const name of ["Approval swimlanes", "Microservices behind a gateway", "Order state machine"]) {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const page = await context.newPage();
+    await page.goto(server.url, { waitUntil: "domcontentloaded" });
+    await waitStartOrEditor(page);
+    const card = page.getByRole("button", { name: `Use template ${name}` });
+    await card.scrollIntoViewIfNeeded();
+    await card.click();
+    await page.locator(".node-card").first().waitFor({ timeout: 10_000 });
+    await page.waitForTimeout(1_000);
+    const result = await page.evaluate(() => {
+      const boxes = [...document.querySelectorAll(".edge-caption")].map((node) =>
+        node.getBoundingClientRect(),
+      );
+      const hits: string[] = [];
+      for (let i = 0; i < boxes.length; i += 1) {
+        for (let j = i + 1; j < boxes.length; j += 1) {
+          const a = boxes[i];
+          const b = boxes[j];
+          if (!a || !b) continue;
+          if (a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) {
+            hits.push(`${i}/${j}`);
+          }
+        }
+      }
+      return { captions: boxes.length, hits };
+    });
+    assert.ok(result.captions > 0, `${name} drew no captions`);
+    assert.deepEqual(result.hits, [], `${name} stacked captions`);
+    await context.close();
+  }
+});
