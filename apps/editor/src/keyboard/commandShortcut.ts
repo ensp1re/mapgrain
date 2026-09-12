@@ -1,4 +1,4 @@
-import { COMMAND_ID, type CommandId } from "../constants/commands.ts";
+import { COMMANDS, type CommandId } from "../constants/commands.ts";
 
 export function isEditableTarget(target: EventTarget | null): boolean {
   if (!target || typeof target !== "object" || !("tagName" in target)) return false;
@@ -41,17 +41,21 @@ export function shouldOpenHelp(event: {
   return event.key === "?" || event.key === "F1";
 }
 
-const KEY_COMMANDS: Record<string, CommandId> = {
-  a: COMMAND_ID.ARRANGE,
-  n: COMMAND_ID.NEW,
-  p: COMMAND_ID.PRESENT,
-  e: COMMAND_ID.EXPORT,
-  j: COMMAND_ID.EXPORT_JSON,
-  o: COMMAND_ID.TOGGLE_OUTLINE,
-  i: COMMAND_ID.TOGGLE_INSPECTOR,
-  t: COMMAND_ID.TOGGLE_THEME,
-  f: COMMAND_ID.FIT_ALL,
-};
+/** Derived from COMMANDS so a shortcut cannot be advertised without being bound. */
+const KEY_COMMANDS: Record<string, CommandId> = Object.fromEntries(
+  COMMANDS.filter((command) => /^[A-Z]$/.test(command.shortcut)).map((command) => [
+    command.shortcut.toLowerCase(),
+    command.id,
+  ]),
+);
+
+/** Shift plus a letter, keyed by the letter the browser reports (already uppercase). */
+const SHIFT_KEY_COMMANDS: Record<string, CommandId> = Object.fromEntries(
+  COMMANDS.filter((command) => /^⇧[A-Z]$/.test(command.shortcut)).map((command) => [
+    command.shortcut.slice(1),
+    command.id,
+  ]),
+);
 
 export function commandForKeyEvent(event: {
   metaKey: boolean;
@@ -66,7 +70,8 @@ export function commandForKeyEvent(event: {
   if (isInsideOverlay(event.target)) return null;
   if (event.metaKey || event.ctrlKey || event.altKey) return null;
   if (event.repeat) return null;
-  if (event.key === "F") return COMMAND_ID.FOCUS;
+  const shifted = SHIFT_KEY_COMMANDS[event.key];
+  if (shifted) return shifted;
   if (event.shiftKey) return null;
   return KEY_COMMANDS[event.key.toLowerCase()] ?? null;
 }

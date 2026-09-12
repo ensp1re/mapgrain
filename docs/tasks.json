@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextId": 65,
+  "nextId": 66,
   "tasks": [
     {
       "id": "F064",
@@ -20,7 +20,7 @@
         "Node titles keep a padding gap from the card edge in the editor and in every export."
       ],
       "dependsOn": [],
-      "state": "verified",
+      "state": "active",
       "spec": null,
       "plan": "docs/PLAN.md",
       "verification": [
@@ -60,6 +60,38 @@
         ],
         "verifiedAt": "2026-09-12T18:29:45.526Z"
       },
+      "delivery": null
+    },
+    {
+      "id": "F065",
+      "behavior": "Editor UI/UX phase 3: editing is predictable and the interface says where to click. React Flow's node changes pass through so its store and the editor agree on selection, a new node lands in view with the selection's group and opens for renaming, a rejected edit has one dismissible home that says what to do, an empty canvas names its gestures, and New, the theme and the panes are reachable without opening a menu first.",
+      "acceptance": [
+        "Clicking a node card selects it, and renaming through the inspector keeps that selection.",
+        "Five components added in a row all land inside the canvas viewport and none overlaps another.",
+        "A new node joins the group of the current selection and opens its label editor.",
+        "Every prop passed to React Flow keeps a stable identity across renders.",
+        "A rejected edit appears once, carries guidance for the rule it broke, and can be dismissed.",
+        "An empty canvas names rename, connect, arrange and the command menu.",
+        "New has a visible control at full header width and the theme can be switched without the command menu.",
+        "The Outline and Details controls are reachable at every shell layout below split.",
+        "Advertised shortcut glyphs come from COMMANDS in every surface that shows them.",
+        "The undo stack is bounded."
+      ],
+      "dependsOn": [
+        "F064"
+      ],
+      "state": "not_started",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": null,
       "delivery": null
     }
   ]

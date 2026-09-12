@@ -75,7 +75,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   await page.getByTestId("rf__edge-e1").waitFor({ state: "attached", timeout: 5_000 });
 
   await page.locator(".outline-row:not(.is-group)").first().click();
-  const label = page.getByRole("textbox", { name: "Node label" });
+  const label = page.getByRole("textbox", { name: "Name", exact: true });
   await label.waitFor();
   await label.fill("API");
   await label.blur();
@@ -99,7 +99,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
   await page.locator(".outline-row:not(.is-group)").filter({ hasText: "API" }).click();
-  assert.equal(await page.getByRole("textbox", { name: "Node label" }).inputValue(), "API");
+  assert.equal(await page.getByRole("textbox", { name: "Name", exact: true }).inputValue(), "API");
 
   await page.getByRole("button", { name: "Export" }).click();
   await page.getByRole("button", { name: "Story WebM" }).waitFor();

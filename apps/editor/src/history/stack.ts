@@ -8,9 +8,17 @@ export function createHistory<T>(present: T): HistoryStack<T> {
   return { past: [], present, future: [] };
 }
 
-export function pushHistory<T>(stack: HistoryStack<T>, next: T): HistoryStack<T> {
+/** Every entry is a whole document clone, so the stack is capped rather than unbounded. */
+export const HISTORY_LIMIT = 100;
+
+export function pushHistory<T>(
+  stack: HistoryStack<T>,
+  next: T,
+  limit = HISTORY_LIMIT,
+): HistoryStack<T> {
   if (Object.is(stack.present, next)) return stack;
-  return { past: [...stack.past, stack.present], present: next, future: [] };
+  const past = [...stack.past, stack.present];
+  return { past: past.slice(-limit), present: next, future: [] };
 }
 
 export function undoHistory<T>(stack: HistoryStack<T>): HistoryStack<T> {

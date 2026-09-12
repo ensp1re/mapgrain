@@ -246,18 +246,27 @@ body {
 .brand,
 .brand-menu {
   flex-shrink: 0;
-  font-size: 14px;
+  font-size: var(--fs-base);
   font-weight: 650;
   letter-spacing: -0.03em;
 }
 
 .brand-menu {
-  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--control-h);
   padding: 4px 8px;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--r-2);
   background: transparent;
   cursor: pointer;
+}
+
+.brand-caret {
+  width: 12px;
+  height: 12px;
+  color: var(--muted);
 }
 
 .brand-menu:hover,
@@ -679,13 +688,13 @@ body {
   pointer-events: none;
 }
 
-.phone-controls {
-  display: none;
+.pane-controls {
+  display: flex;
   position: absolute;
   bottom: 16px;
   right: 16px;
-  z-index: 8;
-  gap: 4px;
+  z-index: var(--z-popover);
+  gap: var(--space-1);
 }
 
 .collision-banner {
@@ -1119,6 +1128,8 @@ body {
 .relation-empty {
   margin: var(--space-2) 0 0;
   color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
 }
 
 .pin-field,
@@ -1217,13 +1228,24 @@ body {
   position: absolute;
   left: 12px;
   top: 12px;
-  z-index: 6;
+  z-index: var(--z-float);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  max-width: min(420px, calc(100% - 24px));
   margin: 0;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  padding: var(--space-2) var(--space-2) var(--space-2) 10px;
+  border: 1px solid var(--danger-border);
+  border-radius: var(--r-3);
   background: var(--surface);
   box-shadow: var(--shadow);
+}
+
+.canvas-error .text-btn {
+  flex-shrink: 0;
+  min-height: var(--control-h-sm);
+  padding: 0 8px;
+  color: var(--muted);
 }
 
 .react-flow__edge-path {
@@ -1584,6 +1606,16 @@ body {
   background: var(--surface-hover);
 }
 
+/* A card that creates a diagram should not look like a card that opens one. */
+.example-card.is-create {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: var(--accent-soft);
+}
+
+.example-card.is-create:hover {
+  border-color: var(--accent);
+}
+
 .example-kind {
   display: flex;
   align-items: center;
@@ -1779,10 +1811,6 @@ body {
 
   .doc-title { display: none; }
 
-  .phone-controls {
-    display: flex;
-  }
-
   .selection-bar {
     bottom: 64px;
     right: auto;
@@ -1797,7 +1825,7 @@ body {
     bottom: 104px;
   }
 
-  .phone-controls .text-btn {
+  .pane-controls .text-btn {
     padding: 8px;
   }
 
@@ -1848,4 +1876,62 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Empty canvas
+   --------------------------------------------------------------------------- */
+
+.canvas-empty {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-canvas);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  text-align: center;
+  pointer-events: none;
+}
+
+.canvas-empty > * {
+  pointer-events: auto;
+}
+
+.canvas-empty-lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-lg);
+}
+
+.canvas-empty-hints {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: var(--space-2) var(--space-3);
+  margin: var(--space-2) 0 0;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.canvas-empty-hints > div {
+  display: contents;
+}
+
+.canvas-empty-hints dt {
+  justify-self: end;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-1);
+  background: var(--bg-raised);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+
+.canvas-empty-hints dd {
+  justify-self: start;
+  margin: 0;
 }

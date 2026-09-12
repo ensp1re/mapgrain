@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium, type Browser, type Page } from "playwright";
 import { PAINT_MEASURE, PERF_WARM_REPS, SELECT_P95_BUDGET_MS } from "../../src/constants/perf.ts";
+import { addKind, goNew, waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const fixtures = fileURLToPath(new URL("../../../../tests/fixtures/documents", import.meta.url));
@@ -239,4 +240,79 @@ test("selection and typing p95 are measured on 10 and 100 node maps", async (t) 
   const stored = fileURLToPath(new URL("../../../../docs/perf/browser.json", import.meta.url));
   await writeFile(stored, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report));
+});
+
+test("added components stay in view, selection survives editing, and shortcuts act", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  const problems: string[] = [];
+  page.on("pageerror", (error) => problems.push(`pageerror ${error.message}`));
+  page.on("console", (message) => {
+    if (message.type() === "error") problems.push(`console ${message.text()}`);
+  });
+  await page.goto(server.url, { waitUntil: "domcontentloaded" });
+  await waitStartOrEditor(page);
+  await goNew(page);
+  await page.getByRole("button", { name: "New architecture" }).click();
+  await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
+
+  // A blank canvas says what to do.
+  await page.getByText("Add your first component").waitFor();
+
+  for (let index = 0; index < 5; index += 1) {
+    await addKind(page, "service");
+    await page.keyboard.press("Escape");
+  }
+  await page.waitForTimeout(400);
+
+  const cards = page.locator(".node-card");
+  assert.equal(await cards.count(), 5, "five components were added");
+  const canvas = await page.locator(".canvas").boundingBox();
+  assert.ok(canvas);
+  for (let index = 0; index < 5; index += 1) {
+    const box = await cards.nth(index).boundingBox();
+    assert.ok(box, `card ${index} has no box`);
+    assert.ok(
+      box.x + box.width > canvas.x &&
+        box.x < canvas.x + canvas.width &&
+        box.y + box.height > canvas.y &&
+        box.y < canvas.y + canvas.height,
+      `card ${index} landed outside the canvas`,
+    );
+  }
+
+  // Selection survives a rename. The inspector field remounts per selected node, so wait
+  // for it to rebind before typing into it.
+  await cards.first().click();
+  await page.waitForTimeout(400);
+  const label = page.getByRole("textbox", { name: "Name", exact: true });
+  await label.waitFor();
+  await label.fill("Renamed service");
+  await label.blur();
+  await page.waitForTimeout(600);
+  const bar = (await page.locator(".selection-bar").textContent().catch(() => null)) ?? "(no bar)";
+  assert.match(bar, /Renamed service selected/, `the rename dropped the selection: ${bar}`);
+
+  // An advertised shortcut acts, and only outside a field.
+  await page.getByRole("button", { name: "More" }).click();
+  await page.keyboard.press("n");
+  await page.waitForTimeout(200);
+  assert.equal(
+    await page.getByRole("heading", { name: "New diagram" }).count(),
+    0,
+    "a letter typed inside a menu ran a global command",
+  );
+  await page.keyboard.press("Escape");
+  await page.keyboard.press("n");
+  await page.getByRole("heading", { name: "New diagram" }).waitFor({ timeout: 5_000 });
+
+  assert.deepEqual(problems, []);
+  await context.close();
 });

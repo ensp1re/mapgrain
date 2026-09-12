@@ -5,10 +5,13 @@ import { shortcutLabel } from "../keyboard/shortcutLabel.ts";
 import type { SaveState } from "../types/persist.ts";
 import { MenuItem, MenuSeparator } from "../ui/Menu.tsx";
 import { Overlay } from "../ui/Overlay.tsx";
+import { THEME } from "@mapgrain/document";
+import type { Theme } from "@mapgrain/document";
 import {
   HEADER_LAYOUT,
   headerShowsArrange,
   headerShowsHistory,
+  headerShowsNew,
   headerShowsPresent,
   stabilizeHeaderLayout,
   type HeaderLayout,
@@ -36,6 +39,8 @@ interface TopBarProps {
   onHelp: () => void;
   onToggleOutline: () => void;
   onToggleDetails?: () => void;
+  onToggleTheme: () => void;
+  theme: Theme;
 }
 
 function commandShortcut(id: string): string {
@@ -72,6 +77,8 @@ export function TopBar({
   onHelp,
   onToggleOutline,
   onToggleDetails,
+  onToggleTheme,
+  theme,
 }: TopBarProps) {
   const [draft, setDraft] = useState(title);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -130,6 +137,7 @@ export function TopBar({
   const showArrange = headerShowsArrange(layout);
   const showPresent = headerShowsPresent(layout);
   const showHistory = headerShowsHistory(layout);
+  const showNew = headerShowsNew(layout);
 
   return (
     <header className="topbar" ref={barRef} data-layout={layout}>
@@ -143,6 +151,16 @@ export function TopBar({
         onClick={() => setDocOpen((value) => !value)}
       >
         Mapgrain
+        <svg className="brand-caret" viewBox="0 0 12 12" aria-hidden="true">
+          <path
+            d="M3 4.5 6 8l3-3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </button>
       <Overlay open={docOpen} anchorRef={docRef} onClose={() => setDocOpen(false)} align="start" pattern="menu" label="Document">
         <MenuItem
@@ -250,6 +268,17 @@ export function TopBar({
       ) : null}
       <div className="spacer" />
       <div className="topbar-actions">
+        {showNew ? (
+          <button
+            type="button"
+            className="text-btn ghost"
+            onClick={onNew}
+            aria-label="New diagram"
+            title={`New diagram ${commandShortcut(COMMAND_ID.NEW)}`}
+          >
+            New
+          </button>
+        ) : null}
         {showHistory ? (
           <>
             <button
@@ -330,20 +359,27 @@ export function TopBar({
             </MenuItem>
           )}
           {showPresent ? null : (
-            <MenuItem shortcut="P" onClick={() => { onPresent(); setMoreOpen(false); }}>
+            <MenuItem shortcut={commandShortcut(COMMAND_ID.PRESENT)} onClick={() => { onPresent(); setMoreOpen(false); }}>
               Present
             </MenuItem>
           )}
-          <MenuItem shortcut="O" onClick={() => { onToggleOutline(); setMoreOpen(false); }}>
+          <MenuItem shortcut={commandShortcut(COMMAND_ID.TOGGLE_OUTLINE)} onClick={() => { onToggleOutline(); setMoreOpen(false); }}>
             Outline
           </MenuItem>
-          <MenuItem shortcut="I" onClick={() => { (onToggleDetails ?? onToggleOutline)(); setMoreOpen(false); }}>
+          <MenuItem shortcut={commandShortcut(COMMAND_ID.TOGGLE_INSPECTOR)} onClick={() => { (onToggleDetails ?? onToggleOutline)(); setMoreOpen(false); }}>
             Details
           </MenuItem>
-          <MenuItem onClick={() => { onCommand(); setMoreOpen(false); }}>
+          <MenuSeparator />
+          <MenuItem
+            shortcut={commandShortcut(COMMAND_ID.TOGGLE_THEME)}
+            onClick={() => { onToggleTheme(); setMoreOpen(false); }}
+          >
+            {theme === THEME.DARK ? "Light theme" : "Dark theme"}
+          </MenuItem>
+          <MenuItem shortcut={shortcutLabel("⌘K")} onClick={() => { onCommand(); setMoreOpen(false); }}>
             Commands
           </MenuItem>
-          <MenuItem shortcut="?" onClick={() => { onHelp(); setMoreOpen(false); }}>
+          <MenuItem shortcut={commandShortcut(COMMAND_ID.HELP)} onClick={() => { onHelp(); setMoreOpen(false); }}>
             Help
           </MenuItem>
         </Overlay>

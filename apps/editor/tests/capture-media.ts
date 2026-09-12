@@ -177,7 +177,7 @@ async function main(): Promise<void> {
     const rows = editPage.locator(".outline-row:not(.is-group)");
     await rows.nth(0).click();
     await editPage.waitForTimeout(250);
-    const label = editPage.getByRole("textbox", { name: "Node label" });
+    const label = editPage.getByRole("textbox", { name: "Name", exact: true });
     await label.waitFor();
     await label.fill("Intake clerk");
     await label.blur();

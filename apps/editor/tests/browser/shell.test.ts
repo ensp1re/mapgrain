@@ -118,7 +118,7 @@ test("fields, focus rings, and scrollbars follow the design tokens in both theme
     await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
     await page.locator(".node-card").first().click();
 
-    const name = page.getByRole("textbox", { name: "Node label" });
+    const name = page.getByRole("textbox", { name: "Name", exact: true });
     await name.waitFor();
     const box = await name.boundingBox();
     assert.ok(box && box.height >= 32, `${colorScheme} name field is ${box?.height}px tall`);
