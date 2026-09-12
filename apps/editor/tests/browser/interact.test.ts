@@ -316,3 +316,62 @@ test("added components stay in view, selection survives editing, and shortcuts a
   assert.deepEqual(problems, []);
   await context.close();
 });
+
+test("a template opens as an editable copy and walks through step by step", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  const problems: string[] = [];
+  page.on("pageerror", (error) => problems.push(`pageerror ${error.message}`));
+  page.on("console", (message) => {
+    if (message.type() === "error") problems.push(`console ${message.text()}`);
+  });
+  await page.goto(server.url, { waitUntil: "domcontentloaded" });
+  await waitStartOrEditor(page);
+  await goNew(page);
+
+  // Search narrows the gallery, and a card opens the real document.
+  await page.getByRole("searchbox", { name: "Search templates" }).fill("oauth");
+  const card = page.getByRole("button", { name: "Use template OAuth sign-in" });
+  await card.waitFor();
+  assert.equal(await page.locator(".template-card").count(), 1, "search did not narrow the gallery");
+  await card.click();
+  await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
+  assert.equal(
+    await page.getByRole("textbox", { name: "Document title" }).inputValue(),
+    "OAuth sign-in",
+  );
+
+  // It is a copy: editing it changes this document, not the catalog entry.
+  await page.locator(".node-card").first().click();
+  await page.waitForTimeout(400);
+  const label = page.getByRole("textbox", { name: "Name", exact: true });
+  await label.fill("My browser");
+  await label.blur();
+  await page.waitForTimeout(400);
+  assert.match((await page.locator(".outline").textContent()) ?? "", /My browser/);
+
+  // The walkthrough reads the diagram without changing it.
+  await page.locator(".canvas").click({ position: { x: 40, y: 300 } });
+  await page.keyboard.press("w");
+  const walk = page.locator(".walk-bar");
+  await walk.waitFor({ timeout: 5_000 });
+  const first = (await walk.textContent()) ?? "";
+  assert.match(first, /1 \/ \d+/);
+  await page.keyboard.press("ArrowRight");
+  await page.waitForTimeout(300);
+  assert.match((await walk.textContent()) ?? "", /2 \/ \d+/);
+  assert.equal(await page.locator(".is-walk-step").count() > 0, true, "no step is highlighted");
+  await page.keyboard.press("Escape");
+  await walk.waitFor({ state: "detached", timeout: 5_000 });
+  assert.match((await page.locator(".outline").textContent()) ?? "", /My browser/, "walking edited the document");
+
+  assert.deepEqual(problems, []);
+  await context.close();
+});

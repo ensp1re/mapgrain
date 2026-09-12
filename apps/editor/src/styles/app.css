@@ -1935,3 +1935,236 @@ body {
   justify-self: start;
   margin: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Template gallery
+   --------------------------------------------------------------------------- */
+
+.template-gallery {
+  margin-top: var(--space-5);
+}
+
+.template-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.template-head h2 {
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+.template-search {
+  flex: 0 1 260px;
+  margin: 0;
+}
+
+.template-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.template-tab {
+  min-height: var(--control-h-sm);
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.template-tab:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.template-tab.is-on {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.template-tab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.template-group + .template-group {
+  margin-top: var(--space-6);
+}
+
+.template-group h3 {
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+.template-group-blurb {
+  margin: 2px 0 var(--space-3);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.template-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.template-card {
+  display: grid;
+  gap: var(--space-1);
+  width: 100%;
+  height: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.template-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  background: var(--surface-hover);
+}
+
+.template-card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.template-card strong {
+  font-size: var(--fs-base);
+}
+
+.template-card span {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.template-meta {
+  font-size: var(--fs-xs) !important;
+}
+
+.template-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 116px;
+  margin-bottom: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.template-preview svg {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+.template-preview.is-empty {
+  background: var(--bg-raised);
+}
+
+.template-empty {
+  margin: 0 0 var(--space-4);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+/* ---------------------------------------------------------------------------
+   Walkthrough
+   --------------------------------------------------------------------------- */
+
+.walk-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  z-index: var(--z-popover);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: min(640px, calc(100% - 32px));
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow);
+  transform: translateX(-50%);
+}
+
+.walk-copy {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.walk-count {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.walk-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-md);
+}
+
+.walk-name small {
+  color: var(--muted);
+}
+
+.walk-actions {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.walk-actions .text-btn {
+  min-width: 32px;
+  padding: 0 10px;
+}
+
+/* Everything outside the current step recedes rather than disappearing. */
+.app.is-walking .react-flow__node,
+.app.is-walking .react-flow__edge {
+  opacity: 0.22;
+  transition: opacity var(--t-fast) ease;
+}
+
+.app.is-walking .edge-caption {
+  opacity: 0.22;
+  transition: opacity var(--t-fast) ease;
+}
+
+.app.is-walking .react-flow__node.is-walk-step,
+.app.is-walking .react-flow__edge.is-walk-step,
+.app.is-walking .edge-caption.is-walk-step {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app.is-walking .react-flow__node,
+  .app.is-walking .react-flow__edge {
+    transition: none;
+  }
+}

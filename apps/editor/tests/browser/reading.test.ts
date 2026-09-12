@@ -46,7 +46,7 @@ async function listen(): Promise<{ url: string; close: () => Promise<void> }> {
   };
 }
 
-test("showcase example keeps readable labels after default fit and shows zoom", async (t) => {
+test("a template keeps readable labels after default fit and shows zoom", async (t) => {
   await stat(join(dist, "index.html"));
   const server = await listen();
   const browser = await chromium.launch({ headless: true });
@@ -60,7 +60,7 @@ test("showcase example keeps readable labels after default fit and shows zoom", 
   if (await page.getByRole("button", { name: "Arrange" }).isVisible().catch(() => false)) {
     await goNew(page);
   }
-  await page.getByRole("button", { name: /Feedback loop/ }).click();
+  await page.getByRole("button", { name: "Use template System context" }).click();
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
   const zoomLabel = page.locator(".zoom-readout");
   await zoomLabel.waitFor({ timeout: 10_000 });

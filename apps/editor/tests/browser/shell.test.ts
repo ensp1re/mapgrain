@@ -113,7 +113,7 @@ test("fields, focus rings, and scrollbars follow the design tokens in both theme
     const page = await context.newPage();
     await page.goto(server.url, { waitUntil: "domcontentloaded" });
     await waitStartOrEditor(page);
-    const example = page.getByRole("button", { name: /Local diagram workspace/ });
+    const example = page.getByRole("button", { name: "Use template Containers" });
     if (await example.isVisible().catch(() => false)) await example.click();
     await page.getByRole("button", { name: "Export" }).waitFor({ timeout: 10_000 });
     await page.locator(".node-card").first().click();
