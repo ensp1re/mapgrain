@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F080",
+    "behavior": "The browser test that clicks a connection lands on the line and waits for the canvas, so main CI stops failing on a diagram the product draws correctly.",
+    "acceptance": [
+      "The click lands on the connection's own path, not the centre of a bounding box that can be empty.",
+      "The test waits for the canvas to settle before clicking, the way its sibling does.",
+      "The connections browser suite passes repeatedly."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789303014551-ed9c55",
+      "fingerprintBefore": "7c5d8d56a2be3be3e9fa9bb6f968c2f1b4f4a6f1ab1600681cb2bd5f04146a8d",
+      "fingerprintAfter": "7c5d8d56a2be3be3e9fa9bb6f968c2f1b4f4a6f1ab1600681cb2bd5f04146a8d",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-13T12:38:23.066Z"
+    },
+    "delivery": {
+      "implementationRevision": "5ed5faeeae5cc103805faafd3dbda6c02f6016d5",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/124",
+      "checkRuns": [
+        {
+          "name": "CI",
+          "revision": "5ed5faeeae5cc103805faafd3dbda6c02f6016d5",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34758026531"
+        }
+      ],
+      "observedAt": "2026-09-13T12:50:26.660242Z"
+    }
+  },
+  "archivedAt": "2026-09-13T12:50:26.849Z"
+}
