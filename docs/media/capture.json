@@ -1,8 +1,8 @@
 {
-  "commit": "11b84ff884017e7bd79936d14b427d9ab25f59cf",
+  "commit": "4c0893b92d9d335d0544b87af3c5397ace891775",
   "package": {
     "name": "mapgrain",
-    "version": "0.2.4"
+    "version": "0.2.5"
   },
   "buildCommand": "pnpm --filter @mapgrain/editor build && pnpm --filter mapgrain build",
   "fixture": "skills/mapgrain/examples/ten-node.json",
@@ -12,7 +12,7 @@
     "playwright": "1.63.0"
   },
   "deviceScaleFactor": 1,
-  "capturedAt": "2026-09-13T11:34:52.446Z",
+  "capturedAt": "2026-09-13T12:22:06.452Z",
   "artifacts": [
     {
       "file": "docs/media/hero-dark.png",
@@ -74,16 +74,16 @@
       "sha256": "c39e2f6b67761aa5de0ec7612dde1ec26655c0f530a25b88e4a13ed5b76ccd42"
     },
     "editing.gif": {
-      "bytes": 1526599,
-      "sha256": "f66c46cac4daf0abb9d87adf1b2f1e1fc655c34f235ded742b680a63adcf9f2e"
+      "bytes": 1521321,
+      "sha256": "054f75462852dd33b61051166b42ef0ef1be74454e9e31a3b79b41f32b0c3342"
     },
     "cli-receipts.png": {
-      "bytes": 16643,
-      "sha256": "9395b3c5c38793ad990cbd5c15af261f80dd234e97f0bf7d547c25b457a9ca8c"
+      "bytes": 16536,
+      "sha256": "42afd227ecf8623def0b042e2205c208afc3d688295d62aec4b7cea8c6512995"
     },
     "cli-workflow.gif": {
-      "bytes": 53981,
-      "sha256": "01005afb5644ff4289246baee0c5e3c09d495c2cc318f875fc1cca785b680d1a"
+      "bytes": 54703,
+      "sha256": "3d62bc6cd5835dcf146829b018421ed9dae9a731d283a6835bb1494b2da723e3"
     }
   }
 }

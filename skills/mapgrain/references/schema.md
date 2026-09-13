@@ -80,7 +80,7 @@ objects, each needing a `nodeId` and optionally a `portId`.
   an `outcome` or a `label`** — that is the rule most often broken. A decision with only one
   outcome is accepted, because a half-built decision has to be authorable.
 - `shape` is optional: `elbow` (default), `straight`, or `curved`. It needs
-  `npx mapgrain@0.2.4` or newer; older packages reject a field they have never seen.
+  `npx mapgrain@0.2.5` or newer; older packages reject a field they have never seen.
 
 ## Sequence fragments
 
