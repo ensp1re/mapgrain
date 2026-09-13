@@ -39,6 +39,10 @@ workflow by firing its transitions.
 
 ![Editing: rename, connect, pin, arrange, undo](docs/media/editing.gif)
 
+At 390px the canvas is still the main surface:
+
+![Editor at 390px](docs/media/narrow-390.png)
+
 ## Five kinds of diagram
 
 Each kind has its own vocabulary, its own validation, and its own layout.
@@ -58,18 +62,6 @@ A worked example of each ships with the agent skill:
 [lifecycle](skills/mapgrain/examples/lifecycle.json),
 [architecture](skills/mapgrain/examples/branching.json). Every one validates, lays out and
 exports — that is a test, not a claim.
-
-## The portable view
-
-An export is one HTML file with the diagram drawn as vectors — not a screenshot, and not a
-bundle of the editor. Search, fit, reach, route, named views, stories, role lenses, English and
-Ukrainian chrome.
-
-![Portable viewer: search, theme, pan](docs/media/viewer.gif)
-
-At 390px the canvas is still the main surface:
-
-![Editor at 390px](docs/media/narrow-390.png)
 
 ## The CLI
 

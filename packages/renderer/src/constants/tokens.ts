@@ -104,9 +104,12 @@ export function viewerChromeCss(): string {
     html, body { margin: 0; background: var(--mg-bg); color: var(--mg-text); font-family: Inter, ui-sans-serif, system-ui, sans-serif; height: 100%; }
     .mapgrain-viewer { display: flex; flex-direction: column; height: 100%; }
     .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--mg-border); background: var(--mg-raised); }
-    .view-title { font-weight: 600; letter-spacing: -0.02em; }
+    /* The diagram's own name leads; "Read-only view" is a caveat, not a heading. */
+    .view-name { font-weight: 650; letter-spacing: -0.02em; font-size: 15px; max-width: 34ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .view-title { color: var(--mg-muted); font-size: 12px; padding-right: 4px; border-right: 1px solid var(--mg-border); }
     .toolbar input, .toolbar select, .toolbar button { font: inherit; background: var(--mg-surface); color: var(--mg-text); border: 1px solid var(--mg-border); border-radius: 8px; padding: 7px 12px; }
-    .toolbar input { flex: 1; min-width: 120px; }
+    .toolbar input { flex: 0 1 240px; min-width: 120px; }
+    .toolbar .spacer { flex: 1 1 auto; }
     .toolbar button:hover, .toolbar select:hover { background: var(--mg-hover); }
     .toolbar button:focus-visible, .toolbar input:focus-visible, .toolbar select:focus-visible { outline: 2px solid var(--mg-accent); outline-offset: 2px; }
     .viewport-bar { display: flex; align-items: center; border: 1px solid var(--mg-border); border-radius: 8px; background: var(--mg-raised); overflow: hidden; }

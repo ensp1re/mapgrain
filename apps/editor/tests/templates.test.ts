@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { DOCUMENT_KIND, validateDocument } from "@mapgrain/document";
 import { buildScene, overlappingIds, overlappingPairs } from "@mapgrain/scene";
+import { backwardDecisionBranches, stepOrder } from "../../../packages/scene/tests/helpers/flow.ts";
 import { TEMPLATE_CATEGORY_ORDER } from "../src/constants/templates.ts";
 import { TEMPLATES, findTemplate, matchesTemplate, templatesByCategory } from "../src/templates/catalog.ts";
 import { snapshotFromTemplate } from "../src/templates/open.ts";
@@ -154,4 +155,34 @@ test("no template stacks a caption, a fragment frame, or a card", () => {
       assert.deepEqual(hits, [], `${item.id}: ${edge.id} sits on a card`);
     }
   }
+});
+
+test("a workflow template's decisions branch forward, and rework lands after the check", () => {
+  for (const item of TEMPLATES) {
+    if (item.document.kind !== DOCUMENT_KIND.WORKFLOW) continue;
+    const scene = buildScene(item.document, { positions: item.document.layout?.positions ?? {} });
+    assert.equal(scene.ok, true, item.id);
+    if (!scene.ok) continue;
+    assert.deepEqual(backwardDecisionBranches(item.document, scene.scene), [], item.id);
+  }
+
+  // The two templates with a rework loop, named, because the loop's target is exactly what a
+  // layering that ignores cycles puts in the wrong place.
+  const order = (title: string) => {
+    const item = TEMPLATES.find((entry) => entry.title === title);
+    assert.ok(item, title);
+    const scene = buildScene(item.document, { positions: item.document.layout?.positions ?? {} });
+    assert.equal(scene.ok, true, title);
+    return scene.ok ? stepOrder(scene.scene) : [];
+  };
+  const pipeline = order("CI/CD pipeline");
+  assert.ok(
+    pipeline.indexOf("fix") > pipeline.indexOf("gate"),
+    `the repair is drawn before the check that asks for it: ${pipeline.join(" ")}`,
+  );
+  const approval = order("Approval swimlanes");
+  assert.ok(
+    approval.indexOf("revise") > approval.indexOf("review"),
+    `the revision is drawn before the review that asks for it: ${approval.join(" ")}`,
+  );
 });

@@ -8,6 +8,9 @@ const SWATCH = 10;
 const GAP = 14;
 const ROW = 20;
 const CHAR = 6.5;
+/** The legend reads as a panel, the way it does in the editor, not as text loose on the page. */
+const PAD_X = 10;
+const PAD_Y = 8;
 
 export function architectureKinds(scene: Scene): NodeKind[] {
   if (scene.documentKind !== DOCUMENT_KIND.ARCHITECTURE) return [];
@@ -29,7 +32,7 @@ export function legendSize(kinds: readonly NodeKind[], maxWidth: number): { widt
     x += width + GAP;
     rowWidth = Math.max(rowWidth, x - GAP);
   }
-  return { width: rowWidth, height: y + ROW };
+  return { width: rowWidth + PAD_X * 2, height: y + ROW + PAD_Y * 2 };
 }
 
 export function legendMarkup(
@@ -41,16 +44,18 @@ export function legendMarkup(
   maxWidth: number,
   muted: string,
   fontFamily: string,
+  panel?: { fill: string; border: string },
 ): string {
   if (kinds.length === 0) return "";
   const items: string[] = [];
-  let x = originX;
-  let y = originY;
+  const box = legendSize(kinds, maxWidth);
+  let x = originX + PAD_X;
+  let y = originY + PAD_Y;
   for (const kind of kinds) {
     const label = kindLegendLabel(kind);
     const width = SWATCH + 6 + Math.ceil(label.length * CHAR);
-    if (x > originX && x + width > originX + maxWidth) {
-      x = originX;
+    if (x > originX + PAD_X && x + width > originX + PAD_X + maxWidth) {
+      x = originX + PAD_X;
       y += ROW;
     }
     const fill = fillForNodeKind(theme, kind, colorMode === COLOR_MODE.THEMED);
@@ -62,5 +67,9 @@ export function legendMarkup(
     );
     x += width + GAP;
   }
-  return `<g data-kind="legend">${items.join("\n")}</g>`;
+  const frame = panel
+    ? `<rect x="${n(originX)}" y="${n(originY)}" width="${n(box.width)}" height="${n(box.height)}" rx="8" fill="${panel.fill}" stroke="${panel.border}" stroke-width="1"/>`
+    : "";
+  return `<g data-kind="legend">${frame}
+${items.join("\n")}</g>`;
 }

@@ -36,8 +36,10 @@ export function wrapViewer(
 <body>
   <main class="mapgrain-viewer" data-mode="${VIEW_MODE.READONLY}" aria-label="Read-only diagram">
     <div class="toolbar">
+      <span class="view-name" title="${escapeHtml(title)}">${escapeHtml(title)}</span>
       <span class="view-title">${escapeHtml(copy.readonly)}</span>
       <input aria-label="${escapeHtml(copy.search)}" placeholder="${escapeHtml(copy.search)}"/>
+      <span class="spacer"></span>
       <div class="viewport-bar" role="group" aria-label="Viewport">
         <button type="button" data-act="zoom-out" aria-label="Zoom out">−</button>
         <span data-zoom aria-live="polite">100%</span>

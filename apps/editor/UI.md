@@ -86,6 +86,14 @@ These rules apply to the editor chrome. They are not product claims.
 - A card is an icon and a title on one row. The kind is carried by the icon; its name belongs
   in the inspector and the legend, not on every card.
 - A branch is a diamond and a terminal state is a pill. Shape is the fastest thing to read.
+- A decision's branches leave by different vertices — the continuing path straight on, the
+  alternatives up and down. Sending them all out of the side that happens to face the target
+  starts two lines at the same point and makes the reader trace them to tell them apart.
+- A rework loop is a cycle, and a cycle has no topological order. Set the closing edges aside,
+  layer what is left, and let those edges run backwards on purpose. Layering a cycle without
+  doing that puts the repair step in front of the work it repeats.
+- Steps share one time axis across all lanes; the lane decides only the row. A lane is simply
+  empty where it has no step, and a sequential process is as wide as its step count.
 - A diamond has to be twice the block it holds, and the block has to be centred on the
   diamond's centre. A rectangle-sized diamond clips its own label on the two upper edges, in
   the editor by the clip path and in the export by nothing at all.

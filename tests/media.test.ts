@@ -47,6 +47,7 @@ test("capture manifest records commit, fixture, viewport, and theme", async () =
   const files = new Set((manifest.artifacts ?? []).map((item) => item.file));
   assert.ok(files.has("docs/media/hero-dark.png"));
   assert.ok(files.has("docs/media/editing.gif"));
+  // The viewer clip is still captured, but the README no longer carries a section for it.
   assert.ok(files.has("docs/media/viewer.gif"));
   const hero = (manifest.artifacts ?? []).find((item) => item.file === "docs/media/hero-dark.png");
   assert.deepEqual(hero?.viewport, { width: 1440, height: 900 });
@@ -59,7 +60,6 @@ test("README links production media, the feature table, and getting-started", as
     "docs/media/hero-dark.png",
     "docs/media/hero-light.png",
     "docs/media/editing.gif",
-    "docs/media/viewer.gif",
     "docs/media/cli-workflow.gif",
     "docs/media/narrow-390.png",
     "docs/FEATURES.md",
