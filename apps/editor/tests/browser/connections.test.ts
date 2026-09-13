@@ -46,10 +46,26 @@ async function listen(): Promise<{ url: string; close: () => Promise<void> }> {
 }
 
 /** Clicks the middle of a drawn connection, which is where its hit stroke is. */
+/**
+ * Click the line itself, at the middle of its own length. The centre of the hit area's bounding
+ * box is not on an elbow: for an L the box centre sits in the empty corner, so whether the click
+ * landed on the stroke depended on how the layout happened to fall, and it failed on CI.
+ */
 async function clickEdge(page: Page, index = 0): Promise<void> {
-  const box = await page.locator(".react-flow__edge").nth(index).locator(".edge-hit").boundingBox();
-  assert.ok(box, "the connection drew no hit area");
-  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  const point = await page
+    .locator(".react-flow__edge")
+    .nth(index)
+    .locator(".edge-hit")
+    .evaluate((element) => {
+      const path = element as SVGPathElement;
+      const at = path.getPointAtLength(path.getTotalLength() / 2);
+      const screen = path.getScreenCTM();
+      if (!screen) return null;
+      const mapped = new DOMPoint(at.x, at.y).matrixTransform(screen);
+      return { x: mapped.x, y: mapped.y };
+    });
+  assert.ok(point, "the connection drew no hit area");
+  await page.mouse.click(point.x, point.y);
   await page.waitForTimeout(250);
 }
 
@@ -101,8 +117,11 @@ test("clicking a line on the canvas selects it", async (t) => {
   await waitStartOrEditor(page);
   await useTemplate(page, "Order state machine");
 
+  // The canvas is still settling right after a template loads, and a click on a stale position
+  // lands on nothing. Its sibling test above waits the same way.
+  await waitConnections(page);
   await clickEdge(page);
-  await page.locator(".inspector .pane-label", { hasText: "Connection" }).waitFor({ timeout: 5_000 });
+  await page.locator(".inspector .pane-label", { hasText: "Connection" }).waitFor({ timeout: 10_000 });
   assert.equal(await page.locator(".react-flow__edge.selected").count(), 1);
 });
 
