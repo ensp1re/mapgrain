@@ -1,47 +1,5 @@
 {
   "schemaVersion": 1,
   "nextId": 80,
-  "tasks": [
-    {
-      "id": "F079",
-      "behavior": "mapgrain 0.2.5 is published with the schema-reference and caption-placement fixes, and every current instruction names it.",
-      "acceptance": [
-        "The CLI package, the source version constant and the published constant all read 0.2.5.",
-        "Every instruction a user follows names 0.2.5, and no historical record is rewritten.",
-        "mapgrain@0.2.5 resolves from the registry and validates a document in an empty directory.",
-        "The captured media shows 0.2.5 and the layout this release ships."
-      ],
-      "dependsOn": [],
-      "state": "verified",
-      "spec": null,
-      "plan": "docs/PLAN.md",
-      "verification": [
-        "unit",
-        "lint",
-        "typecheck"
-      ],
-      "blockedReason": null,
-      "evidence": {
-        "status": "passed",
-        "attemptId": "run-1789302297968-55b118",
-        "fingerprintBefore": "a6245d2b74f9e8ac5276fd88d4c040c0c141ffec577377113a02c09fc7532335",
-        "fingerprintAfter": "a6245d2b74f9e8ac5276fd88d4c040c0c141ffec577377113a02c09fc7532335",
-        "checks": [
-          {
-            "id": "unit",
-            "status": "passed"
-          },
-          {
-            "id": "lint",
-            "status": "passed"
-          },
-          {
-            "id": "typecheck",
-            "status": "passed"
-          }
-        ],
-        "verifiedAt": "2026-09-13T12:25:14.748Z"
-      }
-    }
-  ]
+  "tasks": []
 }
