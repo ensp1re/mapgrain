@@ -1,19 +1,18 @@
 {
   "schemaVersion": 1,
-  "nextId": 73,
+  "nextId": 74,
   "tasks": [
     {
-      "id": "F072",
-      "behavior": "Diagrams stop touching: a branch draws as an outlined diamond that holds its own label, connections keep real clearance from cards and from each other, a workflow column is wide enough for a connection to turn in, a sequence spaces its lifelines to fit the captions between them and its rows to fit the captions they carry, fragment frames cover only the participants their messages touch, a reading stays readable and a click during one ends it, and the header brand opens nothing.",
+      "id": "F073",
+      "behavior": "The agent skill teaches every diagram kind it claims to support, with a worked example of each that validates, lays out and exports; and the repository reads like an open-source project, with a README that says what Mapgrain is and how to start, a contributing guide, a code of conduct, a real security policy, and issue and pull request templates.",
       "acceptance": [
-        "A decision's label sits entirely inside its diamond, in the editor and in the SVG export, and the diamond is outlined rather than a solid block.",
-        "No caption overlaps another caption, a fragment frame, or a card it does not belong to, across every fixture and every template.",
-        "Every routed connection starts and ends on the cards it joins, and a sequence message on its participants' lifelines.",
-        "Two fragment frames never overlap.",
-        "A workflow column gap holds two stubs and a routing channel, and ELK is told how much room a connection needs.",
-        "Two ports on the same side of a card are at least one routing channel apart.",
-        "A dimmed component during a walk or a run is still readable, and clicking one ends the reading and selects it.",
-        "The header brand is not a control, and Export and Open file are in the More menu."
+        "The skill ships a worked example of every diagram kind, and every example validates, builds a scene and exports HTML.",
+        "The schema reference names every node kind and edge type each diagram kind accepts, and a test fails if the two ever drift.",
+        "The skill names the failure modes an agent actually hits, including the decision-outcome rule and the id pattern.",
+        "The README states what Mapgrain is, how to start in a minute, the five kinds, the CLI, the agent skill, and where the feature status lives, keeping every media link.",
+        "CONTRIBUTING.md, CODE_OF_CONDUCT.md and a root SECURITY.md disclosure policy exist, and issue and pull request templates are in place.",
+        "The feature and capability tables name what the last two slices shipped.",
+        "The README media is recaptured from the current build."
       ],
       "dependsOn": [],
       "state": "verified",
@@ -29,9 +28,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789259115951-5b0178",
-        "fingerprintBefore": "43ba652cde1e5a3239e5325335e2f79dd83348df71123aa65a5e9c0b19c8a7f3",
-        "fingerprintAfter": "43ba652cde1e5a3239e5325335e2f79dd83348df71123aa65a5e9c0b19c8a7f3",
+        "attemptId": "run-1789260221882-c01316",
+        "fingerprintBefore": "6a83e1495e7e58f03e4a5c75aded6a1550342ace9d5f0b47d959d46b4adf6703",
+        "fingerprintAfter": "6a83e1495e7e58f03e4a5c75aded6a1550342ace9d5f0b47d959d46b4adf6703",
         "checks": [
           {
             "id": "unit",
@@ -54,7 +53,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-13T00:26:30.425Z"
+        "verifiedAt": "2026-09-13T00:44:57.588Z"
       },
       "delivery": null
     }
