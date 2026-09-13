@@ -219,3 +219,51 @@ test("a branch draws as an outlined diamond that holds its own label", async (t)
   // Outlined, not a solid block: the fill is a colour, with a ::before putting the surface back.
   assert.equal(fits.filled, "none", fits.filled);
 });
+
+test("fit all frames the whole diagram, including what React Flow does not own", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+
+  // A sequence is the case that exposes it: its only React Flow nodes are the participant
+  // cards in one row, so fitting those left every message hanging below the frame.
+  for (const name of ["OAuth sign-in", "Payment authorization", "System context", "Order state machine"]) {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    await page.goto(server.url, { waitUntil: "domcontentloaded" });
+    await waitStartOrEditor(page);
+    const card = page.getByRole("button", { name: `Use template ${name}` });
+    await card.scrollIntoViewIfNeeded();
+    await card.click();
+    await page.locator(".node-card").first().waitFor({ timeout: 10_000 });
+    await page.waitForTimeout(700);
+    await page.getByRole("button", { name: "Fit all" }).click();
+    await page.waitForTimeout(900);
+
+    const framed = await page.evaluate(() => {
+      const canvas = document.querySelector<HTMLElement>(".canvas")!.getBoundingClientRect();
+      const drawn = [
+        ...document.querySelectorAll<HTMLElement>(".react-flow__node"),
+        ...document.querySelectorAll<HTMLElement>(".edge-caption"),
+        ...document.querySelectorAll<SVGElement>(".react-flow__edge-path"),
+        ...document.querySelectorAll<SVGElement>(".lifeline-layer line"),
+      ]
+        .map((el) => el.getBoundingClientRect())
+        .filter((rect) => rect.width > 0 || rect.height > 0);
+      return {
+        below: Math.round(Math.max(...drawn.map((r) => r.bottom)) - canvas.bottom),
+        above: Math.round(canvas.top - Math.min(...drawn.map((r) => r.top))),
+        right: Math.round(Math.max(...drawn.map((r) => r.right)) - canvas.right),
+        left: Math.round(canvas.left - Math.min(...drawn.map((r) => r.left))),
+      };
+    });
+    for (const [side, past] of Object.entries(framed)) {
+      assert.ok(past <= 0, `${name}: the diagram runs ${past}px past the ${side} edge`);
+    }
+    await context.close();
+  }
+});

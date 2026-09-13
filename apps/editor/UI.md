@@ -159,6 +159,12 @@ These rules apply to the editor chrome. They are not product claims.
 - Outline rows: chevron, icon, label. Truncate labels; full text stays on focus and in the inspector.
 - Inspector uses one inset, a single keep-position checkbox, and short connection lines (`From X · calls`).
 - Fit shows the diagram. Focus shows the selection. Keep both actions. Do not fit after every keystroke.
+- Fit the scene's own bounds, not React Flow's. React Flow measures the boxes it owns, which on
+  a sequence is the participant row and nothing else — every message hangs below the frame and
+  the last one is cut off. The scene knows the real extent: cards, lanes, fragment frames,
+  routed points, captions and lifelines.
+- An arrangement, previewed or applied, is shown whole. A reader cannot approve what is off
+  the edge, and Focus is what readability is for.
 - Edge captions use the anchor the scene computed, which places them in one pass against the
   captions it has already placed. Re-place per edge only while a drag makes that anchor stale.
 

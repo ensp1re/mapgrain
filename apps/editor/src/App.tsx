@@ -8,6 +8,7 @@ import {
   ConnectionMode,
   applyNodeChanges,
   getNodesBounds,
+  getViewportForBounds,
   useReactFlow,
   useUpdateNodeInternals,
   type Connection,
@@ -57,7 +58,14 @@ import { storyExportFrames } from "./export/storyFrames.ts";
 import { encodeStoryWebm, STORY_WEBM_CANCELLED, STORY_WEBM_NO_STORY } from "./export/webm.ts";
 import { ArrangeBar } from "./chrome/ArrangeBar.tsx";
 import { SHELL_LAYOUT } from "./constants/layout.ts";
-import { USER_MAX_ZOOM, USER_MIN_ZOOM, fitAllOptions, readableFitOptions } from "./constants/diagram.ts";
+import {
+  FIT_MAX_ZOOM,
+  FIT_PADDING,
+  USER_MAX_ZOOM,
+  USER_MIN_ZOOM,
+  fitAllOptions,
+  readableFitOptions,
+} from "./constants/diagram.ts";
 import { ViewportBar } from "./chrome/ViewportBar.tsx";
 import { KindLegend } from "./diagram/KindLegend.tsx";
 import { shellLayoutForWidth, useViewportWidth } from "./chrome/viewport.ts";
@@ -273,7 +281,8 @@ function toFlow(
 }
 
 function Editor() {
-  const { fitView, getNodes, screenToFlowPosition } = useReactFlow();
+  const { fitView, getNodes, screenToFlowPosition, setViewport } = useReactFlow();
+  const canvasRef = useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
   const portSignatures = useRef(new Map<string, string>());
   const initial = useMemo(loadSnapshot, []);
@@ -471,6 +480,32 @@ function Editor() {
     return sceneToFlow(scene.scene);
   }, [scene]);
 
+  /**
+   * React Flow fits the boxes it owns, which on a sequence is the participant row and nothing
+   * else — every message hangs below the frame, and the last one is cut off. The scene knows
+   * the real extent: cards, lanes, fragment frames, routed points, captions and lifelines.
+   */
+  const fitScene = useCallback(
+    (options?: { minZoom?: number; duration?: number }) => {
+      const box = scene?.ok ? scene.scene.bounds : null;
+      const frame = canvasRef.current?.getBoundingClientRect();
+      if (!box || !frame || box.width <= 0 || frame.width <= 0) {
+        void fitView(fitAllOptions());
+        return;
+      }
+      const viewport = getViewportForBounds(
+        box,
+        frame.width,
+        frame.height,
+        options?.minZoom ?? USER_MIN_ZOOM,
+        FIT_MAX_ZOOM,
+        FIT_PADDING,
+      );
+      void setViewport(viewport, options?.duration ? { duration: options.duration } : undefined);
+    },
+    [fitView, scene, setViewport],
+  );
+
   const cancelEdit = useCallback(() => setEditingId(null), []);
 
   // The canvas edges are derived above where applyOp is defined, so the commit goes through a
@@ -592,27 +627,27 @@ function Editor() {
   useEffect(() => {
     if (!presenting) return;
     const outer = requestAnimationFrame(() => {
-      requestAnimationFrame(() => void fitView(fitAllOptions()));
+      requestAnimationFrame(() => fitScene());
     });
     return () => cancelAnimationFrame(outer);
-  }, [presenting, fitView]);
+  }, [presenting, fitScene]);
 
   // Opening or closing a narrow-width pane resizes the canvas, so refit into it.
   useEffect(() => {
     if (shellLayout === SHELL_LAYOUT.SPLIT) return;
     const outer = requestAnimationFrame(() => {
-      requestAnimationFrame(() => void fitView(fitAllOptions()));
+      requestAnimationFrame(() => fitScene());
     });
     return () => cancelAnimationFrame(outer);
-  }, [narrowPanel, shellLayout, fitView]);
+  }, [narrowPanel, shellLayout, fitScene]);
 
   useEffect(() => {
     if (arrange.status !== "preview") return;
     const outer = requestAnimationFrame(() => {
-      requestAnimationFrame(() => void fitView(readableFitOptions()));
+      requestAnimationFrame(() => fitScene());
     });
     return () => cancelAnimationFrame(outer);
-  }, [arrange.status, fitView, nodes]);
+  }, [arrange.status, fitScene, nodes]);
 
   const applyOp = useCallback((operation: Operation, nextPositions?: PositionMap) => {
     if (presenting) return false;
@@ -984,8 +1019,8 @@ function Editor() {
     if (arrange.status !== "preview") return;
     pushPositions(arrange.positions);
     setArrange({ status: "idle" });
-    void fitView(readableFitOptions());
-  }, [arrange, fitView, pushPositions]);
+    fitScene({ duration: 180 });
+  }, [arrange, fitScene, pushPositions]);
 
   const discardArrange = useCallback(() => setArrange({ status: "idle" }), []);
 
@@ -1229,7 +1264,7 @@ function Editor() {
       if (id === COMMAND_ID.UNDO) setHistory((stack) => undoHistory(stack));
       if (id === COMMAND_ID.REDO) setHistory((stack) => redoHistory(stack));
       if (id === COMMAND_ID.PRESENT) setPresenting((value) => !value);
-      if (id === COMMAND_ID.FIT_ALL) void fitView(fitAllOptions());
+      if (id === COMMAND_ID.FIT_ALL) fitScene({ duration: 180 });
       if (id === COMMAND_ID.FOCUS) {
         const selected = getNodes().filter((node) => selection.nodeIds.includes(node.id));
         void fitView(
@@ -1269,7 +1304,7 @@ function Editor() {
         setConvertOpen(true);
       }
     },
-    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, fitView, flushThen, getNodes, importFromFile, presenting, selection.nodeIds, shellLayout, startArrange, startRunMode, startWalk, theme],
+    [alignSelection, applyOp, connectSelected, deleteSelection, duplicateSelection, documentModel, fitView, flushThen, getNodes, importFromFile, presenting, selection.nodeIds, shellLayout, fitScene, startArrange, startRunMode, startWalk, theme],
   );
 
   useEffect(() => {
@@ -1649,6 +1684,7 @@ function Editor() {
           />
         )}
         <div
+          ref={canvasRef}
           className={arrange.status === "preview" ? "canvas is-previewing" : "canvas"}
           style={presentationCssVars(scene.scene.presentation)}
         >
