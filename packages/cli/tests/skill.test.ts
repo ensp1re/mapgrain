@@ -14,6 +14,7 @@ import {
 } from "@mapgrain/document";
 import { buildScene } from "@mapgrain/scene";
 import { renderView } from "@mapgrain/viewer";
+import { PUBLISHED_CLI, SOURCE_CLI_VERSION } from "../src/constants/agents.ts";
 
 const skillDir = fileURLToPath(new URL("../../../skills/mapgrain", import.meta.url));
 const example = path.join(skillDir, "examples", "ten-node.json");
@@ -32,11 +33,11 @@ test("the skill directory ships schema, examples, and local runtime instructions
   assert.match(text, /--agent gemini-cli/);
   assert.match(text, /--agent windsurf/);
   assert.doesNotMatch(text, /copilot-codex/);
-  assert.match(text, /npx mapgrain@0\.2\.2 validate/);
-  assert.match(text, /npx mapgrain@0\.2\.2 layout/);
+  assert.match(text, new RegExp(`npx ${PUBLISHED_CLI} validate`));
+  assert.match(text, new RegExp(`npx ${PUBLISHED_CLI} layout`));
   assert.match(text, /pnpm mapgrain layout/);
   assert.match(text, /sequence, data-flow, or lifecycle/);
-  assert.match(text, /0\.2\.2/);
+  assert.match(text, new RegExp(SOURCE_CLI_VERSION.replaceAll('.', '\\.')));
   assert.match(text, /npx mapgrain@0\.1\.0/);
   assert.doesNotMatch(text, /npx mapgrain@latest/);
   assert.match(text, /From a Mapgrain checkout only/);

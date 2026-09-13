@@ -7,7 +7,35 @@ import { outlineTree } from "../outline/tree.ts";
 import type { FlowNodeDraft } from "../types/flow.ts";
 import { Pane } from "../ui/Pane.tsx";
 import { PaneResizer } from "../ui/PaneResizer.tsx";
-import { PANE_WIDTH } from "../constants/layout.ts";
+import { OUTLINE_MAX_INDENT, PANE_WIDTH } from "../constants/layout.ts";
+
+/** A section folds so a hundred components never hide the connections under them. */
+function Section({
+  label,
+  count,
+  open,
+  onToggle,
+}: {
+  label: string;
+  count: number;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="outline-section"
+      aria-expanded={open}
+      onClick={onToggle}
+    >
+      <span className="outline-chevron" aria-hidden="true">
+        {open ? "▾" : "▸"}
+      </span>
+      {label}
+      <span className="outline-count">{count}</span>
+    </button>
+  );
+}
 
 /** Open eye, or struck through when the item is hidden. */
 function EyeIcon({ off }: { off: boolean }) {
@@ -58,6 +86,8 @@ export function Outline({
   const hidden = useMemo(() => new Set(hiddenIds), [hiddenIds]);
   const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [showComponents, setShowComponents] = useState(true);
+  const [showConnections, setShowConnections] = useState(true);
   const count = nodes.filter((node) => node.type !== "group").length;
   const rows = useMemo(() => {
     const tree = outlineTree(nodes);
@@ -106,11 +136,20 @@ export function Outline({
         />
         <kbd>{shortcutLabel("⌘K")}</kbd>
       </label>
-      {rows.map((entry) => (
+      <Section
+        label="Components"
+        count={count}
+        open={showComponents}
+        onToggle={() => setShowComponents((open) => !open)}
+      />
+      {showComponents && rows.length === 0 ? (
+        <p className="outline-empty">{query.trim() ? "No match." : "Nothing here yet."}</p>
+      ) : null}
+      {(showComponents ? rows : []).map((entry) => (
         <div
           key={entry.node.id}
           className="outline-item"
-          style={{ paddingLeft: 8 + entry.depth * 16 }}
+          style={{ paddingLeft: 8 + Math.min(entry.depth, OUTLINE_MAX_INDENT) * 16 }}
         >
           {entry.node.type === "group" ? (
             <button
@@ -160,10 +199,18 @@ export function Outline({
           ) : null}
         </div>
       ))}
-      {onSelectEdge && connections.length > 0 ? (
+      {onSelectEdge && edges.length > 0 ? (
         <>
-          <h3 className="outline-heading">Connections</h3>
-          {connections.map((edge) => (
+          <Section
+            label="Connections"
+            count={edges.length}
+            open={showConnections}
+            onToggle={() => setShowConnections((open) => !open)}
+          />
+          {showConnections && connections.length === 0 ? (
+            <p className="outline-empty">No match.</p>
+          ) : null}
+          {(showConnections ? connections : []).map((edge) => (
             <div key={edge.id} className="outline-item">
               <span className="outline-chevron" />
               <button
@@ -173,8 +220,10 @@ export function Outline({
                 onClick={() => onSelectEdge(edge.id)}
               >
                 <span className="outline-pair">
-                  <span className="outline-label">
-                    {edge.source} <span aria-hidden="true">→</span> {edge.target}
+                  <span className="outline-ends">
+                    <span className="outline-end">{edge.source}</span>
+                    <span aria-hidden="true">→</span>
+                    <span className="outline-end">{edge.target}</span>
                   </span>
                   {edge.label ? <small>{edge.label}</small> : null}
                 </span>

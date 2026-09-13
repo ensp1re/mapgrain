@@ -25,3 +25,6 @@ export const SHELL_LAYOUT = {
 } as const;
 
 export type ShellLayout = (typeof SHELL_LAYOUT)[keyof typeof SHELL_LAYOUT];
+
+/** Past this depth the outline stops indenting: a nested row still needs room for its name. */
+export const OUTLINE_MAX_INDENT = 2;

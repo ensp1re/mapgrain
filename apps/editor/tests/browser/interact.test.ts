@@ -375,3 +375,106 @@ test("a template opens as an editable copy and walks through step by step", asyn
   assert.deepEqual(problems, []);
   await context.close();
 });
+
+test("arrange moves the captions with the cards, and the outline never scrolls sideways", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await page.goto(server.url, { waitUntil: "domcontentloaded" });
+  await waitStartOrEditor(page);
+  const card = page.getByRole("button", { name: "Use template Microservices behind a gateway" });
+  await card.scrollIntoViewIfNeeded();
+  await card.click();
+  await page.locator(".node-card").first().waitFor({ timeout: 10_000 });
+  await page.waitForTimeout(1_000);
+
+  /** Every caption's distance to the nearest point of the connection it belongs to. */
+  const captionDrift = () =>
+    page.evaluate(() => {
+      const paths = [...document.querySelectorAll<SVGPathElement>(".react-flow__edge-path")];
+      const worst: number[] = [];
+      for (const caption of document.querySelectorAll<HTMLElement>(".edge-caption")) {
+        const box = caption.getBoundingClientRect();
+        const cx = box.left + box.width / 2;
+        const cy = box.top + box.height / 2;
+        let best = Infinity;
+        for (const path of paths) {
+          const total = path.getTotalLength();
+          for (let at = 0; at <= total; at += Math.max(4, total / 40)) {
+            const point = path.getBoundingClientRect();
+            if (point.width === 0 && point.height === 0) continue;
+            const local = path.getPointAtLength(at);
+            const screen = local.matrixTransform(path.getScreenCTM() ?? undefined);
+            best = Math.min(best, Math.hypot(screen.x - cx, screen.y - cy));
+          }
+        }
+        if (Number.isFinite(best)) worst.push(Math.round(best));
+      }
+      return worst;
+    });
+
+  const before = await captionDrift();
+  assert.ok(before.length > 0, "the template drew no captions");
+
+  await page.getByRole("button", { name: "Arrange" }).click();
+  const apply = page.getByRole("button", { name: "Apply" });
+  await apply.waitFor({ timeout: 30_000 });
+  await page.waitForTimeout(1_000);
+  await apply.click();
+  await page.waitForTimeout(1_200);
+
+  // A caption belongs to its connection. After a re-layout it has to still be on it — the
+  // reused edge used to keep the previous layout's anchor and leave the caption behind.
+  const after = await captionDrift();
+  assert.equal(after.length, before.length);
+  const stranded = after.filter((distance) => distance > 60);
+  assert.deepEqual(stranded, [], `captions left behind after arrange: ${after.join(", ")}`);
+});
+
+test("a hundred components do not make the outline scroll sideways", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+  const hundred = fileURLToPath(
+    new URL("../../../../tests/fixtures/documents/hundred-nodes.json", import.meta.url),
+  );
+  for (const width of [1440, 1024]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await context.newPage();
+    await page.goto(server.url, { waitUntil: "domcontentloaded" });
+    await waitStartOrEditor(page);
+    await page.locator('input[type="file"][aria-label="Open file"]').setInputFiles(hundred);
+    await page.locator(".node-card").first().waitFor({ timeout: 20_000 });
+    await page.waitForTimeout(1_200);
+
+    const pane = await page.evaluate(() => {
+      const outline = document.querySelector<HTMLElement>(".outline");
+      if (!outline) return null;
+      return {
+        overflow: outline.scrollWidth - outline.clientWidth,
+        overflowX: getComputedStyle(outline).overflowX,
+      };
+    });
+    assert.ok(pane, `${width}: no outline`);
+    assert.equal(pane.overflow, 0, `${width}: the outline overflows by ${pane.overflow}px`);
+    assert.equal(pane.overflowX, "hidden", `${width}: the outline scrolls sideways`);
+
+    // Folding the components puts the connections within reach instead of 100 rows down.
+    const components = page.getByRole("button", { name: /^Components/ });
+    await components.click();
+    await page.waitForTimeout(300);
+    const firstConnection = page.locator(".outline-row.is-connection").first();
+    const box = await firstConnection.boundingBox();
+    assert.ok(box && box.y < 400, `${width}: connections are not reachable after folding`);
+    await context.close();
+  }
+});

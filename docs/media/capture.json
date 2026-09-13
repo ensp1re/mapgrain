@@ -1,5 +1,5 @@
 {
-  "commit": "e2a36eda3267f4cf2635b57f6740c14bda01e400",
+  "commit": "ef0f179b8b674ce6c63a511b3d21e0a139010ee0",
   "package": {
     "name": "mapgrain",
     "version": "0.2.3"
@@ -12,7 +12,7 @@
     "playwright": "1.63.0"
   },
   "deviceScaleFactor": 1,
-  "capturedAt": "2026-09-13T00:37:00.269Z",
+  "capturedAt": "2026-09-13T01:05:36.171Z",
   "artifacts": [
     {
       "file": "docs/media/hero-dark.png",
@@ -87,32 +87,32 @@
   ],
   "sizes": {
     "hero-dark.png": {
-      "bytes": 129785,
-      "sha256": "467d532950b6db1bb88ba5ffa96868faed9e1c02550c9f68be9742d06edaa14e"
+      "bytes": 130088,
+      "sha256": "afba02c46612638f094c3476fbce9bc6f11be1fb77018dc169186779dd7ff340"
     },
     "hero-light.png": {
-      "bytes": 131694,
-      "sha256": "91fdb827e5de2eb3f8fc59e9fa5b3ee406958b0efac43eafc52af5e452aac6b0"
+      "bytes": 132015,
+      "sha256": "c39e2f6b67761aa5de0ec7612dde1ec26655c0f530a25b88e4a13ed5b76ccd42"
     },
     "narrow-390.png": {
       "bytes": 47459,
       "sha256": "6b001e2fbd772e959ec843694d40fb896b47b12c8687cb74cbd7ad6ddd1798d3"
     },
     "editing.gif": {
-      "bytes": 1705132,
-      "sha256": "84125999184de8f7d95470fea9e766b3ed6991073d7a261790854de5570e39b8"
+      "bytes": 1740337,
+      "sha256": "c774e417df16f83e7e2ab201d6dcc4672aceeeacac04074eef7984e9015be521"
     },
     "viewer.gif": {
-      "bytes": 537744,
-      "sha256": "137bed74c0aa75a09ef53890986fb95214f7fb204ff7db6dae21849814a3400e"
+      "bytes": 506776,
+      "sha256": "cd60743ee3cb7b0c3d2dfbaff7f11594e1e1b0f3dd077ff65d28dc86a13c392f"
     },
     "cli-receipts.png": {
-      "bytes": 16479,
-      "sha256": "d2c7052dfbd38d90ea5815259099243626c7336910d4e958b5e4d8fec006bd97"
+      "bytes": 16334,
+      "sha256": "cbc52f080d7b11b1145c9ac45d45f3977a108bb64b92e18a2ecf239e9793d714"
     },
     "cli-workflow.gif": {
-      "bytes": 54117,
-      "sha256": "09e821929259fea697f363e641341badb6ec6547eb9e910cbf1c970bf5cd69e7"
+      "bytes": 55439,
+      "sha256": "56c5d82fbf5ff98fb2714ba2fccf17a1842c3238968b2b8c15211feeb6e46698"
     }
   }
 }
