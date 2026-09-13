@@ -1,0 +1,49 @@
+name: Bug report
+description: Something behaves differently from what it says it does
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A Mapgrain diagram is a JSON file, so pasting the document is usually the whole report.
+        For a security issue, use a private advisory instead: see SECURITY.md.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, and what happened instead of what you expected.
+      placeholder: |
+        Ran `mapgrain layout invoice.json`, and two cards ended up on top of each other.
+    validations:
+      required: true
+  - type: textarea
+    id: document
+    attributes:
+      label: The document
+      description: The diagram JSON that reproduces it, or the smallest part of it that still does.
+      render: json
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where
+      options:
+        - The CLI
+        - The editor
+        - An exported HTML view
+        - An exported SVG or PNG
+        - The agent skill
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "`mapgrain --version`, or the commit if you are running from a checkout."
+      placeholder: 0.2.3
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Node and OS
+      placeholder: Node 24.9.0, macOS 15

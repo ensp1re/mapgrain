@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-expense-claim",
+  "revision": 1,
+  "kind": "workflow",
+  "title": "Expense claim",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [
+    {
+      "id": "employee",
+      "label": "Employee",
+      "parentId": null
+    },
+    {
+      "id": "finance",
+      "label": "Finance",
+      "parentId": null
+    }
+  ],
+  "nodes": [
+    {
+      "id": "submit",
+      "kind": "job",
+      "label": "Submit claim",
+      "groupId": "employee",
+      "ports": [],
+      "description": "Receipts attached"
+    },
+    {
+      "id": "check",
+      "kind": "decision",
+      "label": "Under limit?",
+      "groupId": "finance",
+      "ports": []
+    },
+    {
+      "id": "auto",
+      "kind": "job",
+      "label": "Auto approve",
+      "groupId": "finance",
+      "ports": []
+    },
+    {
+      "id": "review",
+      "kind": "job",
+      "label": "Manager review",
+      "groupId": "finance",
+      "ports": []
+    },
+    {
+      "id": "pay",
+      "kind": "job",
+      "label": "Reimburse",
+      "groupId": "finance",
+      "ports": []
+    },
+    {
+      "id": "fix",
+      "kind": "job",
+      "label": "Fix and resubmit",
+      "groupId": "employee",
+      "ports": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": {
+        "nodeId": "submit"
+      },
+      "target": {
+        "nodeId": "check"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e2",
+      "source": {
+        "nodeId": "check"
+      },
+      "target": {
+        "nodeId": "auto"
+      },
+      "type": "outcome",
+      "direction": "forward",
+      "outcome": "under limit"
+    },
+    {
+      "id": "e3",
+      "source": {
+        "nodeId": "check"
+      },
+      "target": {
+        "nodeId": "review"
+      },
+      "type": "outcome",
+      "direction": "forward",
+      "outcome": "over limit"
+    },
+    {
+      "id": "e4",
+      "source": {
+        "nodeId": "auto"
+      },
+      "target": {
+        "nodeId": "pay"
+      },
+      "type": "calls",
+      "direction": "forward"
+    },
+    {
+      "id": "e5",
+      "source": {
+        "nodeId": "review"
+      },
+      "target": {
+        "nodeId": "pay"
+      },
+      "type": "calls",
+      "direction": "forward",
+      "label": "approved"
+    },
+    {
+      "id": "e6",
+      "source": {
+        "nodeId": "review"
+      },
+      "target": {
+        "nodeId": "fix"
+      },
+      "type": "calls",
+      "direction": "forward",
+      "label": "missing receipt"
+    },
+    {
+      "id": "e7",
+      "source": {
+        "nodeId": "fix"
+      },
+      "target": {
+        "nodeId": "check"
+      },
+      "type": "calls",
+      "direction": "forward"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "All"
+    }
+  ]
+}

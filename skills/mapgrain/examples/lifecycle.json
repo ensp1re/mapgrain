@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-ticket-lifecycle",
+  "revision": 1,
+  "kind": "lifecycle",
+  "title": "Support ticket",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [],
+  "nodes": [
+    {
+      "id": "new",
+      "kind": "state",
+      "label": "New",
+      "groupId": null,
+      "ports": [],
+      "marker": "initial"
+    },
+    {
+      "id": "triaged",
+      "kind": "state",
+      "label": "Triaged",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "waiting",
+      "kind": "state",
+      "label": "Waiting on customer",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "resolved",
+      "kind": "state",
+      "label": "Resolved",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "closed",
+      "kind": "state",
+      "label": "Closed",
+      "groupId": null,
+      "ports": [],
+      "marker": "final"
+    }
+  ],
+  "edges": [
+    {
+      "id": "t1",
+      "source": {
+        "nodeId": "new"
+      },
+      "target": {
+        "nodeId": "triaged"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "assigned"
+    },
+    {
+      "id": "t2",
+      "source": {
+        "nodeId": "triaged"
+      },
+      "target": {
+        "nodeId": "waiting"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "guard": "needs detail"
+    },
+    {
+      "id": "t3",
+      "source": {
+        "nodeId": "waiting"
+      },
+      "target": {
+        "nodeId": "triaged"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "customer replied"
+    },
+    {
+      "id": "t4",
+      "source": {
+        "nodeId": "triaged"
+      },
+      "target": {
+        "nodeId": "resolved"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "fixed"
+    },
+    {
+      "id": "t5",
+      "source": {
+        "nodeId": "resolved"
+      },
+      "target": {
+        "nodeId": "closed"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "guard": "after 7 days"
+    },
+    {
+      "id": "t6",
+      "source": {
+        "nodeId": "resolved"
+      },
+      "target": {
+        "nodeId": "triaged"
+      },
+      "type": "transition",
+      "direction": "forward",
+      "label": "reopened"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "All"
+    }
+  ]
+}

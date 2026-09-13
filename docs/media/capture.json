@@ -1,8 +1,8 @@
 {
-  "commit": "a06789695211aa0c57f9813bc94665ff665c906a",
+  "commit": "e2a36eda3267f4cf2635b57f6740c14bda01e400",
   "package": {
     "name": "mapgrain",
-    "version": "0.2.2"
+    "version": "0.2.3"
   },
   "buildCommand": "pnpm --filter @mapgrain/editor build && pnpm --filter mapgrain build",
   "fixture": "skills/mapgrain/examples/ten-node.json",
@@ -12,7 +12,7 @@
     "playwright": "1.63.0"
   },
   "deviceScaleFactor": 1,
-  "capturedAt": "2026-09-12T21:55:57.120Z",
+  "capturedAt": "2026-09-13T00:37:00.269Z",
   "artifacts": [
     {
       "file": "docs/media/hero-dark.png",
@@ -87,32 +87,32 @@
   ],
   "sizes": {
     "hero-dark.png": {
-      "bytes": 105919,
-      "sha256": "4527ce00d88e89343273d93a2bd7f0051a17d8310e3c15424dc70eaba6cf6933"
+      "bytes": 129785,
+      "sha256": "467d532950b6db1bb88ba5ffa96868faed9e1c02550c9f68be9742d06edaa14e"
     },
     "hero-light.png": {
-      "bytes": 107127,
-      "sha256": "b013205a34dc84844acce7c72771c726c26509871f95bad26722e75aa32fee7e"
+      "bytes": 131694,
+      "sha256": "91fdb827e5de2eb3f8fc59e9fa5b3ee406958b0efac43eafc52af5e452aac6b0"
     },
     "narrow-390.png": {
-      "bytes": 47701,
-      "sha256": "6d1bcb1f9a04cb7b07c7735ef2ab66fe970c575669b97015eb666bd227410d50"
+      "bytes": 47459,
+      "sha256": "6b001e2fbd772e959ec843694d40fb896b47b12c8687cb74cbd7ad6ddd1798d3"
     },
     "editing.gif": {
-      "bytes": 1604314,
-      "sha256": "a9124455dcf6fe4f1b114932ff483bdba8ba5addf56b1154cac52dbea174e0d4"
+      "bytes": 1705132,
+      "sha256": "84125999184de8f7d95470fea9e766b3ed6991073d7a261790854de5570e39b8"
     },
     "viewer.gif": {
-      "bytes": 601237,
-      "sha256": "4e1bb4bd8aef7a078def7d17275cd94dd7b7ff7af56431b9783bd5546470f45a"
+      "bytes": 537744,
+      "sha256": "137bed74c0aa75a09ef53890986fb95214f7fb204ff7db6dae21849814a3400e"
     },
     "cli-receipts.png": {
       "bytes": 16479,
       "sha256": "d2c7052dfbd38d90ea5815259099243626c7336910d4e958b5e4d8fec006bd97"
     },
     "cli-workflow.gif": {
-      "bytes": 79827,
-      "sha256": "0270de3080ae654eccf68c8c9e66fe3f141842f8254a706e1cf5d39b43d91a2c"
+      "bytes": 54117,
+      "sha256": "09e821929259fea697f363e641341badb6ec6547eb9e910cbf1c970bf5cd69e7"
     }
   }
 }

@@ -1,0 +1,37 @@
+name: Feature request
+description: Something Mapgrain should be able to do and cannot
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        docs/FEATURES.md lists what is shipped, partial, planned and deferred. If a row there
+        already covers this, say which one and what is missing from it.
+  - type: textarea
+    id: need
+    attributes:
+      label: What are you trying to do
+      description: The diagram or the workflow you are stuck on, not the feature you have in mind.
+      placeholder: |
+        I keep drawing the same deployment pipeline and want the lanes to come from a file.
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: What you do today instead
+      description: The workaround, if there is one, and where it falls down.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part
+      options:
+        - Document schema or a diagram kind
+        - The editor
+        - Layout or routing
+        - Exports
+        - The CLI
+        - The agent skill
+        - Something else
+    validations:
+      required: true

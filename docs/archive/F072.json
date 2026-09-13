@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F072",
+    "behavior": "Diagrams stop touching: a branch draws as an outlined diamond that holds its own label, connections keep real clearance from cards and from each other, a workflow column is wide enough for a connection to turn in, a sequence spaces its lifelines to fit the captions between them and its rows to fit the captions they carry, fragment frames cover only the participants their messages touch, a reading stays readable and a click during one ends it, and the header brand opens nothing.",
+    "acceptance": [
+      "A decision's label sits entirely inside its diamond, in the editor and in the SVG export, and the diamond is outlined rather than a solid block.",
+      "No caption overlaps another caption, a fragment frame, or a card it does not belong to, across every fixture and every template.",
+      "Every routed connection starts and ends on the cards it joins, and a sequence message on its participants' lifelines.",
+      "Two fragment frames never overlap.",
+      "A workflow column gap holds two stubs and a routing channel, and ELK is told how much room a connection needs.",
+      "Two ports on the same side of a card are at least one routing channel apart.",
+      "A dimmed component during a walk or a run is still readable, and clicking one ends the reading and selects it.",
+      "The header brand is not a control, and Export and Open file are in the More menu."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789259115951-5b0178",
+      "fingerprintBefore": "43ba652cde1e5a3239e5325335e2f79dd83348df71123aa65a5e9c0b19c8a7f3",
+      "fingerprintAfter": "43ba652cde1e5a3239e5325335e2f79dd83348df71123aa65a5e9c0b19c8a7f3",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-13T00:26:30.425Z"
+    },
+    "delivery": {
+      "implementationRevision": "b7f2cb3e9eeb9a01ff05e27ef7ce46043b532c13",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/108",
+      "checkRuns": [
+        {
+          "name": "CI",
+          "revision": "b7f2cb3e9eeb9a01ff05e27ef7ce46043b532c13",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34728142381"
+        }
+      ],
+      "observedAt": "2026-09-13T00:33:47.270796Z"
+    }
+  },
+  "archivedAt": "2026-09-13T00:33:47.270796Z"
+}

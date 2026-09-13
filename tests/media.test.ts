@@ -3,6 +3,8 @@ import { readFile, stat } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
+import { PUBLISHED_CLI } from "../packages/cli/src/constants/agents.ts";
+
 const root = fileURLToPath(new URL("..", import.meta.url));
 
 async function text(relative: string): Promise<string> {
@@ -36,7 +38,10 @@ test("capture manifest records commit, fixture, viewport, and theme", async () =
   };
   assert.match(manifest.commit ?? "", /^[0-9a-f]{40}$/);
   assert.equal(manifest.package?.name, "mapgrain");
-  assert.equal(manifest.package?.version, "0.2.2");
+  // The manifest records the build that was captured, which runs ahead of the registry
+  // between a version bump and its publish.
+  const { SOURCE_CLI_VERSION } = await import("../packages/cli/src/constants/agents.ts");
+  assert.equal(manifest.package?.version, SOURCE_CLI_VERSION);
   assert.equal(manifest.fixture, "skills/mapgrain/examples/ten-node.json");
   assert.match(manifest.buildCommand ?? "", /@mapgrain\/editor build/);
   const files = new Set((manifest.artifacts ?? []).map((item) => item.file));
@@ -60,7 +65,7 @@ test("README links production media, the feature table, and getting-started", as
     "docs/FEATURES.md",
     "docs/getting-started.md",
     "docs/agents.md",
-    "npx mapgrain@0.2.2",
+    `npx mapgrain@${PUBLISHED_CLI.split("@").at(-1)}`,
   ]) {
     assert.match(readme, new RegExp(needle.replaceAll(".", "\\.")));
   }
