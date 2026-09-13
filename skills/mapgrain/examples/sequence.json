@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-password-reset",
+  "revision": 1,
+  "kind": "sequence",
+  "title": "Password reset",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [],
+  "nodes": [
+    {
+      "id": "user",
+      "kind": "actor",
+      "label": "User",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "app",
+      "kind": "participant",
+      "label": "Web app",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "mail",
+      "kind": "participant",
+      "label": "Mail service",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "store",
+      "kind": "participant",
+      "label": "Account store",
+      "groupId": null,
+      "ports": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "m1",
+      "source": {
+        "nodeId": "user"
+      },
+      "target": {
+        "nodeId": "app"
+      },
+      "type": "message",
+      "direction": "forward",
+      "order": 1,
+      "label": "ask for reset"
+    },
+    {
+      "id": "m2",
+      "source": {
+        "nodeId": "app"
+      },
+      "target": {
+        "nodeId": "store"
+      },
+      "type": "message",
+      "direction": "forward",
+      "order": 2,
+      "label": "find account"
+    },
+    {
+      "id": "m3",
+      "source": {
+        "nodeId": "store"
+      },
+      "target": {
+        "nodeId": "app"
+      },
+      "type": "reply",
+      "direction": "forward",
+      "order": 3,
+      "label": "account or nothing"
+    },
+    {
+      "id": "m4",
+      "source": {
+        "nodeId": "app"
+      },
+      "target": {
+        "nodeId": "app"
+      },
+      "type": "message",
+      "direction": "forward",
+      "order": 4,
+      "label": "mint a token"
+    },
+    {
+      "id": "m5",
+      "source": {
+        "nodeId": "app"
+      },
+      "target": {
+        "nodeId": "mail"
+      },
+      "type": "message",
+      "direction": "forward",
+      "order": 5,
+      "label": "send reset link"
+    },
+    {
+      "id": "m6",
+      "source": {
+        "nodeId": "app"
+      },
+      "target": {
+        "nodeId": "user"
+      },
+      "type": "reply",
+      "direction": "forward",
+      "order": 6,
+      "label": "check your inbox"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "All"
+    }
+  ],
+  "fragments": [
+    {
+      "id": "known",
+      "kind": "alt",
+      "operands": [
+        {
+          "label": "account exists",
+          "startOrder": 4,
+          "endOrder": 5
+        },
+        {
+          "label": "no account",
+          "startOrder": 6,
+          "endOrder": 6
+        }
+      ]
+    }
+  ]
+}

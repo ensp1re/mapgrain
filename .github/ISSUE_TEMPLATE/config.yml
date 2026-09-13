@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/ensp1re/mapgrain/security/advisories/new
+    about: Report privately through a security advisory, not a public issue.
+  - name: Getting started
+    url: https://github.com/ensp1re/mapgrain/blob/main/docs/getting-started.md
+    about: Installing, the CLI, the editor, and the agent skill.

@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium, type Page } from "playwright";
+import { PUBLISHED_CLI } from "../../../packages/cli/src/constants/agents.ts";
 
 const editorRoot = fileURLToPath(new URL("..", import.meta.url));
 const repoRoot = resolve(editorRoot, "../..");
@@ -266,7 +267,9 @@ async function main(): Promise<void> {
     const cliVideoDir = join(work, "cli");
     await mkdir(cliVideoDir, { recursive: true });
     const receipts = join(work, "receipts.html");
-    const cliVersion = await packageVersion();
+    // The receipt shows the command a reader can actually run, which is the last published
+    // package — not this checkout's version, which may be ahead of the registry.
+    const cliVersion = PUBLISHED_CLI.split("@").at(-1) ?? (await packageVersion());
     const validated = execFileSync(
       "node",
       ["--experimental-strip-types", join(repoRoot, "packages/cli/src/cli.ts"), "validate", fixture],

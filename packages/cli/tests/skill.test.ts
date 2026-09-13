@@ -4,7 +4,15 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { OPERATION_KIND, applyOperationAt, validateDocument } from "@mapgrain/document";
+import {
+  DOCUMENT_KIND,
+  EDGES_FOR_KIND,
+  NODES_FOR_KIND,
+  OPERATION_KIND,
+  applyOperationAt,
+  validateDocument,
+} from "@mapgrain/document";
+import { buildScene } from "@mapgrain/scene";
 import { renderView } from "@mapgrain/viewer";
 
 const skillDir = fileURLToPath(new URL("../../../skills/mapgrain", import.meta.url));
@@ -98,4 +106,50 @@ test("the branching example has 8-12 nodes and no authored coordinates", async (
   if (!result.ok) return;
   assert.ok(result.document.nodes.length >= 8);
   assert.ok(result.document.nodes.length <= 12);
+});
+
+test("the skill ships a worked example of every diagram kind, and each one works", async () => {
+  const names = (await readdir(path.join(skillDir, "examples"))).filter((name) =>
+    name.endsWith(".json"),
+  );
+  const kinds = new Set<string>();
+  for (const name of names) {
+    const raw = JSON.parse(await readFile(path.join(skillDir, "examples", name), "utf8")) as unknown;
+    const result = validateDocument(raw);
+    assert.equal(result.ok, true, `${name}: ${JSON.stringify(result)}`);
+    if (!result.ok) continue;
+    kinds.add(result.document.kind);
+    // An example an agent copies has to lay out and export, not merely validate.
+    const scene = buildScene(result.document, {
+      positions: result.document.layout?.positions ?? {},
+    });
+    assert.equal(scene.ok, true, `${name} built no scene`);
+    const html = renderView(result.document);
+    assert.equal(html.ok, true, `${name} exported no HTML`);
+  }
+  for (const kind of Object.values(DOCUMENT_KIND)) {
+    assert.ok(kinds.has(kind), `the skill ships no ${kind} example`);
+  }
+});
+
+test("the schema reference names every kind's vocabulary, and invents none", async () => {
+  const text = await readFile(path.join(skillDir, "references", "schema.md"), "utf8");
+  for (const kind of Object.values(DOCUMENT_KIND)) {
+    assert.match(text, new RegExp(`\`${kind}\``), `schema.md never mentions ${kind}`);
+    for (const nodeKind of NODES_FOR_KIND[kind]) {
+      assert.match(text, new RegExp(`\`${nodeKind}\``), `${kind} node kind ${nodeKind} is undocumented`);
+    }
+    for (const edgeType of EDGES_FOR_KIND[kind]) {
+      assert.match(
+        text,
+        new RegExp(`\`${edgeType}\``),
+        `${kind} edge type ${edgeType} is undocumented`,
+      );
+    }
+  }
+  // The old reference claimed architecture and workflow were the only kinds.
+  assert.doesNotMatch(text, /`architecture` \| `workflow`\)/);
+  for (const name of ["workflow.json", "sequence.json", "data-flow.json", "lifecycle.json"]) {
+    assert.match(text, new RegExp(name.replace(".", "\\.")), `schema.md links no ${name}`);
+  }
 });

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "doc-meter-readings",
+  "revision": 1,
+  "kind": "data-flow",
+  "title": "Meter readings",
+  "theme": "dark",
+  "layoutHints": {
+    "direction": "right",
+    "pinnedNodeIds": []
+  },
+  "groups": [],
+  "nodes": [
+    {
+      "id": "meter",
+      "kind": "external",
+      "label": "Smart meter",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "ingest",
+      "kind": "process",
+      "label": "Ingest reading",
+      "groupId": null,
+      "ports": [],
+      "description": "Validates the unit"
+    },
+    {
+      "id": "readings",
+      "kind": "datastore",
+      "label": "Readings",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "bill",
+      "kind": "process",
+      "label": "Build a bill",
+      "groupId": null,
+      "ports": []
+    },
+    {
+      "id": "customer",
+      "kind": "entity",
+      "label": "Customer",
+      "groupId": null,
+      "ports": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "d1",
+      "source": {
+        "nodeId": "meter"
+      },
+      "target": {
+        "nodeId": "ingest"
+      },
+      "type": "data",
+      "direction": "forward",
+      "label": "kWh"
+    },
+    {
+      "id": "d2",
+      "source": {
+        "nodeId": "ingest"
+      },
+      "target": {
+        "nodeId": "readings"
+      },
+      "type": "writes",
+      "direction": "forward"
+    },
+    {
+      "id": "d3",
+      "source": {
+        "nodeId": "bill"
+      },
+      "target": {
+        "nodeId": "readings"
+      },
+      "type": "reads",
+      "direction": "forward",
+      "label": "last month"
+    },
+    {
+      "id": "d4",
+      "source": {
+        "nodeId": "bill"
+      },
+      "target": {
+        "nodeId": "customer"
+      },
+      "type": "data",
+      "direction": "forward",
+      "label": "invoice"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "kind": "overview",
+      "name": "All"
+    }
+  ]
+}

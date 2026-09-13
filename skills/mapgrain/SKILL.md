@@ -65,14 +65,57 @@ cp -R skills/mapgrain .grok/skills/mapgrain
 cp -R skills/mapgrain .windsurf/skills/mapgrain
 ```
 
+## Pick the kind first
+
+The kind decides which node kinds and edge types are legal. Choosing wrong means every node is
+rejected, so decide before writing anything.
+
+| The user is describing | `kind` |
+| --- | --- |
+| what the parts of a system are and what calls what | `architecture` |
+| who does what, in what order, with branches | `workflow` |
+| messages between parties over time | `sequence` |
+| where data comes from, what transforms it, where it rests | `data-flow` |
+| the states one thing moves through | `lifecycle` |
+
+Each kind's vocabulary and a worked example: [references/schema.md](references/schema.md).
+
 ## Create
 
-Write JSON that matches [references/document.schema.json](references/document.schema.json). Field summary: [references/schema.md](references/schema.md). A branching 8–12 node example without coordinates: [examples/branching.json](examples/branching.json). A 10-node example with portable layout: [examples/ten-node.json](examples/ten-node.json).
+Write JSON that matches [references/document.schema.json](references/document.schema.json).
+Start from the example of the kind you picked and change it:
+
+| kind | example |
+| --- | --- |
+| architecture | [examples/branching.json](examples/branching.json) — 10 nodes, no coordinates |
+| architecture | [examples/ten-node.json](examples/ten-node.json) — with a portable layout |
+| workflow | [examples/workflow.json](examples/workflow.json) — lanes and a labelled decision |
+| sequence | [examples/sequence.json](examples/sequence.json) — orders, a reply, a self-message, an `alt` |
+| data-flow | [examples/data-flow.json](examples/data-flow.json) — process, store, external entity |
+| lifecycle | [examples/lifecycle.json](examples/lifecycle.json) — markers and guarded transitions |
 
 - `id` values match `^[A-Za-z][A-Za-z0-9_-]*$`.
 - Omit `layout` on first create.
 - Run layout with `npx mapgrain@0.2.2 layout diagram.json` so ELK writes positions. Do not pick x/y yourself.
 - `revision` starts at `1`.
+
+## What fails, and what to do about it
+
+These are the mistakes that actually come back from `validate`:
+
+- **Wrong vocabulary for the kind.** A `service` in a `lifecycle`, a `transition` in an
+  `architecture`. Check the table in [references/schema.md](references/schema.md); do not
+  guess from the name.
+- **A decision branch with no label.** Every edge leaving a `decision` needs `outcome` or
+  `label`. This is the most common rejection in a workflow.
+- **A dangling edge.** `source.nodeId` or `target.nodeId` names a node that is not in `nodes`.
+- **A field the schema does not have.** `additionalProperties` is `false` everywhere, so a
+  helpful extra key fails the whole document. `shape` on an edge needs `0.2.3` or newer.
+- **Mixed message orders.** In a sequence, give `order` to every message or to none.
+- **Authored coordinates.** Do not write `layout.positions` yourself. Run `layout`.
+
+On failure, apply every diagnostic in one pass. Three repair attempts at most, then stop and
+keep the last valid file rather than guessing further.
 
 ## Workflow
 
@@ -81,6 +124,10 @@ Write JSON that matches [references/document.schema.json](references/document.sc
 3. `npx mapgrain@0.2.2 layout diagram.json` (add `--rearrange` only when the user asked to re-layout).
 4. `npx mapgrain@0.2.2 view diagram.json -o diagram.html`
 5. On validate/layout failure, apply every diagnostic in one pass. At most three repair attempts. Keep the last valid file.
+
+`diagnose diagram.json` reports geometry problems — overlaps, clipping, label clearance — as
+JSON warnings. `--strict` turns them into a failure. Run it when a diagram is meant to be read
+by someone else.
 
 ## Edit
 
