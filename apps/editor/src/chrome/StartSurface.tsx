@@ -57,7 +57,7 @@ export function StartSurface({
   const fileRef = useRef<HTMLInputElement>(null);
   const [agentId, setAgentId] = useState<string>(AGENT_CHOICES[0]?.id ?? "cursor");
   const [copied, setCopied] = useState(false);
-  const install = `${skillInstallCommand(agentId)}\nnpx mapgrain@0.2.4 validate diagram.json\nnpx mapgrain@0.2.4 layout diagram.json`;
+  const install = `${skillInstallCommand(agentId)}\nnpx mapgrain@0.2.5 validate diagram.json\nnpx mapgrain@0.2.5 layout diagram.json`;
 
   return (
     <main className="start-page" aria-label="New diagram">

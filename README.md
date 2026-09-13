@@ -18,9 +18,9 @@ No account. No server. The editor, the CLI and the exports all run on your machi
 ## 60 seconds
 
 ```sh
-npx mapgrain@0.2.4 validate diagram.json    # is it a real document?
-npx mapgrain@0.2.4 layout diagram.json      # ELK writes the coordinates
-npx mapgrain@0.2.4 view diagram.json -o diagram.html
+npx mapgrain@0.2.5 validate diagram.json    # is it a real document?
+npx mapgrain@0.2.5 layout diagram.json      # ELK writes the coordinates
+npx mapgrain@0.2.5 view diagram.json -o diagram.html
 ```
 
 `diagram.html` opens with no server and no network: search, pan, zoom, follow a path, switch
@@ -62,7 +62,7 @@ exports — that is a test, not a claim.
 ## The CLI
 
 ```sh
-npx mapgrain@0.2.4 <command> diagram.json
+npx mapgrain@0.2.5 <command> diagram.json
 ```
 
 | Command | Does |
