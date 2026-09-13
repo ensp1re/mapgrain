@@ -2,6 +2,7 @@ import { Type } from "@sinclair/typebox";
 import {
   DOCUMENT_KIND,
   EDGE_DIRECTION,
+  EDGE_SHAPE,
   EDGE_TYPE,
   EVIDENCE_STATE,
   EVIDENCE_TARGET_KIND,
@@ -71,6 +72,7 @@ export const EdgeSchema = Type.Object(
     order: Type.Optional(Type.Integer({ minimum: 1 })),
     guard: Type.Optional(Type.String({ maxLength: 200 })),
     outcome: Type.Optional(Type.String({ maxLength: 200 })),
+    shape: Type.Optional(stringUnion(valuesOf(EDGE_SHAPE))),
   },
   { additionalProperties: false },
 );

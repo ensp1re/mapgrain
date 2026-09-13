@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Local-first workspace for technical diagrams. Early development — not ready for use.",
+  "description": "Local-first workspace for technical diagrams. Early development \u2014 not ready for use.",
   "packageManager": "pnpm@10.26.1",
   "engines": {
     "node": ">=24.0.0 <27",
@@ -15,6 +15,7 @@
     "lint:fix": "eslint . --fix",
     "dev": "pnpm --filter @mapgrain/editor dev",
     "mapgrain": "node --experimental-strip-types packages/cli/src/cli.ts",
+    "schema": "node --experimental-strip-types scripts/schema.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json && pnpm -r --if-present typecheck",
     "test": "node --test --experimental-strip-types --test-reporter=spec tests/*.test.ts packages/*/tests/*.test.ts apps/*/tests/*.test.ts",
     "build": "pnpm -r --if-present --filter=!mapgrain build && pnpm --filter mapgrain build",

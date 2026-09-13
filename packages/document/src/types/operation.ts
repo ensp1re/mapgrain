@@ -5,6 +5,7 @@ import type {
   DiagramNode,
   DocumentKind,
   EdgeDirection,
+  EdgeShape,
   EdgeType,
   LayoutPoint,
   NodeKind,
@@ -25,6 +26,13 @@ export type Operation =
   | { kind: typeof OPERATION_KIND.SET_EDGE_ORDER; edgeId: string; order: number | null }
   | { kind: typeof OPERATION_KIND.SET_EDGE_GUARD; edgeId: string; guard: string }
   | { kind: typeof OPERATION_KIND.SET_EDGE_OUTCOME; edgeId: string; outcome: string }
+  | { kind: typeof OPERATION_KIND.SET_EDGE_SHAPE; edgeId: string; shape: EdgeShape | null }
+  | {
+      kind: typeof OPERATION_KIND.SET_EDGE_ENDPOINT;
+      edgeId: string;
+      end: "source" | "target";
+      nodeId: string;
+    }
   | { kind: typeof OPERATION_KIND.SET_NODE_KIND; nodeId: string; nodeKind: NodeKind }
   | { kind: typeof OPERATION_KIND.SET_NODE_MARKER; nodeId: string; marker: NodeMarker | null }
   | {

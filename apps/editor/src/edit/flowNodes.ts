@@ -58,6 +58,8 @@ export function sameEdgeContent(left: Edge, right: Edge): boolean {
     dataField(left.data, "label") === dataField(right.data, "label") &&
     dataField(left.data, "type") === dataField(right.data, "type") &&
     dataField(left.data, "direction") === dataField(right.data, "direction") &&
+    dataField(left.data, "shape") === dataField(right.data, "shape") &&
+    dataField(left.data, "editing") === dataField(right.data, "editing") &&
     dataField(left.data, "caption") === dataField(right.data, "caption")
   );
 }

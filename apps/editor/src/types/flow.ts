@@ -1,4 +1,4 @@
-import type { EdgeDirection, EdgeType, NodeMarker, PortSide } from "@mapgrain/document";
+import type { EdgeDirection, EdgeShape, EdgeType, NodeMarker, PortSide } from "@mapgrain/document";
 import type { StateTone } from "@mapgrain/scene";
 
 export interface FlowNodeDraft {
@@ -30,6 +30,7 @@ export interface FlowEdgeDraft {
   sourceHandle: string;
   targetHandle: string;
   points: Array<{ x: number; y: number }>;
+  shape: EdgeShape;
   direction: EdgeDirection;
   caption: string;
   labelAnchor: { x: number; y: number };
@@ -72,8 +73,14 @@ export interface RelationEdgeData extends Record<string, unknown> {
   type: EdgeType;
   direction: EdgeDirection;
   points: Array<{ x: number; y: number }>;
+  shape?: EdgeShape;
   caption: string;
   labelAnchor: { x: number; y: number };
   labelSize: { width: number; height: number };
   preserveGeometry: boolean;
+  /** A connection's caption is edited on the canvas, the same way a card's title is. */
+  editing?: boolean;
+  onStartEdit?: () => void;
+  onCommitLabel?: (label: string) => void;
+  onCancelEdit?: () => void;
 }

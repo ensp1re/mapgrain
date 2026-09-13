@@ -92,6 +92,6 @@ test("browser PNG uses a canvas raster and HTML uses the interactive viewer", as
   assert.match(app, /encodeStoryWebm/);
   assert.match(app, /renderView/);
   assert.match(png, /document\.createElement\("canvas"\)/);
-  assert.match(edge, /roundedPolylinePath/);
+  assert.match(edge, /edgePath/);
   assert.match(edge, /placeEdgeLabel/);
 });

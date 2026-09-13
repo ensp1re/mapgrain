@@ -1,6 +1,8 @@
+/** The last package actually on npm. Not the version in this checkout. */
 export const PUBLISHED_CLI = "mapgrain@0.2.2";
 export const HISTORICAL_CLI = "mapgrain@0.1.0";
-export const SOURCE_CLI_VERSION = "0.2.2";
+/** This checkout. Ahead of PUBLISHED_CLI between a release and its publish. */
+export const SOURCE_CLI_VERSION = "0.2.3";
 export const SKILLS_CLI_VERSION = "1.5.25";
 export const SKILL_SOURCE = "ensp1re/mapgrain";
 export const SKILL_NAME = "mapgrain";

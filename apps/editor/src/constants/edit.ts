@@ -6,3 +6,5 @@ export const NEW_NODE_SIZE = { width: 180, height: 56 } as const;
 export const NEW_NODE_GAP = 24;
 export const NEW_NODE_RING_STEP = 216;
 export const NEW_NODE_RINGS = 24;
+/** How far a dropped connection may be from a port and still land on it. */
+export const CONNECT_SNAP_RADIUS = 60;

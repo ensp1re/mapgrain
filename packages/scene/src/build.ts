@@ -1,6 +1,7 @@
 import {
   DOCUMENT_KIND,
   EDGE_DIRECTION,
+  EDGE_SHAPE,
   LAYOUT_DIRECTION,
   NODE_KIND,
   validateDocument,
@@ -345,6 +346,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
         source: { nodeId: edge.source.nodeId, portId: edge.source.portId ?? "" },
         target: { nodeId: edge.target.nodeId, portId: edge.target.portId ?? "" },
         points: [],
+        shape: edge.shape ?? EDGE_SHAPE.ELBOW,
         direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
         caption: "",
         label: empty,
@@ -362,9 +364,17 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       ...nodes.map((item) => item.rect.y + item.rect.height),
       sourceNode.rect.y + sourceNode.rect.height,
     );
+    const shape = edge.shape ?? EDGE_SHAPE.ELBOW;
+    // A straight connection is its own route: two points on the facing sides, so the caption
+    // and the hit area follow the line that is actually drawn.
     const points =
       document.kind === DOCUMENT_KIND.SEQUENCE
         ? sequenceMessagePoints(sourceNode, targetNode, edge.order ?? index + 1, headerBottom)
+        : shape === EDGE_SHAPE.STRAIGHT
+        ? [
+            { x: sourcePort.x, y: sourcePort.y },
+            { x: targetPort.x, y: targetPort.y },
+          ]
         : routeOrthogonal({
             source: { rect: sourceNode.rect, point: { x: sourcePort.x, y: sourcePort.y }, side: sourcePort.side },
             target: { rect: targetNode.rect, point: { x: targetPort.x, y: targetPort.y }, side: targetPort.side },
@@ -385,6 +395,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       source: { nodeId: sourceNode.id, portId: sourcePort.id },
       target: { nodeId: targetNode.id, portId: targetPort.id },
       points,
+      shape,
       direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
       caption,
       label,

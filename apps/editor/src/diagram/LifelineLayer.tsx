@@ -4,9 +4,11 @@ import type { SceneFragment, SceneLifeline } from "@mapgrain/scene";
 interface LifelineLayerProps {
   lifelines: SceneLifeline[];
   fragments?: SceneFragment[];
+  /** The lifeline of the selected participant is highlighted, so a sequence reads as a whole. */
+  selectedId?: string | null;
 }
 
-export function LifelineLayer({ lifelines, fragments = [] }: LifelineLayerProps) {
+export function LifelineLayer({ lifelines, fragments = [], selectedId = null }: LifelineLayerProps) {
   const { x, y, zoom } = useViewport();
   if (lifelines.length === 0 && fragments.length === 0) return null;
   return (
@@ -45,6 +47,7 @@ export function LifelineLayer({ lifelines, fragments = [] }: LifelineLayerProps)
           key={line.nodeId}
           data-kind="lifeline"
           data-id={line.nodeId}
+          className={selectedId === line.nodeId ? "lifeline is-selected" : "lifeline"}
           x1={line.x}
           y1={line.y1}
           x2={line.x}

@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { SOURCE_CLI_VERSION } from "../src/constants/agents.ts";
 import { EXIT_CODE, MAX_INPUT_BYTES } from "../src/constants/cli.ts";
 import { runCli } from "../src/run.ts";
 import type { CliIo } from "../src/types/cli.ts";
@@ -510,7 +511,7 @@ test("version prints the package version", async () => {
   const io = memoryIo();
   const code = await runCli(["--version"], io);
   assert.equal(code, EXIT_CODE.OK);
-  assert.match(text(io.stdoutChunks), /^0\.2\.2\n$/);
+  assert.equal(text(io.stdoutChunks), `${SOURCE_CLI_VERSION}\n`);
 });
 
 test("validate reads stdin", async () => {

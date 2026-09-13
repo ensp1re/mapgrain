@@ -66,15 +66,15 @@ test("blank through export and reimport keeps ids on the production build", asyn
 
   await addKind(page, "service");
   await addKind(page, "datastore");
-  await page.locator(".outline-row:not(.is-group)").nth(1).waitFor();
+  await page.locator(".outline-row:not(.is-group):not(.is-connection)").nth(1).waitFor();
 
-  const rows = page.locator(".outline-row:not(.is-group)");
+  const rows = page.locator(".outline-row:not(.is-group):not(.is-connection)");
   await rows.nth(0).click();
   await rows.nth(1).click({ modifiers: ["Shift"] });
   await page.getByRole("button", { name: "Connect", exact: true }).click();
   await page.getByTestId("rf__edge-e1").waitFor({ state: "attached", timeout: 5_000 });
 
-  await page.locator(".outline-row:not(.is-group)").first().click();
+  await page.locator(".outline-row:not(.is-group):not(.is-connection)").first().click();
   const label = page.getByRole("textbox", { name: "Name", exact: true });
   await label.waitFor();
   await label.fill("API");
@@ -98,7 +98,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
 
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
-  await page.locator(".outline-row:not(.is-group)").filter({ hasText: "API" }).click();
+  await page.locator(".outline-row:not(.is-group):not(.is-connection)").filter({ hasText: "API" }).click();
   assert.equal(await page.getByRole("textbox", { name: "Name", exact: true }).inputValue(), "API");
 
   await openExport(page);
@@ -134,7 +134,7 @@ test("blank through export and reimport keeps ids on the production build", asyn
   await goNew(page);
   await page.locator('input[type="file"][aria-label="Open file"]').setInputFiles(saved.JSON);
   await page.getByRole("button", { name: "Arrange" }).waitFor({ timeout: 10_000 });
-  await page.locator(".outline-row:not(.is-group)").filter({ hasText: "API" }).first().waitFor();
-  const reimported = await page.locator(".outline-row:not(.is-group)").count();
+  await page.locator(".outline-row:not(.is-group):not(.is-connection)").filter({ hasText: "API" }).first().waitFor();
+  const reimported = await page.locator(".outline-row:not(.is-group):not(.is-connection)").count();
   assert.equal(reimported, json.nodes.length);
 });

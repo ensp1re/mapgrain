@@ -44,6 +44,13 @@ export const EDGE_TYPE = {
   OUTCOME: "outcome",
 } as const;
 
+/** How a connection is drawn. The router still picks the geometry; this picks the family. */
+export const EDGE_SHAPE = {
+  ELBOW: "elbow",
+  STRAIGHT: "straight",
+  CURVED: "curved",
+} as const;
+
 export const EDGE_DIRECTION = {
   FORWARD: "forward",
   BOTH: "both",

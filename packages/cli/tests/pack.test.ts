@@ -6,6 +6,7 @@ import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { EXIT_CODE } from "../src/constants/cli.ts";
+import { SOURCE_CLI_VERSION } from "../src/constants/agents.ts";
 
 const enabled = process.env.MAPGRAIN_PACK_TEST === "1";
 const cliRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -60,7 +61,7 @@ test(
       assert.equal(help.code, EXIT_CODE.OK);
       assert.match(help.stdout, /studio/);
       const version = await run(bin, ["--version"], installDir);
-      assert.match(version.stdout, /0\.2\.2/);
+      assert.equal(version.stdout.trim(), SOURCE_CLI_VERSION);
       const validate = await run(bin, ["validate", fixture], installDir);
       assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
       for (const name of modeFixtures) {

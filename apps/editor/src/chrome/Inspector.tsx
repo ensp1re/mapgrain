@@ -2,6 +2,7 @@ import {
   DOCUMENT_KIND,
   EDGES_FOR_KIND,
   EDGE_DIRECTION,
+  EDGE_SHAPE,
   NODE_MARKER,
   NODES_FOR_KIND,
   OPERATION_KIND,
@@ -69,9 +70,27 @@ export function Inspector({
       }
     >
         <dl>
-          <dt>Relation</dt>
+          <dt>From</dt>
           <dd>
-            {nodeLabel(document, edge.source.nodeId)} → {nodeLabel(document, edge.target.nodeId)}
+            <button
+              type="button"
+              className="text-btn ghost relation-end"
+              title="Select the component this starts from"
+              onClick={() => onFocusNode?.(edge.source.nodeId)}
+            >
+              {nodeLabel(document, edge.source.nodeId)}
+            </button>
+          </dd>
+          <dt>To</dt>
+          <dd>
+            <button
+              type="button"
+              className="text-btn ghost relation-end"
+              title="Select the component this leads to"
+              onClick={() => onFocusNode?.(edge.target.nodeId)}
+            >
+              {nodeLabel(document, edge.target.nodeId)}
+            </button>
           </dd>
           <dt>Meaning</dt>
           <dd>
@@ -106,6 +125,28 @@ export function Inspector({
               }
             />
           </dd>
+          {document.kind === DOCUMENT_KIND.SEQUENCE ? null : (
+          <>
+          <dt>Line</dt>
+          <dd>
+            <Select
+              label="Line shape"
+              value={edge.shape ?? EDGE_SHAPE.ELBOW}
+              options={Object.values(EDGE_SHAPE).map((value) => ({
+                value,
+                label: kindTitle(value),
+              }))}
+              onChange={(value) =>
+                onOperate({
+                  kind: OPERATION_KIND.SET_EDGE_SHAPE,
+                  edgeId: edge.id,
+                  shape: value as typeof EDGE_SHAPE[keyof typeof EDGE_SHAPE],
+                })
+              }
+            />
+          </dd>
+          </>
+          )}
           <dt>Label</dt>
           <dd>
             <input

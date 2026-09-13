@@ -94,6 +94,28 @@ These rules apply to the editor chrome. They are not product claims.
 - Handles appear on hover or selection. When a card's ports change, call `updateNodeInternals`
   or the connection into the new side is dropped.
 
+## Connections
+
+- React Flow is fully controlled here, so it needs `onEdgesChange`. Without it every edge
+  change it makes — a click's selection included — is silently discarded, and nothing in the
+  connection inspector is reachable.
+- A connection and a component are never selected at once: the inspector shows one thing, and
+  the outline highlights one thing.
+- React Flow's selection listener reports its own store, which lags a render. A node-only echo
+  never resurrects a card over a connection the reader just selected.
+- A connection says where it goes: its two end cards light up, and the inspector's From and To
+  are buttons that select them.
+- The caption is the connection's label. It takes pointer events, double-click opens it for
+  typing, and empty text removes it. It sits above lane frames, or a lane swallows the click.
+- The edge's own hit stroke is the hit area. React Flow's interaction path is turned off, or it
+  covers the caption and eats the double-click that opens it.
+- A reader drops a connection on a card, not on a 9px handle: loose connection mode with a
+  generous radius lets the nearest port take it. That is also what makes an endpoint draggable
+  onto another card.
+- A line shape is a document field, so the canvas and every export draw the same curve. One
+  function in `packages/scene` builds the path for all three shapes.
+- A sequence message runs between two lifelines, so it has no line shape to choose.
+
 ## Canvas state
 
 - React Flow's store and this app's state must agree on selection. Pass its node changes

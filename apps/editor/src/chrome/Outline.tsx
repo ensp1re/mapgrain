@@ -27,18 +27,31 @@ function EyeIcon({ off }: { off: boolean }) {
 
 interface OutlineProps {
   nodes: FlowNodeDraft[];
+  edges?: readonly OutlineConnection[];
   selectedId: string | null;
+  selectedEdgeId?: string | null;
   hiddenIds?: readonly string[];
   onSelect: (id: string, additive?: boolean) => void;
+  onSelectEdge?: (id: string) => void;
   onToggleHidden?: (id: string) => void;
   onClose?: () => void;
 }
 
+export interface OutlineConnection {
+  id: string;
+  source: string;
+  target: string;
+  label: string;
+}
+
 export function Outline({
   nodes,
+  edges = [],
   selectedId,
+  selectedEdgeId = null,
   hiddenIds = [],
   onSelect,
+  onSelectEdge,
   onToggleHidden,
   onClose,
 }: OutlineProps) {
@@ -56,6 +69,15 @@ export function Outline({
       return true;
     });
   }, [collapsed, nodes, query]);
+  const connections = useMemo(
+    () =>
+      edges.filter((edge) => {
+        if (!query.trim()) return true;
+        const needle = query.trim().toLowerCase();
+        return `${edge.source} ${edge.target} ${edge.label}`.toLowerCase().includes(needle);
+      }),
+    [edges, query],
+  );
 
   return (
     <Pane
@@ -138,6 +160,41 @@ export function Outline({
           ) : null}
         </div>
       ))}
+      {onSelectEdge && connections.length > 0 ? (
+        <>
+          <h3 className="outline-heading">Connections</h3>
+          {connections.map((edge) => (
+            <div key={edge.id} className="outline-item">
+              <span className="outline-chevron" />
+              <button
+                type="button"
+                className={`outline-row is-connection${selectedEdgeId === edge.id ? " is-selected" : ""}`}
+                title={`${edge.source} → ${edge.target}${edge.label ? ` · ${edge.label}` : ""}`}
+                onClick={() => onSelectEdge(edge.id)}
+              >
+                <span className="outline-pair">
+                  <span className="outline-label">
+                    {edge.source} <span aria-hidden="true">→</span> {edge.target}
+                  </span>
+                  {edge.label ? <small>{edge.label}</small> : null}
+                </span>
+              </button>
+              {onToggleHidden ? (
+                <button
+                  type="button"
+                  className={`outline-eye${hidden.has(edge.id) ? " is-hidden" : ""}`}
+                  aria-pressed={hidden.has(edge.id)}
+                  aria-label={`${hidden.has(edge.id) ? "Show" : "Hide"} ${edge.source} to ${edge.target}`}
+                  title={hidden.has(edge.id) ? "Show on the canvas" : "Hide from the canvas"}
+                  onClick={() => onToggleHidden(edge.id)}
+                >
+                  <EyeIcon off={hidden.has(edge.id)} />
+                </button>
+              ) : null}
+            </div>
+          ))}
+        </>
+      ) : null}
     </Pane>
   );
 }

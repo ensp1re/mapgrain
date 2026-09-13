@@ -1,6 +1,7 @@
 import type {
   DocumentKind,
   EdgeDirection,
+  EdgeShape,
   NodeKind,
   NodeMarker,
   PortSide,
@@ -74,6 +75,8 @@ export interface SceneEdge {
   source: { nodeId: string; portId: string };
   target: { nodeId: string; portId: string };
   points: Point[];
+  /** How the polyline is drawn. The points are the same geometry either way. */
+  shape: EdgeShape;
   direction: EdgeDirection;
   caption: string;
   label: MeasuredText;
