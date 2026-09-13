@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F077",
+    "behavior": "The README carries only the media it shows, the repository stops accumulating merged branches and describes itself in one line, and mapgrain 0.2.4 is published with the process-layout and export fixes.",
+    "acceptance": [
+      "The README no longer shows the 390px editor still, and nothing captured is left unshown.",
+      "Merged branches are deleted automatically, and the repository description is one plain sentence.",
+      "mapgrain 0.2.4 is published and resolves from the registry, and every current instruction names it.",
+      "The capture manifest records only the media the README shows, from this build."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789299456665-6ae05c",
+      "fingerprintBefore": "2f642d15b272eed2674aee07b0d4028af4fbf2a521510cd84ab69a01f4c80f8b",
+      "fingerprintAfter": "2f642d15b272eed2674aee07b0d4028af4fbf2a521510cd84ab69a01f4c80f8b",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-13T11:39:06.076Z"
+    },
+    "delivery": {
+      "implementationRevision": "362ae1589b381593a77aaeafaeb963cf44e7beda",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/117",
+      "checkRuns": [
+        {
+          "name": "CI",
+          "revision": "362ae1589b381593a77aaeafaeb963cf44e7beda",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34755160585"
+        }
+      ],
+      "observedAt": "2026-09-13T11:46:51.311011Z"
+    }
+  },
+  "archivedAt": "2026-09-13T11:46:51.311011Z"
+}
