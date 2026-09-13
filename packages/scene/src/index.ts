@@ -37,6 +37,7 @@ export { edgeCaption } from "./caption.ts";
 export {
   mapScenePolyline,
   placeEdgeLabel,
+  pointToPolyline,
   pointAlongPolyline,
   polylineLength,
   polylinePath,

@@ -1,5 +1,57 @@
 {
   "schemaVersion": 1,
-  "nextId": 78,
-  "tasks": []
+  "nextId": 79,
+  "tasks": [
+    {
+      "id": "F078",
+      "behavior": "The agent skill names every field the schema requires, and a caption stays nearest the connection it belongs to, so an agent following the skill writes a document that validates first time and reads correctly.",
+      "acceptance": [
+        "references/schema.md names every required field of evidence, groups, layout, views and stories.",
+        "A test fails when a required field of any documented object is missing from the reference.",
+        "No caption in any fixture sits closer to another connection than to its own.",
+        "The shipped examples still validate, lay out and export."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789301090142-f89d90",
+        "fingerprintBefore": "e890171f4a7e8866895d7857d89ae20dddb80cc097e12cfe630b92c5e56b8594",
+        "fingerprintAfter": "e890171f4a7e8866895d7857d89ae20dddb80cc097e12cfe630b92c5e56b8594",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-13T12:06:20.248Z"
+      }
+    }
+  ]
 }

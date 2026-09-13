@@ -12,9 +12,15 @@ Optional: `layout`, `preset`, `evidence[]`, `stories[]`, `fragments[]` (sequence
 
 - `id` and every node, edge and group id match `^[A-Za-z][A-Za-z0-9_-]*$`.
 - `revision` starts at `1` and goes up by one per successful edit.
-- `layoutHints` is `{ "direction": "right" | "down", "pinnedNodeIds": [] }`.
-- `views` needs at least one entry; `{ "id": "overview", "kind": "overview", "name": "All" }`
-  is the usual one.
+- `layoutHints` needs a `direction` (`right` or `down`) and a `pinnedNodeIds` array, which is
+  usually empty: `{ "direction": "right", "pinnedNodeIds": [] }`.
+- `views` needs at least one entry, and each needs `id`, `kind` and `name`;
+  `{ "id": "overview", "kind": "overview", "name": "All" }` is the usual one.
+- a view's `kind` is `overview` or `path`; a `path` view adds
+  a `path` object naming a `from` node id and a `to` node id, and may narrow itself with
+  `nodeIds` and `edgeIds`.
+- a group needs `id`, `label` and `parentId` — write `"parentId": null` for a top-level group
+  rather than leaving the field out.
 
 ## The five kinds
 
@@ -41,11 +47,15 @@ A worked example of each: [workflow.json](../examples/workflow.json),
 { "id": "ingest", "kind": "process", "label": "Ingest reading", "groupId": null, "ports": [] }
 ```
 
-- `label` is required and is what the card shows.
+Every node needs `id`, `kind`, `label`, `groupId` and `ports` — the last two are required even
+when empty, so write `"groupId": null` and `"ports": []`.
+
+- `label` is what the card shows.
 - `description` is optional, up to 4000 characters, and draws as a second line on the card.
 - `groupId` is a group id or `null`.
 - `ports` may be left empty. Give one only to pin which side a connection leaves from:
-  `{ "id": "out", "side": "east" }`, side being `north` | `south` | `east` | `west`. The scene
+  `{ "id": "out", "side": "east" }` — a port needs both an `id` and a `side`, the side being
+  `north` | `south` | `east` | `west`. The scene
   treats an authored port as a hint and uses the side that faces the other card when they
   disagree.
 - `marker` is `initial` or `final`, and only means anything on a `lifecycle` state.
@@ -57,6 +67,9 @@ A worked example of each: [workflow.json](../examples/workflow.json),
 { "id": "t1", "source": { "nodeId": "new" }, "target": { "nodeId": "triaged" },
   "type": "transition", "direction": "forward", "label": "assigned" }
 ```
+
+Every edge needs `id`, `source`, `target`, `type` and `direction`. `source` and `target` are
+objects, each needing a `nodeId` and optionally a `portId`.
 
 - `direction` is `forward`, `both`, or `none`, and decides the arrowheads.
 - `label` is optional; an edge without one draws no caption.
@@ -76,23 +89,32 @@ A worked example of each: [workflow.json](../examples/workflow.json),
   "operands": [{ "label": "account exists", "startOrder": 4, "endOrder": 5 }] }
 ```
 
-`opt` takes exactly one operand; `alt` takes two or more that do not overlap. Every
+A fragment needs `id`, `kind` and `operands`; every operand needs `label`, `startOrder` and
+`endOrder`. `opt` takes exactly one operand; `alt` takes two or more that do not overlap. Every
 `startOrder` and `endOrder` must exist on a message. Architecture documents reject `fragments`.
 
 ## Layout
 
-`layout.positions` is keyed by node id: `{ "ingest": { "x": 0, "y": 120 } }`. Omit it when
+`layout` needs `version`, `revision` and `positions`, and `mapgrain layout` writes all three.
+`positions` is keyed by node id: `{ "ingest": { "x": 0, "y": 120 } }`. Omit it when
 creating a document and let `mapgrain layout` write it. Keys that are not node ids are dropped.
 Nothing else belongs in `layout` — no viewport, no selection, no edge waypoints.
 
 ## Evidence
 
-`evidence[]` records where a claim came from. `targetKind` is `node` | `edge` | `group` and
+```json
+{ "id": "ev1", "targetKind": "node", "targetId": "ingest", "state": "observed",
+  "path": "modules/ingest/service.ts" }
+```
+
+`evidence[]` records where a claim came from. Each entry needs all four of `id`, `targetKind`,
+`targetId` and `state` — `id` is the entry's own id, separate from the `targetId` it points at,
+and leaving it out is the usual rejection here. `targetKind` is `node` | `edge` | `group` and
 `state` is `observed` (you read the file), `asserted` (a human said so), or `inferred` (you
-guessed). Optional `path`, `location`, and `snapshot` (a sha256 of the file bytes) pin a
-source; optional `revision` is a 40-character Git commit SHA. `diagnose` sets `verified` only
-when that commit's blob matches `snapshot` — a working-tree hash match is `snapshotMatches`,
-which is not the same claim. Never put a branch name in `revision`. Redact credentials.
+guessed). `note` is an optional free-text line. Optional `path`, `location`, and `snapshot`
+(a sha256 of the file bytes) pin a source; optional `revision` is a 40-character Git commit
+SHA. `diagnose` sets `verified` only when that commit's blob matches `snapshot` — a
+working-tree hash match is `snapshotMatches`, which is not the same claim. Never put a branch name in `revision`. Redact credentials.
 
 ## What gets rejected
 
@@ -105,3 +127,9 @@ which is not the same claim. Never put a branch name in `revision`. Redact crede
 
 A failed `validate` prints the code, the path, and the element id. Fix every diagnostic in one
 pass rather than one at a time.
+
+## Stories
+
+`stories[]` is optional and drives the viewer's walkthrough. A story needs `id`, `name` and
+`steps`; every step needs `id` and `name`, and may add a `description`, the `nodeId` it stops
+on, and a `viewId`.

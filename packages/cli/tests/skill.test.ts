@@ -154,3 +154,87 @@ test("the schema reference names every kind's vocabulary, and invents none", asy
     assert.match(text, new RegExp(name.replace(".", "\\.")), `schema.md links no ${name}`);
   }
 });
+
+/**
+ * Where each schema object is written up. An agent that follows the reference and never opens
+ * the JSON Schema has to be able to write a valid document, so every required field has to be
+ * named in the section that covers it.
+ */
+const DOCUMENTED_IN: Record<string, string> = {
+  "": "Every document",
+  nodes: "Node",
+  "nodes.ports": "Node",
+  edges: "Edge",
+  "edges.source": "Edge",
+  "edges.target": "Edge",
+  groups: "Every document",
+  views: "Every document",
+  layout: "Layout",
+  layoutHints: "Every document",
+  evidence: "Evidence",
+  stories: "Stories",
+  "stories.steps": "Stories",
+  fragments: "Sequence fragments",
+  "fragments.operands": "Sequence fragments",
+  "views.path": "Every document",
+};
+
+function sectionsOf(markdown: string): Map<string, string> {
+  const sections = new Map<string, string>();
+  let heading = "";
+  let body: string[] = [];
+  for (const line of markdown.split("\n")) {
+    const found = /^## (.+)$/.exec(line);
+    if (!found) {
+      body.push(line);
+      continue;
+    }
+    sections.set(heading, body.join("\n"));
+    heading = found[1] ?? "";
+    body = [];
+  }
+  sections.set(heading, body.join("\n"));
+  return sections;
+}
+
+/** Every object in the schema that requires anything, keyed by its dotted property path. */
+function requiredByPath(node: unknown, at = ""): Map<string, string[]> {
+  const found = new Map<string, string[]>();
+  if (typeof node !== "object" || node === null) return found;
+  const record = node as Record<string, unknown>;
+  const required = record["required"];
+  if (Array.isArray(required) && required.length > 0) found.set(at, required as string[]);
+  const properties = record["properties"];
+  if (typeof properties === "object" && properties !== null) {
+    for (const [name, child] of Object.entries(properties)) {
+      for (const [key, value] of requiredByPath(child, at === "" ? name : `${at}.${name}`)) {
+        found.set(key, value);
+      }
+    }
+  }
+  const items = record["items"];
+  if (items !== undefined) {
+    for (const [key, value] of requiredByPath(items, at)) found.set(key, value);
+  }
+  return found;
+}
+
+test("the schema reference names every field the schema requires", async () => {
+  const text = await readFile(path.join(skillDir, "references", "schema.md"), "utf8");
+  const sections = sectionsOf(text);
+  const parsed: unknown = JSON.parse(await readFile(schema, "utf8"));
+  const required = requiredByPath(parsed);
+  assert.ok(required.size > 0, "the schema requires nothing, which cannot be right");
+  for (const [at, fields] of required) {
+    const heading = DOCUMENTED_IN[at];
+    assert.ok(heading !== undefined, `schema.md has no section covering \`${at || "the document"}\``);
+    const body = sections.get(heading);
+    assert.ok(body !== undefined, `schema.md has no "## ${heading}" section`);
+    for (const field of fields) {
+      assert.ok(
+        body.includes(`\`${field}\``),
+        `"${heading}" never names \`${field}\`, required by ${at || "the document"}`,
+      );
+    }
+  }
+});
