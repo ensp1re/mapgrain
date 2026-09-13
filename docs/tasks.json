@@ -1,5 +1,46 @@
 {
   "schemaVersion": 1,
-  "nextId": 78,
-  "tasks": []
+  "nextId": 79,
+  "tasks": [
+    {
+      "id": "F078",
+      "behavior": "The agent skill names every field the schema requires, so an agent following it writes a document that validates on the first attempt.",
+      "acceptance": [
+        "references/schema.md names every required field of evidence, groups, layout, views and stories.",
+        "A test fails when a required field of any documented object is missing from the reference.",
+        "The shipped examples still validate, lay out and export."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789300715364-54d9c9",
+        "fingerprintBefore": "2ae483bc328047ee9557881581398d28ccae73797c25fd5991292a119c4d4cfa",
+        "fingerprintAfter": "2ae483bc328047ee9557881581398d28ccae73797c25fd5991292a119c4d4cfa",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-13T11:58:53.019Z"
+      }
+    }
+  ]
 }
