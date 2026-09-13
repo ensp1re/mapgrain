@@ -671,19 +671,9 @@ body {
   stroke-dasharray: 4 4;
 }
 
-/* A lifeline is a 1px dash; without a wider transparent twin it cannot be clicked. */
-.lifeline-hit {
-  stroke: transparent !important;
-  stroke-width: 14 !important;
-  stroke-dasharray: none !important;
-  pointer-events: stroke;
-  cursor: pointer;
-}
-
-.lifeline-layer g[data-kind="lifeline"] {
-  pointer-events: auto;
-}
-
+/* A lifeline paints below React Flow's pane, so it cannot be a click target without stealing
+   clicks from every message that crosses it. Selecting the participant card is the way in; the
+   lifeline follows that selection. */
 .lifeline.is-selected {
   stroke: var(--accent) !important;
   stroke-width: 1.5 !important;

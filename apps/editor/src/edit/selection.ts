@@ -17,11 +17,35 @@ export function retainSelection(current: EditorSelection, next: EditorSelection)
   return sameSelection(current, next) ? current : next;
 }
 
-export function retainFlowSelection(current: EditorSelection, next: EditorSelection): EditorSelection {
-  if (next.nodeIds.length === 0 && next.edgeIds.length === 0) return current;
-  // A connection is selected through onEdgesChange or the outline, neither of which React
-  // Flow's own selection listener sees until the next render. Its node-only echo must not
-  // resurrect the card that was selected before.
-  if (current.edgeIds.length > 0 && next.edgeIds.length === 0) return current;
-  return retainSelection(current, next);
+export interface SelectChange {
+  id: string;
+  selected: boolean;
+}
+
+/**
+ * React Flow reports selection as changes, one per item. Folding them into the editor's own
+ * selection keeps this component the single authority: its selection listener reports its own
+ * store, which lags a render, so letting that win meant a stale card or connection kept coming
+ * back over the one the reader had just picked.
+ *
+ * A component and a connection are never selected together, because the inspector shows one
+ * thing and the outline highlights one thing.
+ */
+export function applySelectChanges(
+  current: EditorSelection,
+  changes: readonly SelectChange[],
+  kind: "node" | "edge",
+): EditorSelection {
+  if (changes.length === 0) return current;
+  const mine = kind === "node" ? current.nodeIds : current.edgeIds;
+  const next = new Set(mine);
+  for (const change of changes) {
+    if (change.selected) next.add(change.id);
+    else next.delete(change.id);
+  }
+  const ids = [...next];
+  if (sameIdSet(ids, mine)) return current;
+  const other = kind === "node" ? current.edgeIds : current.nodeIds;
+  const kept = ids.length > 0 ? [] : other;
+  return kind === "node" ? { nodeIds: ids, edgeIds: kept } : { nodeIds: kept, edgeIds: ids };
 }

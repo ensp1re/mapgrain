@@ -16,7 +16,6 @@ import {
   type Node,
   type NodeChange,
   type ReactFlowInstance,
-  type OnSelectionChangeParams,
 } from "@xyflow/react";
 import {
   DOCUMENT_KIND,
@@ -102,9 +101,8 @@ import {
   commandAllowed,
   layoutToken,
   layoutTokenMatches,
-  selectionFromFlow,
 } from "./edit/safety.ts";
-import { retainFlowSelection, sameIdSet } from "./edit/selection.ts";
+import { applySelectChanges } from "./edit/selection.ts";
 import { EditorErrorBoundary } from "./chrome/ErrorBoundary.tsx";
 import {
   isDeleteEvent,
@@ -878,7 +876,14 @@ function Editor() {
 
   const onPaneClick = useCallback((event: ReactMouseEvent) => {
     const target = event.target;
-    if (target instanceof Element && target.closest(".node-card, .group-frame, .label-input")) return;
+    // A lifeline and a caption are parts of the diagram, not empty canvas: clicking one must
+    // not read as a click on the pane and wipe the selection it just made.
+    if (
+      target instanceof Element &&
+      target.closest(".node-card, .group-frame, .label-input, .lifeline-layer, .edge-caption")
+    ) {
+      return;
+    }
     if (!presenting) setSelection(emptySelection);
     setEditingId(null);
   }, [presenting]);
@@ -913,14 +918,6 @@ function Editor() {
       });
     });
   }, []);
-
-  const onSelectionChange = useCallback(({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
-    const next = selectionFromFlow(selectedNodes, selectedEdges);
-    setSelection((current) => retainFlowSelection(current, next));
-    if (shellLayout === SHELL_LAYOUT.OVERLAY && (next.nodeIds.length > 0 || next.edgeIds.length > 0)) {
-      setNarrowPanel("inspector");
-    }
-  }, [shellLayout]);
 
   commitEdgeRef.current = (id: string, label: string) => {
     setEditingId(null);
@@ -1343,7 +1340,13 @@ function Editor() {
   // other until React gave up with a maximum update depth error.
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes((current) => applyNodeChanges(changes, current));
-  }, []);
+    const picked = changes.filter((change) => change.type === "select");
+    if (picked.length === 0) return;
+    setSelection((current) => applySelectChanges(current, picked, "node"));
+    if (picked.some((change) => change.selected) && shellLayout === SHELL_LAYOUT.OVERLAY) {
+      setNarrowPanel("inspector");
+    }
+  }, [shellLayout]);
 
   /**
    * React Flow is fully controlled here, so without this handler it drops every edge change it
@@ -1353,17 +1356,7 @@ function Editor() {
   const onEdgesChange = useCallback((changes: EdgeChange[]) => {
     const picked = changes.filter((change) => change.type === "select");
     if (picked.length === 0) return;
-    setSelection((current) => {
-      const next = new Set(current.edgeIds);
-      for (const change of picked) {
-        if (change.selected) next.add(change.id);
-        else next.delete(change.id);
-      }
-      const edgeIds = [...next];
-      if (sameIdSet(edgeIds, current.edgeIds)) return current;
-      // A connection and a component are never selected together: the inspector shows one thing.
-      return { nodeIds: edgeIds.length > 0 ? [] : current.nodeIds, edgeIds };
-    });
+    setSelection((current) => applySelectChanges(current, picked, "edge"));
     if (picked.some((change) => change.selected)) {
       setEditingId(null);
       if (shellLayout === SHELL_LAYOUT.OVERLAY) setNarrowPanel("inspector");
@@ -1659,7 +1652,6 @@ function Editor() {
             nodesConnectable={arrange.status === "idle" && !presenting}
             onNodeDragStart={onNodeDragStart}
             onNodeDragStop={onNodeDragStop}
-            onSelectionChange={onSelectionChange}
             onPaneClick={onPaneClick}
             onNodeDoubleClick={onNodeDoubleClick}
             onEdgeDoubleClick={onEdgeDoubleClick}
@@ -1679,7 +1671,6 @@ function Editor() {
               lifelines={flow.lifelines}
               fragments={flow.fragments}
               selectedId={selection.nodeIds[0] ?? null}
-              onSelectNode={(id) => setSelection({ nodeIds: [id], edgeIds: [] })}
             />
             {presenting ? null : (
               <ViewportBar

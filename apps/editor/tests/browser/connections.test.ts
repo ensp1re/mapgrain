@@ -5,7 +5,7 @@ import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { chromium, type Page } from "playwright";
-import { useTemplate, waitConnections, waitStartOrEditor } from "./helpers.ts";
+import { selectOutlineRow, useTemplate, waitConnections, waitStartOrEditor } from "./helpers.ts";
 
 const dist = fileURLToPath(new URL("../../dist", import.meta.url));
 const MIME: Record<string, string> = {
@@ -69,13 +69,9 @@ test("a connection can be selected, and it says which components it joins", asyn
   // Select a component first: clicking a connection used to silently un-ring it and change
   // nothing. The outline is the reliable way in; the canvas depends on the fit.
   await waitConnections(page);
-  await page.locator(".outline-row:not(.is-group):not(.is-connection)").first().click();
-  await page.locator(".inspector .pane-label", { hasText: "Component" }).waitFor({ timeout: 10_000 });
+  await selectOutlineRow(page, ".outline-row:not(.is-group):not(.is-connection)", "Component");
+  await selectOutlineRow(page, ".outline-row.is-connection", "Connection");
 
-  await page.locator(".outline-row.is-connection").first().click();
-  await page.waitForTimeout(300);
-
-  await page.locator(".inspector .pane-label", { hasText: "Connection" }).waitFor({ timeout: 10_000 });
   const ends = page.locator(".relation-end");
   assert.equal(await ends.count(), 2, "the inspector must name both ends");
   const from = (await ends.first().innerText()).trim();
@@ -170,8 +166,7 @@ test("a connection's line shape is chosen, saved and redrawn", async (t) => {
   await waitConnections(page);
   const rows = page.locator(".outline-row.is-connection");
   assert.ok((await rows.count()) > 0, "the outline listed no connections");
-  await rows.first().click();
-  await page.locator(".inspector .pane-label", { hasText: "Connection" }).waitFor({ timeout: 10_000 });
+  await selectOutlineRow(page, ".outline-row.is-connection", "Connection");
   const line = page.getByRole("button", { name: /^Line shape/ });
 
   const pick = async (shape: string) => {
@@ -228,8 +223,7 @@ test("an endpoint is dragged onto another card, and the document follows", async
   await useTemplate(page, "Order state machine");
 
   await waitConnections(page);
-  await page.locator(".outline-row.is-connection").first().click();
-  await page.waitForTimeout(300);
+  await selectOutlineRow(page, ".outline-row.is-connection", "Connection");
   const target = (await page.locator(".relation-end").nth(1).innerText()).trim();
 
   const anchor = page.locator(".react-flow__edgeupdater").last();
@@ -261,7 +255,7 @@ test("an endpoint is dragged onto another card, and the document follows", async
   assert.notEqual(ends[1]?.trim(), target, `the endpoint did not move: ${ends.join(" → ")}`);
 });
 
-test("a sequence message is as editable as a card, and a lifeline selects its participant", async (t) => {
+test("a sequence message is as editable as a card, and its lifeline follows the selection", async (t) => {
   await stat(join(dist, "index.html"));
   const server = await listen();
   const browser = await chromium.launch({ headless: true });
@@ -275,9 +269,7 @@ test("a sequence message is as editable as a card, and a lifeline selects its pa
   await useTemplate(page, "OAuth sign-in");
 
   await waitConnections(page);
-  await page.locator(".outline-row.is-connection").first().click();
-  await page.waitForTimeout(300);
-  await page.locator(".inspector .pane-label", { hasText: "Connection" }).waitFor({ timeout: 5_000 });
+  await selectOutlineRow(page, ".outline-row.is-connection", "Connection");
   await page.getByRole("spinbutton", { name: "Message order" }).waitFor({ timeout: 5_000 });
 
   const caption = page.locator(".edge-caption").first();
@@ -291,8 +283,7 @@ test("a sequence message is as editable as a card, and a lifeline selects its pa
     (await page.locator(".edge-caption").allInnerTexts()).some((text) => text.includes("start checkout")),
   );
 
-  const lifeline = page.locator(".lifeline-hit").first();
-  await lifeline.click({ force: true });
-  await page.waitForTimeout(300);
-  await page.locator(".inspector .pane-label", { hasText: "Component" }).waitFor({ timeout: 5_000 });
+  // Selecting the participant highlights its lifeline, so a sequence reads as a whole.
+  await selectOutlineRow(page, ".outline-row:not(.is-group):not(.is-connection)", "Component");
+  assert.equal(await page.locator(".lifeline.is-selected").count(), 1);
 });

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { retainFlowSelection, retainSelection, sameIdSet, sameSelection } from "../src/edit/selection.ts";
+import { applySelectChanges, retainSelection, sameIdSet, sameSelection } from "../src/edit/selection.ts";
 
 test("id sets compare membership, not JSON or order", () => {
   assert.equal(sameIdSet(["a", "b"], ["b", "a"]), true);
@@ -20,15 +20,6 @@ test("retainSelection returns the previous object when ids are unchanged", () =>
   assert.deepEqual(changed.nodeIds, ["n2"]);
 });
 
-test("retainFlowSelection ignores empty React Flow echoes", () => {
-  const current = { nodeIds: ["n1"], edgeIds: [] };
-  assert.equal(retainFlowSelection(current, { nodeIds: [], edgeIds: [] }), current);
-  const selected = retainFlowSelection(current, { nodeIds: ["n2"], edgeIds: [] });
-  assert.deepEqual(selected, { nodeIds: ["n2"], edgeIds: [] });
-  const withEdge = retainFlowSelection(current, { nodeIds: [], edgeIds: ["e1"] });
-  assert.deepEqual(withEdge, { nodeIds: [], edgeIds: ["e1"] });
-});
-
 test("sameSelection treats empty and group selections as first-class", () => {
   assert.equal(sameSelection({ nodeIds: [], edgeIds: [] }, { nodeIds: [], edgeIds: [] }), true);
   assert.equal(
@@ -41,19 +32,34 @@ test("sameSelection treats empty and group selections as first-class", () => {
   );
 });
 
-test("React Flow's late node echo does not resurrect a card over a selected connection", () => {
-  const withEdge = { nodeIds: [], edgeIds: ["e1"] };
-  // The outline or a canvas click selected the connection; React Flow still reports the card
-  // it had selected a render ago, with no edges of its own.
-  assert.equal(retainFlowSelection(withEdge, { nodeIds: ["n1"], edgeIds: [] }), withEdge);
-  // Once the connection is genuinely deselected, a card click lands normally.
-  assert.deepEqual(retainFlowSelection({ nodeIds: [], edgeIds: [] }, { nodeIds: ["n1"], edgeIds: [] }), {
+test("a select change folds into the editor's selection, one kind at a time", () => {
+  const empty = { nodeIds: [], edgeIds: [] };
+  assert.deepEqual(applySelectChanges(empty, [{ id: "n1", selected: true }], "node"), {
     nodeIds: ["n1"],
     edgeIds: [],
   });
-  // And React Flow may still move the selection to another connection.
-  assert.deepEqual(retainFlowSelection(withEdge, { nodeIds: [], edgeIds: ["e2"] }), {
+  // Picking a connection drops the card, and picking a card drops the connection: the
+  // inspector shows one thing.
+  const card = { nodeIds: ["n1"], edgeIds: [] };
+  assert.deepEqual(applySelectChanges(card, [{ id: "e1", selected: true }], "edge"), {
     nodeIds: [],
-    edgeIds: ["e2"],
+    edgeIds: ["e1"],
   });
+  const link = { nodeIds: [], edgeIds: ["e1"] };
+  assert.deepEqual(applySelectChanges(link, [{ id: "n2", selected: true }], "node"), {
+    nodeIds: ["n2"],
+    edgeIds: [],
+  });
+  // Deselecting the last of one kind leaves the other kind alone, so a stale echo cannot
+  // wipe a selection this component just made.
+  const both = { nodeIds: [], edgeIds: ["e1"] };
+  assert.deepEqual(applySelectChanges(both, [{ id: "n9", selected: false }], "node"), both);
+  // Several nodes select together, as a box selection does.
+  assert.deepEqual(
+    applySelectChanges(empty, [{ id: "a", selected: true }, { id: "b", selected: true }], "node"),
+    { nodeIds: ["a", "b"], edgeIds: [] },
+  );
+  // No change is no new object.
+  assert.equal(applySelectChanges(card, [{ id: "n1", selected: true }], "node"), card);
+  assert.equal(applySelectChanges(card, [], "node"), card);
 });

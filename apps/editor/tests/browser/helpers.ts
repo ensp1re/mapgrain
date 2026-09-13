@@ -48,3 +48,25 @@ export async function useTemplate(page: Page, name: string): Promise<void> {
 export async function waitConnections(page: Page): Promise<void> {
   await page.locator(".outline-row.is-connection").first().waitFor({ timeout: 15_000 });
 }
+
+/**
+ * The outline re-renders as the canvas settles, so a click can land on a row that is being
+ * replaced and quietly do nothing. Retry until the inspector shows what was asked for.
+ */
+export async function selectOutlineRow(
+  page: Page,
+  selector: string,
+  expect: "Component" | "Connection",
+  index = 0,
+): Promise<void> {
+  const pane = page.locator(".inspector .pane-label", { hasText: expect });
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    await page.locator(selector).nth(index).click();
+    const shown = await pane
+      .waitFor({ timeout: 2_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (shown) return;
+  }
+  throw new Error(`the outline never opened the ${expect} inspector for ${selector}`);
+}
