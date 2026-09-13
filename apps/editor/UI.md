@@ -137,12 +137,24 @@ These rules apply to the editor chrome. They are not product claims.
 
 - React Flow's store and this app's state must agree on selection. Pass its node changes
   straight through; withholding them leaves the two stores rewriting each other.
-- Every prop handed to React Flow keeps a stable identity across renders.
+- Every prop handed to React Flow keeps a stable identity across renders. Everything the canvas
+  draws from is compared before an object is reused — a connection's routed points and caption
+  anchor included, or Arrange moves the cards and leaves the captions behind.
 - A new node lands in view, joins the selection's group, is selected and opens for renaming.
 - An empty canvas names the gestures that are not visible: rename, connect, arrange, commands.
 - One place shows a rejected edit, it says what to do about it, and it can be dismissed.
 
 ## Panels and canvas
+
+- A pane scrolls down, never sideways. Rows truncate instead. A resizer hanging over the pane's
+  edge makes the pane wider than itself, which buys a horizontal scrollbar on any list long
+  enough to scroll.
+- A long list folds into sections with counts, and a section head stays put while its rows
+  scroll under it. A hundred components must not bury the connections below them.
+- Indentation stops after a couple of levels: a nested row still needs room for its name.
+- A connection row truncates whichever end is longer, never always the target — the target is
+  the half that says where it goes.
+- Nothing shares the canvas's bottom-right corner with the pane controls.
 
 - Outline rows: chevron, icon, label. Truncate labels; full text stays on focus and in the inspector.
 - Inspector uses one inset, a single keep-position checkbox, and short connection lines (`From X · calls`).

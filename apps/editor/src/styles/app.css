@@ -459,7 +459,11 @@ body {
   position: relative;
   min-height: 0;
   min-width: 0;
-  overflow: auto;
+  /* A pane scrolls down, never sideways. Rows truncate; four pixels of overflow used to buy a
+     full horizontal scrollbar under a hundred components. */
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--bg-raised);
 }
 
@@ -480,8 +484,10 @@ body {
   touch-action: none;
 }
 
-.pane-resizer.is-right { right: -4px; }
-.pane-resizer.is-left { left: -4px; }
+/* The handle sits inside the pane. Hanging it over the edge made the pane four pixels wider
+   than itself, which bought a horizontal scrollbar on any list long enough to scroll. */
+.pane-resizer.is-right { right: 0; }
+.pane-resizer.is-left { left: 0; }
 
 .pane-resizer::after {
   content: "";
@@ -555,16 +561,6 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.outline-heading {
-  margin: var(--space-3) 0 var(--space-1);
-  padding: 0 var(--space-3);
-  color: var(--muted);
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
 .outline-row.is-connection {
   align-items: flex-start;
   color: var(--muted);
@@ -575,6 +571,23 @@ body {
   flex-direction: column;
   min-width: 0;
   gap: 1px;
+}
+
+/* Either end can truncate, so a narrow pane never hides the half that says where it goes. The
+   ends shrink in proportion, which leaves a short name whole. */
+.outline-ends {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.outline-end {
+  flex: 0 1 auto;
+  min-width: 2.5ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .outline-row.is-connection small {
@@ -701,9 +714,19 @@ body {
   position: absolute;
   bottom: 16px;
   right: 16px;
+  max-width: calc(100% - 32px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--muted);
   font-size: 12px;
   pointer-events: none;
+}
+
+/* Below the split layout the pane controls take that corner, so the readout moves above them
+   instead of running underneath. */
+.app:has(.pane-controls) .selection-bar {
+  bottom: calc(16px + var(--control-h) + var(--space-2));
 }
 
 .pane-controls {
@@ -1604,7 +1627,58 @@ body {
   display: flex;
   align-items: center;
   min-width: 0;
+  max-width: 100%;
   padding-right: 8px;
+}
+
+/* A section head stays put while its rows scroll under it, so a long list still says where
+   you are. */
+.outline-section {
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+
+.outline-section:first-of-type {
+  border-top: 0;
+}
+
+.outline-section:hover {
+  color: var(--text);
+}
+
+.outline-section .outline-chevron {
+  flex: 0 0 12px;
+  width: 12px;
+  height: auto;
+}
+
+.outline-count {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+.outline-empty {
+  padding: var(--space-2) var(--space-3);
+  color: var(--muted);
+  font-size: var(--fs-sm);
 }
 
 .recent-rows {

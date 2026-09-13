@@ -18,6 +18,7 @@ import { makeNode } from "../src/create/nodes.ts";
 import { importDocumentText } from "../src/create/importDocument.ts";
 import { runCreateJob } from "../src/create/job.ts";
 import { isProviderConfigured } from "../src/create/provider.ts";
+import { PUBLISHED_CLI } from "../../../packages/cli/src/constants/agents.ts";
 
 const fixture = fileURLToPath(
   new URL("../../../tests/fixtures/documents/nested-groups.json", import.meta.url),
@@ -84,7 +85,7 @@ test("start surface offers templates, blank modes, file, and agent path", async 
   assert.match(source, /Recent diagrams/);
   assert.match(source, /skillInstallCommand/);
   assert.match(source, /AGENT_CHOICES/);
-  assert.match(source, /npx mapgrain@0\.2\.2 validate/);
+  assert.match(source, new RegExp(`npx ${PUBLISHED_CLI} validate`));
   assert.doesNotMatch(source, /pnpm mapgrain validate/);
   assert.doesNotMatch(source, /Describe a diagram/);
 });

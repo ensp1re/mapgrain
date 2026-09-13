@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "nextId": 74,
+  "nextId": 75,
   "tasks": [
     {
-      "id": "F073",
-      "behavior": "The agent skill teaches every diagram kind it claims to support, with a worked example of each that validates, lays out and exports; and the repository reads like an open-source project, with a README that says what Mapgrain is and how to start, a contributing guide, a code of conduct, a real security policy, and issue and pull request templates.",
+      "id": "F074",
+      "behavior": "Arrange redraws the connections it moves, the outline holds a hundred components without scrolling sideways, and the repository ships mapgrain 0.2.3 with a README whose images come from that build.",
       "acceptance": [
-        "The skill ships a worked example of every diagram kind, and every example validates, builds a scene and exports HTML.",
-        "The schema reference names every node kind and edge type each diagram kind accepts, and a test fails if the two ever drift.",
-        "The skill names the failure modes an agent actually hits, including the decision-outcome rule and the id pattern.",
-        "The README states what Mapgrain is, how to start in a minute, the five kinds, the CLI, the agent skill, and where the feature status lives, keeping every media link.",
-        "CONTRIBUTING.md, CODE_OF_CONDUCT.md and a root SECURITY.md disclosure policy exist, and issue and pull request templates are in place.",
-        "The feature and capability tables name what the last two slices shipped.",
-        "The README media is recaptured from the current build."
+        "After Arrange every caption sits on the connection it belongs to, not where the previous layout left it.",
+        "The outline never scrolls sideways, at any pane width, with a hundred components loaded.",
+        "Components and connections are separate folding sections, so either is reachable without scrolling past the other.",
+        "A connection row truncates whichever end is longer rather than always hiding the target.",
+        "The canvas selection readout does not sit under the pane controls at narrow widths.",
+        "mapgrain 0.2.3 is published, and every current instruction in the README, the skill and the docs names it.",
+        "The README media is captured from this build."
       ],
       "dependsOn": [],
       "state": "verified",
@@ -28,9 +28,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789260221882-c01316",
-        "fingerprintBefore": "6a83e1495e7e58f03e4a5c75aded6a1550342ace9d5f0b47d959d46b4adf6703",
-        "fingerprintAfter": "6a83e1495e7e58f03e4a5c75aded6a1550342ace9d5f0b47d959d46b4adf6703",
+        "attemptId": "run-1789261656295-79e99f",
+        "fingerprintBefore": "58c7b1b0ef7163c8264cb6a7a911f1b3f0e47ad6f2fbc47d08606812209463ed",
+        "fingerprintAfter": "58c7b1b0ef7163c8264cb6a7a911f1b3f0e47ad6f2fbc47d08606812209463ed",
         "checks": [
           {
             "id": "unit",
@@ -53,7 +53,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-13T00:44:57.588Z"
+        "verifiedAt": "2026-09-13T01:08:57.303Z"
       },
       "delivery": null
     }

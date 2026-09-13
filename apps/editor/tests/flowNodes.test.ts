@@ -99,3 +99,26 @@ test("hiding an item is a change, so the canvas stops drawing it", () => {
   assert.equal(sameEdgeContent(edge, { ...edge, hidden: true }), false);
   assert.equal(reuseUnchangedEdges([edge], [{ ...edge, hidden: true }])[0]?.hidden, true);
 });
+
+test("a connection whose route or caption anchor moved is not reused", () => {
+  const at = (points: Array<{ x: number; y: number }>, anchor: { x: number; y: number }): Edge => ({
+    id: "e1",
+    source: "a",
+    target: "b",
+    data: { label: "calls", type: "calls", direction: "forward", caption: "calls", points, labelAnchor: anchor },
+  });
+  const first = at([{ x: 0, y: 0 }, { x: 40, y: 0 }], { x: 20, y: -10 });
+
+  // Arrange moves the cards. The ends, the label and the handles are all unchanged, so every
+  // other field matches and only the geometry says the edge has to be redrawn.
+  const moved = at([{ x: 0, y: 90 }, { x: 40, y: 90 }], { x: 20, y: 80 });
+  assert.equal(sameEdgeContent(first, moved), false);
+  assert.equal(reuseUnchangedEdges([first], [moved])[0], moved);
+
+  // The caption alone can move when a neighbour's caption is placed first.
+  const nudged = at([{ x: 0, y: 0 }, { x: 40, y: 0 }], { x: 20, y: 14 });
+  assert.equal(sameEdgeContent(first, nudged), false);
+
+  // Identical geometry is still reused, so a redraw is not forced every render.
+  assert.equal(sameEdgeContent(first, at([{ x: 0, y: 0 }, { x: 40, y: 0 }], { x: 20, y: -10 })), true);
+});

@@ -18,9 +18,9 @@ No account. No server. The editor, the CLI and the exports all run on your machi
 ## 60 seconds
 
 ```sh
-npx mapgrain@0.2.2 validate diagram.json    # is it a real document?
-npx mapgrain@0.2.2 layout diagram.json      # ELK writes the coordinates
-npx mapgrain@0.2.2 view diagram.json -o diagram.html
+npx mapgrain@0.2.3 validate diagram.json    # is it a real document?
+npx mapgrain@0.2.3 layout diagram.json      # ELK writes the coordinates
+npx mapgrain@0.2.3 view diagram.json -o diagram.html
 ```
 
 `diagram.html` opens with no server and no network: search, pan, zoom, follow a path, switch
@@ -74,7 +74,7 @@ At 390px the canvas is still the main surface:
 ## The CLI
 
 ```sh
-npx mapgrain@0.2.2 <command> diagram.json
+npx mapgrain@0.2.3 <command> diagram.json
 ```
 
 | Command | Does |

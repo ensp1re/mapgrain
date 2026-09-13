@@ -45,6 +45,20 @@ export function sameNodeContent(left: Node, right: Node): boolean {
   );
 }
 
+/**
+ * Where a connection is drawn and where its caption sits. Arrange moves cards without changing
+ * an edge's ends, its label or its handles, so without this the reused edge kept the geometry
+ * of the previous layout and the caption stayed behind where the card used to be.
+ */
+export function geometrySignature(data: unknown): string {
+  const points = dataField(data, "points");
+  const anchor = dataField(data, "labelAnchor") as { x?: number; y?: number } | undefined;
+  const path = Array.isArray(points)
+    ? points.map((point) => `${(point as { x: number }).x},${(point as { y: number }).y}`).join(" ")
+    : "";
+  return `${path}|${anchor?.x ?? ""},${anchor?.y ?? ""}`;
+}
+
 export function sameEdgeContent(left: Edge, right: Edge): boolean {
   return (
     left.id === right.id &&
@@ -60,7 +74,8 @@ export function sameEdgeContent(left: Edge, right: Edge): boolean {
     dataField(left.data, "direction") === dataField(right.data, "direction") &&
     dataField(left.data, "shape") === dataField(right.data, "shape") &&
     dataField(left.data, "editing") === dataField(right.data, "editing") &&
-    dataField(left.data, "caption") === dataField(right.data, "caption")
+    dataField(left.data, "caption") === dataField(right.data, "caption") &&
+    geometrySignature(left.data) === geometrySignature(right.data)
   );
 }
 

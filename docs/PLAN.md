@@ -1,6 +1,6 @@
 # Delivery plan
 
-Mapgrain is a local editor, CLI (`npx mapgrain@0.2.2`), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
+Mapgrain is a local editor, CLI (`npx mapgrain@0.2.3`), and agent skill. Users make a diagram by hand or through an agent, save JSON, and export SVG/PNG/HTML. No account.
 
 **Status:** shipped through F068. Live slice: `F069` (editor chrome rebuild). Next task id: `F070`. Closed slices: [docs/archive/](archive/). Product facts: [PROJECT.md](PROJECT.md), [FEATURES.md](FEATURES.md), [CAPABILITY.md](CAPABILITY.md).
 

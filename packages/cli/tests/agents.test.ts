@@ -53,7 +53,7 @@ test("priority installer ids and paths match skills 1.5.25 and the matrix", asyn
   const skill = await readFile(path.join(skillDir, "SKILL.md"), "utf8");
   const matrix = await readFile(agentsDoc, "utf8");
   assert.equal(SKILLS_CLI_VERSION, "1.5.25");
-  assert.equal(PUBLISHED_CLI, "mapgrain@0.2.2");
+  assert.equal(PUBLISHED_CLI, `mapgrain@${SOURCE_CLI_VERSION}`);
   assert.equal(HISTORICAL_CLI, "mapgrain@0.1.0");
   assert.equal(SOURCE_CLI_VERSION, "0.2.3");
   assert.equal(SHARED_PROJECT_SKILL_PATH, ".agents/skills/mapgrain");
@@ -171,14 +171,14 @@ test("npx mapgrain@0.2.1 still validates sequence in an empty directory", { time
   assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
 });
 
-test("npx mapgrain@0.2.2 validates sequence in an empty directory", { timeout: 90_000 }, async () => {
+test("the published CLI validates sequence in an empty directory", { timeout: 90_000 }, async () => {
   const dest = await mkdtemp(path.join(tmpdir(), "mapgrain-npx-seq-"));
   const sequence = path.join(root, "tests", "fixtures", "documents", "sequence-checkout.json");
   const input = path.join(dest, "sequence.json");
   await cp(sequence, input);
   const version = await run("npx", ["--yes", PUBLISHED_CLI, "--version"], dest);
   assert.equal(version.code, EXIT_CODE.OK, version.stderr);
-  assert.match(version.stdout, /0\.2\.2/);
+  assert.match(version.stdout, new RegExp(SOURCE_CLI_VERSION.replaceAll(".", "\\.")));
   const validate = await run("npx", ["--yes", PUBLISHED_CLI, "validate", input], dest);
   assert.equal(validate.code, EXIT_CODE.OK, validate.stderr);
   const html = path.join(dest, "sequence.html");
