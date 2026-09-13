@@ -6,6 +6,7 @@ import {
   NODE_KIND,
   validateDocument,
   type DiagramDocument,
+  type EdgeShape,
   type PortSide,
 } from "@mapgrain/document";
 import { DESCRIPTION_GAP, ICON_GAP } from "./constants/metrics.ts";
@@ -403,24 +404,26 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   const labelObstacles: Rect[] = nodes.map((node) => node.rect);
   // Each route avoids running along the ones already placed, the way captions already do.
   const routed: Point[][] = [];
-  const edges: SceneEdge[] = document.edges.map((edge, edgeIndex) => {
+
+  /**
+   * Routing comes first for every connection, so a caption is placed against the whole picture
+   * rather than only the lines that happen to be drawn before it. Placing as we routed let a
+   * caption settle beside a line that had not been drawn yet, and read as that line's label.
+   */
+  interface RoutedEdge {
+    edge: (typeof document.edges)[number];
+    sourceNode: SceneNode;
+    targetNode: SceneNode;
+    sourcePort: { id: string; x: number; y: number; side: PortSide };
+    targetPort: { id: string; x: number; y: number; side: PortSide };
+    points: Point[];
+    shape: EdgeShape;
+  }
+
+  const routes: (RoutedEdge | null)[] = document.edges.map((edge, edgeIndex) => {
     const sourceNode = nodeById.get(edge.source.nodeId);
     const targetNode = nodeById.get(edge.target.nodeId);
-    if (!sourceNode || !targetNode) {
-      const empty = { lines: [], width: 0, height: 0 };
-      return {
-        id: edge.id,
-        source: { nodeId: edge.source.nodeId, portId: edge.source.portId ?? "" },
-        target: { nodeId: edge.target.nodeId, portId: edge.target.portId ?? "" },
-        points: [],
-        shape: edge.shape ?? EDGE_SHAPE.ELBOW,
-        direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
-        caption: "",
-        label: empty,
-        labelAnchor: { x: 0, y: 0 },
-        labelBox: { x: 0, y: 0, width: 0, height: 0 },
-      };
-    }
+    if (!sourceNode || !targetNode) return null;
     // A decision's outgoing branches leave by different vertices, the way a gateway's do.
     const branching = sourceNode.kind === NODE_KIND.DECISION;
     const sourcePort = resolvePort(sourceNode, edge.source.portId, targetNode.rect, branching);
@@ -456,19 +459,48 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
             count,
           });
     if (points.length > 1) routed.push(points);
+    return { edge, sourceNode, targetNode, sourcePort, targetPort, points, shape };
+  });
+
+  const edges: SceneEdge[] = routes.map((route, edgeIndex) => {
+    const edge = document.edges[edgeIndex];
+    if (!route) {
+      return {
+        id: edge?.id ?? "",
+        source: { nodeId: edge?.source.nodeId ?? "", portId: edge?.source.portId ?? "" },
+        target: { nodeId: edge?.target.nodeId ?? "", portId: edge?.target.portId ?? "" },
+        points: [],
+        shape: edge?.shape ?? EDGE_SHAPE.ELBOW,
+        direction: edge?.direction ?? EDGE_DIRECTION.FORWARD,
+        caption: "",
+        label: { lines: [], width: 0, height: 0 },
+        labelAnchor: { x: 0, y: 0 },
+        labelBox: { x: 0, y: 0, width: 0, height: 0 },
+      };
+    }
     const caption = captions[edgeIndex]?.text ?? "";
     const label =
       captions[edgeIndex]?.measured ??
       measureText(caption || " ", options.font, options.maxLabelWidth, options.measurer);
-    const placed = placeEdgeLabel(points, caption ? label : { width: 0, height: 0 }, labelObstacles);
+    // Every other connection in the diagram is something this caption could be mistaken for.
+    const others = routes
+      .filter((other): other is RoutedEdge => other !== null && other !== route)
+      .map((other) => other.points)
+      .filter((points) => points.length > 1);
+    const placed = placeEdgeLabel(
+      route.points,
+      caption ? label : { width: 0, height: 0 },
+      labelObstacles,
+      others,
+    );
     if (caption) labelObstacles.push(placed.box);
     return {
-      id: edge.id,
-      source: { nodeId: sourceNode.id, portId: sourcePort.id },
-      target: { nodeId: targetNode.id, portId: targetPort.id },
-      points,
-      shape,
-      direction: edge.direction ?? EDGE_DIRECTION.FORWARD,
+      id: route.edge.id,
+      source: { nodeId: route.sourceNode.id, portId: route.sourcePort.id },
+      target: { nodeId: route.targetNode.id, portId: route.targetPort.id },
+      points: route.points,
+      shape: route.shape,
+      direction: route.edge.direction ?? EDGE_DIRECTION.FORWARD,
       caption,
       label,
       labelAnchor: placed.anchor,

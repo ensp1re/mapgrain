@@ -92,6 +92,31 @@ function labelBoxAt(
   return { anchor: { x: box.x + box.width / 2, y: box.y + box.height / 2 }, box };
 }
 
+function pointToSegment(point: Point, a: Point, b: Point): number {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const square = dx * dx + dy * dy;
+  const t = square === 0 ? 0 : Math.max(0, Math.min(1, ((point.x - a.x) * dx + (point.y - a.y) * dy) / square));
+  return Math.hypot(point.x - (a.x + t * dx), point.y - (a.y + t * dy));
+}
+
+export function pointToPolyline(point: Point, points: readonly Point[]): number {
+  let best = Infinity;
+  for (let i = 1; i < points.length; i += 1) {
+    const a = points[i - 1];
+    const b = points[i];
+    if (!a || !b) continue;
+    best = Math.min(best, pointToSegment(point, a, b));
+  }
+  return points.length < 2 ? Infinity : best;
+}
+
+/** A caption reads as belonging to whichever line it sits closest to. */
+function claimedByAnother(anchor: Point, own: readonly Point[], others: readonly Point[][]): boolean {
+  const mine = pointToPolyline(anchor, own);
+  return others.some((other) => pointToPolyline(anchor, other) < mine);
+}
+
 function overlapArea(box: Rect, obstacles: readonly Rect[]): number {
   let area = 0;
   for (const obstacle of obstacles) {
@@ -102,24 +127,37 @@ function overlapArea(box: Rect, obstacles: readonly Rect[]): number {
   return area;
 }
 
+/**
+ * A caption has to clear the cards and the captions already placed, and it has to stay nearer
+ * its own connection than any other — a label that drifts closer to a neighbouring line reads
+ * as that line's label. Clear boxes that would be misread are kept as a fallback, so a crowded
+ * diagram still gets a caption rather than none.
+ */
 export function placeEdgeLabel(
   points: Point[],
   size: { width: number; height: number },
   obstacles: readonly Rect[] = [],
+  others: readonly Point[][] = [],
 ): { anchor: Point; box: Rect } {
   const total = polylineLength(points);
   const inset = Math.min(16, total / 4);
   const clamp = (value: number) => Math.min(Math.max(inset, value), Math.max(0, total - inset));
-  if (size.width <= 0 || size.height <= 0 || obstacles.length === 0) {
+  if (size.width <= 0 || size.height <= 0 || (obstacles.length === 0 && others.length === 0)) {
     return labelBoxAt(points, size, clamp(total * 0.5), "above");
   }
+  let misread: { anchor: Point; box: Rect } | null = null;
   let best: { anchor: Point; box: Rect } | null = null;
   let bestOverlap = Infinity;
   for (const fraction of LABEL_FRACTIONS) {
     const distance = clamp(total * fraction);
-    for (const side of ["above", "over", "below", "under"] as const) {
+    for (const side of ["above", "below", "over", "under"] as const) {
       const placed = labelBoxAt(points, size, distance, side);
-      if (!obstacles.some((obstacle) => rectsOverlap(placed.box, obstacle))) return placed;
+      const clear = !obstacles.some((obstacle) => rectsOverlap(placed.box, obstacle));
+      if (clear && !claimedByAnother(placed.anchor, points, others)) return placed;
+      if (clear) {
+        misread ??= placed;
+        continue;
+      }
       const overlap = overlapArea(placed.box, obstacles);
       if (overlap < bestOverlap) {
         best = placed;
@@ -127,7 +165,7 @@ export function placeEdgeLabel(
       }
     }
   }
-  return best ?? labelBoxAt(points, size, clamp(total * 0.5), "above");
+  return misread ?? best ?? labelBoxAt(points, size, clamp(total * 0.5), "above");
 }
 
 /**

@@ -4,7 +4,7 @@ import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { DOCUMENT_KIND, validateDocument, type DiagramDocument } from "@mapgrain/document";
-import { buildScene, overlappingPairs, type Boxed } from "../src/index.ts";
+import { buildScene, overlappingPairs, pointToPolyline, type Boxed } from "../src/index.ts";
 import { backwardDecisionBranches } from "./helpers/flow.ts";
 
 const fixtures = fileURLToPath(new URL("../../../tests/fixtures/documents", import.meta.url));
@@ -32,6 +32,27 @@ function boxes(scene: ReturnType<typeof buildScene>): { captions: Boxed[]; frame
     frames: scene.scene.fragments.map((fragment) => ({ id: `frame:${fragment.id}`, rect: fragment.rect })),
   };
 }
+
+test("a caption stays nearest the connection it belongs to", async () => {
+  for (const { name, document } of await documents()) {
+    const scene = buildScene(document, { positions: document.layout?.positions ?? {} });
+    assert.equal(scene.ok, true, name);
+    if (!scene.ok) continue;
+    const drawn = scene.scene.edges.filter((edge) => edge.points.length > 1);
+    for (const edge of drawn) {
+      if (!edge.caption) continue;
+      const own = pointToPolyline(edge.labelAnchor, edge.points);
+      for (const other of drawn) {
+        if (other.id === edge.id) continue;
+        const away = pointToPolyline(edge.labelAnchor, other.points);
+        assert.ok(
+          away >= own,
+          `${name}: the caption on ${edge.id} sits ${away.toFixed(0)}px from ${other.id} and ${own.toFixed(0)}px from its own line, so it reads as ${other.id}'s label`,
+        );
+      }
+    }
+  }
+});
 
 test("no caption lands on another caption", async () => {
   for (const { name, document } of await documents()) {
