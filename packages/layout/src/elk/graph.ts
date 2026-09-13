@@ -38,6 +38,8 @@ function childrenOf(
         "elk.padding": "[top=46,left=24,bottom=24,right=24]",
         "elk.spacing.nodeNode": "96",
         "elk.layered.spacing.nodeNodeBetweenLayers": "120",
+        "elk.spacing.edgeNode": "28",
+        "elk.layered.spacing.edgeNodeBetweenLayers": "28",
       },
       children: childrenOf(document, sizes, group.id),
     })),
@@ -64,6 +66,10 @@ export function toElkGraph(document: DiagramDocument, sizes: Map<string, Size>):
       "elk.layered.spacing.nodeNodeBetweenLayers": "120",
       "elk.spacing.edgeLabel": "12",
       "elk.spacing.edgeEdge": "16",
+      // ELK's own routes are discarded, but its node placement still has to leave room for the
+      // routes packages/scene draws. Its default of 10 is narrower than one channel step.
+      "elk.spacing.edgeNode": "28",
+      "elk.layered.spacing.edgeNodeBetweenLayers": "28",
       "elk.layered.mergeEdges": "false",
     },
     children: childrenOf(document, sizes, null),

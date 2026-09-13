@@ -87,12 +87,10 @@ export function TopBar({
 }: TopBarProps) {
   const [draft, setDraft] = useState(title);
   const [moreOpen, setMoreOpen] = useState(false);
-  const [docOpen, setDocOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [layout, setLayout] = useState<HeaderLayout>(HEADER_LAYOUT.FULL);
   const barRef = useRef<HTMLElement>(null);
   const moreRef = useRef<HTMLButtonElement>(null);
-  const docRef = useRef<HTMLButtonElement>(null);
   const saveRef = useRef<HTMLButtonElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const failed = saveState === SAVE_STATE.RECOVERY || saveState === SAVE_STATE.TEMPORARY;
@@ -145,54 +143,9 @@ export function TopBar({
 
   return (
     <header className="topbar" ref={barRef} data-layout={layout}>
-      <button
-        ref={docRef}
-        type="button"
-        className="brand-menu"
-        aria-haspopup="menu"
-        aria-expanded={docOpen}
-        aria-label="Document menu"
-        onClick={() => setDocOpen((value) => !value)}
-      >
-        Mapgrain
-        <svg className="brand-caret" viewBox="0 0 12 12" aria-hidden="true">
-          <path
-            d="M3 4.5 6 8l3-3.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-      <Overlay open={docOpen} anchorRef={docRef} onClose={() => setDocOpen(false)} align="start" pattern="menu" label="Document">
-        <MenuItem
-          onClick={() => {
-            setDocOpen(false);
-            onNew();
-          }}
-        >
-          New diagram
-        </MenuItem>
-        <MenuItem
-          shortcut={commandShortcut(COMMAND_ID.EXPORT)}
-          onClick={() => {
-            setDocOpen(false);
-            onExport();
-          }}
-        >
-          Export
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setDocOpen(false);
-            fileRef.current?.click();
-          }}
-        >
-          Open file
-        </MenuItem>
-      </Overlay>
+      {/* A wordmark, not a control: New diagram has its own header button, and Export and
+          Open file live in More with everything else. */}
+      <div className="brand">Mapgrain</div>
       <input
         ref={fileRef}
         type="file"
@@ -367,6 +320,18 @@ export function TopBar({
               Present
             </MenuItem>
           )}
+          <MenuItem
+            onClick={() => {
+              setMoreOpen(false);
+              fileRef.current?.click();
+            }}
+          >
+            Open file
+          </MenuItem>
+          <MenuItem shortcut={commandShortcut(COMMAND_ID.EXPORT)} onClick={() => { onExport(); setMoreOpen(false); }}>
+            Export
+          </MenuItem>
+          <MenuSeparator />
           <MenuItem shortcut={commandShortcut(COMMAND_ID.WALK)} onClick={() => { onWalk(); setMoreOpen(false); }}>
             Walk through
           </MenuItem>

@@ -1,8 +1,10 @@
-import { EDGE_DIRECTION, NODE_KIND, NODE_MARKER, type Theme } from "@mapgrain/document";
+import { EDGE_DIRECTION, NODE_MARKER, type Theme } from "@mapgrain/document";
 import {
   ICON_VIEWBOX,
   defaultFont,
   iconShapesFor,
+  NODE_SHAPE,
+  showsIcon,
   edgePath,
   stateTone,
   type Point,
@@ -133,15 +135,27 @@ export function renderSvg(
     .map((node) => {
       const padX = presentation.paddingX;
       const padY = presentation.paddingY;
-      const originX = node.rect.x + ox + padX;
-      const originY = node.rect.y + oy + padY;
-      const isState = node.kind === NODE_KIND.STATE;
+      const isState = !showsIcon(node.kind);
       // Icon and title share the first row; the kind name lives in the inspector and legend.
       const lead = isState ? 0 : node.iconSize + presentation.iconGap;
-      const textX = originX + lead;
       const firstRow = isState
         ? node.label.height
         : Math.max(node.iconSize, presentation.titleLineHeight);
+      // A diamond is only wide at its centre, so its content is centred rather than set from
+      // the top-left corner, which for that shape is outside the polygon.
+      const diamond = node.shape === NODE_SHAPE.DECISION;
+      const blockWidth =
+        lead + Math.max(node.label.width, node.description?.width ?? 0);
+      const blockHeight =
+        firstRow +
+        (node.description ? presentation.descriptionGap + node.description.height : 0);
+      const originX = diamond
+        ? node.rect.x + ox + (node.rect.width - blockWidth) / 2
+        : node.rect.x + ox + padX;
+      const originY = diamond
+        ? node.rect.y + oy + (node.rect.height - blockHeight) / 2
+        : node.rect.y + oy + padY;
+      const textX = originX + lead;
       const iconY = originY + (firstRow - node.iconSize) / 2;
       const icon = isState ? "" : iconGroup(node.kind, originX, iconY, node.iconSize, muted);
       const lines = node.label.lines

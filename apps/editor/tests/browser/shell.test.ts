@@ -77,6 +77,8 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
     await page.getByRole("button", { name: "Add", exact: true }).waitFor();
     assert.equal(await page.getByRole("button", { name: "Add service" }).count(), 0);
     const more = page.getByRole("button", { name: "More" });
+    // The brand is a wordmark now; nothing opens from it.
+    assert.equal(await page.getByRole("button", { name: "Document menu" }).count(), 0);
     if (viewport.width <= 390) {
       await more.click();
       const arrangeItem = page.getByRole("menuitem", { name: "Arrange" });
@@ -87,7 +89,18 @@ test("editor chrome stays in bounds at 1440, 1280, 1024, 768, and 390", async (t
       await undo.waitFor();
       const undoBox = await undo.boundingBox();
       assert.ok(undoBox && undoBox.height > 8, `${viewport.width} More menu clipped`);
-      await page.getByRole("menuitem", { name: "Help" }).waitFor();
+      // Export and Open file moved here from the brand, so the menu grew. It still has to fit.
+      const openFile = page.getByRole("menuitem", { name: "Open file" });
+      await openFile.waitFor();
+      const openBox = await openFile.boundingBox();
+      assert.ok(openBox && openBox.height > 8, `${viewport.width} Open file clipped`);
+      const exportItem = page.getByRole("menuitem", { name: "Export" });
+      const exportBox = await exportItem.boundingBox();
+      assert.ok(exportBox && exportBox.height > 8, `${viewport.width} Export clipped`);
+      const help = page.getByRole("menuitem", { name: "Help" });
+      await help.waitFor();
+      const helpBox = await help.boundingBox();
+      assert.ok(helpBox && helpBox.height > 8, `${viewport.width} the last item is clipped`);
       await page.keyboard.press("Escape");
     } else {
       const arrangeBox = await page.getByRole("button", { name: "Arrange" }).boundingBox();

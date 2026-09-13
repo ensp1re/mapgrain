@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "nextId": 72,
+  "nextId": 73,
   "tasks": [
     {
-      "id": "F071",
-      "behavior": "A connection is something the reader can edit: it can be clicked to see which components it joins, its caption typed on the canvas, its meaning, direction and line shape chosen, either end dragged onto another card, and it can be deleted — on every diagram kind including sequence, with the chosen line saved in the document and drawn the same way by every export.",
+      "id": "F072",
+      "behavior": "Diagrams stop touching: a branch draws as an outlined diamond that holds its own label, connections keep real clearance from cards and from each other, a workflow column is wide enough for a connection to turn in, a sequence spaces its lifelines to fit the captions between them and its rows to fit the captions they carry, fragment frames cover only the participants their messages touch, a reading stays readable and a click during one ends it, and the header brand opens nothing.",
       "acceptance": [
-        "Clicking a connection selects it, and selecting one never leaves a component selected as well.",
-        "The connection inspector names both ends and each end selects its component.",
-        "A caption is typed on the canvas, empty text removes it, and the change is undoable.",
-        "Dragging an endpoint onto another card moves that end of the connection in the document.",
-        "A connection's line shape is elbow, straight or curved, is saved, and survives a reload.",
-        "The editor and the SVG export build a connection's path through the same function.",
-        "A sequence message is as editable as any other connection, and clicking a lifeline selects its participant.",
-        "Every connection is reachable from the outline, not only by hitting the line."
+        "A decision's label sits entirely inside its diamond, in the editor and in the SVG export, and the diamond is outlined rather than a solid block.",
+        "No caption overlaps another caption, a fragment frame, or a card it does not belong to, across every fixture and every template.",
+        "Every routed connection starts and ends on the cards it joins, and a sequence message on its participants' lifelines.",
+        "Two fragment frames never overlap.",
+        "A workflow column gap holds two stubs and a routing channel, and ELK is told how much room a connection needs.",
+        "Two ports on the same side of a card are at least one routing channel apart.",
+        "A dimmed component during a walk or a run is still readable, and clicking one ends the reading and selects it.",
+        "The header brand is not a control, and Export and Open file are in the More menu."
       ],
       "dependsOn": [],
       "state": "verified",
@@ -29,9 +29,9 @@
       "blockedReason": null,
       "evidence": {
         "status": "passed",
-        "attemptId": "run-1789258631118-2286ab",
-        "fingerprintBefore": "d6b33815e282fb8d0a72536ee3077266811e7c70355dcc146bac66d3acf6193d",
-        "fingerprintAfter": "d6b33815e282fb8d0a72536ee3077266811e7c70355dcc146bac66d3acf6193d",
+        "attemptId": "run-1789259115951-5b0178",
+        "fingerprintBefore": "43ba652cde1e5a3239e5325335e2f79dd83348df71123aa65a5e9c0b19c8a7f3",
+        "fingerprintAfter": "43ba652cde1e5a3239e5325335e2f79dd83348df71123aa65a5e9c0b19c8a7f3",
         "checks": [
           {
             "id": "unit",
@@ -54,7 +54,7 @@
             "status": "passed"
           }
         ],
-        "verifiedAt": "2026-09-13T00:18:24.904Z"
+        "verifiedAt": "2026-09-13T00:26:30.425Z"
       },
       "delivery": null
     }

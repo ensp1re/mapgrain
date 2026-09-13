@@ -867,6 +867,22 @@ function Editor() {
     if (changed.length > 0) updateNodeInternals(changed);
   }, [derivedNodes, updateNodeInternals]);
 
+  /**
+   * A reading dims everything that is not the step, so clicking a dimmed card looked like it
+   * did nothing. A click is a decision to stop reading and look at that thing instead.
+   */
+  const leaveReading = useCallback(() => {
+    setWalkPlaying(false);
+    setWalkIndex(null);
+    setRunState(null);
+  }, []);
+
+  const onNodeClick = useCallback((_event: ReactMouseEvent, node: Node) => {
+    if (walkIndex === null && !runState) return;
+    leaveReading();
+    setSelection({ nodeIds: [node.id], edgeIds: [] });
+  }, [leaveReading, runState, walkIndex]);
+
   const onEdgeDoubleClick = useCallback((event: ReactMouseEvent, edge: Edge) => {
     if (presenting) return;
     event.stopPropagation();
@@ -1653,6 +1669,7 @@ function Editor() {
             onNodeDragStart={onNodeDragStart}
             onNodeDragStop={onNodeDragStop}
             onPaneClick={onPaneClick}
+            onNodeClick={onNodeClick}
             onNodeDoubleClick={onNodeDoubleClick}
             onEdgeDoubleClick={onEdgeDoubleClick}
             onNodeMouseEnter={onNodeMouseEnter}

@@ -96,7 +96,10 @@ test("the header offers no chat entry and keeps Help reachable", async () => {
   assert.match(topbar, /onHelp/);
   assert.match(topbar, />\s*Help\s*</);
   assert.match(topbar, /aria-label="More"/);
-  assert.match(topbar, /Document menu/);
+  // The brand opens nothing: Export and Open file live in More.
+  assert.doesNotMatch(topbar, /Document menu/);
+  assert.match(topbar, />\s*Open file\s*</);
+  assert.match(topbar, />\s*Export\s*</);
 });
 
 test("history keeps a bounded past", async () => {

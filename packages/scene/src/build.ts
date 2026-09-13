@@ -9,7 +9,7 @@ import {
   type PortSide,
 } from "@mapgrain/document";
 import { DESCRIPTION_GAP, ICON_GAP } from "./constants/metrics.ts";
-import { DECISION_SCALE_X, DECISION_SCALE_Y } from "./constants/shape.ts";
+import { DECISION_LABEL_WIDTH, DECISION_SCALE_X, DECISION_SCALE_Y } from "./constants/shape.ts";
 import { edgeCaption } from "./caption.ts";
 import { expandTop, inflate, unionRects } from "./geometry.ts";
 import { routeOrthogonal } from "./route/orthogonal.ts";
@@ -23,8 +23,11 @@ import { presetOverrides } from "./presets.ts";
 import {
   isSequenceDocument,
   SEQUENCE_MESSAGE_GAP,
+  SEQUENCE_SELF_DROP,
+  SEQUENCE_SELF_REACH,
+  messageOrder,
+  sequenceLayout,
   sequenceMessageY,
-  sequencePositions,
 } from "./sequence.ts";
 import { isWorkflowLanesDocument, workflowLanePositions } from "./workflow.ts";
 import {
@@ -51,16 +54,17 @@ function sequenceMessagePoints(
   target: SceneNode,
   order: number,
   headerBottom: number,
+  rows?: Map<number, number>,
 ): Point[] {
-  const y = sequenceMessageY(order, headerBottom);
+  const y = sequenceMessageY(order, headerBottom, rows);
   const fromX = source.rect.x + source.rect.width / 2;
   const toX = target.rect.x + target.rect.width / 2;
   if (source.id === target.id) {
     return [
       { x: fromX, y },
-      { x: fromX + 28, y },
-      { x: fromX + 28, y: y + 16 },
-      { x: fromX, y: y + 16 },
+      { x: fromX + SEQUENCE_SELF_REACH, y },
+      { x: fromX + SEQUENCE_SELF_REACH, y: y + SEQUENCE_SELF_DROP },
+      { x: fromX, y: y + SEQUENCE_SELF_DROP },
     ];
   }
   return [
@@ -76,31 +80,53 @@ function buildFragments(
   document: DiagramDocument,
   nodes: SceneNode[],
   headerBottom: number,
+  rows: Map<number, number> | undefined,
+  orders: Map<string, number>,
 ): SceneFragment[] {
   if (document.kind !== DOCUMENT_KIND.SEQUENCE || nodes.length === 0) return [];
-  const minX = Math.min(...nodes.map((node) => node.rect.x)) - FRAGMENT_PAD_X;
-  const maxX = Math.max(...nodes.map((node) => node.rect.x + node.rect.width)) + FRAGMENT_PAD_X;
+  const rectById = new Map(nodes.map((node) => [node.id, node.rect]));
   const padY = SEQUENCE_MESSAGE_GAP / 2;
   return (document.fragments ?? []).map((fragment) => {
+    const first = fragment.operands[0]?.label ?? "";
+    const span = { start: Infinity, end: -Infinity };
+    for (const operand of fragment.operands) {
+      span.start = Math.min(span.start, operand.startOrder);
+      span.end = Math.max(span.end, operand.endOrder);
+    }
+    // A frame is only as wide as the participants its own messages touch, so two fragments
+    // over different halves of the diagram no longer sit on top of each other.
+    const touched = document.edges.filter((edge) => {
+      const order = orders.get(edge.id);
+      return order !== undefined && order >= span.start && order <= span.end;
+    });
+    const rects = touched
+      .flatMap((edge) => [rectById.get(edge.source.nodeId), rectById.get(edge.target.nodeId)])
+      .filter((rect): rect is Rect => Boolean(rect));
+    const covered = rects.length > 0 ? rects : nodes.map((node) => node.rect);
+    const minX = Math.min(...covered.map((rect) => rect.x)) - FRAGMENT_PAD_X;
+    const maxX = Math.max(...covered.map((rect) => rect.x + rect.width)) + FRAGMENT_PAD_X;
     const operands = fragment.operands.map((operand) => {
-      const top = sequenceMessageY(operand.startOrder, headerBottom) - padY;
-      const bottom = sequenceMessageY(operand.endOrder, headerBottom) + padY;
+      const top = sequenceMessageY(operand.startOrder, headerBottom, rows) - padY;
+      const bottom = sequenceMessageY(operand.endOrder, headerBottom, rows) + padY;
       return { label: operand.label, y: top, height: Math.max(SEQUENCE_MESSAGE_GAP, bottom - top) };
     });
     const y = Math.min(...operands.map((operand) => operand.y));
     const bottom = Math.max(...operands.map((operand) => operand.y + operand.height));
-    const first = fragment.operands[0]?.label ?? "";
     return {
       id: fragment.id,
       kind: fragment.kind,
       title: `${fragment.kind} ${first}`.trim(),
+      // The title band is reserved above the frame's own content rather than carved out of the
+      // space above it, which used to be the previous fragment's last row.
       rect: {
         x: minX,
         y: y - FRAGMENT_HEADER,
         width: maxX - minX,
         height: bottom - y + FRAGMENT_HEADER,
       },
-      operands,
+      operands: operands.map((operand, index) =>
+        index === 0 ? { ...operand, y: operand.y } : operand,
+      ),
     };
   });
 }
@@ -112,6 +138,11 @@ function buildFragments(
  * card the same shape and spent a line on information the icon already carries. The kind name
  * now lives in the inspector and the legend.
  */
+/** A state and a branch are read from their shape, so neither spends width on an icon. */
+export function showsIcon(kind: string): boolean {
+  return kind !== NODE_KIND.STATE && kind !== NODE_KIND.DECISION;
+}
+
 function nodeSize(
   label: { width: number; height: number },
   description: { width: number; height: number } | null,
@@ -270,7 +301,12 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   const iconSize = iconSizeFor(options.font);
   const presentation = presentationFromOptions(options);
   for (const node of document.nodes) {
-    const label = measureText(node.label, options.font, options.maxLabelWidth, options.measurer);
+    // A branch label wraps sooner, because the diamond around it has to be twice its size.
+    const labelWidth =
+      node.kind === NODE_KIND.DECISION
+        ? Math.min(DECISION_LABEL_WIDTH, options.maxLabelWidth)
+        : options.maxLabelWidth;
+    const label = measureText(node.label, options.font, labelWidth, options.measurer);
     const kind = measureText(
       kindDisplayText(node.kind),
       kindFont,
@@ -283,7 +319,7 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     labels.set(node.id, label);
     kinds.set(node.id, kind);
     if (description) descriptions.set(node.id, description);
-    const base = nodeSize(label, description, iconSize, options, node.kind !== NODE_KIND.STATE);
+    const base = nodeSize(label, description, iconSize, options, showsIcon(node.kind));
     sizes.set(
       node.id,
       node.kind === NODE_KIND.DECISION
@@ -295,8 +331,35 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
     );
   }
 
-  const positions = isSequenceDocument(document)
-    ? sequencePositions(document, sizes)
+  const captions = document.edges.map((edge, index) => {
+    const extra =
+      edge.outcome ?? edge.guard ?? (edge.order !== undefined ? String(edge.order) : undefined);
+    const text = edgeCaption(edge.type, edge.label, extra);
+    return {
+      text,
+      order: messageOrder(edge, index),
+      measured: measureText(text || " ", options.font, options.maxLabelWidth, options.measurer),
+    };
+  });
+  const sequenceHeader = Math.max(
+    0,
+    ...document.nodes.map((node) => (sizes.get(node.id) ?? { height: 36 }).height),
+  );
+  const sequence = isSequenceDocument(document)
+    ? sequenceLayout(
+        document,
+        sizes,
+        document.edges.map((edge, index) => ({
+          from: edge.source.nodeId,
+          to: edge.target.nodeId,
+          order: captions[index]?.order ?? index + 1,
+          caption: captions[index]?.measured ?? { width: 0, height: 0 },
+        })),
+        sequenceHeader,
+      )
+    : null;
+  const positions = sequence
+    ? sequence.positions
     : isWorkflowLanesDocument(document)
       ? workflowLanePositions(document, sizes)
       : placeNodes(document, sizes, options);
@@ -336,7 +399,9 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
   }
 
   const labelObstacles: Rect[] = nodes.map((node) => node.rect);
-  const edges: SceneEdge[] = document.edges.map((edge) => {
+  // Each route avoids running along the ones already placed, the way captions already do.
+  const routed: Point[][] = [];
+  const edges: SceneEdge[] = document.edges.map((edge, edgeIndex) => {
     const sourceNode = nodeById.get(edge.source.nodeId);
     const targetNode = nodeById.get(edge.target.nodeId);
     if (!sourceNode || !targetNode) {
@@ -364,12 +429,13 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
       ...nodes.map((item) => item.rect.y + item.rect.height),
       sourceNode.rect.y + sourceNode.rect.height,
     );
+    const messageRow = captions[edgeIndex]?.order ?? edgeIndex + 1;
     const shape = edge.shape ?? EDGE_SHAPE.ELBOW;
     // A straight connection is its own route: two points on the facing sides, so the caption
     // and the hit area follow the line that is actually drawn.
     const points =
       document.kind === DOCUMENT_KIND.SEQUENCE
-        ? sequenceMessagePoints(sourceNode, targetNode, edge.order ?? index + 1, headerBottom)
+        ? sequenceMessagePoints(sourceNode, targetNode, messageRow, headerBottom, sequence?.rowY)
         : shape === EDGE_SHAPE.STRAIGHT
         ? [
             { x: sourcePort.x, y: sourcePort.y },
@@ -381,13 +447,15 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
             obstacles: nodes
               .filter((item) => item.id !== sourceNode.id && item.id !== targetNode.id)
               .map((item) => item.rect),
+            drawn: routed,
             index,
             count,
           });
-    const extra =
-      edge.outcome ?? edge.guard ?? (edge.order !== undefined ? String(edge.order) : undefined);
-    const caption = edgeCaption(edge.type, edge.label, extra);
-    const label = measureText(caption || " ", options.font, options.maxLabelWidth, options.measurer);
+    if (points.length > 1) routed.push(points);
+    const caption = captions[edgeIndex]?.text ?? "";
+    const label =
+      captions[edgeIndex]?.measured ??
+      measureText(caption || " ", options.font, options.maxLabelWidth, options.measurer);
     const placed = placeEdgeLabel(points, caption ? label : { width: 0, height: 0 }, labelObstacles);
     if (caption) labelObstacles.push(placed.box);
     return {
@@ -419,7 +487,10 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
           y2: Math.max(node.rect.y + node.rect.height + 48, messageBottom + 24),
         }))
       : [];
-  const fragments = buildFragments(document, nodes, headerBottom);
+  const messageOrders = new Map(
+    document.edges.map((edge, index) => [edge.id, captions[index]?.order ?? index + 1]),
+  );
+  const fragments = buildFragments(document, nodes, headerBottom, sequence?.rowY, messageOrders);
   const bounds = unionRects([
     ...nodes.map((node) => node.rect),
     ...groups.map((group) => group.rect),

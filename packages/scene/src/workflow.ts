@@ -1,11 +1,17 @@
 import { DOCUMENT_KIND, type DiagramDocument } from "@mapgrain/document";
+import { EDGE_STUB, ROUTE_CHANNEL_STEP } from "./constants/metrics.ts";
 import type { Point, Size } from "./types/geometry.ts";
 
 const LANE_PAD_X = 28;
 const LANE_PAD_Y = 22;
 const LANE_GAP = 32;
-const NODE_GAP_X = 44;
-const NODE_GAP_Y = 24;
+/**
+ * A connection stubs EDGE_STUB out of each card, then needs a channel to turn in. At 44 that
+ * left 4px between the stubs, and one step of ROUTE_CHANNEL_STEP put the line inside the next
+ * card. The column gap now holds both stubs and a few channels.
+ */
+const NODE_GAP_X = EDGE_STUB * 2 + ROUTE_CHANNEL_STEP;
+const NODE_GAP_Y = 32;
 const FALLBACK_SIZE = { width: 72, height: 36 };
 
 export function isWorkflowLanesDocument(document: DiagramDocument): boolean {

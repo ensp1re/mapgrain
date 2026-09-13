@@ -1,4 +1,5 @@
 import { PORT_SIDE, type PortSide } from "@mapgrain/document";
+import { PORT_MIN_GAP } from "./constants/metrics.ts";
 import type { Point, Rect } from "./types/geometry.ts";
 import type { ScenePort } from "./types/scene.ts";
 
@@ -45,9 +46,16 @@ export function placePortsOnRect(
   const placed: ScenePort[] = [];
   for (const side of Object.values(PORT_SIDE)) {
     const list = bySide.get(side) ?? [];
+    // Evenly spreading over the whole side puts four ports 14px apart on a 72px card, closer
+    // than one routing channel, so the lines leaving them run into each other. Keep at least a
+    // channel between ports and centre the group when the side is too short to hold them all.
+    const span = side === PORT_SIDE.NORTH || side === PORT_SIDE.SOUTH ? rect.width : rect.height;
+    const even = span / (list.length + 1);
+    const step = Math.max(even, PORT_MIN_GAP);
+    const used = step * (list.length - 1);
     list.forEach((port, index) => {
-      const t = (index + 1) / (list.length + 1);
-      const point = pointOnSide(rect, side, t);
+      const t = list.length === 1 ? 0.5 : (span / 2 - used / 2 + index * step) / span;
+      const point = pointOnSide(rect, side, Math.min(1, Math.max(0, t)));
       placed.push({ id: port.id, nodeId, side, x: point.x, y: point.y });
     });
   }

@@ -243,35 +243,16 @@ body {
   font-size: 12px;
 }
 
-.brand,
-.brand-menu {
+/* A wordmark. It opens nothing, so it is not a control. */
+.brand {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
+  min-height: var(--control-h);
+  padding: 4px 10px 4px 0;
   font-size: var(--fs-base);
   font-weight: 650;
   letter-spacing: -0.03em;
-}
-
-.brand-menu {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  min-height: var(--control-h);
-  padding: 4px 10px;
-  border: 0;
-  border-radius: var(--r-2);
-  background: transparent;
-  cursor: pointer;
-}
-
-.brand-caret {
-  width: 12px;
-  height: 12px;
-  color: var(--muted);
-}
-
-.brand-menu:hover,
-.brand-menu:focus-visible {
-  background: var(--surface-hover);
 }
 
 .title-field {
@@ -428,7 +409,6 @@ body {
 
 .text-btn,
 .menu-item,
-.brand-menu,
 .save-failed,
 .ui-select-trigger {
   transition: background-color 120ms ease, color 120ms ease, opacity 120ms ease;
@@ -949,22 +929,40 @@ body {
 .node-card[data-shape="entity"] { border-radius: 2px; }
 .node-card[data-shape="terminal"] { border-radius: var(--r-pill); }
 
-/* A branch is a diamond, so it never reads as another step in the row. */
+/* A branch is a diamond, so it never reads as another step in the row.
+   clip-path does not clip box-shadow, so the card's 1px ring cannot be used here. The outline
+   is a second clipped layer instead: the border colour fills the shape and a ::before inset by
+   1px puts the surface back, leaving a hairline that follows the polygon. */
 .node-card[data-shape="decision"] {
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
   border-radius: 0;
   box-shadow: none;
-  background-image: linear-gradient(var(--border), var(--border));
+  background-color: var(--border);
+}
+
+.node-card[data-shape="decision"]::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: var(--surface);
 }
 
 .node-card[data-shape="decision"] .node-card-body {
+  position: relative;
+  align-items: center;
   justify-content: center;
-  padding-inline: calc(var(--node-pad-x) * 2);
+  padding: 0;
+}
+
+.node-card[data-shape="decision"] .node-text {
+  flex: 0 1 auto;
+  text-align: center;
 }
 
 .node-card.is-selected[data-shape="decision"] {
   box-shadow: none;
-  background-image: linear-gradient(var(--accent), var(--accent));
+  background-color: var(--accent);
 }
 
 .kind-legend {
@@ -2270,10 +2268,11 @@ body {
 }
 
 /* Everything outside the current step recedes rather than disappearing. Lane frames stay,
-   because the structure is exactly what a reader needs while following a step. */
+   because the structure is exactly what a reader needs while following a step. The floor is
+   high enough that a label stays readable: below it a dimmed card looks blank. */
 .app.is-walking .react-flow__node:not(.react-flow__node-group),
 .app.is-walking .react-flow__edge {
-  opacity: 0.22;
+  opacity: 0.45;
   transition: opacity var(--t-fast) ease;
 }
 
@@ -2296,7 +2295,7 @@ body {
 }
 
 .app.is-walking .edge-caption {
-  opacity: 0.22;
+  opacity: 0.45;
   transition: opacity var(--t-fast) ease;
 }
 
@@ -2407,7 +2406,7 @@ body {
 .app.is-running .react-flow__node:not(.react-flow__node-group),
 .app.is-running .react-flow__edge,
 .app.is-running .edge-caption {
-  opacity: 0.28;
+  opacity: 0.45;
   transition: opacity var(--t-fast) ease;
 }
 
