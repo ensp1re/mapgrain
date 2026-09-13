@@ -1,5 +1,58 @@
 {
   "schemaVersion": 1,
-  "nextId": 75,
-  "tasks": []
+  "nextId": 76,
+  "tasks": [
+    {
+      "id": "F075",
+      "behavior": "Fit all frames the whole diagram rather than only the boxes React Flow owns, so a sequence no longer hangs off the bottom of the canvas and the result of Arrange is visible; and the document's own name survives a phone-width header.",
+      "acceptance": [
+        "Fit all leaves nothing past any edge of the canvas, on architecture, workflow, sequence and lifecycle diagrams.",
+        "A sequence frames its participants, its messages, its captions and its lifelines together.",
+        "Applying an arrangement, and previewing one, show the whole diagram.",
+        "At phone width the document title is legible instead of clipped to a letter."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789296601528-c3ef3d",
+        "fingerprintBefore": "9985ee073c8492595253d09e5bcf4f574a3473a45bc70cbe299671e78592d358",
+        "fingerprintAfter": "9985ee073c8492595253d09e5bcf4f574a3473a45bc70cbe299671e78592d358",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-13T10:51:30.081Z"
+      },
+      "delivery": null
+    }
+  ]
 }

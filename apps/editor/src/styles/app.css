@@ -243,6 +243,12 @@ body {
   font-size: 12px;
 }
 
+/* On a phone the document's own name is worth more than the product's, and the header has
+   room for one of them. */
+.topbar[data-layout="phone"] .brand {
+  display: none;
+}
+
 /* A wordmark. It opens nothing, so it is not a control. */
 .brand {
   display: flex;
