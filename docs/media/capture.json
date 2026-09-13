@@ -1,8 +1,8 @@
 {
-  "commit": "962adc24dd10f0d6c47cb1166562edd82b1c42dd",
+  "commit": "11b84ff884017e7bd79936d14b427d9ab25f59cf",
   "package": {
     "name": "mapgrain",
-    "version": "0.2.3"
+    "version": "0.2.4"
   },
   "buildCommand": "pnpm --filter @mapgrain/editor build && pnpm --filter mapgrain build",
   "fixture": "skills/mapgrain/examples/ten-node.json",
@@ -12,7 +12,7 @@
     "playwright": "1.63.0"
   },
   "deviceScaleFactor": 1,
-  "capturedAt": "2026-09-13T11:20:38.423Z",
+  "capturedAt": "2026-09-13T11:34:52.446Z",
   "artifacts": [
     {
       "file": "docs/media/hero-dark.png",
@@ -35,16 +35,6 @@
       "fixture": "skills/mapgrain/examples/ten-node.json"
     },
     {
-      "file": "docs/media/narrow-390.png",
-      "kind": "still",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "theme": "light",
-      "fixture": "skills/mapgrain/examples/ten-node.json"
-    },
-    {
       "file": "docs/media/editing.gif",
       "kind": "gif",
       "viewport": {
@@ -54,17 +44,6 @@
       "theme": "dark",
       "fixture": "skills/mapgrain/examples/ten-node.json",
       "notes": "select → rename → connect → pin → arrange preview → apply → undo"
-    },
-    {
-      "file": "docs/media/viewer.gif",
-      "kind": "gif",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "fixture": "skills/mapgrain/examples/ten-node.json",
-      "notes": "offline HTML from mapgrain view: search, theme, pan"
     },
     {
       "file": "docs/media/cli-receipts.png",
@@ -94,25 +73,17 @@
       "bytes": 132015,
       "sha256": "c39e2f6b67761aa5de0ec7612dde1ec26655c0f530a25b88e4a13ed5b76ccd42"
     },
-    "narrow-390.png": {
-      "bytes": 47319,
-      "sha256": "073a7f98babafbe0a449d0c7ee6e7a485f4be023810ed5abe827b556f073699e"
-    },
     "editing.gif": {
-      "bytes": 1582876,
-      "sha256": "778fec0e397561a97de6670621594c9024adcc7e76daaa628531f55d33becff1"
-    },
-    "viewer.gif": {
-      "bytes": 378732,
-      "sha256": "fc75e901e3a88f088647f0333fbfcb0126609b96cc311ee354892eaec99a2f20"
+      "bytes": 1526599,
+      "sha256": "f66c46cac4daf0abb9d87adf1b2f1e1fc655c34f235ded742b680a63adcf9f2e"
     },
     "cli-receipts.png": {
-      "bytes": 16334,
-      "sha256": "cbc52f080d7b11b1145c9ac45d45f3977a108bb64b92e18a2ecf239e9793d714"
+      "bytes": 16643,
+      "sha256": "9395b3c5c38793ad990cbd5c15af261f80dd234e97f0bf7d547c25b457a9ca8c"
     },
     "cli-workflow.gif": {
-      "bytes": 83680,
-      "sha256": "57b2fbadd427fd74deee92c2f177c85a61e37109946e4fd03912d40ea3af7f84"
+      "bytes": 53981,
+      "sha256": "01005afb5644ff4289246baee0c5e3c09d495c2cc318f875fc1cca785b680d1a"
     }
   }
 }
