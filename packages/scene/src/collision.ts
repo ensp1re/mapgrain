@@ -4,12 +4,32 @@ import type { SceneNode } from "./types/scene.ts";
 
 const GAP = 8;
 
-export function overlappingIds(nodes: SceneNode[], nodeId: string): string[] {
-  const grown = nodes.find((node) => node.id === nodeId);
+/** Anything the scene draws in a box: a card, a caption, a fragment frame, a lane. */
+export interface Boxed {
+  id: string;
+  rect: Rect;
+}
+
+export function overlappingIds(boxes: Boxed[], id: string): string[] {
+  const grown = boxes.find((box) => box.id === id);
   if (!grown) return [];
-  return nodes
-    .filter((node) => node.id !== nodeId && rectsOverlap(grown.rect, node.rect))
-    .map((node) => node.id);
+  return boxes
+    .filter((box) => box.id !== id && rectsOverlap(grown.rect, box.rect))
+    .map((box) => box.id);
+}
+
+/** Every pair of boxes that overlap, as `a|b`. One call covers cards, captions and frames. */
+export function overlappingPairs(boxes: Boxed[]): string[] {
+  const hits: string[] = [];
+  for (let index = 0; index < boxes.length; index += 1) {
+    for (let other = index + 1; other < boxes.length; other += 1) {
+      const left = boxes[index];
+      const right = boxes[other];
+      if (!left || !right) continue;
+      if (rectsOverlap(left.rect, right.rect)) hits.push(`${left.id}|${right.id}`);
+    }
+  }
+  return hits;
 }
 
 function separate(grown: Rect, other: Rect): Point {

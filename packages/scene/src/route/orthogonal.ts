@@ -1,6 +1,12 @@
 import { rectsOverlap } from "../geometry.ts";
 import { PORT_SIDE, type PortSide } from "@mapgrain/document";
-import { EDGE_STUB, ROUTE_CHANNEL_STEP, ROUTE_CHANNEL_TRIES, ROUTE_CLEARANCE } from "../constants/metrics.ts";
+import {
+  EDGE_STUB,
+  ROUTE_BREATHING_ROOM,
+  ROUTE_CHANNEL_STEP,
+  ROUTE_CHANNEL_TRIES,
+  ROUTE_CLEARANCE,
+} from "../constants/metrics.ts";
 import type { Point, Rect } from "../types/geometry.ts";
 
 export interface RouteRequest {
@@ -8,6 +14,8 @@ export interface RouteRequest {
   target: { rect: Rect; point: Point; side: PortSide };
   /** Every other node rectangle the route should not cross. */
   obstacles: Rect[];
+  /** Routes already drawn. Crossing one is allowed; running along it is not. */
+  drawn?: Point[][];
   /** Index and count among edges sharing this node pair, so parallels take separate channels. */
   index: number;
   count: number;
@@ -49,14 +57,13 @@ function simplify(points: Point[]): Point[] {
   return kept;
 }
 
-function segmentRect(a: Point, b: Point): Rect {
-  const x = Math.min(a.x, b.x);
-  const y = Math.min(a.y, b.y);
+/** The band a segment claims: the clearance is kept on each side, not split between them. */
+function segmentRect(a: Point, b: Point, clearance = ROUTE_CLEARANCE): Rect {
   return {
-    x: x - ROUTE_CLEARANCE / 2,
-    y: y - ROUTE_CLEARANCE / 2,
-    width: Math.abs(a.x - b.x) + ROUTE_CLEARANCE,
-    height: Math.abs(a.y - b.y) + ROUTE_CLEARANCE,
+    x: Math.min(a.x, b.x) - clearance,
+    y: Math.min(a.y, b.y) - clearance,
+    width: Math.abs(a.x - b.x) + clearance * 2,
+    height: Math.abs(a.y - b.y) + clearance * 2,
   };
 }
 
@@ -73,6 +80,24 @@ export function routeCost(points: Point[], obstacles: Rect[]): number {
     }
   }
   return hits;
+}
+
+/**
+ * How close the route comes to anything it does not touch, as a penalty. Two candidates can
+ * both be clear; this is what makes the router take the roomier one instead of the first it
+ * happens to try.
+ */
+function routeTightness(points: Point[], obstacles: Rect[]): number {
+  let tight = 0;
+  for (let index = 0; index + 1 < points.length; index += 1) {
+    const first = points[index];
+    const second = points[index + 1];
+    if (!first || !second) continue;
+    for (const obstacle of obstacles) {
+      if (rectsOverlap(segmentRect(first, second, ROUTE_BREATHING_ROOM), obstacle)) tight += 1;
+    }
+  }
+  return tight;
 }
 
 /**
@@ -113,8 +138,29 @@ function candidates(from: Point, to: Point, fromSide: PortSide, toSide: PortSide
  * card perpendicular to its port, turns in the channel between the two, and steps that channel
  * aside when a card is in the way.
  */
+/** The bands already-drawn routes occupy, so a later route does not run along one of them. */
+function drawnBands(drawn: Point[][]): Rect[] {
+  const bands: Rect[] = [];
+  for (const points of drawn) {
+    for (let index = 0; index + 1 < points.length; index += 1) {
+      const first = points[index];
+      const second = points[index + 1];
+      if (!first || !second) continue;
+      const run = Math.abs(first.x - second.x) + Math.abs(first.y - second.y);
+      // A stub is too short to be worth avoiding, and avoiding it would push every route off
+      // the side it is supposed to leave from.
+      if (run <= EDGE_STUB * 2) continue;
+      bands.push(segmentRect(first, second, ROUTE_CHANNEL_STEP / 2));
+    }
+  }
+  return bands;
+}
+
 export function routeOrthogonal(request: RouteRequest): Point[] {
   const { source, target, obstacles, index, count } = request;
+  // Overlapping a card is a real fault; overlapping another route is only a preference, so
+  // the two are scored separately.
+  const crowd = [...obstacles, ...drawnBands(request.drawn ?? [])];
   const start = source.point;
   const end = target.point;
   const fromStub = stubPoint(start, source.side);
@@ -140,14 +186,17 @@ export function routeOrthogonal(request: RouteRequest): Point[] {
 
   let best: Point[] | null = null;
   let bestCost = Number.POSITIVE_INFINITY;
+  let bestTight = Number.POSITIVE_INFINITY;
   const consider = (middle: Point[]) => {
     const points = simplify([start, ...middle, end]);
     const cost = routeCost(points, obstacles);
-    if (cost < bestCost) {
+    const tight = cost === 0 ? routeTightness(points, crowd) : Number.POSITIVE_INFINITY;
+    if (cost < bestCost || (cost === bestCost && tight < bestTight)) {
       best = points;
       bestCost = cost;
+      bestTight = tight;
     }
-    return cost === 0 ? points : null;
+    return cost === 0 && tight === 0 ? points : null;
   };
 
   for (let attempt = 0; attempt <= ROUTE_CHANNEL_TRIES; attempt += 1) {

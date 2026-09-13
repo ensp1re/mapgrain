@@ -160,6 +160,8 @@ test("a card is wide enough for its own name, so no title breaks mid-word", asyn
     await page.waitForTimeout(500);
     const wrapped = await page.evaluate(() =>
       [...document.querySelectorAll(".node-title")]
+        // A branch label wraps on purpose: the diamond around it is twice the text block.
+        .filter((title) => !title.closest('[data-shape="decision"]'))
         .filter((title) => {
           const line = parseFloat(getComputedStyle(title).lineHeight);
           return (title as HTMLElement).offsetHeight > line * 1.5;
@@ -169,4 +171,51 @@ test("a card is wide enough for its own name, so no title breaks mid-word", asyn
     assert.deepEqual(wrapped, [], `${name} wrapped a card title`);
     await context.close();
   }
+});
+
+test("a branch draws as an outlined diamond that holds its own label", async (t) => {
+  await stat(join(dist, "index.html"));
+  const server = await listen();
+  const browser = await chromium.launch({ headless: true });
+  t.after(async () => {
+    await browser.close();
+    await server.close();
+  });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await page.goto(server.url, { waitUntil: "domcontentloaded" });
+  await waitStartOrEditor(page);
+  const card = page.getByRole("button", { name: "Use template CI/CD pipeline" });
+  await card.scrollIntoViewIfNeeded();
+  await card.click();
+  await page.locator(".node-card").first().waitFor({ timeout: 10_000 });
+  await page.waitForFunction(() => document.fonts.status === "loaded", undefined, { timeout: 10_000 });
+  await page.waitForTimeout(600);
+
+  const diamond = page.locator('.node-card[data-shape="decision"]').first();
+  await diamond.waitFor({ timeout: 10_000 });
+
+  const fits = await diamond.evaluate((card) => {
+    const box = card.getBoundingClientRect();
+    const text = card.querySelector(".node-text")?.getBoundingClientRect();
+    if (!text) return null;
+    // A diamond's half-width at a given height shrinks toward its points. Every corner of the
+    // text block has to sit inside the polygon, which is what the old 1.35x box did not do.
+    const cx = box.left + box.width / 2;
+    const cy = box.top + box.height / 2;
+    const inside = (x: number, y: number) =>
+      Math.abs(x - cx) / (box.width / 2) + Math.abs(y - cy) / (box.height / 2) <= 1.0001;
+    return {
+      corners: [
+        inside(text.left, text.top),
+        inside(text.right, text.top),
+        inside(text.left, text.bottom),
+        inside(text.right, text.bottom),
+      ],
+      filled: getComputedStyle(card).backgroundImage,
+    };
+  });
+  assert.ok(fits, "the diamond drew no label");
+  assert.deepEqual(fits.corners, [true, true, true, true], "the label leaves the diamond");
+  // Outlined, not a solid block: the fill is a colour, with a ::before putting the surface back.
+  assert.equal(fits.filled, "none", fits.filled);
 });

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { DOCUMENT_KIND, validateDocument } from "@mapgrain/document";
-import { buildScene, overlappingIds } from "@mapgrain/scene";
+import { buildScene, overlappingIds, overlappingPairs } from "@mapgrain/scene";
 import { TEMPLATE_CATEGORY_ORDER } from "../src/constants/templates.ts";
 import { TEMPLATES, findTemplate, matchesTemplate, templatesByCategory } from "../src/templates/catalog.ts";
 import { snapshotFromTemplate } from "../src/templates/open.ts";
@@ -122,4 +122,36 @@ test("an authored story wins over the derived reading", () => {
   const steps = deriveWalkthrough(withStory);
   assert.equal(steps.length, 1);
   assert.equal(steps[0]?.name, "Start here");
+});
+
+test("no template stacks a caption, a fragment frame, or a card", () => {
+  for (const item of TEMPLATES) {
+    const scene = buildScene(item.document, { positions: item.document.layout?.positions ?? {} });
+    assert.equal(scene.ok, true, item.id);
+    if (!scene.ok) continue;
+    const captions = scene.scene.edges
+      .filter((edge) => edge.caption)
+      .map((edge) => ({ id: `caption:${edge.id}`, rect: edge.labelBox }));
+    assert.deepEqual(overlappingPairs(captions), [], `${item.id} stacked captions`);
+
+    const frames = scene.scene.fragments.map((fragment) => ({
+      id: `frame:${fragment.id}`,
+      rect: fragment.rect,
+    }));
+    assert.deepEqual(overlappingPairs(frames), [], `${item.id} stacked fragment frames`);
+
+    const cards = new Map(scene.scene.nodes.map((node) => [node.id, node.rect]));
+    for (const edge of scene.scene.edges) {
+      if (!edge.caption) continue;
+      const own = new Set([edge.source.nodeId, edge.target.nodeId]);
+      const others = [...cards.entries()]
+        .filter(([id]) => !own.has(id))
+        .map(([id, rect]) => ({ id: `card:${id}`, rect }));
+      const hits = overlappingPairs([
+        { id: `caption:${edge.id}`, rect: edge.labelBox },
+        ...others,
+      ]).filter((pair) => pair.startsWith("caption:"));
+      assert.deepEqual(hits, [], `${item.id}: ${edge.id} sits on a card`);
+    }
+  }
 });

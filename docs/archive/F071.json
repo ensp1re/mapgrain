@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "F071",
+    "behavior": "A connection is something the reader can edit: it can be clicked to see which components it joins, its caption typed on the canvas, its meaning, direction and line shape chosen, either end dragged onto another card, and it can be deleted \u2014 on every diagram kind including sequence, with the chosen line saved in the document and drawn the same way by every export.",
+    "acceptance": [
+      "Clicking a connection selects it, and selecting one never leaves a component selected as well.",
+      "The connection inspector names both ends and each end selects its component.",
+      "A caption is typed on the canvas, empty text removes it, and the change is undoable.",
+      "Dragging an endpoint onto another card moves that end of the connection in the document.",
+      "A connection's line shape is elbow, straight or curved, is saved, and survives a reload.",
+      "The editor and the SVG export build a connection's path through the same function.",
+      "A sequence message is as editable as any other connection, and clicking a lifeline selects its participant.",
+      "Every connection is reachable from the outline, not only by hitting the line."
+    ],
+    "dependsOn": [],
+    "state": "passing",
+    "spec": null,
+    "plan": "docs/PLAN.md",
+    "verification": [
+      "unit",
+      "lint",
+      "typecheck",
+      "build",
+      "browser"
+    ],
+    "blockedReason": null,
+    "evidence": {
+      "status": "passed",
+      "attemptId": "run-1789258631118-2286ab",
+      "fingerprintBefore": "d6b33815e282fb8d0a72536ee3077266811e7c70355dcc146bac66d3acf6193d",
+      "fingerprintAfter": "d6b33815e282fb8d0a72536ee3077266811e7c70355dcc146bac66d3acf6193d",
+      "checks": [
+        {
+          "id": "unit",
+          "status": "passed"
+        },
+        {
+          "id": "lint",
+          "status": "passed"
+        },
+        {
+          "id": "typecheck",
+          "status": "passed"
+        },
+        {
+          "id": "build",
+          "status": "passed"
+        },
+        {
+          "id": "browser",
+          "status": "passed"
+        }
+      ],
+      "verifiedAt": "2026-09-13T00:18:24.904Z"
+    },
+    "delivery": {
+      "implementationRevision": "9a61bd402cf1d418ec67cf4833f1112d0b8ce55e",
+      "remote": "https://github.com/ensp1re/mapgrain.git",
+      "prUrl": "https://github.com/ensp1re/mapgrain/pull/107",
+      "checkRuns": [
+        {
+          "name": "CI",
+          "revision": "9a61bd402cf1d418ec67cf4833f1112d0b8ce55e",
+          "conclusion": "success",
+          "url": "https://github.com/ensp1re/mapgrain/actions/runs/34727782788"
+        }
+      ],
+      "observedAt": "2026-09-13T00:25:10.241192Z"
+    }
+  },
+  "archivedAt": "2026-09-13T00:25:10.241192Z"
+}

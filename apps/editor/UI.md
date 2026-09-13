@@ -86,6 +86,23 @@ These rules apply to the editor chrome. They are not product claims.
 - A card is an icon and a title on one row. The kind is carried by the icon; its name belongs
   in the inspector and the legend, not on every card.
 - A branch is a diamond and a terminal state is a pill. Shape is the fastest thing to read.
+- A diamond has to be twice the block it holds, and the block has to be centred on the
+  diamond's centre. A rectangle-sized diamond clips its own label on the two upper edges, in
+  the editor by the clip path and in the export by nothing at all.
+- `clip-path` does not clip `box-shadow`, so a clipped shape draws its outline as a second
+  clipped layer, not as a ring.
+- A state and a branch carry no icon: the shape already says what they are, and the icon only
+  takes the width the shape needs.
+- Clearance is kept on each side of a route, not split across it, and among clear routes the
+  one with the most room wins. Routes are obstacles to each other, or two of them run along the
+  same line.
+- A column gap holds two stubs and a channel, or a connection has nowhere to turn and steps
+  into the next card.
+- Ports on one side never sit closer than a routing channel.
+- Lifelines are spaced to hold the captions between them and rows are as tall as the caption
+  they carry. A flat gap and a flat pitch are what make a busy sequence overlap.
+- A fragment frame is as wide as the participants its own messages touch, and reserves its
+  title band from its own top rather than from the row above it.
 - A caption never repeats the connection type. An unlabelled connection draws no caption.
 - Card geometry lives in `nodeSize` and `ScenePresentation` together. Move one without the
   other and the text stops fitting its box.
@@ -133,6 +150,11 @@ These rules apply to the editor chrome. They are not product claims.
 - Edge captions use the anchor the scene computed, which places them in one pass against the
   captions it has already placed. Re-place per edge only while a drag makes that anchor stale.
 
+## Header
+
+- The brand is a wordmark. It opens nothing: `New diagram` has its own button and everything
+  else, `Export` and `Open file` included, is in `More`.
+
 ## Reading a diagram
 
 - Hiding is a reading aid, never an edit. It lives in editor state, it is applied through
@@ -151,6 +173,9 @@ These rules apply to the editor chrome. They are not product claims.
   what it fired. It reads the document and never writes to it, so there is nothing to undo.
 - Frame the state with its moves; below 720px frame the state alone and let the bar carry the
   moves, because the canvas cannot hold both at a readable zoom.
+- Dimming has a floor: below about 0.4 a dark-theme label stops being readable and the card
+  looks blank. And a click during a reading ends the reading and selects what was clicked,
+  because a dimmed thing that ignores clicks reads as broken.
 
 ## Motion
 

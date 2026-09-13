@@ -22,7 +22,6 @@ export const DEFAULT_GROUP_HEADER = 22;
 export const DEFAULT_SPACING_X = 64;
 export const DEFAULT_SPACING_Y = 48;
 
-export const PARALLEL_EDGE_OFFSET = 14;
 export const CORNER_RADIUS = 8;
 export const EDGE_LABEL_PAD = 4;
 export const EDGE_LABEL_CLEARANCE = 36;
@@ -49,4 +48,9 @@ export const DESCRIPTION_GAP = 3;
 export const EDGE_STUB = 20;
 export const ROUTE_CHANNEL_STEP = 18;
 export const ROUTE_CHANNEL_TRIES = 8;
+/** Kept on each side of a segment. A route closer than this to a card reads as touching it. */
 export const ROUTE_CLEARANCE = 6;
+/** Preferred, not required: among clear routes the router takes the one with this much room. */
+export const ROUTE_BREATHING_ROOM = 14;
+/** Two ports on the same side never sit closer than one routing channel. */
+export const PORT_MIN_GAP = ROUTE_CHANNEL_STEP + 4;
