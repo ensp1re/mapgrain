@@ -18,9 +18,9 @@ No account. No server. The editor, the CLI and the exports all run on your machi
 ## 60 seconds
 
 ```sh
-npx mapgrain@0.2.3 validate diagram.json    # is it a real document?
-npx mapgrain@0.2.3 layout diagram.json      # ELK writes the coordinates
-npx mapgrain@0.2.3 view diagram.json -o diagram.html
+npx mapgrain@0.2.4 validate diagram.json    # is it a real document?
+npx mapgrain@0.2.4 layout diagram.json      # ELK writes the coordinates
+npx mapgrain@0.2.4 view diagram.json -o diagram.html
 ```
 
 `diagram.html` opens with no server and no network: search, pan, zoom, follow a path, switch
@@ -38,10 +38,6 @@ a different card, choose a line shape, arrange with ELK, walk through it step by
 workflow by firing its transitions.
 
 ![Editing: rename, connect, pin, arrange, undo](docs/media/editing.gif)
-
-At 390px the canvas is still the main surface:
-
-![Editor at 390px](docs/media/narrow-390.png)
 
 ## Five kinds of diagram
 
@@ -66,7 +62,7 @@ exports — that is a test, not a claim.
 ## The CLI
 
 ```sh
-npx mapgrain@0.2.3 <command> diagram.json
+npx mapgrain@0.2.4 <command> diagram.json
 ```
 
 | Command | Does |

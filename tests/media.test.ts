@@ -15,10 +15,8 @@ test("production media files stay within documented size limits", async () => {
   const limits: Record<string, number> = {
     "docs/media/hero-dark.png": 500 * 1024,
     "docs/media/hero-light.png": 500 * 1024,
-    "docs/media/narrow-390.png": 500 * 1024,
     "docs/media/cli-receipts.png": 500 * 1024,
     "docs/media/editing.gif": 5 * 1024 * 1024,
-    "docs/media/viewer.gif": 5 * 1024 * 1024,
     "docs/media/cli-workflow.gif": 5 * 1024 * 1024,
   };
   for (const [relative, max] of Object.entries(limits)) {
@@ -47,8 +45,6 @@ test("capture manifest records commit, fixture, viewport, and theme", async () =
   const files = new Set((manifest.artifacts ?? []).map((item) => item.file));
   assert.ok(files.has("docs/media/hero-dark.png"));
   assert.ok(files.has("docs/media/editing.gif"));
-  // The viewer clip is still captured, but the README no longer carries a section for it.
-  assert.ok(files.has("docs/media/viewer.gif"));
   const hero = (manifest.artifacts ?? []).find((item) => item.file === "docs/media/hero-dark.png");
   assert.deepEqual(hero?.viewport, { width: 1440, height: 900 });
   assert.equal(hero?.theme, "dark");
@@ -61,7 +57,6 @@ test("README links production media, the feature table, and getting-started", as
     "docs/media/hero-light.png",
     "docs/media/editing.gif",
     "docs/media/cli-workflow.gif",
-    "docs/media/narrow-390.png",
     "docs/FEATURES.md",
     "docs/getting-started.md",
     "docs/agents.md",

@@ -148,20 +148,6 @@ async function main(): Promise<void> {
       fixture: "skills/mapgrain/examples/ten-node.json",
     });
 
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.waitForTimeout(500);
-    await page.keyboard.press("Escape");
-    await page.locator(".react-flow__pane").click({ position: { x: 24, y: 80 } });
-    await page.waitForTimeout(300);
-    const narrow = join(mediaDir, "narrow-390.png");
-    await page.screenshot({ path: narrow, type: "png" });
-    artifacts.push({
-      file: "docs/media/narrow-390.png",
-      kind: "still",
-      viewport: { width: 390, height: 844 },
-      theme: "light",
-      fixture: "skills/mapgrain/examples/ten-node.json",
-    });
     await stills.close();
 
     const editVideoDir = join(work, "edit");
@@ -209,59 +195,6 @@ async function main(): Promise<void> {
       theme: "dark",
       fixture: "skills/mapgrain/examples/ten-node.json",
       notes: "select → rename → connect → pin → arrange preview → apply → undo",
-    });
-
-    const viewOut = join(work, "view.html");
-    execFileSync(
-      "node",
-      [
-        "--experimental-strip-types",
-        join(repoRoot, "packages/cli/src/cli.ts"),
-        "view",
-        fixture,
-        "-o",
-        viewOut,
-      ],
-      { cwd: repoRoot, stdio: "pipe" },
-    );
-    const viewServer = await listen(work);
-    const viewVideoDir = join(work, "view");
-    await mkdir(viewVideoDir, { recursive: true });
-    const viewContext = await browser.newContext({
-      viewport: { width: 1440, height: 900 },
-      deviceScaleFactor: 1,
-      recordVideo: { dir: viewVideoDir, size: { width: 1440, height: 900 } },
-    });
-    const viewPage = await viewContext.newPage();
-    await viewPage.goto(`${viewServer.url}view.html`, { waitUntil: "domcontentloaded" });
-    await viewPage.getByRole("img").or(viewPage.locator("svg")).first().waitFor({ timeout: 10_000 });
-    await viewPage.waitForTimeout(400);
-    await viewPage.getByRole("textbox", { name: "Search" }).fill("Capture");
-    await viewPage.waitForTimeout(300);
-    const hit = viewPage.getByRole("list", { name: "Search results" }).getByRole("button").first();
-    if (await hit.isVisible().catch(() => false)) await hit.click();
-    await viewPage.waitForTimeout(400);
-    await viewPage.getByRole("button", { name: "More" }).click();
-    await viewPage.getByRole("button", { name: "Theme" }).click();
-    await viewPage.waitForTimeout(400);
-    await viewPage.mouse.move(720, 480);
-    await viewPage.mouse.down();
-    await viewPage.mouse.move(820, 520);
-    await viewPage.mouse.up();
-    await viewPage.waitForTimeout(500);
-    const viewVideo = await viewPage.video()?.path();
-    await viewContext.close();
-    await viewServer.close();
-    if (!viewVideo) throw new Error("viewer video missing");
-    const viewerGif = join(mediaDir, "viewer.gif");
-    toGif(viewVideo, viewerGif, 900, 12);
-    artifacts.push({
-      file: "docs/media/viewer.gif",
-      kind: "gif",
-      viewport: { width: 1440, height: 900 },
-      theme: "dark",
-      fixture: "skills/mapgrain/examples/ten-node.json",
-      notes: "offline HTML from mapgrain view: search, theme, pan",
     });
 
     const cliVideoDir = join(work, "cli");
@@ -333,9 +266,7 @@ pre{white-space:pre-wrap;background:#141416;border:1px solid #2a2a2e;padding:16p
   const files = [
     "hero-dark.png",
     "hero-light.png",
-    "narrow-390.png",
     "editing.gif",
-    "viewer.gif",
     "cli-receipts.png",
     "cli-workflow.gif",
   ];
