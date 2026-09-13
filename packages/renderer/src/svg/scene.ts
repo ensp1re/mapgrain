@@ -15,7 +15,6 @@ import {
   GROUP_HEADER_BAND,
   GROUP_RADIUS,
   NODE_RADIUS,
-  PORT_RADIUS,
   VIEW_PAD,
 } from "../constants/export.ts";
 import { fillForNodeKind } from "../constants/kindFill.ts";
@@ -67,7 +66,7 @@ export function renderSvg(
   const ox = VIEW_PAD - scene.bounds.x;
   const oy = VIEW_PAD - scene.bounds.y;
   const font = { ...defaultFont, family: EXPORT_FONT_FAMILY };
-  const { background: bg, surface, border, text, muted, edge: edgeColor, group: groupColor, port, raised } = paints;
+  const { background: bg, surface, border, text, muted, edge: edgeColor, group: groupColor, raised } = paints;
 
   const groups = scene.groups
     .map((group) => {
@@ -171,12 +170,6 @@ export function renderSvg(
             `<text x="${n(textX)}" y="${n(descriptionY + index * line.height)}" dominant-baseline="hanging" fill="${muted}" stroke="none" font-family="${escapeXml(font.family)}" font-weight="${font.weight}" font-size="${presentation.kindSize}">${escapeXml(line.text)}</text>`,
         )
         .join("\n  ");
-      const ports = node.ports
-        .map(
-          (item) =>
-            `<circle data-port="${escapeXml(item.id)}" cx="${n(item.x + ox)}" cy="${n(item.y + oy)}" r="${PORT_RADIUS}" fill="${port}" stroke="none"/>`,
-        )
-        .join("\n  ");
       const midY = node.rect.y + oy + node.rect.height / 2;
       const diskX = node.rect.x + ox - 10;
       const initial =
@@ -207,7 +200,6 @@ export function renderSvg(
   ${icon}
   ${lines}
   ${description}
-  ${ports}
 </g>`;
     })
     .join("\n");
@@ -228,7 +220,7 @@ ${fragments}
 ${lifelines}
 ${edges}
 ${nodes}
-${legendMarkup(kinds, theme, colorMode, VIEW_PAD, scene.bounds.height + VIEW_PAD + 8, Math.max(120, width - VIEW_PAD * 2), muted, font.family)}
+${legendMarkup(kinds, theme, colorMode, VIEW_PAD, scene.bounds.height + VIEW_PAD + 8, Math.max(120, width - VIEW_PAD * 2), muted, font.family, { fill: raised, border })}
 </svg>`;
 
   return { svg, width, height };

@@ -28,6 +28,21 @@ export function facingSide(from: Rect, to: Rect): PortSide {
   return dy >= 0 ? PORT_SIDE.SOUTH : PORT_SIDE.NORTH;
 }
 
+/**
+ * Which vertex a branch leaves a decision by.
+ *
+ * A gateway's alternatives are meant to leave by *different* vertices — the continuing path
+ * straight on, the alternatives up and down — so a reader can tell them apart at the diamond
+ * rather than where they end. Sending them all out of the side that merely happens to face the
+ * target puts both branches on the same point, and the reader has to trace two lines that
+ * start in the same place. Anything level with the diamond keeps the forward vertex.
+ */
+export function branchSide(from: Rect, to: Rect): PortSide {
+  const dy = to.y + to.height / 2 - (from.y + from.height / 2);
+  if (Math.abs(dy) <= from.height / 2) return facingSide(from, to);
+  return dy >= 0 ? PORT_SIDE.SOUTH : PORT_SIDE.NORTH;
+}
+
 export function portOffset(port: ScenePort, rect: Rect): Point {
   return { x: port.x - rect.x, y: port.y - rect.y };
 }

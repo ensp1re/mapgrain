@@ -1,5 +1,61 @@
 {
   "schemaVersion": 1,
-  "nextId": 76,
-  "tasks": []
+  "nextId": 77,
+  "tasks": [
+    {
+      "id": "F076",
+      "behavior": "Process diagrams follow the conventions readers expect: a rework loop no longer drags its repair step in front of the work it repeats, and a decision's branches leave the diamond by different vertices. The exported HTML reads as a document rather than a debug view: it names the diagram, drops the editing affordances, and stops magnifying a small diagram.",
+      "acceptance": [
+        "No decision branch is drawn right to left; only the leg that returns to an earlier step runs backwards.",
+        "In the CI/CD and approval templates the rework step is drawn after the check that asks for it.",
+        "A decision's outgoing branches leave by different vertices when their targets are above and below it.",
+        "An exported HTML view names the diagram, and never draws port dots.",
+        "Fit in the exported view never enlarges a small diagram past its own size.",
+        "The exported legend reads as a panel, not as text loose on the page.",
+        "The README no longer carries a portable-view section."
+      ],
+      "dependsOn": [],
+      "state": "verified",
+      "spec": null,
+      "plan": "docs/PLAN.md",
+      "verification": [
+        "unit",
+        "lint",
+        "typecheck",
+        "build",
+        "browser"
+      ],
+      "blockedReason": null,
+      "evidence": {
+        "status": "passed",
+        "attemptId": "run-1789298454226-42e624",
+        "fingerprintBefore": "971ec010921027ed9eb47d249ac6f9c6df0d49d060609b3417fd373ae9c7f665",
+        "fingerprintAfter": "971ec010921027ed9eb47d249ac6f9c6df0d49d060609b3417fd373ae9c7f665",
+        "checks": [
+          {
+            "id": "unit",
+            "status": "passed"
+          },
+          {
+            "id": "lint",
+            "status": "passed"
+          },
+          {
+            "id": "typecheck",
+            "status": "passed"
+          },
+          {
+            "id": "build",
+            "status": "passed"
+          },
+          {
+            "id": "browser",
+            "status": "passed"
+          }
+        ],
+        "verifiedAt": "2026-09-13T11:22:30.153Z"
+      },
+      "delivery": null
+    }
+  ]
 }

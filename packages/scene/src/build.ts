@@ -31,6 +31,7 @@ import {
 } from "./sequence.ts";
 import { isWorkflowLanesDocument, workflowLanePositions } from "./workflow.ts";
 import {
+  branchSide,
   facingSide,
   placePortsOnRect,
   synthesizedPortId,
@@ -213,8 +214,9 @@ function resolvePort(
   node: SceneNode,
   portId: string | undefined,
   toward: Rect,
+  branching = false,
 ): ScenePort {
-  const facing = facingSide(node.rect, toward);
+  const facing = branching ? branchSide(node.rect, toward) : facingSide(node.rect, toward);
   if (portId) {
     const listed = node.ports.find((port) => port.id === portId);
     if (listed && listed.side === facing) return listed;
@@ -419,7 +421,9 @@ export function buildScene(input: unknown, optionOverrides: Partial<SceneOptions
         labelBox: { x: 0, y: 0, width: 0, height: 0 },
       };
     }
-    const sourcePort = resolvePort(sourceNode, edge.source.portId, targetNode.rect);
+    // A decision's outgoing branches leave by different vertices, the way a gateway's do.
+    const branching = sourceNode.kind === NODE_KIND.DECISION;
+    const sourcePort = resolvePort(sourceNode, edge.source.portId, targetNode.rect, branching);
     const targetPort = resolvePort(targetNode, edge.target.portId, sourceNode.rect);
     const key = pairKey(sourceNode.id, targetNode.id);
     const count = pairCounts.get(key) ?? 1;

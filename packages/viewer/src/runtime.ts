@@ -13,6 +13,9 @@ const lensSel = document.querySelector("[data-act=lens]");
 const svg = board.querySelector("svg");
 const PAD = 24;
 const MIN = 0.1, MAX = 8;
+// Fit never enlarges past this. A small diagram blown up to 205% reads as a mistake, and the
+// zoom controls are right there for anyone who wants more.
+const FIT_MAX = 1;
 const nodeIds = new Set((payload.nodes || []).map((n) => n.id));
 const edgeIds = new Set((payload.edges || []).map((e) => e.id));
 const nodeById = new Map((payload.nodes || []).map((n) => [n.id, n]));
@@ -65,7 +68,7 @@ function fit() {
   const size = diagramSize();
   const availW = Math.max(1, stage.clientWidth - 2 * PAD);
   const availH = Math.max(1, stage.clientHeight - 2 * PAD);
-  scale = clamp(Math.min(availW / size.w, availH / size.h));
+  scale = clamp(Math.min(FIT_MAX, Math.min(availW / size.w, availH / size.h)));
   x = (stage.clientWidth - size.w * scale) / 2;
   y = (stage.clientHeight - size.h * scale) / 2;
   apply();

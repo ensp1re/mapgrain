@@ -5,6 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { DOCUMENT_KIND, validateDocument, type DiagramDocument } from "@mapgrain/document";
 import { buildScene, overlappingPairs, type Boxed } from "../src/index.ts";
+import { backwardDecisionBranches } from "./helpers/flow.ts";
 
 const fixtures = fileURLToPath(new URL("../../../tests/fixtures/documents", import.meta.url));
 
@@ -115,5 +116,15 @@ test("a sequence message starts and ends on its participants' lifelines", async 
       assert.equal(first.x, lifeline.get(edge.source.nodeId), `${name}: ${edge.id} source`);
       assert.equal(last.x, lifeline.get(edge.target.nodeId), `${name}: ${edge.id} target`);
     }
+  }
+});
+
+test("a decision's branches read forward; only the return leg of a loop goes back", async () => {
+  for (const { name, document } of await documents()) {
+    if (document.kind !== DOCUMENT_KIND.WORKFLOW) continue;
+    const scene = buildScene(document, { positions: document.layout?.positions ?? {} });
+    assert.equal(scene.ok, true, name);
+    if (!scene.ok) continue;
+    assert.deepEqual(backwardDecisionBranches(document, scene.scene), [], name);
   }
 });

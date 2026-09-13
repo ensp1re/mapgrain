@@ -1,5 +1,5 @@
 {
-  "commit": "ef0f179b8b674ce6c63a511b3d21e0a139010ee0",
+  "commit": "962adc24dd10f0d6c47cb1166562edd82b1c42dd",
   "package": {
     "name": "mapgrain",
     "version": "0.2.3"
@@ -12,7 +12,7 @@
     "playwright": "1.63.0"
   },
   "deviceScaleFactor": 1,
-  "capturedAt": "2026-09-13T01:05:36.171Z",
+  "capturedAt": "2026-09-13T11:20:38.423Z",
   "artifacts": [
     {
       "file": "docs/media/hero-dark.png",
@@ -95,24 +95,24 @@
       "sha256": "c39e2f6b67761aa5de0ec7612dde1ec26655c0f530a25b88e4a13ed5b76ccd42"
     },
     "narrow-390.png": {
-      "bytes": 47459,
-      "sha256": "6b001e2fbd772e959ec843694d40fb896b47b12c8687cb74cbd7ad6ddd1798d3"
+      "bytes": 47319,
+      "sha256": "073a7f98babafbe0a449d0c7ee6e7a485f4be023810ed5abe827b556f073699e"
     },
     "editing.gif": {
-      "bytes": 1740337,
-      "sha256": "c774e417df16f83e7e2ab201d6dcc4672aceeeacac04074eef7984e9015be521"
+      "bytes": 1582876,
+      "sha256": "778fec0e397561a97de6670621594c9024adcc7e76daaa628531f55d33becff1"
     },
     "viewer.gif": {
-      "bytes": 506776,
-      "sha256": "cd60743ee3cb7b0c3d2dfbaff7f11594e1e1b0f3dd077ff65d28dc86a13c392f"
+      "bytes": 378732,
+      "sha256": "fc75e901e3a88f088647f0333fbfcb0126609b96cc311ee354892eaec99a2f20"
     },
     "cli-receipts.png": {
       "bytes": 16334,
       "sha256": "cbc52f080d7b11b1145c9ac45d45f3977a108bb64b92e18a2ecf239e9793d714"
     },
     "cli-workflow.gif": {
-      "bytes": 55439,
-      "sha256": "56c5d82fbf5ff98fb2714ba2fccf17a1842c3238968b2b8c15211feeb6e46698"
+      "bytes": 83680,
+      "sha256": "57b2fbadd427fd74deee92c2f177c85a61e37109946e4fd03912d40ea3af7f84"
     }
   }
 }
